@@ -1,0 +1,38 @@
+name: marketing
+description: >
+  Ho tro xay dung chien luoc, nghien cuu khach hang/doi thu, dinh vi, thong
+  diep, noi dung da kenh (Facebook, Zalo, TikTok, website, email, SEO), ke
+  hoach chien dich theo ngay/tuan/thang, ke hoach quang cao tra phi o muc
+  chien luoc (khong tu chay quang cao), lich noi dung, KPI va kiem tra chat
+  luong/rui ro truyen thong. Uu tien boi canh Viet Nam, doanh nghiep nho,
+  ho kinh doanh, san pham dia phuong va nong san.
+entrypoint: SKILL.md
+language: vi
+references:
+  - references/customer-research.md
+  - references/positioning-messaging.md
+  - references/content-channels.md
+  - references/campaign-planning.md
+  - references/paid-advertising.md
+  - references/marketing-kpis.md
+  - references/compliance-quality.md
+assets:
+  - assets/marketing-brief-template.md
+  - assets/customer-persona-template.md
+  - assets/campaign-plan-template.md
+  - assets/content-calendar-template.csv
+  - assets/short-video-script-template.md
+  - assets/content-review-checklist.md
+scripts:
+  - scripts/create_campaign_brief.py
+  - scripts/create_content_calendar.py
+  - scripts/validate_campaign.py
+runtime:
+  interpreter: python3
+  network_access: false
+  requires_external_packages: false
+constraints:
+  - Khong tu truy cap hoac thay doi tai khoan quang cao.
+  - Khong tu dang bai hoac chay quang cao neu khong co cong cu va quyen truy cap.
+  - Khong bia so lieu thi truong, nguon, doi thu, nhan xet khach hang hoac ket qua chien dich.
+  - Khong cam ket tuyet doi ve doanh thu, hieu qua hoac cong dung san pham.
