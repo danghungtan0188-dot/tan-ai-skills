@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #efe7d4;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="17.621"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div
+        id="el-01-hook"
+        class="scene"
+        data-composition-id="01-hook"
+        data-composition-src="compositions/frames/01-hook.html"
+        data-start="0"
+        data-duration="3.472"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-01-hook-voice"
+        src="assets/voice/01.wav"
+        data-start="0"
+        data-duration="3.072"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-02-intro"
+        class="scene"
+        data-composition-id="02-intro"
+        data-composition-src="compositions/frames/02-intro.html"
+        data-start="3.072"
+        data-duration="5.428"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-02-intro-voice"
+        src="assets/voice/02.wav"
+        data-start="3.072"
+        data-duration="4.928"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-03-taste"
+        class="scene"
+        data-composition-id="03-taste"
+        data-composition-src="compositions/frames/03-taste.html"
+        data-start="8"
+        data-duration="3.593"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-03-taste-voice"
+        src="assets/voice/03.wav"
+        data-start="8"
+        data-duration="3.093"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-04-versatility"
+        class="scene"
+        data-composition-id="04-versatility"
+        data-composition-src="compositions/frames/04-versatility.html"
+        data-start="11.093"
+        data-duration="3.252"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-04-versatility-voice"
+        src="assets/voice/04.wav"
+        data-start="11.093"
+        data-duration="2.752"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-05-cta"
+        class="scene"
+        data-composition-id="05-cta"
+        data-composition-src="compositions/frames/05-cta.html"
+        data-start="13.844999999999999"
+        data-duration="3.776"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-05-cta-voice"
+        src="assets/voice/05.wav"
+        data-start="13.844999999999999"
+        data-duration="3.776"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-01-hook", { scale: 2.5, opacity: 0, filter: "blur(8px)", duration: 0.4, ease: "power3.in" }, 3.072);
+        tl.fromTo("#el-02-intro", { scale: 0.5, opacity: 0, filter: "blur(8px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 3.072);
+        tl.to("#el-02-intro", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 8);
+        tl.fromTo("#el-03-taste", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 8);
+        tl.to("#el-03-taste", { x: -1080, duration: 0.5, ease: "power3.inOut" }, 11.093);
+        tl.fromTo("#el-04-versatility", { x: 1080, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 11.093);
+        tl.to("#el-04-versatility", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 13.845);
+        tl.fromTo("#el-05-cta", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 13.845);
+        tl.to({}, { duration: 17.621 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
+    </script>
+  </body>
+</html>

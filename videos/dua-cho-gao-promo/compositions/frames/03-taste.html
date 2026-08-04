@@ -1,0 +1,94 @@
+<template>
+  <style>
+    #root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      container-type: size;
+    }
+
+    .taste-bg {
+      position: absolute;
+      inset: 0;
+      background: #efe7d4;
+    }
+
+    .taste-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 800px;
+      width: 100%;
+      margin: 0;
+      text-align: center;
+      font-family: serif;
+      font-weight: 500;
+      font-size: 92px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      padding: 0 6cqw;
+    }
+
+    #taste-line-a {
+      color: #1a1a17;
+    }
+
+    #taste-line-b {
+      color: #2e4a2a;
+    }
+  </style>
+
+  <div id="root" data-composition-id="03-taste" data-duration="3.593" data-width="1080" data-height="1920">
+    <div class="clip taste-bg" data-start="0" data-duration="3.593" data-track-index="0"></div>
+
+    <p
+      id="taste-line-a"
+      class="clip taste-line"
+      data-start="0.265"
+      data-duration="1.15"
+      data-track-index="1"
+    >
+      Sweet Water.
+    </p>
+
+    <p
+      id="taste-line-b"
+      class="clip taste-line"
+      data-start="1.414"
+      data-duration="2.179"
+      data-track-index="2"
+    >
+      Rich Coconut Meat.
+    </p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      tl.fromTo(
+        "#taste-line-a",
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" },
+        0.265
+      );
+
+      tl.to(
+        "#taste-line-a",
+        { y: -70, opacity: 0, duration: 0.4, ease: "power2.inOut" },
+        1.414
+      );
+      tl.fromTo(
+        "#taste-line-b",
+        { y: 70, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.45, ease: "power2.inOut" },
+        1.414
+      );
+
+      window.__timelines["03-taste"] = tl;
+    })();
+  </script>
+</template>

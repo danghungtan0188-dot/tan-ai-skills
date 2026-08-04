@@ -1,0 +1,233 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      color: #1a1a17;
+    }
+
+    .v04-bg {
+      position: absolute;
+      inset: 0;
+      background: #efe7d4;
+    }
+
+    .v04-topbar {
+      position: absolute;
+      top: 140px;
+      left: 72px;
+      right: 72px;
+    }
+
+    .v04-label {
+      display: inline-block;
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 32px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #2e4a2a;
+    }
+
+    .v04-topbar-rule {
+      margin-top: 20px;
+      width: 936px;
+      height: 2px;
+      background: #2e4a2a;
+      transform-origin: 0% 50%;
+    }
+
+    .v04-item {
+      position: absolute;
+      left: 72px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .v04-item-1 { top: 620px; }
+    .v04-item-2 { top: 940px; }
+    .v04-item-3 { top: 1260px; }
+
+    .v04-marker {
+      flex: 0 0 auto;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #e89cb1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+    }
+
+    .v04-marker svg {
+      width: 30px;
+      height: 30px;
+      stroke: #efe7d4;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .v04-pill {
+      flex: 0 0 auto;
+      box-sizing: border-box;
+      padding: 26px 40px;
+      border-radius: 8px;
+      border: 2.5px solid #2e4a2a;
+      background: #e6dcc4;
+      overflow: hidden;
+      clip-path: inset(0 100% 0 0 round 8px);
+    }
+
+    .v04-pill-text {
+      display: inline-block;
+      white-space: nowrap;
+      font-family: serif;
+      font-weight: 600;
+      font-size: 46px;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: #1a1a17;
+    }
+  </style>
+
+  <div id="root" data-composition-id="04-versatility" data-duration="3.252" data-width="1080" data-height="1920">
+    <div class="v04-bg clip" data-start="0" data-duration="3.252" data-track-index="0"></div>
+
+    <div class="v04-topbar clip" data-start="0" data-duration="3.252" data-track-index="1">
+      <span class="v04-label">WAYS TO ENJOY</span>
+      <div class="v04-topbar-rule"></div>
+    </div>
+
+    <div class="v04-item v04-item-1 clip" data-start="0" data-duration="3.252" data-track-index="2">
+      <div class="v04-marker">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 3h8l-1 15a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2L8 3Z" />
+          <path d="M7.3 8h9.4" />
+        </svg>
+      </div>
+      <div class="v04-pill"><span class="v04-pill-text">Drink Fresh</span></div>
+    </div>
+
+    <div class="v04-item v04-item-2 clip" data-start="0.5" data-duration="2.752" data-track-index="3">
+      <div class="v04-marker">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 11h16v2a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6v-2Z" />
+          <path d="M20 12h1.5a2 2 0 0 1 0 4H20" />
+          <path d="M9 5c0 1-1 1.2-1 2.3S9 9 9 9" />
+          <path d="M13 5c0 1-1 1.2-1 2.3S13 9 13 9" />
+        </svg>
+      </div>
+      <div class="v04-pill"><span class="v04-pill-text">Cook With It</span></div>
+    </div>
+
+    <div class="v04-item v04-item-3 clip" data-start="1.5" data-duration="1.752" data-track-index="4">
+      <div class="v04-marker">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.5 11h17a1 1 0 0 1 1 1 8 6 0 0 1-8 6h-3a8 6 0 0 1-8-6 1 1 0 0 1 1-1Z" />
+          <path d="M9 11 10 4" />
+          <path d="M15 11 14 4" />
+        </svg>
+      </div>
+      <div class="v04-pill"><span class="v04-pill-text">Every Meal</span></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      var root = document.querySelector('[data-composition-id="04-versatility"]');
+
+      tl.fromTo(
+        root.querySelector(".v04-label"),
+        { y: -10, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
+        0
+      );
+      tl.fromTo(
+        root.querySelector(".v04-topbar-rule"),
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.35, ease: "power2.out" },
+        0.04
+      );
+
+      function revealItem(index, popAt) {
+        var item = root.querySelector(".v04-item-" + index);
+        var marker = item.querySelector(".v04-marker");
+        var pill = item.querySelector(".v04-pill");
+        var text = item.querySelector(".v04-pill-text");
+
+        tl.fromTo(
+          marker,
+          { scale: 0, opacity: 0, y: 8 },
+          { scale: 1, opacity: 1, y: 0, duration: 0.3, ease: "power3.out" },
+          popAt
+        );
+
+        var wipeStart = popAt + 0.25;
+        var wipeDur = 0.4;
+        var proxy = { p: 100 };
+        tl.to(
+          proxy,
+          {
+            p: 0,
+            duration: wipeDur,
+            ease: "power2.out",
+            onUpdate: function () {
+              pill.style.clipPath = "inset(0 " + proxy.p + "% 0 0 round 8px)";
+            },
+          },
+          wipeStart
+        );
+
+        tl.fromTo(
+          text,
+          { x: 16, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
+          wipeStart
+        );
+      }
+
+      revealItem(1, 0.08);
+      revealItem(2, 0.58);
+      revealItem(3, 1.58);
+
+      var idleStart = 2.1;
+      var idleDur = 0.65;
+      var period = 2.4;
+      var floatPhase = { p: 0 };
+      var item1 = root.querySelector(".v04-item-1");
+      var item2 = root.querySelector(".v04-item-2");
+      var item3 = root.querySelector(".v04-item-3");
+
+      tl.to(
+        floatPhase,
+        {
+          p: (idleDur / period) * Math.PI * 2,
+          duration: idleDur,
+          ease: "none",
+          onUpdate: function () {
+            var s1 = Math.sin(floatPhase.p);
+            var s2 = Math.sin(floatPhase.p + Math.PI / 3);
+            var s3 = Math.sin(floatPhase.p + (Math.PI * 2) / 3);
+            item1.style.transform = "translateY(" + (s1 * 1.5).toFixed(2) + "px)";
+            item2.style.transform = "translateY(" + (s2 * 1.3).toFixed(2) + "px)";
+            item3.style.transform = "translateY(" + (s3 * 1.5).toFixed(2) + "px)";
+          },
+        },
+        idleStart
+      );
+
+      window.__timelines["04-versatility"] = tl;
+    })();
+  </script>
+</template>

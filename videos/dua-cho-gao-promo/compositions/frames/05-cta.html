@@ -1,0 +1,90 @@
+<template>
+  <style>
+    #root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      container-type: size;
+    }
+
+    .cta05-bg {
+      position: absolute;
+      inset: 0;
+      background: #2e4a2a;
+    }
+
+    .cta05-name {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 640px;
+      width: 100%;
+      text-align: center;
+      font-family: serif;
+      font-weight: 600;
+      font-size: 9cqw;
+      line-height: 0.96;
+      letter-spacing: -0.01em;
+      color: #e89cb1;
+      padding: 0 6cqw;
+    }
+
+    .cta05-tagline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 820px;
+      width: 100%;
+      text-align: center;
+      font-family: serif;
+      font-weight: 400;
+      font-size: 3cqw;
+      line-height: 1.34;
+      letter-spacing: 0;
+      color: #efe7d4;
+      padding: 0 10cqw;
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-cta" data-duration="3.776" data-width="1080" data-height="1920">
+    <div class="clip cta05-bg" data-start="0" data-duration="3.776" data-track-index="0"></div>
+
+    <h1 class="clip cta05-name" data-start="0.377" data-duration="1.259" data-track-index="1">
+      Cho Gao Coconut
+    </h1>
+
+    <p class="clip cta05-tagline" data-start="1.636" data-duration="2.14" data-track-index="2">
+      Worth trying.
+    </p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      tl.fromTo(
+        ".cta05-name",
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" },
+        0.377
+      );
+
+      tl.to(
+        ".cta05-name",
+        { y: -160, opacity: 0, duration: 0.5, ease: "power3.inOut" },
+        1.636
+      );
+      tl.fromTo(
+        ".cta05-tagline",
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+        1.636
+      );
+
+      window.__timelines["05-cta"] = tl;
+    })();
+  </script>
+</template>
