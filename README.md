@@ -7,8 +7,12 @@ Kho lưu trữ AI Skills phục vụ công việc, học tập và nghiên cứu
 | Skill | Trạng thái | Mô tả ngắn |
 |---|---|---|
 | [marketing](skills/marketing/SKILL.md) | Hoàn thiện | Xây dựng chiến lược, nghiên cứu khách hàng/đối thủ, định vị, thông điệp, nội dung đa kênh, kế hoạch chiến dịch, kế hoạch quảng cáo trả phí ở mức chiến lược, KPI và kiểm tra chất lượng/rủi ro truyền thông. |
+| [tan-giong-doc-ban-tin](skills/tan-giong-doc-ban-tin/SKILL.md) | Hoàn thiện | Tổng hợp giọng đọc bản tin tiếng Việt từ kịch bản TXT/DOCX bằng VieNeu-TTS: giọng nam/nữ miền Nam dựng sẵn phong cách tin tức, nhân bản giọng người dùng, tự mở rộng chữ viết tắt, xuất WAV 48kHz + MP3. |
+| [heygen-avatar](skills/heygen-avatar/SKILL.md), [heygen-video](skills/heygen-video/SKILL.md), [heygen-translate](skills/heygen-translate/SKILL.md) | Hoàn thiện (gói skill nhập từ HeyGen) | Tạo avatar, tạo video có người dẫn (avatar), và dịch/lồng tiếng video qua HeyGen. |
+| [remotion-*](skills) (11 skill: best-practices, captions, create, docs, interactivity, maps, markup, multimedia, render, saas, upgrade) | Hoàn thiện (gói skill nhập từ Remotion) | Kiến thức và quy trình tạo/dựng video lập trình bằng framework Remotion. |
+| [video-use](skills/video-use/SKILL.md) | Hoàn thiện (gói skill nhập ngoài) | Chỉnh sửa video qua hội thoại: cắt, ghép, chèn phụ đề, chỉnh màu. |
 
-Đây là skill duy nhất đã được xây dựng đầy đủ trong repo tính đến thời điểm hiện tại. Các mục ở phần "Kế hoạch phát triển" bên dưới **chưa được tạo**.
+`marketing` và `tan-giong-doc-ban-tin` là hai skill được xây dựng riêng cho repo này (nguồn chuẩn nằm trong `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`). Các skill còn lại (heygen-*, remotion-*, video-use) là gói skill nhập từ bên ngoài, giữ nguyên theo bản gốc — không tự ý sửa mã nguồn bên trong các thư mục đó.
 
 ## Khả năng của skill marketing
 
