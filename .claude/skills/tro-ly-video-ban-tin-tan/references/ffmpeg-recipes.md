@@ -149,6 +149,41 @@ ffmpeg -y -i INPUT.mp4 -vf "vidstabtransform=input=transforms.trf:smoothing=20:z
 ```
 **Cảnh báo:** FFmpeg build có thể không có `vidstabdetect/vidstabtransform`. Kiểm tra bằng `ffmpeg -filters | grep vidstab`. Stabilization có thể crop, zoom, méo biên hoặc làm cảnh tệ hơn; luôn preview đoạn mẫu trước.
 
+## 7. CAPTIONS
+
+### Cháy phụ đề SRT vào hình
+```bash
+ffmpeg -y -i INPUT.mp4 -vf "subtitles=sub.srt" -c:a copy OUTPUT.mp4
+```
+
+### Phụ đề có style + vùng an toàn
+```bash
+ffmpeg -y -i INPUT.mp4 -vf "subtitles=sub.srt:force_style='FontName=Arial,FontSize=18,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,Outline=2,Shadow=1,Alignment=2,MarginV=40'" -c:a copy OUTPUT.mp4
+```
+`Alignment=2` là giữa–dưới. `MarginV` là khoảng cách tính từ mép dưới; đặt ≥8% chiều cao khung (1080p → ~86, 720p → ~58) để không đụng vùng UI của Facebook/TikTok.
+
+### Hộp nền mờ khi nền sáng hoặc nhiều chi tiết
+```bash
+ffmpeg -y -i INPUT.mp4 -vf "subtitles=sub.srt:force_style='FontName=Arial,FontSize=18,BorderStyle=3,BackColour=&H80000000,MarginV=40'" -c:a copy OUTPUT.mp4
+```
+`BorderStyle=3` đổi viền thành hộp nền. Màu ASS là `&HAABBGGRR` — `&H80000000` là đen trong suốt 50%.
+
+### Cháy phụ đề ASS (karaoke, caption theo từ, nhiều style)
+```bash
+ffmpeg -y -i INPUT.mp4 -vf "ass=sub.ass" -c:a copy OUTPUT.mp4
+```
+Dùng ASS khi cần highlight theo từ hoặc nhiều kiểu chữ trong cùng video; SRT không làm được.
+
+### Dịch toàn bộ timestamp
+```bash
+ffmpeg -y -itsoffset 2.5 -i sub.srt -c copy shifted.srt
+```
+Dịch cả file đi 2,5 giây. Chỉ đúng khi cắt **một khối ở đầu**. Nếu cắt nhiều đoạn giữa video thì phải tính lại từng cue theo timeline mới, không dùng lệnh này.
+
+**Lỗi thường gặp trên Windows:** filter `subtitles`/`ass` hiểu dấu `:` trong `C:\...` là dấu phân cách tham số. Chạy `ffmpeg` từ đúng thư mục chứa file phụ đề và truyền đường dẫn tương đối (`sub.srt`), đừng truyền đường dẫn tuyệt đối.
+
+**Thứ tự:** burn phụ đề **sau cùng**, sau khi đã chốt crop, màu và ghép. Crop sau khi burn sẽ cắt cụt chữ.
+
 ## Render video dài chống timeout
 Chia đoạn:
 ```bash

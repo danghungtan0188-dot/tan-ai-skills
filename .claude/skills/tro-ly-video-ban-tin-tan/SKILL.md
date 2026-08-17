@@ -56,16 +56,19 @@ Từ transcript/kịch bản, tự đề xuất 3-6 banner ngắn. Ví dụ ch�
 
 Không thêm số liệu, quy định hoặc kết luận chưa có trong nguồn.
 
-## Thư viện hiệu ứng
-Skill có 6 nhóm công thức FFmpeg chạy được ngay:
-1. Transitions
-2. Text
-3. Filters
-4. Effects
-5. Stickers
-6. Adjustment
+## Bảy nhóm chức năng tương đương CapCut
 
-Luôn đọc `references/ffmpeg-recipes.md` trước khi dựng.
+Bảy nhóm dưới đây đều có công thức FFmpeg chạy được ngay trong `references/ffmpeg-recipes.md`. Luôn đọc file đó trước khi dựng, không tự nghĩ filter chain từ đầu.
+
+- **Text:** tiêu đề, lower-third, banner, chữ 3D giả lập, glow, stroke, shadow, typewriter, karaoke, đếm ngược. Bản tin: chữ ngắn, tương phản cao, xuất hiện sau MC 1–2 giây, không che mặt/ngực MC.
+- **Stickers:** PNG/WebP/GIF/video alpha, logo, icon mạng xã hội, emoji, callout. Chỉ dùng tài nguyên có quyền. ATT NEWS bug nhỏ ở góc; Facebook/Zalo nhỏ gọn 4–8% chiều rộng khung, sát mép dưới — không dùng cụm social lớn.
+- **Effects:** flash, light leak, zoom/motion blur, shake, glitch, RGB split, vignette, grain, freeze, slow motion, speed ramp, Ken Burns. Bản tin chính thống dùng tiết chế — chủ yếu Ken Burns cho ảnh tĩnh và vignette nhẹ; không TikTok hóa nội dung hành chính.
+- **Transitions:** cut, fade, dissolve, dip-white, dip-black, wipe, slide, push, zoom, blur, radial/circle, whip-pan, flash. Mặc định hard cut; transition 0,12–0,55 giây. Không đặt transition vào giữa một câu nói đang dở.
+- **Captions:** SRT/ASS, caption theo câu hoặc theo từ, karaoke highlight, hộp nền, vùng an toàn, tái tính timestamp sau cắt. Burn **sau cùng**, sau khi đã chốt crop, màu và ghép. Cắt xong phải tính lại timestamp rồi kiểm lại đồng bộ, không dùng lại file phụ đề cũ.
+- **Filters:** Natural, Vibrant, Cinematic, Warm, Cool, B&W, Vintage, News Clean. Ưu tiên **màu da thật** — giảm strength ngay khi da ngả đỏ hoặc cháy vùng sáng. Bản tin dùng News Clean hoặc Natural, không đổi tông giữa chừng trong cùng cụm cảnh.
+- **Adjustment:** brightness/exposure, contrast, saturation, temperature/tint, sharpen, denoise, stabilization, crop, rotate, opacity, speed, audio gain/ducking. Sửa lỗi kỹ thuật trước, làm đẹp sau; denoise trước sharpen. Stabilization có thể crop/warp mạnh — chỉ dùng khi thật cần và phải preview.
+
+**Freeze, slow motion, speed ramp và speed làm đổi thời lượng.** Mặc định không được đổi thời lượng nguồn: chỉ dùng nhóm này khi người dùng nói rõ cho phép cắt/rút gọn. Yêu cầu "edit cho đẹp", "làm chuyên nghiệp" không phải là cho phép. Dùng rồi thì bước QC phải đối chiếu lại duration với nguồn.
 
 ## Lỗi thực tế phải tránh
 - Render video dài trong một tiến trình có thể timeout. Nếu thời lượng >60 giây hoặc filter graph nặng: chia 3-4 segment, render riêng rồi concat.
