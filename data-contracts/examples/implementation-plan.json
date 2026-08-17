@@ -1,0 +1,44 @@
+{
+  "understanding": "Thêm nút đăng xuất vào thanh điều hướng, gọi endpoint /auth/logout đã có sẵn và xóa session phía client.",
+  "affected_files": [
+    {
+      "path": "src/components/NavBar.tsx",
+      "change": "modify",
+      "why": "Thêm nút và trạng thái loading"
+    },
+    {
+      "path": "src/lib/auth.ts",
+      "change": "modify",
+      "why": "Thêm hàm logout() dùng lại apiClient đã có"
+    },
+    {
+      "path": "src/lib/auth.test.ts",
+      "change": "modify",
+      "why": "Test cho logout thành công và khi API trả 500"
+    }
+  ],
+  "dependencies": ["Không thêm package mới"],
+  "steps": [
+    {
+      "do": "Thêm hàm logout() trong src/lib/auth.ts, tái sử dụng apiClient",
+      "verify": "npm run typecheck exit 0"
+    },
+    {
+      "do": "Viết test cho logout() gồm cả nhánh API lỗi",
+      "verify": "npm test -- auth.test.ts exit 0"
+    },
+    {
+      "do": "Gắn nút vào NavBar, khóa nút khi đang gọi API",
+      "verify": "npm run build exit 0, mở app bấm nút thấy quay về /login"
+    }
+  ],
+  "validation_commands": [
+    "npm run lint",
+    "npm run typecheck",
+    "npm test",
+    "npm run build"
+  ],
+  "risks": [
+    "NavBar được render cả ở trang chưa đăng nhập — phải ẩn nút khi không có session"
+  ]
+}

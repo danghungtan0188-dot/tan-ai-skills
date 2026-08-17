@@ -1,0 +1,23 @@
+{
+  "source": "input/hoi-thi-mau.mp4",
+  "duration": 59.04,
+  "width": 1080,
+  "height": 1920,
+  "aspect_ratio": "9:16",
+  "orientation": "portrait",
+  "fps": 30.0,
+  "video_codec": "h264",
+  "audio_codec": "aac",
+  "sample_rate": 44100,
+  "channels": 2,
+  "has_audio": true,
+  "topic": "su-kien-phong-trao",
+  "observations": [
+    "Contact sheet cho thấy sân khấu trong nhà, phông nền đỏ, nhiều người mặc đồng phục",
+    "Có chữ tiêu đề cháy sẵn ở 1/3 trên trong khoảng 0–4 giây"
+  ],
+  "unknowns": [
+    "Chưa xác định được tên đơn vị tổ chức — chữ trên phông quá nhỏ để đọc chắc chắn",
+    "Chưa transcribe audio nên chưa biết nội dung lời nói"
+  ]
+}

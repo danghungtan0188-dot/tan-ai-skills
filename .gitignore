@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.pyc
+
+# Worktree tạm của agent Claude Code
+.claude/worktrees/
+
+# File media và sản phẩm làm việc — nặng, không thuộc mã nguồn skill
+/dongthap_reel.mp4
+/outputs/

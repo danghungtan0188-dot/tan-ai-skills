@@ -1,0 +1,30 @@
+name: dung-video-su-kien
+description: >
+  Cong thuc dung video tong ket su kien/hoi thi/tin tuc phong trao kieu Viet
+  Nam: title card banner do-vang, overlay gameshow (dem nguoc + trac
+  nghiem), transition hieu ung lua/xe, doan hero-intro nhan vat cuoi video,
+  tong mau anh sang san khau. Duc ket tu phan tich thuc te 1 video mau
+  (kenh Dong Thap 24h, hoi thi luc luong bao ve an ninh trat tu o co so).
+  Day la ban dac ta phong cach (playbook), khong tu render video.
+entrypoint: SKILL.md
+language: vi
+references:
+  - references/cau-truc-video.md
+  - references/do-hoa-tieu-de.md
+  - references/overlay-gameshow.md
+  - references/transition-hieu-ung.md
+  - references/hero-intro.md
+  - references/mau-sac-anh-sang.md
+assets:
+  - assets/shot-list-template.md
+scripts:
+  - scripts/sync_skill.py
+runtime:
+  interpreter: python3
+  network_access: false
+  requires_external_packages: false
+constraints:
+  - Khong tu render video, chi lap ke hoach/dac ta phong cach.
+  - Khong tu tai video co ban quyen cua nguoi khac de tai su dung noi dung.
+  - Khong bia ten don vi, giai thuong, so lieu su kien khi chua co thong tin that.
+  - Khong suy dien nhac nen/nhip cat theo beat khi chua nghe am thanh goc.

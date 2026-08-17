@@ -1,0 +1,5 @@
+interface:
+  display_name: "Chuyên gia Edit Video Tan"
+  short_description: "Dựng video chuyên nghiệp bằng code và FFmpeg"
+  brand_color: "#D71920"
+  default_prompt: "Use $chuyen-gia-edit-video-tan to analyze my footage and build a polished edit plan and render."

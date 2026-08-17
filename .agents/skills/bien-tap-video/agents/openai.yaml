@@ -1,0 +1,39 @@
+name: bien-tap-video
+description: >
+  Skill bien tap video thong minh - khi dua vao 1 video, tu phan tich
+  metadata + khung hinh de nhan dien chu de (su kien/hoi nghi, quang cao
+  san pham, vlog du lich, phong van/tutorial, dam cuoi/ky niem gia dinh,
+  the thao/hanh dong, am thuc, mang xa hoi ngan), roi ap dung dung phong
+  cach dung cho chu de do theo bo nguyen tac chat luong chuyen nghiep dung
+  chung. La lop dieu phoi (router + creative direction), khong tu render -
+  phoi hop voi video-use, HyperFrames, remotion-*, va skill
+  dung-video-su-kien cho chu de su kien.
+entrypoint: SKILL.md
+language: vi
+references:
+  - references/nguyen-tac-chat-luong.md
+  - references/quang-cao-san-pham.md
+  - references/vlog-du-lich.md
+  - references/phong-van-tutorial.md
+  - references/ky-niem-gia-dinh.md
+  - references/the-thao-hanh-dong.md
+  - references/am-thuc.md
+  - references/mang-xa-hoi-ngan.md
+assets:
+  - assets/bang-nhan-dien-chu-de.md
+  - assets/edit-plan-template.md
+scripts:
+  - scripts/phan_tich_video.py
+  - scripts/sync_skill.py
+runtime:
+  interpreter: python3
+  network_access: false
+  requires_external_packages: false
+  external_tools:
+    - ffmpeg
+    - ffprobe
+constraints:
+  - Khong tu render video hoan chinh, chi lap ke hoach/dieu phoi cong cu khac.
+  - Khong tu tai hoac tai su dung noi dung co ban quyen cua nguoi khac khi chua duoc phep.
+  - Khong bia thong tin xuat hien trong video (ten nguoi, dia diem, thuong hieu, so lieu).
+  - Khong suy dien nhac nen/loi thoai khi chua thuc su nghe/trich xuat duoc.

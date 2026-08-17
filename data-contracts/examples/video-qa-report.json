@@ -1,0 +1,67 @@
+{
+  "artifact": "dongthap_reel.mp4",
+  "checked_at": "2026-08-17T22:57:19+00:00",
+  "status": "FAIL",
+  "checks": [
+    {
+      "name": "file_exists",
+      "status": "PASS",
+      "detail": "108645961 byte"
+    },
+    {
+      "name": "duration",
+      "status": "PASS",
+      "detail": "182.067 giay"
+    },
+    {
+      "name": "video_stream",
+      "status": "PASS",
+      "detail": "vp9 1920x1080 @30.0fps"
+    },
+    {
+      "name": "pix_fmt",
+      "status": "PASS",
+      "detail": "yuv420p"
+    },
+    {
+      "name": "video_codec",
+      "status": "FAIL",
+      "detail": "vp9 thay vi h264"
+    },
+    {
+      "name": "faststart",
+      "status": "PASS",
+      "detail": "moov nam truoc mdat"
+    },
+    {
+      "name": "audio_stream",
+      "status": "PASS",
+      "detail": "aac 44100Hz 2ch"
+    },
+    {
+      "name": "audio_level",
+      "status": "PASS",
+      "detail": "mean_volume -17.3 dB"
+    }
+  ],
+  "errors": [
+    "video_codec: vp9 thay vi h264"
+  ],
+  "warnings": [],
+  "probe": {
+    "duration": 182.066667,
+    "size_bytes": 108645961,
+    "video": {
+      "codec": "vp9",
+      "width": 1920,
+      "height": 1080,
+      "pix_fmt": "yuv420p",
+      "fps": 30.0
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate": 44100,
+      "channels": 2
+    }
+  }
+}

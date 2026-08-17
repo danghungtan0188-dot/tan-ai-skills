@@ -1,0 +1,39 @@
+{
+  "output": "outputs/hoi-thi-mau_ban_tin.mp4",
+  "target_duration": 59.04,
+  "aspect_ratio": "9:16",
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 4.0,
+      "purpose": "Title card mở đầu, banner đỏ-vàng theo skill dung-video-su-kien",
+      "transition_in": "fade",
+      "effects": ["ken-burns-nhe"],
+      "text_overlays": ["HỘI THI LỰC LƯỢNG BẢO VỆ AN NINH TRẬT TỰ CƠ SỞ"]
+    },
+    {
+      "start": 4.0,
+      "end": 40.0,
+      "purpose": "Diễn biến chính, giữ nguyên tiếng hiện trường",
+      "transition_in": "dissolve",
+      "effects": [],
+      "text_overlays": ["lower-third người phát biểu khi có phỏng vấn"]
+    },
+    {
+      "start": 40.0,
+      "end": 59.04,
+      "purpose": "Hero-intro nhân vật và chốt lại",
+      "transition_in": "wipe",
+      "effects": ["slow-motion-cuoi"],
+      "text_overlays": []
+    }
+  ],
+  "color_grade": "Tăng nhẹ tương phản và độ bão hòa cho ánh sáng sân khấu, không đẩy quá tay vùng đỏ",
+  "audio_plan": "Giữ tiếng hiện trường, thêm nhạc nền ducking -18dB dưới lời nói, chuẩn hóa về -14 LUFS",
+  "subtitle_plan": "Phụ đề tiếng Việt 2 dòng, safe area 8% mép dưới — chỉ làm sau khi có transcript thật",
+  "skills_used": ["dung-video-su-kien", "hieu-ung-video", "video-use"],
+  "risks": [
+    "Chưa được phép cắt: tổng thời lượng phải giữ nguyên 59.04 giây",
+    "Lower-third có nguy cơ che mặt ở đoạn 12–18 giây, cần kiểm tra khung hình trước"
+  ]
+}
