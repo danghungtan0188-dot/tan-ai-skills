@@ -1,0 +1,27 @@
+name: video-thuyet-minh
+description: >
+  Quy trinh san xuat video co loi thuyet minh/ban tin tieng Viet tu dau
+  den cuoi - noi skill tan-giong-doc-ban-tin (kich ban -> giong doc chuan
+  phat thanh vien) voi skill bien-tap-video/dung-video-su-kien (dung/chinh
+  hinh anh) va video-use (thuc thi ghep). La lop dieu phoi toan quy trinh
+  (workflow orchestrator) - khong tu tong hop giong noi hay tu render, chi
+  goi dung thu tu 3 skill tren va xu ly phan dong bo loi doc voi hinh anh +
+  tron am thanh ma 3 skill kia khong tu lam.
+entrypoint: SKILL.md
+language: vi
+references:
+  - references/dong-bo-loi-doc-hinh-anh.md
+  - references/can-bang-am-thanh.md
+assets:
+  - assets/ke-hoach-video-thuyet-minh-template.md
+scripts:
+  - scripts/sync_skill.py
+runtime:
+  interpreter: python3
+  network_access: false
+  requires_external_packages: false
+constraints:
+  - Khong tu tong hop giong noi hay tu render video, chi dieu phoi cac skill khac.
+  - Khong tu viet lai noi dung kich ban.
+  - Khong tu bia hinh anh/canh quay khi nguoi dung chua cung cap.
+  - Khong tu them nhac nen khong ro nguon goc ban quyen.

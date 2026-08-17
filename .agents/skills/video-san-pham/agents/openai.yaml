@@ -1,0 +1,33 @@
+name: video-san-pham
+description: >
+  Dung mot video san pham ngan khi duoc yeu cau, tu du lieu 1 san pham
+  trong Excel/CSV + anh san pham - AI viet kich ban dung du lieu that,
+  tao giong doc, dong bo phu de bang ASR cap tu (vai tro Whisper), dung
+  canh co chuyen dong (vai tro Remotion/HyperFrames), ghep va xuat dung
+  dinh dang TikTok/Facebook (vai tro FFmpeg). Chay tung video mot theo
+  yeu cau, khong tu dong quet/xuat ca danh sach Excel. Kem nguyen tac
+  cung + buoc tu kiem tra chat luong sau khi render.
+entrypoint: SKILL.md
+language: vi
+references:
+  - references/quy-trinh-ky-thuat-remotion-whisper-ffmpeg.md
+  - references/du-lieu-dau-vao-excel-anh.md
+  - references/dinh-dang-xuat-tiktok-facebook.md
+  - references/kiem-tra-chat-luong-tu-dong.md
+assets:
+  - assets/ke-hoach-video-san-pham-template.md
+scripts:
+  - scripts/doc_du_lieu_san_pham.py
+  - scripts/kiem_tra_dau_ra.py
+  - scripts/sync_skill.py
+runtime:
+  interpreter: python3
+  network_access: false
+  requires_external_packages: false
+constraints:
+  - Chi xu ly 1 san pham duoc chi dinh trong yeu cau, khong tu dong quet/xuat ca file Excel.
+  - Khong tu bia thong tin san pham (gia, cong dung, khuyen mai) khong co trong du lieu.
+  - Khong tu tong hop giong noi, khong tu phien am, khong tu render - chi dieu phoi cac skill khac.
+  - Phu de phai lay timestamp tu buoc ASR cap tu, khong tu uoc luong.
+  - Bat buoc qua buoc kiem tra rui ro noi dung truoc khi xuat ban cuoi.
+  - Bat buoc tu kiem tra dau ra (Buoc H) truoc khi giao video, toi da 3 lan tu sua.

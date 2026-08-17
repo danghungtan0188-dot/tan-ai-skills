@@ -1,0 +1,29 @@
+name: phat-trien-app
+description: >
+  Quy trinh phat trien app va website: do kien truc du an hien co truoc khi
+  sua, quy uoc viet frontend (UI, component, state, responsive, accessibility),
+  backend (API, business logic, xac thuc, phan quyen, validation),
+  database/Supabase (schema, migration, RLS, query), va chuoi validation that
+  (lint - typecheck - test - build - security). La bo quy uoc dung chung cho
+  cac agent app-planner, app-builder, code-reviewer, app-tester,
+  security-reviewer. Khong tu chon framework thay nguoi dung, khong tu deploy.
+entrypoint: SKILL.md
+language: vi
+references:
+  - references/frontend.md
+  - references/backend.md
+  - references/supabase.md
+  - references/kiem-thu.md
+runtime:
+  interpreter: none
+  network_access: false
+  requires_external_packages: false
+  external_tools:
+    - git
+constraints:
+  - Khong tu chon framework khi du an chua co - phai hoi nguoi dung.
+  - Khong bia lenh validation; chi dung lenh lay tu package.json/Makefile/CI cua du an.
+  - Khong bao PASS cho buoc chua thuc su chay.
+  - Khong reset database, khong xoa du lieu, khong tat RLS, khong tao Service Role key.
+  - Khong deploy, khong push GitHub, khong dung toi production.
+  - Khong hardcode secret; doc tu bien moi truong.

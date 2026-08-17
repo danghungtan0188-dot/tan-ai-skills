@@ -1,0 +1,32 @@
+name: hieu-ung-video
+description: >
+  Thu vien hieu ung dung video kieu CapCut - chuyen canh (transition), hoat
+  hinh chu, bo loc mau (filter), chuyen dong camera (Ken Burns/zoom/pan),
+  sticker/icon overlay, va hieu chinh hinh anh (adjustment) - moi hieu ung
+  co cong thuc ffmpeg/HyperFrames thuc thi duoc ngay. La thu vien cong thuc
+  (cookbook), duoc bien-tap-video/dung-video-su-kien/video-thuyet-minh/
+  video-san-pham goi toi khi can 1 hieu ung cu the.
+entrypoint: SKILL.md
+language: vi
+references:
+  - references/chuyen-canh.md
+  - references/chu-va-hoat-hinh.md
+  - references/bo-loc-mau.md
+  - references/chuyen-dong-camera.md
+  - references/nhan-dan-sticker.md
+  - references/hieu-chinh.md
+assets:
+  - assets/thu-vien-hieu-ung.md
+scripts:
+  - scripts/sync_skill.py
+runtime:
+  interpreter: python3
+  network_access: false
+  requires_external_packages: false
+  external_tools:
+    - ffmpeg
+constraints:
+  - Khong tu tai logo/sticker co ban quyen cua ben thu ba.
+  - Khong tu render toan bo video, chi ap hieu ung len doan duoc chi dinh.
+  - Khong dung stabilize xuyen qua nhieu canh cat khac nhau trong 1 lan chay.
+  - Luon kiem tra tinh toan ven file (ffmpeg -v error -f null) sau moi buoc xu ly.

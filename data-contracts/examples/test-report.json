@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "stage": "lint",
+      "status": "PASS",
+      "command": "npm run lint",
+      "exit_code": 0,
+      "detail": "0 error, 3 warning"
+    },
+    {
+      "stage": "typecheck",
+      "status": "FAIL",
+      "command": "npm run typecheck",
+      "exit_code": 2,
+      "detail": "src/api/user.ts:41 — Property 'role' does not exist on type 'Session'"
+    },
+    {
+      "stage": "unit",
+      "status": "NOT_RUN",
+      "reason_not_run": "Dừng vì typecheck FAIL, sửa xong sẽ chạy lại"
+    },
+    {
+      "stage": "build",
+      "status": "NOT_RUN",
+      "reason_not_run": "Dừng vì typecheck FAIL"
+    },
+    {
+      "stage": "security",
+      "status": "NOT_RUN",
+      "reason_not_run": "Chạy sau khi các bước trên PASS"
+    }
+  ],
+  "overall": "FAIL"
+}

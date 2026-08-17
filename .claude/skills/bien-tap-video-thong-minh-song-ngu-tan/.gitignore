@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+edit/
+*.mp4
+private/
+*.wav
+*.flac

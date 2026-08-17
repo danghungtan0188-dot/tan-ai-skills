@@ -1,0 +1,5 @@
+interface:
+  display_name: "Biên tập video thông minh song ngữ Tan"
+  short_description: "Tự chọn cách dựng và phụ đề Anh–Việt"
+  brand_color: "#0B4F8A"
+  default_prompt: "Use $bien-tap-video-thong-minh-song-ngu-tan to analyze my video, choose a suitable editing style, and add English-over-Vietnamese subtitles."
