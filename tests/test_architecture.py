@@ -7,7 +7,9 @@ skill chua dong bo.
 """
 
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 import unittest
@@ -114,10 +116,29 @@ class TestHooks(unittest.TestCase):
         self.assertTrue(commands, "settings.json khong khai bao hook nao")
         for command in commands:
             with self.subTest(command=command):
-                match = re.search(r"([\w./\\-]+\.py)", command)
-                self.assertIsNotNone(match, "Lenh hook phai tro toi mot file .py")
+                # Duong dan tuong doi hong ngay khi cwd doi sang thu muc con:
+                # moi lenh Bash/Edit bi chan. Bat buoc tinh tu CLAUDE_PROJECT_DIR.
+                match = re.search(r'"\$\{CLAUDE_PROJECT_DIR\}/([\w./\\-]+\.py)"', command)
+                self.assertIsNotNone(
+                    match, 'Lenh hook phai co dang python "${CLAUDE_PROJECT_DIR}/...py"')
                 self.assertTrue((REPO_ROOT / match.group(1)).is_file(),
                                 f"Khong tim thay script: {match.group(1)}")
+
+    def test_hook_chay_duoc_tu_thu_muc_con(self):
+        bash = shutil.which("bash")
+        if not bash:
+            self.skipTest("khong co bash")
+        settings = json.loads(SETTINGS.read_text(encoding="utf-8"))
+        guard = next(h["command"] for g in settings["hooks"]["PreToolUse"]
+                     for h in g["hooks"] if "guard_bash" in h["command"])
+        env = {**os.environ, "CLAUDE_PROJECT_DIR": REPO_ROOT.as_posix()}
+        for cmd, expect in (("git status", 0), ("rm -rf /", 2)):
+            with self.subTest(cmd=cmd):
+                r = subprocess.run([bash, "-c", guard], cwd=REPO_ROOT / "skills",
+                                   input=json.dumps({"tool_name": "Bash",
+                                                     "tool_input": {"command": cmd}}),
+                                   env=env, capture_output=True, text=True)
+                self.assertEqual(r.returncode, expect, r.stderr)
 
     def test_script_hook_khong_loi_cu_phap(self):
         for path in sorted(HOOKS.glob("*.py")):

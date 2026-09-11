@@ -1,0 +1,41 @@
+{
+  "_ghi_chu": "5 phong cách hình ảnh 'chất truyền hình Việt Nam' — thiết kế nguyên bản, không lấy màu/nhận diện của VTV, HTV hay đài cụ thể. Cỡ chữ tính theo tỉ lệ chiều cao khung (H). Thời gian motion tính bằng giây.",
+  "chung": {
+    "font": {"dam": "C:/Windows/Fonts/arialbd.ttf", "thuong": "C:/Windows/Fonts/arial.ttf"},
+    "co_chu": {"headline": 0.050, "ten": 0.045, "chuc_danh": 0.033, "chip": 0.028, "ticker": 0.032, "the_so_lieu": 0.085},
+    "co_chu_toi_thieu_px_1080": 26,
+    "tuong_phan_toi_thieu": 4.5,
+    "icon": {"luoi": 24, "net": 2, "dau_net": "round"}
+  },
+  "national-modern": {
+    "mo_ta": "chính luận, thông tin công cộng",
+    "mau": {"nen": "#0B2A6B", "nen_2": "#123C8C", "nhan": "#D71920", "phu": "#F5C518", "chu": "#FFFFFF", "chu_phu": "#CFE0FF"},
+    "bo_goc": 6, "mat_do": "thoang",
+    "motion": {"vao": 0.45, "ra": 0.35, "kieu": "slide", "ease": "out-cubic"}
+  },
+  "newsroom-digital": {
+    "mo_ta": "công nghệ, kinh tế, tin nhanh",
+    "mau": {"nen": "#0A1020", "nen_2": "#13233F", "nhan": "#00C2FF", "phu": "#7CFFB2", "chu": "#FFFFFF", "chu_phu": "#9FB3D1"},
+    "bo_goc": 10, "mat_do": "day",
+    "motion": {"vao": 0.30, "ra": 0.25, "kieu": "mask", "ease": "out-quart"}
+  },
+  "editorial-premium": {
+    "mo_ta": "phân tích, phỏng vấn, phóng sự",
+    "mau": {"nen": "#15161A", "nen_2": "#23252B", "nhan": "#C9A45C", "phu": "#E8E1D3", "chu": "#FFFFFF", "chu_phu": "#B8B2A6"},
+    "bo_goc": 2, "mat_do": "thoang",
+    "motion": {"vao": 0.60, "ra": 0.45, "kieu": "fade", "ease": "in-out-sine"}
+  },
+  "community-live": {
+    "mo_ta": "sự kiện và tin địa phương",
+    "mau": {"nen": "#0E6B4F", "nen_2": "#128A64", "nhan": "#FFB300", "phu": "#FFFFFF", "chu": "#FFFFFF", "chu_phu": "#D8F3E8"},
+    "bo_goc": 14, "mat_do": "vua",
+    "motion": {"vao": 0.40, "ra": 0.30, "kieu": "slide", "ease": "out-back"}
+  },
+  "urgent-alert": {
+    "mo_ta": "cảnh báo, giao thông, thời tiết, tin khẩn",
+    "mau": {"nen": "#8E0F14", "nen_2": "#B3151B", "nhan": "#FFD200", "phu": "#FFE14D", "chu": "#FFFFFF", "chu_phu": "#FFE9A8"},
+    "bo_goc": 4, "mat_do": "day",
+    "motion": {"vao": 0.25, "ra": 0.25, "kieu": "slide", "ease": "out-cubic", "nhap_nhay_toi_da_hz": 0},
+    "bat_buoc": ["verified", "source"]
+  }
+}

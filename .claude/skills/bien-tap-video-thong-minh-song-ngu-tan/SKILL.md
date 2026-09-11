@@ -7,6 +7,19 @@ description: Phân tích nội dung, hình ảnh, lời nói và nhịp của t�
 
 Phân tích trước, chọn phong cách sau. Không áp một preset cho mọi video.
 
+> **Bản tin ATT NEWS (xã An Thạnh Thủy):** đã có bộ thông số chốt sẵn — logo góc, vị trí
+> icon mạng xã hội, cỡ/màu phụ đề, lệnh render. Đọc [references/phong-cach-att-news.md](references/phong-cach-att-news.md)
+> và áp dụng y nguyên, không dựng lại từ đầu. Tài nguyên góc sinh bằng
+> `scripts/make_att_bugs.py`.
+
+## Nâng cấp chi tiết
+
+- **Song ngữ Việt–Anh:** [references/quy-trinh-song-ngu.md](references/quy-trinh-song-ngu.md) — lời Việt theo kịch bản (ASR chỉ lấy mốc), glossary, `check_translation.py`, 4 chế độ xuất (`export_subtitles.py`), kiểm SRT/VTT (`check_subtitles.py`).
+- **ATT NEWS một lượt:** `detect_scenes.py` → `make_tv_card.py` → `make_outro.py` → `render_att.py` → `qa.py --tail`; banner kiểm tràn cảnh bằng `make_lower_thirds_ass.py --scenes`.
+- **MC AI / lip-sync:** [skills/chuyen-gia-edit-video-tan/references/mc-ai-lip-sync.md](skills/chuyen-gia-edit-video-tan/references/mc-ai-lip-sync.md)
+- **Chức năng kiểu CapCut:** [skills/chuyen-gia-edit-video-tan/references/capcut-catalog.md](skills/chuyen-gia-edit-video-tan/references/capcut-catalog.md)
+- **Banner – icon truyền hình VN:** [skills/chuyen-gia-edit-video-tan/references/he-thong-do-hoa-truyen-hinh.md](skills/chuyen-gia-edit-video-tan/references/he-thong-do-hoa-truyen-hinh.md)
+
 ## Quy trình
 
 1. Chạy `scripts/analyze_and_plan.py INPUT --transcript transcript.txt --out edit/plan.json` để đo thông số, mật độ chuyển cảnh và phân loại nội dung.

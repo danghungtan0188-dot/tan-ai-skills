@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python .claude/hooks/guard_secrets.py",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_secrets.py\"",
             "timeout": 15
           }
         ]
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python .claude/hooks/guard_bash.py",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_bash.py\"",
             "timeout": 15
           }
         ]
@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python .claude/hooks/check_render.py",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/check_render.py\"",
             "timeout": 60
           }
         ]

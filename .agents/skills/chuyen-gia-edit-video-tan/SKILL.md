@@ -29,6 +29,13 @@ Biến yêu cầu, tư liệu gốc và video tham chiếu thành phương án d
 
 Đọc `references/effect-catalog.md` khi chọn preset; `references/project-schema.md` trước khi viết JSON.
 
+## Nâng cấp chi tiết
+
+- **MC AI / lip-sync:** [references/mc-ai-lip-sync.md](references/mc-ai-lip-sync.md) — quyền khuôn mặt/giọng nói, nhãn nội dung AI, nối `mc-lip-sync`, QA miệng–răng–mắt–tóc–tay–viền–ánh sáng–liên tục (`scripts/mc_qa_frames.py`).
+- **Chức năng kiểu CapCut:** [references/capcut-catalog.md](references/capcut-catalog.md) — trạng thái thật của từng chức năng trên máy.
+- **Banner – chú thích – icon truyền hình VN:** [references/he-thong-do-hoa-truyen-hinh.md](references/he-thong-do-hoa-truyen-hinh.md) — 5 phong cách, 15 banner, chú thích, 22 icon, motion, 7 preset, kiểm tự động `scripts/validate_graphics.py`.
+- **Song ngữ:** [skills/bien-tap-video-thong-minh-song-ngu-tan/references/quy-trinh-song-ngu.md](skills/bien-tap-video-thong-minh-song-ngu-tan/references/quy-trinh-song-ngu.md) — dùng `check_subtitles.py` của skill đó cho mọi file SRT/VTT.
+
 ## Banner người phát biểu
 
 - Khi có người phát biểu, ưu tiên banner hai dòng: tên ở trên; chức vụ–đơn vị hoặc địa chỉ ở dưới.

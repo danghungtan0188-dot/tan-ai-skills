@@ -166,41 +166,58 @@ def _main() -> int:
     gap_samples = int(sample_rate * args.gap_ms / 1000)
     silence = np.zeros(gap_samples, dtype=np.float32)
 
-    audio_segments: List["np.ndarray"] = []
+    wav_path, mp3_path = _build_output_paths(args)
+    parts_dir = wav_path.parent / f".{wav_path.stem}_parts"
+    parts_dir.mkdir(parents=True, exist_ok=True)
+
+    done: List[Path] = []
     failures: List[str] = []
     t_synth = time.time()
     for i, paragraph in enumerate(paragraphs, 1):
+        part_path = parts_dir / f"p{i:04d}.npy"
+        if part_path.exists():  # lần chạy trước đã xong đoạn này
+            print(f"[{i}/{len(paragraphs)}] Đã có sẵn, bỏ qua.", flush=True)
+            done.append(part_path)
+            continue
         preview = paragraph if len(paragraph) <= 60 else paragraph[:57] + "..."
-        print(f"[{i}/{len(paragraphs)}] Đang tổng hợp: {preview}")
+        print(f"[{i}/{len(paragraphs)}] Đang tổng hợp: {preview}", flush=True)
         try:
             audio = vieneu.infer(paragraph, voice=voice_name, style=args.style)
         except Exception as exc:  # tiếp tục các đoạn còn lại thay vì huỷ toàn bộ
             failures.append(f"Đoạn {i}: {exc}")
             print(f"  LOI ở đoạn {i}, bỏ qua và tiếp tục: {exc}", file=sys.stderr)
             continue
-        audio_segments.append(np.asarray(audio, dtype=np.float32))
-        if i < len(paragraphs):
-            audio_segments.append(silence)
+        # Lưu ngay từng đoạn: máy này hay treo giữa chừng, chạy lại sẽ tiếp được chỗ dở.
+        np.save(part_path, np.asarray(audio, dtype=np.float32))
+        done.append(part_path)
 
-    if not audio_segments:
+    if not done:
         return _die("Không tổng hợp được đoạn nào — xem lỗi phía trên.", code=1)
+
+    audio_segments: List["np.ndarray"] = []
+    for n, part_path in enumerate(done, 1):
+        audio_segments.append(np.load(part_path))
+        if n < len(done):
+            audio_segments.append(silence)
 
     combined = np.concatenate(audio_segments)
     synth_seconds = time.time() - t_synth
     audio_seconds = len(combined) / sample_rate
     print(
-        f"Đã tổng hợp {len(paragraphs) - len(failures)}/{len(paragraphs)} đoạn "
+        f"Đã tổng hợp {len(done)}/{len(paragraphs)} đoạn "
         f"trong {synth_seconds:.1f}s (audio dài {audio_seconds:.1f}s, "
         f"RTF={synth_seconds / audio_seconds:.2f})"
     )
 
-    wav_path, mp3_path = _build_output_paths(args)
     vieneu.save(combined, str(wav_path))
     print(f"✅ Đã lưu WAV {sample_rate} Hz: {wav_path}")
 
     if not args.no_mp3:
         if _convert_to_mp3(wav_path, mp3_path, args.mp3_bitrate):
             print(f"✅ Đã lưu MP3 ({args.mp3_bitrate}): {mp3_path}")
+
+    if not failures:
+        shutil.rmtree(parts_dir, ignore_errors=True)
 
     if failures:
         print(f"\n⚠️  {len(failures)} đoạn bị lỗi và đã bị bỏ qua:", file=sys.stderr)

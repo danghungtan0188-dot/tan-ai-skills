@@ -1,0 +1,40 @@
+{
+  "_ghi_chu": "7 preset chương trình. 'thanh_phan' là tên component trong scripts/broadcast_kit.py. Bản tin ATT NEWS dùng 'chinh-luan' (national-modern gần màu navy của kênh) hoặc 'cong-dong'.",
+  "tin-nhanh": {
+    "phong_cach": "newsroom-digital", "khung": ["16:9", "9:16"], "do_dai": "45–90 s",
+    "thanh_phan": ["headline_strap", "topic_slug", "chip", "lower_third", "source_strap"],
+    "phu_de": "vi", "nhip": "cắt 2–4 s", "chuyen_canh": "cut, dissolve ≤0,3 s", "nhac": "nhẹ, dưới lời ≥12 dB"
+  },
+  "chinh-luan": {
+    "phong_cach": "national-modern", "khung": ["16:9"], "do_dai": "1–3 phút",
+    "thanh_phan": ["headline_strap", "lower_third", "chip", "quote_card", "fact_card", "source_strap", "end_card"],
+    "phu_de": "song-ngu", "nhip": "giữ cảnh 3–6 s", "chuyen_canh": "cut, dissolve ≤0,5 s", "nhac": "không hoặc rất nhỏ"
+  },
+  "phan-tich": {
+    "phong_cach": "editorial-premium", "khung": ["16:9"], "do_dai": "3–8 phút",
+    "thanh_phan": ["topic_slug", "lower_third", "quote_card", "fact_card", "comparison", "timeline", "source_strap"],
+    "phu_de": "vi", "nhip": "giữ cảnh 4–8 s cho người xem đọc", "chuyen_canh": "cut, fade", "nhac": "nền mỏng, ducking"
+  },
+  "cong-nghe": {
+    "phong_cach": "newsroom-digital", "khung": ["16:9", "1:1"], "do_dai": "1–2 phút",
+    "thanh_phan": ["headline_strap", "fact_card", "comparison", "chart", "counter", "source_strap", "label_chip"],
+    "phu_de": "vi", "nhip": "cắt 2–5 s", "chuyen_canh": "cut, mask reveal", "nhac": "điện tử nhẹ"
+  },
+  "cong-dong": {
+    "phong_cach": "community-live", "khung": ["16:9", "9:16"], "do_dai": "1–2 phút",
+    "thanh_phan": ["headline_strap", "chip", "lower_third", "fact_card", "end_card"],
+    "phu_de": "song-ngu", "nhip": "cắt 3–5 s", "chuyen_canh": "cut, dissolve", "nhac": "ấm, dưới lời"
+  },
+  "canh-bao-khan": {
+    "phong_cach": "urgent-alert", "khung": ["16:9", "9:16", "1:1"], "do_dai": "20–60 s",
+    "thanh_phan": ["breaking_bar", "status_bar", "ticker", "chip", "map_card", "source_strap"],
+    "phu_de": "vi", "nhip": "thông tin trước, hình sau", "chuyen_canh": "cut",
+    "nhac": "không", "bat_buoc": ["verified=true", "source", "thời điểm cập nhật"], "cam": ["nhấp nháy", "còi hú giả"]
+  },
+  "social-doc": {
+    "phong_cach": "community-live", "khung": ["9:16"], "do_dai": "15–60 s",
+    "thanh_phan": ["headline_strap", "lower_third", "fact_card", "end_card"],
+    "phu_de": "vi cỡ lớn, đốt vào hình", "nhip": "móc câu trong 2 s đầu", "chuyen_canh": "cut, slide",
+    "nhac": "theo xu hướng nhưng phải có quyền", "vung_cam": "trên 12%, dưới 20%, phải 15% (UI nền tảng)"
+  }
+}

@@ -1,5 +1,9 @@
 # ATT NEWS Preset
 
+> Toạ độ, cỡ, lệnh render và quy trình chuẩn nằm ở
+> [skills/bien-tap-video-thong-minh-song-ngu-tan/references/phong-cach-att-news.md](skills/bien-tap-video-thong-minh-song-ngu-tan/references/phong-cach-att-news.md).
+> Khi hai file lệch nhau, theo file đó. File này chỉ giữ phần định hướng.
+
 ## Phong cách
 Bản tin truyền hình cấp cơ sở: chính thống, hiện đại, sáng, sạch, dễ đọc trên điện thoại. Tông ưu tiên xanh dương - trắng, nhấn đỏ/vàng vừa phải.
 
@@ -23,7 +27,7 @@ Bản tin truyền hình cấp cơ sở: chính thống, hiện đại, sáng, s
 ## Social
 - Facebook và Zalo phải nhỏ, đúng nhận diện, gọn ở mép khung.
 - Không để panel social lớn.
-- Mặc định 4-8% chiều rộng khung hình.
+- Cụm Facebook + Zalo: 194×62 px ở khung 1920×1080, đặt tại x=46, y=H-h-46, alpha 0,94.
 - Nếu logo nguồn không chắc chắn, dùng asset chính thức do người dùng cung cấp hoặc wordmark sạch; không tự vẽ logo sai.
 
 ## Logo

@@ -11,11 +11,21 @@ def ts(seconds: float) -> str:
 def clean(value: object) -> str:
     return str(value).replace("\\","\\\\").replace("{","\\{").replace("}","\\}").replace("\n"," ").strip()
 
+def check_scenes(rows: list, scenes_path: Path) -> list[str]:
+    """Banner phải nằm trọn trong một cảnh; tràn cảnh = gắn tên vào người khác."""
+    d=json.loads(scenes_path.read_text(encoding="utf-8")); cuts=sorted(float(c) for c in d["cuts"]); loi=[]
+    for r in rows:
+        st,en=float(r["start"]),float(r["end"]); cat=[c for c in cuts if st<c<en]
+        if cat: loi.append(f"'{r['name']}' {st}–{en}s tràn qua mốc cắt cảnh {cat[0]}s")
+    return loi
+
 def main() -> int:
-    ap=argparse.ArgumentParser(); ap.add_argument("input",type=Path); ap.add_argument("output",type=Path); ap.add_argument("--width",type=int,default=1920); ap.add_argument("--height",type=int,default=1080); a=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument("input",type=Path); ap.add_argument("output",type=Path); ap.add_argument("--width",type=int,default=1920); ap.add_argument("--height",type=int,default=1080); ap.add_argument("--scenes",type=Path,help="scenes.json từ detect_scenes.py — chặn banner tràn cảnh"); a=ap.parse_args()
     rows=json.loads(a.input.read_text(encoding="utf-8"));
     if not isinstance(rows,list): raise SystemExit("lower-thirds.json phải là một mảng")
-    ns=max(34,round(a.height*.045)); ds=max(28,round(a.height*.035)); mx=round(a.width*.05); y=round(a.height*.72); by=y-round(a.height*.025); bh=round(a.height*.135); bw=round(a.width*.72)
+    if a.scenes and (loi:=check_scenes(rows,a.scenes)): raise SystemExit("Banner tràn cảnh:\n"+"\n".join(loi))
+    # y=.655: hộp 680–826 ở 1080p, tránh dòng phụ đề tiếng Anh (đỉnh ~876). Mức .72 cũ đè lên nó.
+    ns=max(34,round(a.height*.045)); ds=max(28,round(a.height*.035)); mx=round(a.width*.05); y=round(a.height*.655); by=y-round(a.height*.025); bh=round(a.height*.135); bw=round(a.width*.72)
     head=f"""[Script Info]\nScriptType: v4.00+\nPlayResX: {a.width}\nPlayResY: {a.height}\nScaledBorderAndShadow: yes\n\n[V4+ Styles]\nFormat: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding\nStyle: Name,Arial,{ns},&H00FFFFFF,&H00FFFFFF,&H90000000,&H00000000,-1,0,0,0,100,100,0,0,1,1.2,0,7,0,0,0,1\nStyle: Detail,Arial,{ds},&H00FFFFFF,&H00FFFFFF,&H90000000,&H00000000,0,0,0,0,100,100,0,0,1,1,0,7,0,0,0,1\n\n[Events]\nFormat: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text\n"""; events=[]
     for i,r in enumerate(rows):
         st=float(r["start"]); en=float(r["end"]); name=clean(r["name"]); detail=clean(r.get("detail",""))
