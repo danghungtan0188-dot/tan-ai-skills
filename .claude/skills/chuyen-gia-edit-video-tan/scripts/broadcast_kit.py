@@ -9,7 +9,9 @@ spec.json: {"style": "...", "aspect": "16:9", "items": [{"id": "lt1", "type": "l
             "start": 12.4, "end": 17.0, "args": {"name": "...", "title": "..."}}, ...]}
 Mỗi item ra thư mục gfx/<id>/f_%04d.png + mục manifest (vị trí, khung giờ, màu chữ/nền, cỡ chữ).
 Ghép vào video: -framerate 30 -i gfx/<id>/f_%04d.png rồi
-  [k:v]setpts=PTS-STARTPTS+<start>/TB[g];[base][g]overlay=<x>:<y>:eof_action=pass
+  [k:v]setpts=PTS-STARTPTS+<start>/TB[g];[base][g]overlay=<overlay_x>:<overlay_y>:eof_action=pass
+Manifest ghi `x,y` = chỗ đồ hoạ ĐỨNG YÊN (để kiểm bố cục) và `overlay_x,overlay_y` = chỗ đặt
+chuỗi khung khi ghép (lùi ra ngoài một đoạn nếu kiểu motion là trượt vào).
 Tin khẩn (urgent-alert) không có kiểu nhấp nháy, và bị từ chối nếu thiếu verified/source.
 """
 from __future__ import annotations
@@ -394,10 +396,10 @@ def render_spec(spec: dict, out_dir: Path) -> list[dict]:
         seconds = it["end"] - it["start"]
         if it["type"] == "ticker_strip":
             ticker_frames(im, kit.W, out_dir / it["id"], seconds)
-            meta.update(w=kit.W)
+            meta.update(w=kit.W, overlay_x=meta["x"], overlay_y=meta["y"])
         else:
             info = animate(im, out_dir / it["id"], seconds, mo["kieu"], mo["vao"], mo["ra"])
-            meta["x"] += info["dx"]
+            meta.update(overlay_x=meta["x"] + info["dx"], overlay_y=meta["y"])
         manifest.append({"id": it["id"], "type": it["type"], "style": kit.name, "aspect": kit.aspect,
                          "start": it["start"], "end": it["end"], **meta})
     (out_dir / "manifest.json").write_text(json.dumps({"aspect": kit.aspect, "items": manifest},

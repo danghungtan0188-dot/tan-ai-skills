@@ -92,5 +92,5 @@ Ghép một đồ hoạ vào video:
 
 ```
 -framerate 30 -i gfx/<id>/f_%04d.png
-[k:v]setpts=PTS-STARTPTS+<start>/TB[g];[base][g]overlay=<x>:<y>:eof_action=pass
+[k:v]setpts=PTS-STARTPTS+<start>/TB[g];[base][g]overlay=<overlay_x>:<overlay_y>:eof_action=pass
 ```

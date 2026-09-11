@@ -25,12 +25,12 @@ Phân tích trước, chọn phong cách sau. Không áp một preset cho mọi 
 1. Chạy `scripts/analyze_and_plan.py INPUT --transcript transcript.txt --out edit/plan.json` để đo thông số, mật độ chuyển cảnh và phân loại nội dung.
 2. Đọc `references/editing-profiles.md`, đối chiếu kết quả tự động với nội dung thật và chọn một profile chính; chỉ pha profile khi có lý do rõ.
 3. Mặc định `cut_authorized=false`. Không trim, bỏ cảnh, rút khoảng lặng, freeze hoặc speed-ramp làm đổi thời lượng. Nếu muốn cắt, liệt kê mốc, lý do và hỏi người dùng.
-4. Chuẩn bị `bilingual.json` theo `references/bilingual-contract.md`. Dịch theo nghĩa và văn phong tự nhiên; giữ nguyên tên riêng, chức danh, địa danh, số liệu. Không dịch từ nội dung chưa nghe/đọc rõ.
-5. Khi có người phát biểu/phỏng vấn, xác minh tên và chức vụ/đơn vị hoặc địa chỉ; tạo `lower-thirds.ass` theo `references/lower-third-contract.md`. Không nhận diện hoặc đoán danh tính từ hình ảnh.
+4. Dựng `bilingual.json` theo `references/bilingual-contract.md` và [references/quy-trinh-song-ngu.md](references/quy-trinh-song-ngu.md): `scripts/build_bilingual.py transcribe INPUT` lấy **mốc thời gian**, viết `cues.json` với lời Việt **theo kịch bản gốc** (không chép ASR), rồi `scripts/build_bilingual.py build`. Giữ nguyên tên riêng, chức danh, địa danh, số liệu.
+5. Chạy `scripts/detect_scenes.py INPUT --out scenes.json`. Khi có người phát biểu, xác minh tên và chức vụ từ kịch bản, rồi `scripts/make_lower_thirds_ass.py lower-thirds.json lt.ass --scenes scenes.json` — tham số `--scenes` chặn banner tràn sang cảnh khác. Không đoán danh tính từ hình ảnh.
 6. Nếu người dùng yêu cầu dùng giọng cá nhân đã được chính họ cho phép, đọc `references/authorized-voice.md`. Chỉ dùng hồ sơ đã có xác nhận; không commit mẫu giọng, token hoặc `voice_profile_id` lên GitHub.
-7. Chạy `scripts/make_bilingual_ass.py bilingual.json captions.ass`: tiếng Anh dòng trên, tiếng Việt dòng dưới, cùng mốc thời gian.
-8. Chạy `scripts/render.py INPUT plan.json captions.ass OUTPUT --source INPUT --lower-thirds lower-thirds.ass`; bỏ đối số cuối nếu video không có người phát biểu.
-9. Chạy `scripts/qa.py OUTPUT --source INPUT --cut-authorized no --captions bilingual.json` và xem thủ công các điểm vào/ra chữ, chuyển cảnh, lower-third, 2 giây đầu/cuối.
+7. Kiểm bản dịch `scripts/check_translation.py bilingual.json`, xuất phụ đề `scripts/export_subtitles.py bilingual.json --mode all`, kiểm file rời `scripts/check_subtitles.py`.
+8. Render một lượt. Bản tin ATT NEWS: `scripts/render_att.py INPUT --captions cap.song-ngu.ass --lower-thirds lt.ass --scenes scenes.json --card card.png --outro-dir outro --out OUT.mp4` (xem [references/phong-cach-att-news.md](references/phong-cach-att-news.md)). Video thường: `scripts/render.py INPUT plan.json captions.ass OUTPUT --lower-thirds lt.ass`.
+9. Chạy `scripts/qa.py OUTPUT --source INPUT --cut-authorized no --tail <giây outro> --captions bilingual.json` và xem thủ công các điểm vào/ra chữ, chuyển cảnh, lower-third, 2 giây đầu/cuối.
 
 ## Ra quyết định theo nội dung
 

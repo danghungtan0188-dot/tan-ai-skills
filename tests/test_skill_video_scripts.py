@@ -309,5 +309,132 @@ class TestQaTail(unittest.TestCase):
             self.assertEqual(subprocess.run(lenh + ["--tail", "1"], capture_output=True).returncode, 0)
 
 
+class TestRenderSpec(unittest.TestCase):
+    """Duong chay chinh cua broadcast_kit: spec.json -> chuoi khung + manifest."""
+
+    def test_render_spec_ra_khung_va_manifest_dat(self):
+        spec = {"style": "national-modern", "aspect": "16:9", "items": [
+            {"id": "lt1", "type": "lower_third", "start": 1.0, "end": 3.0,
+             "args": {"name": "Ten", "title": "Chuc danh"}},
+            {"id": "tk1", "type": "ticker_strip", "start": 0.0, "end": 1.0,
+             "args": {"items": ["tin mot", "tin hai"]}}]}
+        with tempfile.TemporaryDirectory() as t:
+            out = Path(t) / "gfx"
+            man = broadcast_kit.render_spec(spec, out)
+            self.assertEqual(len(man), 2)
+            self.assertEqual(len(list((out / "lt1").glob("f_*.png"))), 60)   # 2 s x 30 fps
+            self.assertEqual(len(list((out / "tk1").glob("f_*.png"))), 30)
+            luu = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(validate_graphics.validate(luu)[0], [])
+
+    def test_component_khong_co_thi_bao_loi(self):
+        with tempfile.TemporaryDirectory() as t:
+            with self.assertRaises(SystemExit):
+                broadcast_kit.render_spec(
+                    {"style": "national-modern", "items": [{"id": "x", "type": "khong_co",
+                                                            "start": 0, "end": 1}]}, Path(t))
+
+    def test_spec_mau_dung_dinh_dang(self):
+        p = CHUYEN_GIA.parent / "assets" / "broadcast" / "spec.example.json"
+        spec = json.loads(p.read_text(encoding="utf-8"))
+        kit = broadcast_kit.Kit(spec["style"], spec["aspect"])
+        for it in spec["items"]:
+            with self.subTest(item=it["id"]):
+                self.assertTrue(hasattr(kit, it["type"]))
+                self.assertLess(it["start"], it["end"])
+
+
+class TestMotion(unittest.TestCase):
+    def khung(self, kieu):
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as t:
+            im = Image.new("RGBA", (200, 50), (255, 0, 0, 255))
+            info = broadcast_kit.animate(im, Path(t), 1.0, kieu, .3, .3)
+            return info, sorted(Path(t).glob("f_*.png"))
+
+    def test_truot_bu_lai_khoang_dich(self):
+        info, files = self.khung("slide")
+        self.assertEqual(len(files), 30)
+        self.assertEqual(info["dx"], -60)
+
+    def test_mo_dan_va_lo_dan_khong_doi_vi_tri(self):
+        for kieu in ("fade", "mask"):
+            with self.subTest(kieu=kieu):
+                info, files = self.khung(kieu)
+                self.assertEqual(info["dx"], 0)
+                self.assertEqual(len(files), 30)
+
+    def test_bo_dem_va_ticker(self):
+        kit = broadcast_kit.Kit("national-modern", "16:9")
+        with tempfile.TemporaryDirectory() as t:
+            n = callouts.counter_frames(kit, 2500, "nguoi dan", 1.0, Path(t) / "dem")
+            self.assertEqual(n, 30)
+            self.assertEqual(len(list((Path(t) / "dem").glob("f_*.png"))), 30)
+            strip, _ = kit.ticker_strip(["a", "b"])
+            self.assertEqual(broadcast_kit.ticker_frames(strip, kit.W, Path(t) / "tk", 0.5), 15)
+
+
+class TestMcQaFrames(unittest.TestCase):
+    def setUp(self):
+        sys.path.insert(0, str(CHUYEN_GIA))
+        import mc_qa_frames
+        self.m = mc_qa_frames
+
+    def test_chon_tu_co_am_moi_khep(self):
+        words = [{"s": 1.0, "e": 1.2, "w": "bà"}, {"s": 2.0, "e": 2.2, "w": "phát"},
+                 {"s": 3.0, "e": 3.2, "w": "mẹ"}, {"s": 4.0, "e": 4.2, "w": "ăn"}]
+        tu = [w for _, w in self.m.pick(words, every=99, limit=99)]
+        self.assertIn("bà", tu)
+        self.assertIn("mẹ", tu)
+        self.assertNotIn("phát", tu, "ph la am /f/, moi khong khep")
+        self.assertNotIn("ăn", tu)
+
+    def test_gioi_han_so_khung(self):
+        words = [{"s": i * 0.5, "e": i * 0.5 + .2, "w": "ba"} for i in range(50)]
+        self.assertLessEqual(len(self.m.pick(words, every=1, limit=12)), 12)
+
+
+class TestMakeOutroGuard(unittest.TestCase):
+    def test_outro_duoi_3_giay_bi_chan(self):
+        with tempfile.TemporaryDirectory() as t:
+            logo = Path(t) / "logo.png"
+            from PIL import Image
+            Image.new("RGBA", (268, 78)).save(logo)
+            r = subprocess.run([sys.executable, str(SONG_NGU / "make_outro.py"), "--title", "A",
+                                "--sub", "B", "--logo", str(logo), "--out-dir", str(Path(t) / "o"),
+                                "--seconds", "1"], capture_output=True, text=True, encoding="utf-8")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("3 giây", r.stdout + r.stderr)
+
+
+class TestTvCard(unittest.TestCase):
+    def test_the_dung_kich_thuoc_khung_tv(self):
+        import make_tv_card
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as t:
+            anh = Path(t) / "a.jpg"
+            Image.new("RGB", (900, 600), (200, 120, 60)).save(anh)
+            card = make_tv_card.make_card(anh, "NHAN", ["Dong mot", "Dong hai"], ["chan"])
+            self.assertEqual(card.size, (1000, 394))
+            self.assertEqual(make_tv_card.CARD_POS, (900, 240))
+
+
+@unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "khong co ffmpeg")
+class TestDetectScenes(unittest.TestCase):
+    def test_tim_dung_moc_cat_va_studio_end(self):
+        import detect_scenes
+        with tempfile.TemporaryDirectory() as t:
+            v = Path(t) / "v.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y",
+                            "-f", "lavfi", "-i", "color=c=0x1a3a8a:s=320x180:r=30:d=2",
+                            "-f", "lavfi", "-i", "testsrc2=s=320x180:r=30:d=2",
+                            "-filter_complex", "[0:v][1:v]concat=n=2:v=1:a=0,format=yuv420p[v]",
+                            "-map", "[v]", "-c:v", "libx264", "-preset", "ultrafast", str(v)], check=True)
+            d = detect_scenes.detect(v)
+            self.assertAlmostEqual(d["duration"], 4.0, delta=0.2)
+            self.assertIsNotNone(d["studio_end"])
+            self.assertAlmostEqual(d["studio_end"], 2.0, delta=0.2)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

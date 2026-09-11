@@ -1,0 +1,22 @@
+{
+  "_ghi_chu": "Mẫu cho: python scripts/broadcast_kit.py render spec.example.json --out-dir gfx — mỗi item ra gfx/<id>/f_%04d.png + gfx/manifest.json. Kiểm bằng validate_graphics.py trước khi ghép.",
+  "style": "national-modern",
+  "aspect": "16:9",
+  "items": [
+    {"id": "slug", "type": "topic_slug", "start": 2.0, "end": 12.0,
+     "args": {"text": "Y tế"}},
+    {"id": "diadiem", "type": "chip", "start": 2.0, "end": 12.0,
+     "args": {"kind": "location", "text": "Xã An Thạnh Thủy"}},
+    {"id": "nguon", "type": "source_strap", "start": 2.0, "end": 12.0,
+     "args": {"text": "UBND xã An Thạnh Thủy"}},
+    {"id": "tieude", "type": "headline_strap", "start": 3.0, "end": 9.0,
+     "args": {"title": "KHÁM SÀNG LỌC CHO 2.500 NGƯỜI DÂN", "sub": "Trạm Y tế xã · 7–8/9/2026"}},
+    {"id": "soLieu", "type": "fact_card", "start": 13.0, "end": 19.0,
+     "args": {"number": "2.500", "label": "người dân được khám, sàng lọc", "note": "dự kiến"}},
+    {"id": "bacSi", "type": "lower_third", "start": 21.0, "end": 26.0,
+     "args": {"name": "Bác sĩ Trạm Y tế xã An Thạnh Thủy", "title": "Khám, tư vấn sức khỏe cho người dân"}},
+    {"id": "ketThuc", "type": "end_card", "start": 84.0, "end": 88.0,
+     "args": {"title": "ATT NEWS", "cta": "Theo dõi để nhận bản tin của xã mỗi ngày",
+              "handles": ["facebook.com/attnews", "Zalo OA: An Thạnh Thủy"]}}
+  ]
+}
