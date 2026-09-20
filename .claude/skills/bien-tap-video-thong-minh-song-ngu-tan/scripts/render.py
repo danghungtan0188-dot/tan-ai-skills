@@ -6,11 +6,14 @@ def q(s): return str(s).replace("\\","\\\\").replace(":","\\:").replace("'","\\'
 def duration(path):
     r=subprocess.run(["ffprobe","-v","error","-show_entries","format=duration","-of","default=nw=1:nk=1",path],text=True,capture_output=True,check=True)
     return r.stdout.strip()
-def loudnorm_linear(path, pre="highpass=f=70,lowpass=f=15500"):
-    """Loudnorm 2 lượt, linear: đo trước rồi áp một mức gain cố định — không bóp dải động."""
-    r=subprocess.run(["ffmpeg","-hide_banner","-i",path,"-vn","-af",f"{pre},loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json","-f","null","-"],text=True,capture_output=True,encoding="utf-8",errors="replace")
+def loudnorm_linear(path, pre="highpass=f=70,lowpass=f=15500", lufs=-16, tp=-1.5):
+    """Loudnorm 2 lượt, linear: đo trước rồi áp một mức gain cố định — không bóp dải động.
+
+    lufs=-14 cho Facebook/YouTube; to hơn nữa thì nền tảng cũng tự hạ xuống.
+    Muốn to mà không vỡ đỉnh thì thêm alimiter vào cuối `pre`, đặt level=disabled."""
+    r=subprocess.run(["ffmpeg","-hide_banner","-i",path,"-vn","-af",f"{pre},loudnorm=I={lufs}:TP={tp}:LRA=11:print_format=json","-f","null","-"],text=True,capture_output=True,encoding="utf-8",errors="replace")
     m=json.loads(r.stderr[r.stderr.rindex("{"):r.stderr.rindex("}")+1])
-    return (f"{pre},loudnorm=I=-16:TP=-1.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}"
+    return (f"{pre},loudnorm=I={lufs}:TP={tp}:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}"
             f":measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
 def main():
     p=argparse.ArgumentParser(); p.add_argument("input"); p.add_argument("plan"); p.add_argument("captions"); p.add_argument("output"); p.add_argument("--lower-thirds"); p.add_argument("--preview",action="store_true"); a=p.parse_args()

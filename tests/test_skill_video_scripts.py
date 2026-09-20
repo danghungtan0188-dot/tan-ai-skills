@@ -419,6 +419,36 @@ class TestTvCard(unittest.TestCase):
             self.assertEqual(make_tv_card.CARD_POS, (900, 240))
 
 
+class TestRenderAttLopHinh(unittest.TestCase):
+    """Thu tu lop: thay-hinh phai nam DUOI logo/icon, khong thi no che mat."""
+
+    def cmd(self, **kw):
+        import render_att
+        from argparse import Namespace
+        with tempfile.TemporaryDirectory() as t:
+            goc = dict(input=Path("in.mp4"), captions=None, lower_thirds=None, card=None,
+                       card_video=None, card_pos="900,240", extra_logo=None, overlay=[],
+                       replace=[], outro_dir=None, bugs_dir=t, preview=False, out=Path("o.mp4"))
+            return " ".join(render_att.build_cmd(Namespace(**{**goc, **kw}), 26.0, 100.0, "anull"))
+
+    def test_lop_thay_hinh_nam_duoi_logo_va_icon(self):
+        c = self.cmd(replace=["sach.mp4,26.267"])
+        self.assertIn("sach.mp4", c)
+        self.assertLess(c.index("[rp"), c.index("[ic]"), "thay hinh phai dat truoc icon")
+        self.assertLess(c.index("[rp"), c.index("[att]"), "thay hinh phai dat truoc logo ATT")
+
+    def test_overlay_dung_toa_do_va_khung_gio(self):
+        c = self.cmd(overlay=["bn.png,46,843,1.5,26.0"])
+        self.assertIn("overlay=46:843:enable='between(t,1.5,26.0)'", c)
+
+    def test_khong_co_captions_thi_khong_thua_dau_phay(self):
+        self.assertIn("]trim=0:100.0", self.cmd())
+        self.assertIn("subtitles=", self.cmd(captions="cap.ass"))
+
+    def test_card_pos_doi_duoc(self):
+        self.assertIn("overlay=889:231", self.cmd(card=Path("c.png"), card_pos="889,231"))
+
+
 @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "khong co ffmpeg")
 class TestDetectScenes(unittest.TestCase):
     def test_tim_dung_moc_cat_va_studio_end(self):

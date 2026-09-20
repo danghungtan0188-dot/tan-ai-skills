@@ -71,6 +71,80 @@ Loudnorm **2 lượt linear** (đo trước, áp một mức gain cố định) 
 `render_att.py` tự làm. Mã hoá `-preset faster -crf 20`: bản sk2 ra 64 MB so với 110 MB của
 `preset medium`, mắt không thấy khác, máy đỡ nóng.
 
+## 5b. Khi nguồn đã được dựng sẵn
+
+Có lúc người dùng đưa file **đã có phụ đề và banner đốt vào hình**. Kiểm trước bằng cách trích
+vài khung ở phần phóng sự. Nếu đã có thì **bỏ trống `--captions`** và không tạo lower-third mới —
+dựng đè sẽ thành hai lớp chữ chồng nhau. Chỉ thêm phần còn thiếu: logo, icon, thẻ/clip trong khung
+TV, outro.
+
+**Luôn hỏi hoặc tự tìm bản gốc chưa gắn chữ.** Ở bản tin liệt sĩ, bản sạch nằm trong `Downloads`
+với đuôi tên `_khong_chu_loi_dan`, dài đúng bằng phần phóng sự. Có bản sạch thì xoá được đồ hoạ cũ
+gọn ghẽ bằng `--replace`, thay vì che đè để lại vệt.
+
+```bash
+--replace "doan_sach.mp4,26.267"     # thay nguyên khung hình từ giây 26.267
+```
+
+Cách tính: `thời lượng đoạn = mốc cắt cảnh kế tiếp − mốc bắt đầu`; lấy từ `scenes.json`.
+
+## 5c. Màn hình TV trong trường quay
+
+Màn hình đo được: **x 889–1920, y 231–646**, tỉ lệ 2,49. Nguồn quay 16:9 (1,78) nên **không thể
+vừa phủ kín vừa thấy trọn khung** — phải chọn:
+
+| Cách | Lệnh | Đánh đổi |
+|---|---|---|
+| Thấy trọn khung, nền hai bên cùng tông phông | nền 1030×414 + `scale=-2:414` đặt giữa | Không mất gì. **Nên dùng.** |
+| Phủ kín màn hình | `crop=1656:664:132:0,scale=1030:414` | Mất 29% chiều cao |
+| Thu nhỏ, chừa hai bên | `scale=-2:410` | Hai bên lộ hình nền phông |
+
+Nền hai bên: dải dọc RGB (182,208,242) → (120,164,210) — đo từ chính màn hình phông.
+
+Clip trong khung TV:
+```bash
+ffmpeg -ss <bat_dau> -t <dai> -i NGUON -an -filter_complex \
+ "[1:v]scale=-2:414,setpts=<he_so>*PTS,fps=30[fg];[0:v][fg]overlay=(W-w)/2:0:shortest=1,\
+  drawbox=x=0:y=0:w=iw:h=ih:color=white@0.95:t=3[v]" ...
+python render_att.py ... --card-video tv_clip.mp4 --card-pos 889,231
+```
+Hệ số `setpts` = thời lượng phần trường quay ÷ độ dài đoạn — giãn cho khớp, **không lặp**. Lặp 5 giây
+thì cứ 5 giây lại giật một lần; nối chồng mờ đỡ hơn nhưng vẫn thấy.
+
+**Cắt khung phải né đồ hoạ đã đốt sẵn trong nguồn:** phụ đề ở y ≥ 880, banner tên người ở y 668–823.
+Để lọt banner tên vào khung TV là gắn tên một người vào ô nhỏ giữa lúc đang dẫn chuyện khác.
+
+## 5d. Banner cho khúc MC dẫn
+
+Dựng bằng `broadcast_kit.py` của skill `chuyen-gia-edit-video-tan`, thu còn khoảng **52%** rồi đắp
+bằng `--overlay`:
+
+```bash
+--overlay "banner_mc.png,46,843,1.5,26.0"
+```
+
+Đặt ở (46, 843): dưới MC, **trên** cụm icon (y 972) và không chạm chữ trên bàn dẫn.
+
+## 5e. Giọng đọc to, trong, ấm
+
+```
+highpass=f=75,
+equalizer=f=160:t=q:w=1.0:g=2,      # trầm ấm
+equalizer=f=450:t=q:w=1.2:g=-1.5,   # bỏ tiếng đục
+equalizer=f=3200:t=q:w=1.2:g=2.5,   # rõ lời
+equalizer=f=9000:t=q:w=1.0:g=1.2,   # thoáng
+lowpass=f=15500,
+alimiter=limit=0.78:attack=5:release=60:level=disabled
+```
+
+`--lufs -13.5 --tp -1.0`. Kết quả đo thật: −13,47 LUFS, đỉnh −0,99 dBTP, **LRA 7,20 so với 6,50 của
+nguồn** — to hơn mà dải động còn rộng hơn.
+
+Hai điều phải nhớ:
+- `alimiter` mặc định **tự bù mức**; không đặt `level=disabled` thì loudness vọt lên và đỉnh chạm 0 dBTP.
+- Nâng dải cao làm đỉnh vọt theo. Muốn to hơn thì **nới trần đỉnh lên −1,0 dBTP**, đừng ép thêm
+  limiter — ép limiter là bóp dải động.
+
 ## 6. Kiểm trước khi giao
 
 1. `qa.py OUT --source INPUT --tail <giây outro> --captions bilingual.json`
@@ -94,6 +168,15 @@ Loudnorm **2 lượt linear** (đo trước, áp một mức gain cố định) 
 | Render lại nhiều lần làm nóng máy | ghép thử bằng PIL trước; dừng lượt render cũ trước khi chạy lượt mới |
 | Outro ngắn hơn 3 giây thì không kịp hiện logo và dòng kêu gọi | `make_outro.py` chặn dưới 3 giây |
 | Outro chưa có nhạc | chỉ thêm khi người dùng đưa bản nhạc có quyền dùng |
+| Đắp phụ đề lên video vốn đã có phụ đề đốt sẵn | trích khung kiểm trước; có rồi thì bỏ trống `--captions` |
+| Lớp `--replace` đặt sau logo/icon nên che mất chúng | thay hình phải nằm dưới cùng; đã có test chặn |
+| `alimiter` tự bù mức, loudness vọt lên và đỉnh chạm 0 dBTP | luôn đặt `level=disabled` |
+| Ép limiter để tăng độ to | nới trần đỉnh lên −1,0 dBTP trước; ép limiter là bóp dải động |
+| Clip trong khung TV lặp đoạn ngắn nên giật từng vòng | giãn `setpts` cho khớp đúng phần trường quay, không lặp |
+| Khung cắt cho TV lọt banner tên người của nguồn | né y 668–823 (banner) và y ≥ 880 (phụ đề) |
+| Dùng ảnh chụp màn hình nhỏ làm logo nền tảng | 53 px là quá thấp cho phát sóng — xin file gốc lớn |
+| `x264` báo lỗi "width not divisible by 2" | mọi kích thước phải chẵn (1030 chứ không 1031) |
+| Tin tang lễ, liệt sĩ mà outro có biểu tượng like | dùng `make_outro.py --no-like` |
 
 Thông số ATT NEWS trong `tro-ly-video-ban-tin-tan/references/att-news.md` ghi icon mạng xã hội
 "4–8% chiều rộng", lệch với thực tế 194 px (10%). **File này là nguồn chuẩn.**

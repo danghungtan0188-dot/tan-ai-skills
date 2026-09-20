@@ -49,20 +49,37 @@ def build_cmd(a, studio_end: float, dur: float, af: str) -> list[str]:
         fc.append(expr.format(cur=cur, nxt=nxt))
         cur = nxt
 
-    if a.card:
+    for spec in a.replace:           # thay cả khung hình: dùng bản gốc sạch cho một đoạn
+        f, t0 = spec.rsplit(",", 1)
+        i = them(["-i", f])
+        lop(f"[{i}:v]{FILTERS['news_clean']},setpts=PTS-STARTPTS+{float(t0)}/TB[rp{i}];"
+            f"[{{cur}}][rp{i}]overlay=0:0:eof_action=pass[{{nxt}}]")
+
+    cx, cy = (int(v) for v in a.card_pos.split(","))
+    if a.card_video:                     # clip chạy trong khung TV, lặp cho đủ phần trường quay
+        d = float(duration(str(a.card_video)))
+        i = them(["-stream_loop", str(max(1, int(studio_end / max(d, .1)) + 1)), "-i", str(a.card_video)])
+        lop(f"[{i}:v]setpts=N/FRAME_RATE/TB[tv];[{{cur}}][tv]overlay={cx}:{cy}:enable='lt(t,{studio_end})'[{{nxt}}]")
+    elif a.card:
         i = them(["-i", str(a.card)])
-        lop(f"[{{cur}}][{i}:v]overlay=900:240:enable='lt(t,{studio_end})'[{{nxt}}]")
+        lop(f"[{{cur}}][{i}:v]overlay={cx}:{cy}:enable='lt(t,{studio_end})'[{{nxt}}]")
     i = them(["-i", str(icons)])
     lop(f"[{i}:v]format=rgba,colorchannelmixer=aa=0.94[ic];[{{cur}}][ic]overlay=46:H-h-46[{{nxt}}]")
     i = them(["-i", str(att)])
     lop(f"[{i}:v]format=rgba[att];[{{cur}}][att]overlay=1612:130:enable='gte(t,{studio_end})'[{{nxt}}]")
+    for spec in a.overlay:               # PNG rời: banner, nhãn, đồ hoạ phụ — "file,x,y,bắt_đầu,kết_thúc"
+        f, ox, oy, t0, t1 = spec.split(",")
+        i = them(["-i", f])
+        lop(f"[{i}:v]format=rgba[ov{i}];[{{cur}}][ov{i}]overlay={int(ox)}:{int(oy)}"
+            f":enable='between(t,{float(t0)},{float(t1)})'[{{nxt}}]")
     if a.extra_logo:
         i = them(["-i", str(a.extra_logo)])
         lop(f"[{i}:v]format=rgba,scale=-1:78[xl];[{{cur}}][xl]overlay=x=1598-w:y=130[{{nxt}}]")
-    subs = ",".join(f"subtitles='{q(Path(p).resolve())}'" for p in (a.lower_thirds, a.captions) if p)
+    # video đã đốt sẵn phụ đề thì bỏ trống --captions, đừng đắp thêm lớp thứ hai
+    subs = "".join(f"subtitles='{q(Path(p).resolve())}'," for p in (a.lower_thirds, a.captions) if p)
     outro = sorted(Path(a.outro_dir).glob("f_*.png")) if a.outro_dir else []
     fade = f",fade=t=out:st={dur - 0.4:.3f}:d=0.4" if outro else ""
-    lop(f"[{{cur}}]{subs},trim=0:{dur},setpts=PTS-STARTPTS{fade},fps=30,format=yuv420p,setsar=1[{{nxt}}]")
+    lop(f"[{{cur}}]{subs}trim=0:{dur},setpts=PTS-STARTPTS{fade},fps=30,format=yuv420p,setsar=1[{{nxt}}]")
     amain = f"[0:a]{af},aresample=44100,atrim=0:{dur},asetpts=PTS-STARTPTS"
     if outro:
         do_dai = len(outro) / 30
@@ -84,14 +101,25 @@ def build_cmd(a, studio_end: float, dur: float, af: str) -> list[str]:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("input", type=Path)
-    ap.add_argument("--captions", required=True)
+    ap.add_argument("--captions", help="bỏ trống nếu video đã có phụ đề đốt sẵn")
     ap.add_argument("--scenes", type=Path)
     ap.add_argument("--studio-end", type=float)
     ap.add_argument("--lower-thirds")
-    ap.add_argument("--card", type=Path)
+    ap.add_argument("--card", type=Path, help="ảnh tĩnh 1000×394 trong khung TV")
+    ap.add_argument("--card-video", type=Path, help="clip chạy trong khung TV, tự lặp")
+    ap.add_argument("--card-pos", default="900,240",
+                    help="góc trên trái của thẻ/clip. Màn hình TV nằm trong x 889–1920, y 231–646")
     ap.add_argument("--extra-logo", type=Path)
+    ap.add_argument("--overlay", action="append", default=[],
+                    metavar="FILE,X,Y,BAT_DAU,KET_THUC", help="PNG phụ, lặp lại được nhiều lần")
     ap.add_argument("--outro-dir", type=Path)
     ap.add_argument("--bugs-dir", default=".")
+    ap.add_argument("--audio-pre", default="highpass=f=70,lowpass=f=15500",
+                    help="chuỗi lọc trước loudnorm: cân bằng tần số, limiter (đặt level=disabled)")
+    ap.add_argument("--lufs", type=float, default=-16, help="-14 cho Facebook/YouTube")
+    ap.add_argument("--tp", type=float, default=-1.5, help="trần đỉnh dBTP; -1.0 khi cần to hơn mà không nén thêm")
+    ap.add_argument("--replace", action="append", default=[], metavar="FILE,BAT_DAU",
+                    help="thay nguyên một đoạn bằng video khác (vd bản gốc chưa gắn chữ)")
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--preview", action="store_true")
     a = ap.parse_args()
@@ -100,7 +128,7 @@ def main() -> int:
     if se is None:
         raise SystemExit("Cần --scenes (từ detect_scenes.py) hoặc --studio-end")
     dur = float(duration(str(a.input)))
-    subprocess.run(build_cmd(a, se, dur, loudnorm_linear(str(a.input))), check=True)
+    subprocess.run(build_cmd(a, se, dur, loudnorm_linear(str(a.input), a.audio_pre, a.lufs, a.tp)), check=True)
     print(a.out)
     return 0
 

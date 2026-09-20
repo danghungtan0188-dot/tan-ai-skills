@@ -74,7 +74,7 @@ def ngon_tay(d: ImageDraw.ImageDraw, x: float, y: float, cao: float) -> None:
 
 
 def render(title: list[str], sub: str, logo: Path, out: Path, seconds: float = 4.0,
-           cta: str = CTA, credit: str = CREDIT) -> int:
+           cta: str = CTA, credit: str = CREDIT, like: bool = True) -> int:
     out.mkdir(parents=True, exist_ok=True)
     nen_goc = Image.new("RGB", (W, H))
     d0 = ImageDraw.Draw(nen_goc)
@@ -151,7 +151,7 @@ def render(title: list[str], sub: str, logo: Path, out: Path, seconds: float = 4
             s = 0.72 + 0.28 * ease_back(a6)
             lw, lh = max(2, round(lg0.width * s)), max(2, round(lg0.height * s))
             dat(im, lg0.resize((lw, lh), Image.LANCZOS), lx + (lg0.width - lw) / 2, ly + (lg0.height - lh) / 2, min(1.0, a6 * 1.6))
-        a7 = min(1.0, max(0.0, (t - 1.45) / 0.45))
+        a7 = min(1.0, max(0.0, (t - 1.45) / 0.45)) if like else 0.0
         if a7 > 0:
             lt = Image.new("RGBA", (W, H), (0, 0, 0, 0))
             ngon_tay(ImageDraw.Draw(lt), lx + lg0.width - 74, ly + 116 + (1 - ease_back(a7)) * 26, 92)
@@ -173,10 +173,12 @@ def main() -> int:
     ap.add_argument("--seconds", type=float, default=4.0)
     ap.add_argument("--cta", default=CTA)
     ap.add_argument("--credit", default=CREDIT)
+    ap.add_argument("--no-like", action="store_true",
+                    help="bỏ biểu tượng like — dùng cho tin tang lễ, liệt sĩ, thiên tai")
     a = ap.parse_args()
     if a.seconds < 3:
         raise SystemExit("Outro cần ≥ 3 giây: dòng kêu gọi hiện ở 1,05 s, logo ở 1,15 s, cần thời gian giữ để đọc")
-    n = render(a.title, a.sub, a.logo, a.out_dir, a.seconds, a.cta, a.credit)
+    n = render(a.title, a.sub, a.logo, a.out_dir, a.seconds, a.cta, a.credit, not a.no_like)
     print(f"{n} khung ({n / FPS:.2f} s) -> {a.out_dir}")
     return 0
 
