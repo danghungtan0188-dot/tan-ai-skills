@@ -68,8 +68,13 @@ def build_cmd(plan: dict, a, tieng: dict[str, bool], gain: dict[str, float]) -> 
     n = len(plan["segments"])
     fc.append("".join(x + y for x, y in zip(vlab, alab)) + f"concat=n={n}:v=1:a=1[vc][ac]")
     if a.voice:
+        # lời đọc ngắn hơn phim thì apad bù im lặng, dài hơn thì atrim cắt — nếu không, amix
+        # kết thúc theo lời đọc và phim mất tiếng ở đuôi hoặc dài ra ngoài kế hoạch
+        tong = sum(s["dur"] for s in plan["segments"])
         i = them(["-i", str(a.voice)])
-        fc.append(f"[ac]volume={a.nat_db}dB[nat];[{i}:a]aresample=48000,aformat=channel_layouts=stereo[vo];"
+        fc.append(f"[ac]volume={a.nat_db}dB[nat];"
+                  f"[{i}:a]aresample=48000,aformat=channel_layouts=stereo,apad,"
+                  f"atrim=0:{tong:.3f},asetpts=PTS-STARTPTS[vo];"
                   "[vo][nat]amix=inputs=2:duration=first:normalize=0[ao]")
         amap = "[ao]"
     else:
@@ -80,6 +85,28 @@ def build_cmd(plan: dict, a, tieng: dict[str, bool], gain: dict[str, float]) -> 
             "-c:v", "libx264", "-preset", enc[0], "-crf", enc[1],
             "-c:a", "aac", "-ar", "48000", "-b:a", "192k", "-pix_fmt", "yuv420p",
             "-movflags", "+faststart", str(a.out)]
+
+
+def kiem_dau_ra(out: Path, tong: float, W: int, H: int, fps: int) -> list[str]:
+    """Render xong ≠ xong: probe lại file thật thay vì tin vào kế hoạch."""
+    r = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                        "format=duration:stream=codec_type,width,height,avg_frame_rate",
+                        "-of", "json", str(out)], text=True, capture_output=True, check=True)
+    d = json.loads(r.stdout)
+    loi = []
+    thuc = float(d["format"]["duration"])
+    if abs(thuc - tong) > 0.3:
+        loi.append(f"thời lượng thật {thuc:.2f}s ≠ kế hoạch {tong:.2f}s")
+    v = next((s for s in d["streams"] if s.get("codec_type") == "video"), None)
+    if v is None or not any(s.get("codec_type") == "audio" for s in d["streams"]):
+        loi.append("thiếu luồng hình hoặc tiếng")
+    elif (v["width"], v["height"]) != (W, H):
+        loi.append(f"khung {v['width']}x{v['height']} ≠ {W}x{H}")
+    if v:
+        num, den = (v.get("avg_frame_rate") or "0/1").split("/")
+        if den != "0" and abs(float(num) / float(den) - fps) > 0.1:
+            loi.append(f"fps {num}/{den} ≠ {fps}")
+    return loi
 
 
 def main() -> int:
@@ -94,6 +121,13 @@ def main() -> int:
     ap.add_argument("--preview", action="store_true")
     a = ap.parse_args()
     plan = json.loads(a.plan.read_text(encoding="utf-8"))
+    if plan.get("valid") is False:
+        raise SystemExit("Kế hoạch còn lỗi (valid=false) — sửa chon-canh.json rồi chạy lại build_edit_plan.py")
+    if not plan.get("segments"):
+        raise SystemExit("Kế hoạch không có đoạn nào")
+    for ten, p in (("--voice", a.voice), ("--rushes", a.rushes)):
+        if p and not p.exists():
+            raise SystemExit(f"Không thấy file {ten}: {p}")
     if plan.get("cut_authorized") is not True:
         raise SystemExit("Kế hoạch chưa được cho phép cắt ghép (cut_authorized=false). "
                          "Hãy xin duyệt hoặc tạo lại plan với --approved khi người dùng đã yêu cầu tự động dựng.")
@@ -104,8 +138,14 @@ def main() -> int:
     a.out.parent.mkdir(parents=True, exist_ok=True)
     cmd = build_cmd(plan, a, {f: co_tieng(f) for f in files}, gain_clip(a.rushes))
     subprocess.run(cmd, check=True)
+    W, H = (int(v) for v in a.size.split("x"))
+    loi = kiem_dau_ra(a.out, sum(s["dur"] for s in plan["segments"]), W, H, a.fps)
     print(f"{a.out}  ({plan['tong']}s theo kế hoạch, yêu cầu {plan['target']}s)")
-    print("Kiểm lại bằng qa.py, và xem tay điểm nối giữa các đoạn.")
+    for x in loi:
+        print("LỖI      ", x)
+    if loi:
+        return 1
+    print("Đo lại file thật: khớp kế hoạch. Còn phải xem tay điểm nối giữa các đoạn, rồi qa.py --plan.")
     return 0
 
 

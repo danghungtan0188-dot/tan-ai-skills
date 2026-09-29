@@ -531,6 +531,10 @@ class TestBuildEditPlan(unittest.TestCase):
         _, loi = self.chay(self.ba_doan(c0={"co": "can"}))
         self.assertTrue(any("mở đầu phải có cảnh toàn" in x for x in loi))
 
+    def test_chan_loai_go_sai(self):
+        _, loi = self.chay(self.ba_doan(c2={"loai": "phatbieu"}))
+        self.assertTrue(any("phải là broll/phat_bieu" in x for x in loi))
+
     def test_thieu_ly_do_bi_chan(self):
         _, loi = self.chay(self.ba_doan(c1={"ly_do": "  "}))
         self.assertTrue(any("thiếu lý do" in x for x in loi))
@@ -638,7 +642,7 @@ class TestDungTuVideoTho(unittest.TestCase):
                             "-c:a", "aac", str(a)], check=True)
             self.tao_clip(b, "smptebars=s=320x180:r=30:d=8", 8, False)
 
-            data = survey_rushes.khao_sat([a, b], 0.12, 1.2, t / "thumbs")
+            data = survey_rushes.khao_sat([a, b], 0.12, 1.2, t / "thumbs", 4.0)
             ids = [s["id"] for c in data["clips"] for s in c["shots"]]
             self.assertIn("0.1", ids)
             self.assertIn("0.2", ids)
@@ -646,6 +650,10 @@ class TestDungTuVideoTho(unittest.TestCase):
             self.assertTrue(any("câm" in x for x in data["canh_bao"]))
             survey_rushes.contact_sheet(data, t / "sheet.jpg")
             self.assertTrue((t / "sheet.jpg").exists())
+            dai = [s for c in data["clips"] for s in c["shots"] if s["dur"] >= 4.0]
+            self.assertTrue(dai, "phai co canh dai de kiem anh phu")
+            self.assertEqual(len(dai[0]["them"]), 2, "canh dai phai co them 2 anh dai dien")
+            self.assertTrue(all(Path(x).exists() for x in dai[0]["them"]))
 
             bang = build_edit_plan.nap(data)
             chon = {"muc": [{"id": "m", "canh": [
@@ -663,7 +671,7 @@ class TestDungTuVideoTho(unittest.TestCase):
             out = t / "rough.mp4"
             ns = Namespace(out=out, rushes=None, voice=None, nat_db=-12.0,
                            size="640x360", fps=30, preview=True)
-            tieng = {str(a): True, str(b): False}
+            tieng = {str(a.resolve()): True, str(b.resolve()): False}
             subprocess.run(assemble.build_cmd(plan, ns, tieng, {}), check=True)
             d = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                                 "-of", "csv=p=0", str(out)], text=True, capture_output=True,
@@ -685,6 +693,102 @@ class TestDungTuVideoTho(unittest.TestCase):
                                 encoding="utf-8", errors="replace")
             self.assertEqual(r2.returncode, 1, "lech ke hoach phai FAIL")
             self.assertTrue(any("kế hoạch" in e for e in json.loads(r2.stdout)["errors"]))
+
+
+class TestAssembleTuChoi(unittest.TestCase):
+    """Chan chay nham: ke hoach chua duyet, ke hoach con loi, thieu file."""
+
+    def chay(self, plan, extra=()):
+        with tempfile.TemporaryDirectory() as t:
+            p = Path(t) / "plan.json"
+            p.write_text(json.dumps(plan), encoding="utf-8")
+            return subprocess.run([sys.executable, str(SONG_NGU / "assemble.py"), str(p),
+                                   "--out", str(Path(t) / "o.mp4"), *extra],
+                                  text=True, capture_output=True, encoding="utf-8", errors="replace")
+
+    GOC = {"target": 6.0, "tong": 6.0, "cut_authorized": True, "valid": True,
+           "segments": [{"n": 1, "file": "khong-co.mp4", "in": 0.0, "out": 6.0, "dur": 6.0}]}
+
+    def test_chua_duyet_thi_khong_cat(self):
+        r = self.chay({**self.GOC, "cut_authorized": False})
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("cut_authorized", r.stderr)
+
+    def test_ke_hoach_con_loi_thi_tu_choi(self):
+        r = self.chay({**self.GOC, "valid": False})
+        self.assertIn("valid=false", r.stderr)
+
+    def test_ke_hoach_rong_thi_tu_choi(self):
+        r = self.chay({**self.GOC, "segments": []})
+        self.assertIn("không có đoạn nào", r.stderr)
+
+    def test_thieu_file_voice_bao_truoc_khi_goi_ffmpeg(self):
+        r = self.chay(self.GOC, ["--voice", "khong-co.wav"])
+        self.assertIn("--voice", r.stderr)
+
+    def test_thieu_clip_thi_bao(self):
+        r = self.chay(self.GOC)
+        self.assertIn("Không thấy clip", r.stderr)
+
+
+@unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "khong co ffmpeg")
+class TestAssembleLoiDoc(unittest.TestCase):
+    """Loi doc ngan hay dai hon phim deu phai ra dung do dai ke hoach."""
+
+    def dung(self, t, giay_voice):
+        v, vo = Path(t) / "v.mp4", Path(t) / f"vo{giay_voice}.wav"
+        subprocess.run(["ffmpeg", "-v", "error", "-y",
+                        "-f", "lavfi", "-i", "testsrc2=s=160x90:r=15:d=8",
+                        "-f", "lavfi", "-i", "sine=f=200:d=8",
+                        "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p",
+                        "-c:a", "aac", str(v)], check=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi",
+                        "-i", f"sine=f=600:d={giay_voice}", str(vo)], check=True)
+        return v, vo
+
+    def do_tieng(self, f):
+        r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries",
+                            "stream=duration", "-of", "csv=p=0", str(f)],
+                           text=True, capture_output=True, check=True)
+        return float(r.stdout.strip())
+
+    def chay(self, giay_voice):
+        from argparse import Namespace
+        with tempfile.TemporaryDirectory() as t:
+            v, vo = self.dung(t, giay_voice)
+            out = Path(t) / "o.mp4"
+            plan = {"target": 6.0, "tong": 6.0, "segments": [
+                {"n": 1, "file": str(v), "in": 0.0, "out": 3.0, "dur": 3.0},
+                {"n": 2, "file": str(v), "in": 4.0, "out": 7.0, "dur": 3.0}]}
+            ns = Namespace(out=out, rushes=None, voice=vo, nat_db=-12.0,
+                           size="160x90", fps=15, preview=True)
+            subprocess.run(assemble.build_cmd(plan, ns, {str(v): True}, {}), check=True)
+            return self.do_tieng(out), assemble.kiem_dau_ra(out, 6.0, 160, 90, 15)
+
+    def test_loi_doc_ngan_hon_thi_bu_im_lang(self):
+        dai, loi = self.chay(2)
+        self.assertAlmostEqual(dai, 6.0, delta=0.3, msg="tieng phai dai bang phim")
+        self.assertEqual(loi, [])
+
+    def test_loi_doc_dai_hon_thi_cat_bot(self):
+        dai, loi = self.chay(12)
+        self.assertAlmostEqual(dai, 6.0, delta=0.3, msg="tieng khong duoc dai hon ke hoach")
+        self.assertEqual(loi, [])
+
+    def test_kiem_dau_ra_bat_duoc_sai_lech(self):
+        from argparse import Namespace
+        with tempfile.TemporaryDirectory() as t:
+            v, vo = self.dung(t, 2)
+            out = Path(t) / "o.mp4"
+            plan = {"target": 6.0, "tong": 6.0, "segments": [
+                {"n": 1, "file": str(v), "in": 0.0, "out": 6.0, "dur": 6.0}]}
+            ns = Namespace(out=out, rushes=None, voice=None, nat_db=-12.0,
+                           size="160x90", fps=15, preview=True)
+            subprocess.run(assemble.build_cmd(plan, ns, {str(v): True}, {}), check=True)
+            loi = assemble.kiem_dau_ra(out, 20.0, 320, 180, 30)
+            self.assertTrue(any("thời lượng thật" in x for x in loi))
+            self.assertTrue(any("khung" in x for x in loi))
+            self.assertTrue(any("fps" in x for x in loi))
 
 
 class TestFindClips(unittest.TestCase):

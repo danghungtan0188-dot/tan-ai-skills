@@ -14,6 +14,15 @@ Khác với đường chạy thường ở chỗ: ở đây `cut_authorized` bu�
 
 Không lấy quyền của một yêu cầu cũ để cắt một kho mới hoặc đầu ra mới.
 
+## Cần có gì trên máy
+
+```bash
+pip install opencv-python numpy Pillow
+```
+
+Thêm `ffmpeg` và `ffprobe` trong PATH. `survey_rushes.py` kiểm các thứ này ngay khi khởi động và
+báo thiếu trước khi quét, chứ không chết giữa chừng.
+
 ## Phân vai
 
 | Ai | Làm gì |
@@ -100,11 +109,17 @@ quyền, bỏ `--approved`, đưa nguyên bảng cho người dùng duyệt rồ
 python scripts/assemble.py edit/edit-plan.json --out edit/rough.mp4 --rushes edit/rushes.json
 ```
 
+**Chạy được hay không phụ thuộc kế hoạch:** `assemble.py` từ chối khi `cut_authorized` chưa true
+(chưa duyệt), khi `valid: false` (kế hoạch còn lỗi), khi kế hoạch rỗng, hoặc khi thiếu clip /
+thiếu file `--voice` / `--rushes`. Ghép xong nó **tự `ffprobe` lại file thật** và báo lỗi nếu
+thời lượng, khung hình, fps hoặc luồng tiếng không khớp — render xong chưa phải là xong.
+
 - Nối hard cut, chuẩn hoá mọi clip về 1920×1080 / 30 fps / 48 kHz.
 - `--rushes` cân mức tiếng từng clip bằng **một mức gain cố định** đo sẵn — clip này không to hơn
   clip kia, mà dải động vẫn giữ nguyên.
 - Có lời đọc thì `--voice vo.wav`; tiếng hiện trường hạ còn `--nat-db` (mặc định −12 dB) bằng gain
   cố định, **không ducking động**. Tiếng hiện trường là bằng chứng sự việc, phải nghe rõ.
+  Lời đọc ngắn hơn phim thì được bù im lặng, dài hơn thì bị cắt — tiếng luôn dài đúng bằng kế hoạch.
 - Không chuẩn hoá LUFS ở đây — để `render_att.py` làm một lần ở cuối, tránh chồng hai lớp.
 
 Xong `rough.mp4` thì quay lại đường chạy quen: `detect_scenes.py` → phụ đề song ngữ →

@@ -30,6 +30,7 @@ from pathlib import Path
 
 BROLL_MIN, BROLL_MAX, PHAT_BIEU_MIN, SAI_SO = 2.5, 8.0, 4.0, 2.0
 CO_HOP_LE = ("toan", "trung", "can")
+LOAI_HOP_LE = ("broll", "phat_bieu")
 
 
 def nap(rushes: dict) -> dict:
@@ -55,6 +56,9 @@ def dung_doan(chon: dict, bang: dict) -> tuple[list[dict], list[str]]:
             if c.get("co") not in CO_HOP_LE:
                 loi.append(f"{sid}: cỡ cảnh '{c.get('co')}' phải là {'/'.join(CO_HOP_LE)}")
             loai = c.get("loai", "broll")
+            if loai not in LOAI_HOP_LE:          # gõ sai sẽ lọt qua luật b-roll, thành cắt bừa
+                loi.append(f"{sid}: loại '{loai}' phải là {'/'.join(LOAI_HOP_LE)}")
+                loai = "broll"
             # nới dài nhất có thể: b-roll không được trùm sang cảnh khác, phát biểu chỉ giới hạn bởi clip
             toi_da = (shot["end"] if loai == "broll" else clip["duration"]) - t0
             doan.append({"n": len(doan) + 1, "muc": muc["id"], "ten_muc": muc.get("ten", ""),
@@ -179,6 +183,7 @@ def main() -> int:
         loi.append(loi_dai)
     plan = {"tieu_de": chon.get("tieu_de", ""), "target": a.target,
             "tong": round(sum(d["dur"] for d in doan), 2), "cut_authorized": bool(a.approved),
+            "valid": not loi,
             "segments": doan}
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(plan, ensure_ascii=False, indent=1), encoding="utf-8")

@@ -4,12 +4,15 @@
     python survey_rushes.py FOLDER --out rushes.json --sheet contact.jpg [--threshold 0.12] [--min-shot 1.2]
 
 Xuất `rushes.json` (số liệu) và `contact.jpg` (ảnh bảng, mỗi ô một cảnh, có nhãn `clip.cảnh  t=…  dài…`).
+Cảnh dài hơn `--anh-them` giây được lấy thêm 2 ảnh ở 1/4 và 3/4 cảnh — một khung giữa cảnh
+không đủ để biết cảnh dài quay những gì.
 Máy chỉ ĐO. Cảnh nào nói về cái gì thì phải nhìn contact sheet mà xác định, không suy từ số liệu.
 
 Cột số liệu mỗi cảnh:
   net   phương sai Laplacian — dưới ~60 là mờ/mất nét, cần xem lại trước khi đưa vào bản tin
   sang  độ sáng trung bình 0–255 — dưới 45 là tối, trên 215 là cháy sáng
-  dong  chênh lệch hai khung cách nhau 0,5 s — cao là máy rung hoặc lia nhanh
+  dong  chênh lệch hai khung cách nhau 0,5 s — cao là máy rung, lia nhanh HOẶC chủ thể
+        chuyển động mạnh. Đây là tín hiệu để xem lại, không phải kết luận máy rung.
 
 Cảnh báo (không chặn): clip khác tỉ lệ/fps so với đa số, clip câm, cảnh tối/mờ/rung.
 Bước sau: build_edit_plan.py.
@@ -24,6 +27,20 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from detect_scenes import detect  # noqa: E402
+
+CAN_CO = (("cv2", "opencv-python"), ("numpy", "numpy"), ("PIL", "Pillow"))
+
+
+def kiem_moi_truong() -> None:
+    """Báo thiếu thư viện/ffmpeg ngay từ đầu, thay vì chết giữa chừng sau khi đã quét nửa kho."""
+    import importlib.util
+    import shutil
+    thieu = [goi for mo, goi in CAN_CO if importlib.util.find_spec(mo) is None]
+    if thieu:
+        raise SystemExit("Thiếu thư viện: pip install " + " ".join(thieu))
+    khong = [x for x in ("ffmpeg", "ffprobe") if not shutil.which(x)]
+    if khong:
+        raise SystemExit("Không thấy " + ", ".join(khong) + " trong PATH")
 
 DUOI = {".mp4", ".mov", ".mts", ".m4v", ".avi", ".mkv", ".mpg", ".mpeg", ".wmv"}
 BO_QUA = {".git", "node_modules", "outputs", "output", "render", "renders", "edit", "thumbs", "cache", "__pycache__"}
@@ -42,6 +59,19 @@ def tim_clip(folder: Path, recursive: bool = False) -> list[Path]:
          and not any(part.lower() in BO_QUA for part in p.relative_to(folder).parts[:-1])),
         key=lambda p: str(p).lower(),
     )
+
+
+FONT_UNG_VIEN = ("C:/Windows/Fonts/arial.ttf",
+                 "/System/Library/Fonts/Supplemental/Arial.ttf",
+                 "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
+
+
+def font(co: int):
+    from PIL import ImageFont
+    for f in FONT_UNG_VIEN:
+        if Path(f).exists():
+            return ImageFont.truetype(f, co)
+    return ImageFont.load_default()
 
 
 def probe(p: Path) -> dict:
@@ -91,7 +121,20 @@ def cham_canh(cap, t0: float, t1: float):
     return so, cv2.resize(fr, (THUMB_W, THUMB_H))
 
 
-def khao_sat(files: list[Path], threshold: float, min_shot: float, thumb_dir: Path) -> dict:
+def anh_them(cap, t0: float, t1: float) -> list:
+    """Hai ảnh ở 1/4 và 3/4 cảnh — cảnh dài thường chứa nhiều nội dung khác nhau."""
+    import cv2
+    ra = []
+    for r in (0.25, 0.75):
+        cap.set(cv2.CAP_PROP_POS_MSEC, (t0 + (t1 - t0) * r) * 1000)
+        ok, fr = cap.read()
+        if ok:
+            ra.append(cv2.resize(fr, (THUMB_W, THUMB_H)))
+    return ra
+
+
+def khao_sat(files: list[Path], threshold: float, min_shot: float, thumb_dir: Path,
+             anh_them_giay: float = 10.0) -> dict:
     import cv2
     thumb_dir.mkdir(parents=True, exist_ok=True)
     clips, canh_bao = [], []
@@ -111,8 +154,15 @@ def khao_sat(files: list[Path], threshold: float, min_shot: float, thumb_dir: Pa
             sid = f"{i}.{len(shots) + 1}"
             tp = thumb_dir / f"{sid}.jpg"
             cv2.imwrite(str(tp), thumb)
+            them = []
+            if t1 - t0 >= anh_them_giay:
+                for j, im in enumerate(anh_them(cap, t0, t1)):
+                    q = thumb_dir / f"{sid}_{'ab'[j]}.jpg"
+                    cv2.imwrite(str(q), im)
+                    them.append(q)
             shots.append({"id": sid, "start": round(t0, 2), "end": round(t1, 2),
-                          "dur": round(t1 - t0, 2), **so, "thumb": str(tp)})
+                          "dur": round(t1 - t0, 2), **so, "thumb": str(tp.resolve()),
+                          "them": [str(x.resolve()) for x in them]})
             if so["net"] < NET_THAP:
                 canh_bao.append(f"{sid} ({f.name}) mờ: net={so['net']}")
             if so["sang"] < SANG_TOI or so["sang"] > SANG_CHAY:
@@ -120,7 +170,7 @@ def khao_sat(files: list[Path], threshold: float, min_shot: float, thumb_dir: Pa
             if so["dong"] > DONG_CAO:
                 canh_bao.append(f"{sid} ({f.name}) rung/lia mạnh: dong={so['dong']}")
         cap.release()
-        clips.append({"idx": i, "file": str(f), "name": f.name, **m,
+        clips.append({"idx": i, "file": str(f.resolve()), "name": f.name, **m,
                       "lufs": do_am(f) if m["audio"] else None, "shots": shots})
         if not m["audio"]:
             canh_bao.append(f"{f.name}: clip câm — không có tiếng hiện trường")
@@ -139,19 +189,24 @@ def khao_sat(files: list[Path], threshold: float, min_shot: float, thumb_dir: Pa
 
 
 def contact_sheet(data: dict, out: Path) -> None:
-    from PIL import Image, ImageDraw, ImageFont
-    shots = [(c, s) for c in data["clips"] for s in c["shots"]]
+    from PIL import Image, ImageDraw
+    shots = []
+    for c in data["clips"]:
+        for s in c["shots"]:
+            shots.append((c, s, s["id"], s["thumb"]))
+            for j, x in enumerate(s.get("them", [])):
+                shots.append((c, s, s["id"] + "·" + "ab"[j], x))
     if not shots:
         return
     hang = (len(shots) + COT - 1) // COT
     o = 26
     bang = Image.new("RGB", (COT * THUMB_W, hang * (THUMB_H + o)), (18, 18, 20))
     d = ImageDraw.Draw(bang)
-    ft = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 15)
-    for k, (c, s) in enumerate(shots):
+    ft = font(15)
+    for k, (c, s, nhan, anh) in enumerate(shots):
         x, y = (k % COT) * THUMB_W, (k // COT) * (THUMB_H + o)
-        bang.paste(Image.open(s["thumb"]), (x, y))
-        xau = f"{s['id']}  t={s['start']:.1f}s  {s['dur']:.1f}s  {c['name'][:14]}"
+        bang.paste(Image.open(anh), (x, y))
+        xau = f"{nhan}  t={s['start']:.1f}s  {s['dur']:.1f}s  {c['name'][:14]}"
         kem = s["net"] < NET_THAP or s["sang"] < SANG_TOI or s["dong"] > DONG_CAO
         d.text((x + 5, y + THUMB_H + 4), xau, font=ft, fill=(255, 120, 90) if kem else (225, 225, 225))
     bang.save(out, quality=88)
@@ -164,14 +219,17 @@ def main() -> int:
     ap.add_argument("--sheet", type=Path, help="ảnh bảng cảnh để xem bằng mắt")
     ap.add_argument("--threshold", type=float, default=0.12)
     ap.add_argument("--min-shot", type=float, default=1.2, help="bỏ cảnh ngắn hơn ngần này")
+    ap.add_argument("--anh-them", type=float, default=10.0,
+                    help="cảnh dài hơn ngần này thì lấy thêm 2 ảnh ở 1/4 và 3/4 cảnh")
     ap.add_argument("--recursive", action="store_true",
                     help="quét cả các thư mục con trong kho; tự bỏ qua output/render/edit/cache")
     a = ap.parse_args()
+    kiem_moi_truong()
     files = tim_clip(a.folder, a.recursive)
     if not files:
         raise SystemExit(f"Không thấy clip nào trong {a.folder}")
     thumb_dir = a.out.parent / "thumbs"
-    data = khao_sat(files, a.threshold, a.min_shot, thumb_dir)
+    data = khao_sat(files, a.threshold, a.min_shot, thumb_dir, a.anh_them)
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
     if a.sheet:

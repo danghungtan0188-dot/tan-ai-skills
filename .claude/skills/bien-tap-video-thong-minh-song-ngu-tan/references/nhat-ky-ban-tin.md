@@ -17,3 +17,6 @@ Ghi thêm dòng ở **cuối bảng**, không sửa dòng cũ. Luật cũ hoá r
 | 2026-09 | Hungtanngu1 — lấy mẫu hài cốt | 1:56 + 4s | Nguồn 16:9 đặt vừa khung TV 2.49 thì hoặc đen hai bên hoặc mất nội dung; chọn lọt khung trên nền chuyển sắc | `doc:phong-cach-att-news.md` |
 | 2026-09 | Hungtanngu1 — lấy mẫu hài cốt | 1:56 + 4s | Bản tin tang lễ, liệt sĩ không dùng nhạc nền; tiếng hiện trường là bằng chứng sự việc | `script:make_outro.py` |
 | 2026-09-29 | — (nâng cấp quy trình) | — | Ghép từ nhiều clip thì `qa.py` phải chạy `--cut-authorized yes`, tức bỏ luôn phép kiểm thời lượng — cần kiểm theo kế hoạch thay vì theo nguồn | `test:TestBuildEditPlan` |
+| 2026-09-30 | — (rà soát code) | — | `amix=inputs=2:duration=first` lấy độ dài theo lời đọc: lời ngắn hơn phim thì đuôi phim mất tiếng, lời dài hơn thì tiếng tràn ra ngoài kế hoạch | `test:TestAssembleLoiDoc` |
+| 2026-09-30 | — (rà soát code) | — | Luật "duyệt trước, cắt sau" nằm trong tài liệu thì vẫn chạy được; phải chặn bằng code: `cut_authorized`, `valid`, kế hoạch rỗng, thiếu file | `test:TestAssembleTuChoi` |
+| 2026-09-30 | — (rà soát code) | — | Render xong không probe lại thì không biết file thật có đúng thời lượng/khung/fps không | `script:assemble.py` |
