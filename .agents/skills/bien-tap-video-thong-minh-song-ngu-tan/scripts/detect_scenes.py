@@ -15,10 +15,13 @@ import subprocess
 from pathlib import Path
 
 
-def detect(path: Path, threshold: float = 0.12) -> dict:
+def detect(path: Path, threshold: float = 0.12, fast: bool = False) -> dict:
+    # fast: thu nhỏ trước khi chấm điểm cảnh — quét cả thư mục clip thô đỡ nóng máy.
+    # Vẫn phải giải mã hết hình, chỉ nhẹ phần tính toán; mốc chính xác kém hơn chút.
+    pre = "scale=320:-2," if fast else ""
     r = subprocess.run(
         ["ffmpeg", "-hide_banner", "-v", "error", "-i", str(path), "-an", "-vf",
-         f"select='gt(scene,{threshold})',metadata=print:file=-", "-f", "null", "-"],
+         f"{pre}select='gt(scene,{threshold})',metadata=print:file=-", "-f", "null", "-"],
         capture_output=True, text=True, encoding="utf-8", errors="replace")
     cuts = [round(float(x), 3) for x in re.findall(r"pts_time:([0-9.]+)", r.stdout)]
     dur = subprocess.run(

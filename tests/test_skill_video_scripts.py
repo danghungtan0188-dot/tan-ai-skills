@@ -27,6 +27,9 @@ import check_translation  # noqa: E402
 import export_subtitles  # noqa: E402
 import icons  # noqa: E402
 import validate_graphics  # noqa: E402
+import assemble  # noqa: E402
+import build_edit_plan  # noqa: E402
+import survey_rushes  # noqa: E402
 
 WORDS = [{"s": i * 0.5, "e": i * 0.5 + 0.4, "w": f"w{i}"} for i in range(30)]
 
@@ -464,6 +467,207 @@ class TestDetectScenes(unittest.TestCase):
             self.assertAlmostEqual(d["duration"], 4.0, delta=0.2)
             self.assertIsNotNone(d["studio_end"])
             self.assertAlmostEqual(d["studio_end"], 2.0, delta=0.2)
+
+
+def _shot(sid, t0, t1):
+    return {"id": sid, "start": t0, "end": t1, "dur": round(t1 - t0, 2),
+            "net": 150.0, "sang": 120.0, "dong": 4.0, "thumb": ""}
+
+
+RUSHES = {"clips": [
+    {"idx": 0, "file": "A.mp4", "name": "A.mp4", "duration": 20.0, "width": 1920, "height": 1080,
+     "fps": 30.0, "rotation": 0, "audio": True, "lufs": -26.0,
+     "shots": [_shot("0.1", 0.0, 6.0), _shot("0.2", 6.0, 14.0), _shot("0.3", 14.0, 20.0)]},
+    {"idx": 1, "file": "B.mp4", "name": "B.mp4", "duration": 30.0, "width": 1920, "height": 1080,
+     "fps": 30.0, "rotation": 0, "audio": False, "lufs": None,
+     "shots": [_shot("1.1", 0.0, 12.0), _shot("1.2", 12.0, 30.0)]}]}
+
+
+class TestBuildEditPlan(unittest.TestCase):
+    def chay(self, canh, target=20.0):
+        bang = build_edit_plan.nap(RUSHES)
+        doan, loi = build_edit_plan.dung_doan({"muc": [{"id": "m", "canh": canh}]}, bang)
+        loi += build_edit_plan.kiem_luat(doan, bang)
+        doan, loi_dai = build_edit_plan.co_gian(doan, target)
+        loi += build_edit_plan.kiem_do_dai(doan)
+        if loi_dai:
+            loi.append(loi_dai)
+        return doan, loi
+
+    def ba_doan(self, **kw):
+        c = [{"shot": "0.1", "co": "toan", "in": 0.0, "out": 3.0, "ly_do": "toan canh"},
+             {"shot": "0.2", "co": "trung", "in": 6.0, "out": 9.0, "ly_do": "trung canh"},
+             {"shot": "1.2", "co": "can", "loai": "phat_bieu", "in": 12.0, "out": 22.0, "ly_do": "phat bieu"}]
+        for i, v in kw.items():
+            c[int(i[-1])].update(v)
+        return c
+
+    def test_chan_shot_khong_co_that(self):
+        _, loi = self.chay([{"shot": "9.9", "co": "toan", "ly_do": "x"}])
+        self.assertTrue(any("khong co trong" in x or "không có trong" in x for x in loi))
+
+    def test_chan_in_out_ra_ngoai_clip(self):
+        _, loi = self.chay([{"shot": "0.1", "co": "toan", "in": 0.0, "out": 99.0, "ly_do": "x"}])
+        self.assertTrue(any("ra ngoài clip" in x for x in loi))
+
+    def test_chan_broll_trum_qua_moc_cat(self):
+        _, loi = self.chay(self.ba_doan(c0={"in": 4.0, "out": 9.0}))
+        self.assertTrue(any("trùm qua mốc cắt cảnh" in x for x in loi))
+
+    def test_phat_bieu_duoc_phep_vuot_moc_cat(self):
+        _, loi = self.chay(self.ba_doan(c2={"in": 10.0, "out": 20.0}))
+        self.assertFalse([x for x in loi if "trùm qua" in x])
+
+    def test_chan_phat_bieu_qua_ngan(self):
+        _, loi = self.chay(self.ba_doan(c2={"in": 12.0, "out": 15.0}), target=11.0)
+        self.assertTrue(any("câu nói bị cụt" in x for x in loi))
+
+    def test_chan_hai_doan_lien_nhau_cung_clip_cung_co(self):
+        _, loi = self.chay(self.ba_doan(c1={"co": "toan"}))
+        self.assertTrue(any("nhảy hình" in x for x in loi))
+
+    def test_doan_dau_phai_la_canh_toan(self):
+        _, loi = self.chay(self.ba_doan(c0={"co": "can"}))
+        self.assertTrue(any("mở đầu phải có cảnh toàn" in x for x in loi))
+
+    def test_thieu_ly_do_bi_chan(self):
+        _, loi = self.chay(self.ba_doan(c1={"ly_do": "  "}))
+        self.assertTrue(any("thiếu lý do" in x for x in loi))
+
+    def test_co_gian_khop_do_dai_va_khong_dung_phat_bieu(self):
+        doan, loi = self.chay(self.ba_doan(), target=20.0)
+        self.assertEqual(loi, [])
+        self.assertAlmostEqual(sum(d["dur"] for d in doan), 20.0, places=1)
+        pb = [d for d in doan if d["loai"] == "phat_bieu"][0]
+        self.assertEqual((pb["in"], pb["out"]), (12.0, 22.0), "phat bieu khong duoc co gian")
+        self.assertEqual([d["pos"] for d in doan], [0.0, doan[0]["dur"], round(doan[0]["dur"] + doan[1]["dur"], 2)])
+
+    def test_khong_keo_broll_vuot_ranh_gioi_canh(self):
+        doan, loi = self.chay(self.ba_doan(), target=60.0)
+        self.assertLessEqual(doan[0]["out"], 6.0, "khong duoc keo sang canh sau")
+        self.assertLessEqual(doan[1]["out"], 14.0)
+        self.assertTrue(any("lệch" in x for x in loi), "phai bao thieu bao nhieu giay")
+
+    def test_bang_duyet_co_du_cot(self):
+        doan, _ = self.chay(self.ba_doan())
+        bang = build_edit_plan.bang_duyet({"segments": doan, "tong": 20.0, "target": 20.0})
+        self.assertIn("phat bieu", bang)
+        self.assertIn("Tổng 20.0s / yêu cầu 20.0s", bang)
+
+    def test_tim_clip_de_quy_va_bo_qua_output(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = Path(t)
+            (root / "ngay-1").mkdir()
+            (root / "outputs").mkdir()
+            (root / "A.mp4").touch()
+            (root / "ngay-1" / "B.MOV").touch()
+            (root / "outputs" / "da-dung.mp4").touch()
+            found = survey_rushes.tim_clip(root, recursive=True)
+            self.assertEqual({p.name for p in found}, {"A.mp4", "B.MOV"})
+
+
+class TestAssemble(unittest.TestCase):
+    PLAN = {"target": 12.0, "tong": 12.0, "segments": [
+        {"n": 1, "file": "A.mp4", "in": 0.0, "out": 4.0, "dur": 4.0},
+        {"n": 2, "file": "B.mp4", "in": 2.0, "out": 6.0, "dur": 4.0},
+        {"n": 3, "file": "A.mp4", "in": 8.0, "out": 12.0, "dur": 4.0}]}
+
+    def cmd(self, **kw):
+        from argparse import Namespace
+        goc = dict(out=Path("o.mp4"), rushes=None, voice=None, nat_db=-12.0,
+                   size="1920x1080", fps=30, preview=False)
+        tieng = kw.pop("tieng", {"A.mp4": True, "B.mp4": False})
+        gain = kw.pop("gain", {})
+        return " ".join(assemble.build_cmd(self.PLAN, Namespace(**{**goc, **kw}), tieng, gain))
+
+    def test_chi_so_input_dung_khi_co_clip_cam(self):
+        c = self.cmd()
+        self.assertIn("[0:v]scale=1920:1080", c)
+        self.assertIn("[3:v]scale=1920:1080", c, "clip cam chen them input, clip sau phai doi chi so")
+        self.assertIn("[2:a]aresample=48000[a1]", c, "im lang phai lay tu input anullsrc")
+        self.assertIn("anullsrc", c)
+        self.assertIn("concat=n=3:v=1:a=1[vc][ac]", c)
+
+    def test_moi_doan_cat_dung_vao_ra(self):
+        c = self.cmd()
+        self.assertIn("-ss 0.000 -t 4.000 -i A.mp4", c)
+        self.assertIn("-ss 8.000 -t 4.000 -i A.mp4", c)
+
+    def test_can_muc_tung_clip_bang_gain_tinh(self):
+        c = self.cmd(gain={"A.mp4": 6.0})
+        self.assertIn("volume=6.00dB", c)
+        self.assertNotIn("compand", c)
+        self.assertNotIn("sidechain", c)
+
+    def test_long_tieng_ha_tieng_hien_truong_bang_gain_co_dinh(self):
+        c = self.cmd(voice=Path("vo.wav"))
+        self.assertIn("[ac]volume=-12.0dB[nat]", c)
+        self.assertIn("amix=inputs=2:duration=first:normalize=0[ao]", c)
+        self.assertNotIn("sidechaincompress", c, "khong duoc ducking dong")
+
+    def test_gain_clip_gioi_han_va_bo_qua_clip_cam(self):
+        with tempfile.TemporaryDirectory() as t:
+            p = Path(t) / "r.json"
+            p.write_text(json.dumps(RUSHES), encoding="utf-8")
+            g = assemble.gain_clip(p)
+        self.assertEqual(g, {"A.mp4": 6.0})
+
+
+@unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "khong co ffmpeg")
+class TestDungTuVideoTho(unittest.TestCase):
+    """Chay that: khao sat clip tho -> chon canh -> ghep -> do lai thoi luong."""
+
+    def tao_clip(self, path, nguon, giay, tieng):
+        cmd = ["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", nguon]
+        if tieng:
+            cmd += ["-f", "lavfi", "-i", f"sine=f=440:d={giay}", "-c:a", "aac"]
+        cmd += ["-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p", str(path)]
+        subprocess.run(cmd, check=True)
+
+    def test_duong_chay_chinh(self):
+        with tempfile.TemporaryDirectory() as t:
+            t = Path(t)
+            a, b = t / "A.mp4", t / "B.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y",
+                            "-f", "lavfi", "-i", "color=c=0x1a3a8a:s=320x180:r=30:d=5",
+                            "-f", "lavfi", "-i", "testsrc2=s=320x180:r=30:d=5",
+                            "-f", "lavfi", "-i", "sine=f=440:d=10",
+                            "-filter_complex", "[0:v][1:v]concat=n=2:v=1:a=0,format=yuv420p[v]",
+                            "-map", "[v]", "-map", "2:a", "-c:v", "libx264", "-preset", "ultrafast",
+                            "-c:a", "aac", str(a)], check=True)
+            self.tao_clip(b, "smptebars=s=320x180:r=30:d=8", 8, False)
+
+            data = survey_rushes.khao_sat([a, b], 0.12, 1.2, t / "thumbs")
+            ids = [s["id"] for c in data["clips"] for s in c["shots"]]
+            self.assertIn("0.1", ids)
+            self.assertIn("0.2", ids)
+            self.assertIn("1.1", ids)
+            self.assertTrue(any("câm" in x for x in data["canh_bao"]))
+            survey_rushes.contact_sheet(data, t / "sheet.jpg")
+            self.assertTrue((t / "sheet.jpg").exists())
+
+            bang = build_edit_plan.nap(data)
+            chon = {"muc": [{"id": "m", "canh": [
+                {"shot": "0.1", "co": "toan", "in": 0.5, "out": 3.5, "ly_do": "toan canh"},
+                {"shot": "1.1", "co": "trung", "in": 0.5, "out": 3.5, "ly_do": "clip cam"},
+                {"shot": "0.2", "co": "can", "in": 5.5, "out": 8.5, "ly_do": "can canh"}]}]}
+            doan, loi = build_edit_plan.dung_doan(chon, bang)
+            loi += build_edit_plan.kiem_luat(doan, bang)
+            doan, loi_dai = build_edit_plan.co_gian(doan, 12.0)
+            loi += build_edit_plan.kiem_do_dai(doan)
+            self.assertEqual((loi, loi_dai), ([], None))
+
+            from argparse import Namespace
+            plan = {"target": 12.0, "tong": 12.0, "segments": doan}
+            out = t / "rough.mp4"
+            ns = Namespace(out=out, rushes=None, voice=None, nat_db=-12.0,
+                           size="640x360", fps=30, preview=True)
+            tieng = {str(a): True, str(b): False}
+            subprocess.run(assemble.build_cmd(plan, ns, tieng, {}), check=True)
+            d = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                                "-of", "csv=p=0", str(out)], text=True, capture_output=True,
+                               check=True).stdout.strip()
+            self.assertAlmostEqual(float(d), 12.0, delta=0.3, msg="ghep xong phai dung do dai yeu cau")
 
 
 if __name__ == "__main__":

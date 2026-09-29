@@ -1,6 +1,6 @@
 ---
 name: bien-tap-video-thong-minh-song-ngu-tan
-description: Phân tích nội dung, hình ảnh, lời nói và nhịp của từng video để tự chọn chiến lược biên tập phù hợp, đồng thời tạo phụ đề song ngữ tiếng Anh ở dòng trên và tiếng Việt ở dòng dưới. Dùng cho bản tin, hội nghị, phỏng vấn, tuyên truyền, sự kiện, phóng sự, video giáo dục và mạng xã hội; không tự cắt video nếu chưa được người dùng cho phép.
+description: Tự tìm và xem toàn bộ clip trong kho/thư mục người dùng chỉ định, phân tích nội dung, hình ảnh, lời nói và nhịp để cắt ghép thành một video hoàn chỉnh có bố cục logic, đúng độ dài được yêu cầu; đồng thời hỗ trợ phụ đề song ngữ Anh trên–Việt dưới và phong cách ATT NEWS. Kích hoạt khi người dùng đưa kho clip, footage hoặc nhiều video và yêu cầu tự động dựng/cắt ghép. Chỉ quét trong kho được chỉ định; chỉ cắt khi yêu cầu hiện tại nói rõ tự động dựng/cắt ghép hoặc người dùng duyệt edit-plan.
 ---
 
 # Biên tập video thông minh song ngữ Tan
@@ -12,8 +12,25 @@ Phân tích trước, chọn phong cách sau. Không áp một preset cho mọi 
 > và áp dụng y nguyên, không dựng lại từ đầu. Tài nguyên góc sinh bằng
 > `scripts/make_att_bugs.py`.
 
+> **Người dùng đưa cả thư mục clip thô tự quay?** Đọc [references/dung-tu-video-tho.md](references/dung-tu-video-tho.md)
+> trước: khảo sát → xem contact sheet chọn cảnh → kiểm luật dựng và co cho khớp độ dài người dùng
+> đặt → **đưa bảng đoạn cho người dùng duyệt** → ghép, rồi mới quay lại quy trình bên dưới từ bước 4.
+
+> **Chế độ tự dựng từ kho:** khi người dùng nói rõ “tự động tìm/xem/cắt ghép/dựng” và chỉ kho
+> clip cùng thời lượng đích, đó là quyền cắt cho yêu cầu hiện tại. Quét đệ quy đúng kho đó, xem hết
+> contact sheet, tự lập bố cục mở đầu → diễn biến → điểm chính/phát biểu → kết, tạo plan bằng
+> `--approved`, ghép và QA mà không cần dừng xin duyệt lại. Nếu chưa có thời lượng đích thì hỏi một
+> lần; không tự quét toàn ổ đĩa hay thư mục ngoài phạm vi người dùng đặt.
+
+> **Ba kho mặc định của người dùng:** Desktop, Documents và Google Drive. Khi người dùng nói “trong
+> kho” mà không nêu đường dẫn, đọc [references/kho-clip.md](references/kho-clip.md), tìm lần lượt ở ba
+> nơi này theo tên/chủ đề/ngày của yêu cầu. Với Google Drive, dùng tìm kiếm Drive hoặc thư mục Drive
+> đã đồng bộ; chỉ tải các video đã chọn về thư mục làm việc, không tải toàn bộ Drive.
+
 ## Nâng cấp chi tiết
 
+- **Dựng từ video thô:** [references/dung-tu-video-tho.md](references/dung-tu-video-tho.md) — `survey_rushes.py` → `build_edit_plan.py` → `assemble.py`; luật cỡ cảnh, độ dài cảnh, chống nhảy hình, khớp đúng thời lượng yêu cầu.
+- **Tìm kho clip:** [references/kho-clip.md](references/kho-clip.md) — thứ tự Desktop → Documents → Google Drive, quy tắc lọc video liên quan và cách đưa file Drive về vùng làm việc trước khi khảo sát.
 - **Song ngữ Việt–Anh:** [references/quy-trinh-song-ngu.md](references/quy-trinh-song-ngu.md) — lời Việt theo kịch bản (ASR chỉ lấy mốc), glossary, `check_translation.py`, 4 chế độ xuất (`export_subtitles.py`), kiểm SRT/VTT (`check_subtitles.py`).
 - **ATT NEWS một lượt:** `detect_scenes.py` → `make_tv_card.py` → `make_outro.py` → `render_att.py` → `qa.py --tail`; banner kiểm tràn cảnh bằng `make_lower_thirds_ass.py --scenes`.
 - **MC AI / lip-sync:** [skills/chuyen-gia-edit-video-tan/references/mc-ai-lip-sync.md](skills/chuyen-gia-edit-video-tan/references/mc-ai-lip-sync.md)
@@ -28,6 +45,7 @@ Phân tích trước, chọn phong cách sau. Không áp một preset cho mọi 
 4. Dựng `bilingual.json` theo `references/bilingual-contract.md` và [references/quy-trinh-song-ngu.md](references/quy-trinh-song-ngu.md): `scripts/build_bilingual.py transcribe INPUT` lấy **mốc thời gian**, viết `cues.json` với lời Việt **theo kịch bản gốc** (không chép ASR), rồi `scripts/build_bilingual.py build`. Giữ nguyên tên riêng, chức danh, địa danh, số liệu.
 5. Chạy `scripts/detect_scenes.py INPUT --out scenes.json`. Khi có người phát biểu, xác minh tên và chức vụ từ kịch bản, rồi `scripts/make_lower_thirds_ass.py lower-thirds.json lt.ass --scenes scenes.json` — tham số `--scenes` chặn banner tràn sang cảnh khác. Không đoán danh tính từ hình ảnh.
 6. Nếu người dùng yêu cầu dùng giọng cá nhân đã được chính họ cho phép, đọc `references/authorized-voice.md`. Chỉ dùng hồ sơ đã có xác nhận; không commit mẫu giọng, token hoặc `voice_profile_id` lên GitHub.
+   Với ATT NEWS trên máy của người dùng, ưu tiên lựa chọn rõ ràng: `mc-an-thanh-thuy` cho MC Đài An Thạnh Thủy hoặc `hung-tan-chan-that` cho Giọng Hùng Tân chân thật; tổng hợp qua skill `tan-giong-doc-ban-tin`. Không tự chọn giữa hai giọng khi người dùng chưa chỉ định.
 7. Kiểm bản dịch `scripts/check_translation.py bilingual.json`, xuất phụ đề `scripts/export_subtitles.py bilingual.json --mode all`, kiểm file rời `scripts/check_subtitles.py`.
 8. Render một lượt. Bản tin ATT NEWS: `scripts/render_att.py INPUT --captions cap.song-ngu.ass --lower-thirds lt.ass --scenes scenes.json --card card.png --outro-dir outro --out OUT.mp4` (xem [references/phong-cach-att-news.md](references/phong-cach-att-news.md)). Video thường: `scripts/render.py INPUT plan.json captions.ass OUTPUT --lower-thirds lt.ass`.
 9. Chạy `scripts/qa.py OUTPUT --source INPUT --cut-authorized no --tail <giây outro> --captions bilingual.json` và xem thủ công các điểm vào/ra chữ, chuyển cảnh, lower-third, 2 giây đầu/cuối.

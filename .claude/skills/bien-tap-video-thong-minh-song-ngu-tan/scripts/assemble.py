@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+"""Ghép các đoạn trong edit-plan.json thành một bản dựng thô, một lượt ffmpeg.
+
+    python assemble.py edit-plan.json --out rough.mp4 [--rushes rushes.json]
+        [--voice vo.wav] [--nat-db -12] [--size 1920x1080] [--fps 30] [--preview]
+
+Chuẩn hoá mọi clip về cùng khung/fps/âm thanh rồi nối hard cut — nhịp bản tin là hard cut,
+không chèn dissolve ở đây; muốn dissolve thì làm ở bước đồ hoạ.
+
+Âm thanh:
+- `--rushes`: cân mức từng clip bằng MỘT mức gain cố định (đo sẵn ở survey_rushes.py) để clip
+  này không to hơn clip kia. Gain tĩnh — không nén, không bóp dải động.
+- `--voice`: lồng lời đọc lên trên, tiếng hiện trường hạ còn `--nat-db` (mặc định −12 dB).
+  Hạ bằng gain cố định, KHÔNG ducking động — tiếng hiện trường là bằng chứng sự việc, phải nghe rõ.
+- Không chuẩn hoá LUFS ở đây; việc đó để render_att.py làm một lần ở cuối.
+
+Chỉ chạy sau khi người dùng đã duyệt bảng đoạn của build_edit_plan.py.
+Bước sau: render_att.py (logo, banner, phụ đề, outro) rồi qa.py.
+"""
+from __future__ import annotations
+import argparse
+import json
+import subprocess
+from pathlib import Path
+
+LUFS_CHUAN, GAIN_TOI_DA = -20.0, 12.0
+
+
+def co_tieng(path: str) -> bool:
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries",
+                        "stream=codec_type", "-of", "csv=p=0", path], text=True, capture_output=True)
+    return "audio" in r.stdout
+
+
+def gain_clip(rushes: Path | None) -> dict[str, float]:
+    if not rushes:
+        return {}
+    d = json.loads(rushes.read_text(encoding="utf-8"))
+    return {c["file"]: max(-GAIN_TOI_DA, min(GAIN_TOI_DA, LUFS_CHUAN - c["lufs"]))
+            for c in d["clips"] if c.get("lufs") is not None}
+
+
+def build_cmd(plan: dict, a, tieng: dict[str, bool], gain: dict[str, float]) -> list[str]:
+    W, H = (int(v) for v in a.size.split("x"))
+    inputs, fc, vlab, alab = [], [], [], []
+    n_in = 0                        # chỉ số input thật: clip câm chèn thêm anullsrc nên không dùng k được
+
+    def them(args: list[str]) -> int:
+        nonlocal n_in
+        inputs.extend(args)
+        n_in += 1
+        return n_in - 1
+
+    for k, s in enumerate(plan["segments"]):
+        i = them(["-ss", f"{s['in']:.3f}", "-t", f"{s['dur']:.3f}", "-i", s["file"]])
+        fc.append(f"[{i}:v]scale={W}:{H}:force_original_aspect_ratio=decrease,"
+                  f"pad={W}:{H}:-1:-1:color=black,setsar=1,fps={a.fps},format=yuv420p[v{k}]")
+        vlab.append(f"[v{k}]")
+        if tieng[s["file"]]:
+            g = gain.get(s["file"], 0.0)
+            vol = f"volume={g:.2f}dB," if abs(g) > 0.05 else ""
+            fc.append(f"[{i}:a]{vol}aresample=48000,aformat=channel_layouts=stereo,"
+                      f"atrim=0:{s['dur']:.3f},asetpts=PTS-STARTPTS[a{k}]")
+        else:                       # clip câm: chèn im lặng đúng độ dài, nếu không concat lệch tiếng
+            j = them(["-f", "lavfi", "-t", f"{s['dur']:.3f}", "-i", "anullsrc=r=48000:cl=stereo"])
+            fc.append(f"[{j}:a]aresample=48000[a{k}]")
+        alab.append(f"[a{k}]")
+    n = len(plan["segments"])
+    fc.append("".join(x + y for x, y in zip(vlab, alab)) + f"concat=n={n}:v=1:a=1[vc][ac]")
+    if a.voice:
+        i = them(["-i", str(a.voice)])
+        fc.append(f"[ac]volume={a.nat_db}dB[nat];[{i}:a]aresample=48000,aformat=channel_layouts=stereo[vo];"
+                  "[vo][nat]amix=inputs=2:duration=first:normalize=0[ao]")
+        amap = "[ao]"
+    else:
+        amap = "[ac]"
+    enc = ["veryfast", "27"] if a.preview else ["faster", "20"]
+    return ["ffmpeg", "-y", "-hide_banner", "-v", "error", "-stats", *inputs,
+            "-filter_complex", ";".join(fc), "-map", "[vc]", "-map", amap,
+            "-c:v", "libx264", "-preset", enc[0], "-crf", enc[1],
+            "-c:a", "aac", "-ar", "48000", "-b:a", "192k", "-pix_fmt", "yuv420p",
+            "-movflags", "+faststart", str(a.out)]
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("plan", type=Path)
+    ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--rushes", type=Path, help="để cân mức tiếng giữa các clip")
+    ap.add_argument("--voice", type=Path, help="file lời đọc lồng lên trên")
+    ap.add_argument("--nat-db", type=float, default=-12.0, help="mức tiếng hiện trường khi có lời đọc")
+    ap.add_argument("--size", default="1920x1080")
+    ap.add_argument("--fps", type=int, default=30)
+    ap.add_argument("--preview", action="store_true")
+    a = ap.parse_args()
+    plan = json.loads(a.plan.read_text(encoding="utf-8"))
+    if plan.get("cut_authorized") is not True:
+        raise SystemExit("Kế hoạch chưa được cho phép cắt ghép (cut_authorized=false). "
+                         "Hãy xin duyệt hoặc tạo lại plan với --approved khi người dùng đã yêu cầu tự động dựng.")
+    files = {s["file"] for s in plan["segments"]}
+    thieu = [f for f in files if not Path(f).exists()]
+    if thieu:
+        raise SystemExit("Không thấy clip: " + ", ".join(thieu))
+    a.out.parent.mkdir(parents=True, exist_ok=True)
+    cmd = build_cmd(plan, a, {f: co_tieng(f) for f in files}, gain_clip(a.rushes))
+    subprocess.run(cmd, check=True)
+    print(f"{a.out}  ({plan['tong']}s theo kế hoạch, yêu cầu {plan['target']}s)")
+    print("Kiểm lại bằng qa.py, và xem tay điểm nối giữa các đoạn.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
