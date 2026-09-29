@@ -8,7 +8,7 @@ Nhịp: sáng lên 0,35 s → tiêu đề trượt lên lệch nhịp hai dòng 
 dòng phụ → dòng kêu gọi trượt từ trái → logo bung (quá đà nhẹ) → like nảy → tối dần 0,35 s.
 Nền: chuyển sắc navy, quầng sáng, hạt bay, đường mạch nhấp nháy, sóng trôi, vệt sáng quét.
 Đồ hoạ tự dựng bằng công thức; chỉ mượn bố cục, không lấy nhận diện kênh khác.
-Outro im lặng — chỉ thêm nhạc khi người dùng đưa bản nhạc có quyền dùng.
+Outro im lặng là đúng phong cách ATT NEWS — không thêm nhạc nền, không đề xuất thêm nhạc.
 """
 from __future__ import annotations
 import argparse

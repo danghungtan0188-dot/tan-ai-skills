@@ -167,7 +167,8 @@ Hai điều phải nhớ:
 | Ảnh người dùng dán trong khung chat không phải file trên đĩa | tìm file mới nhất trên Desktop; đọc lại vì có thể bị ghi đè cùng tên |
 | Render lại nhiều lần làm nóng máy | ghép thử bằng PIL trước; dừng lượt render cũ trước khi chạy lượt mới |
 | Outro ngắn hơn 3 giây thì không kịp hiện logo và dòng kêu gọi | `make_outro.py` chặn dưới 3 giây |
-| Outro chưa có nhạc | chỉ thêm khi người dùng đưa bản nhạc có quyền dùng |
+| Đề xuất thêm nhạc nền | **Bản tin ATT NEWS không dùng nhạc nền.** Outro im lặng là cố ý, không phải thiếu sót |
+| Coi nhẹ tiếng hiện trường | Tiếng máy cắt, bước chân, tiếng gió là **bằng chứng của sự kiện** — giữ nguyên, không ducking, không lọc mạnh tay |
 | Đắp phụ đề lên video vốn đã có phụ đề đốt sẵn | trích khung kiểm trước; có rồi thì bỏ trống `--captions` |
 | Lớp `--replace` đặt sau logo/icon nên che mất chúng | thay hình phải nằm dưới cùng; đã có test chặn |
 | `alimiter` tự bù mức, loudness vọt lên và đỉnh chạm 0 dBTP | luôn đặt `level=disabled` |
