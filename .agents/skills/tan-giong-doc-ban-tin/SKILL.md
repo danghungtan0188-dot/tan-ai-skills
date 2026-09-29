@@ -1,13 +1,13 @@
 ---
 name: tan-giong-doc-ban-tin
-description: Tổng hợp giọng đọc bản tin tiếng Việt từ kịch bản TXT/DOCX bằng VieNeu-TTS (Apache-2.0, https://github.com/pnnbao97/VieNeu-TTS). Hỗ trợ giọng nam/nữ miền Nam dựng sẵn phong cách đọc tin tức, nhân bản và lưu giọng nói của người dùng từ file WAV mẫu, tự động mở rộng chữ viết tắt tiếng Việt (số và ngày tháng đã được thư viện tự chuẩn hoá), tự chia đoạn dài, xuất WAV 48kHz và MP3. Kích hoạt khi người dùng cần đọc bản tin/kịch bản tiếng Việt thành giọng nói, tạo audio bản tin, lồng tiếng bằng giọng nam/nữ miền Nam, hoặc nhân bản giọng đọc của chính họ để dùng lại.
+description: Tổng hợp giọng đọc bản tin tiếng Việt từ kịch bản TXT/DOCX bằng VieNeu-TTS để lồng vào MP4 và clip video. Hỗ trợ hai giọng chuyên đọc kịch bản video ATT NEWS là MC Đài An Thạnh Thủy và Giọng Hùng Tân chân thật, cùng giọng nam/nữ miền Nam dựng sẵn; tự mở rộng chữ viết tắt, chia đoạn dài, xuất WAV 48kHz và MP3. Kích hoạt khi người dùng cần đọc script/kịch bản cho video, tạo voice-over bản tin, lồng tiếng clip hoặc nhân bản giọng của chính họ để dùng lại.
 ---
 
 # Tân — Giọng đọc bản tin
 
 ## Phạm vi
 
-Hỗ trợ: đọc kịch bản/bản tin tiếng Việt (`.txt`, `.docx`) thành file âm thanh; chọn giọng nam hoặc nữ miền Nam dựng sẵn, phong cách đọc tin tức (mặc định), hoặc bất kỳ giọng nào trong 14 giọng dựng sẵn của VieNeu-TTS-v3-Turbo; nhân bản và lưu lại giọng nói của người dùng từ một file WAV mẫu để tái sử dụng; mở rộng chữ viết tắt tiếng Việt thường gặp trong bản tin (hành chính, chức danh, giao thông...) trước khi tổng hợp; xuất WAV 48kHz và MP3.
+Hỗ trợ: đọc script/kịch bản/bản tin tiếng Việt (`.txt`, `.docx`) thành voice-over để ghép vào MP4 hoặc clip video; chọn giọng chuyên dụng ATT NEWS, giọng nam/nữ miền Nam dựng sẵn hoặc giọng nhân bản; mở rộng chữ viết tắt tiếng Việt thường gặp trong bản tin trước khi tổng hợp; xuất WAV 48kHz và MP3 để các skill dựng video dùng trực tiếp.
 
 Không làm: không tự động thêm hoặc sửa nội dung bản tin (chỉ đọc nguyên văn, có chuẩn hoá chữ viết tắt/số/ngày để phát âm đúng); không chỉnh sửa mã nguồn của thư viện `vieneu` — skill chỉ gọi API công khai của gói đã cài qua `pip`/`uv`, không vendor lại source code; không tự lưu giọng nhân bản vào thư mục cài đặt của `vieneu` (tránh mất dữ liệu khi nâng cấp gói); không đảm bảo nhân bản giọng hoạt động trên mọi máy — máy không có GPU NVIDIA có thể cần cài thêm bộ PyTorch (xem [INSTALL.md](INSTALL.md)).
 
@@ -35,6 +35,8 @@ Không có API key hay dịch vụ trả phí nào liên quan — VieNeu-TTS ch�
    python scripts/synthesize.py --input duong_dan/ban_tin.docx --voice nam
    python scripts/synthesize.py --input duong_dan/ban_tin.txt --voice nu --style tin_tuc
    python scripts/synthesize.py --input duong_dan/ban_tin.txt --voice "Giọng của tôi"
+   python scripts/synthesize.py --input duong_dan/ban_tin.txt --voice mc-an-thanh-thuy
+   python scripts/synthesize.py --input duong_dan/ban_tin.txt --voice hung-tan-chan-that
    ```
    `--voice nam` / `--voice nu` là hai giọng miền Nam, phong cách tin tức, dựng sẵn (Minh Triết / Thùy Dung — xem [references/voices.md](references/voices.md) cho toàn bộ 14 giọng). Script tự: đọc TXT/DOCX → tách đoạn → mở rộng chữ viết tắt (`scripts/normalize_vi.py`, tự điển ở [references/abbreviations.json](references/abbreviations.json)) → gọi VieNeu-TTS tổng hợp từng đoạn (thư viện tự chuẩn hoá số/ngày tháng và tự chia nhỏ đoạn dài ở tầng phoneme) → ghép các đoạn bằng khoảng lặng → lưu WAV 48kHz → chuyển MP3 bằng `ffmpeg`.
 5. **Kiểm tra kết quả** với người dùng: nghe thử file WAV/MP3 xuất ra (mặc định ở `outputs/`), báo lại số đoạn lỗi nếu có (script tiếp tục chạy các đoạn còn lại thay vì dừng hẳn, và tổng kết ở cuối).
@@ -49,6 +51,15 @@ Không có API key hay dịch vụ trả phí nào liên quan — VieNeu-TTS ch�
 - `scripts/read_script.py <file>` — chỉ để xem trước file được tách đoạn thế nào, không tổng hợp giọng.
 
 Mỗi script hỗ trợ `--help`.
+
+## Giọng riêng dùng cho ATT NEWS trên máy này
+
+- `--voice mc-an-thanh-thuy` (hoặc `mc-att`) → hồ sơ **MC Đài An Thạnh Thủy**, chuyên đọc script MC/bản tin để lồng vào MP4 và clip video.
+- `--voice hung-tan-chan-that` → hồ sơ **Giọng Hùng Tân chân thật**, chuyên đọc lời thuyết minh/kịch bản video; nhân bản từ mẫu WAV do người dùng cung cấp ngày 2026-09-29.
+
+Khi yêu cầu có MP4, clip, footage hoặc nói “đọc script cho video”, tạo voice-over bằng một trong hai giọng trên rồi chuyển sang workflow `video-thuyet-minh` để đồng bộ lời với hình và ghép video. Chỉ trả file audio riêng khi người dùng nói rõ không cần ghép vào video.
+
+Hai hồ sơ là dữ liệu giọng cá nhân, nằm tại `~/.tan-giong-doc-ban-tin/voices/giong_cua_toi.json`, không nằm trong Git. Trước khi dùng trên máy khác, kiểm tra bằng `python scripts/clone_voice.py list`; nếu chưa có thì phải đăng ký từ mẫu giọng được chủ thể cho phép, không thay bằng một giọng gần giống rồi gọi cùng tên.
 
 ## Ví dụ sử dụng
 

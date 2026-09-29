@@ -27,7 +27,7 @@ Dùng khi người dùng gọi `$tro-ly-video-ban-tin-tan` hoặc yêu cầu:
 1. **Input Check**: đọc kịch bản, kiểm video/audio, lấy duration/fps/resolution bằng ffprobe.
 2. **Script Check**: sửa lỗi đọc, số, ngày tháng, tên riêng; không tự bịa nội dung.
 3. **HeyGen**: nếu cần MC, dùng HeyGen theo skill `heygen-video`. Ưu tiên avatar đã có của người dùng.
-4. **Voice**: ưu tiên `Hoài - Natural` nếu HeyGen hiện có đúng voice đó. Yêu cầu: nữ miền Nam, rõ, ấm, truyền cảm, tốc độ hơi nhanh kiểu phát thanh viên. Không giả định voice ID; phải resolve từ danh sách voice hiện tại.
+4. **Voice**: nếu dùng HeyGen, ưu tiên `Hoài - Natural` khi danh sách voice hiện tại có đúng tên đó; không giả định voice ID. Với script cần đọc để lồng vào MP4/clip, ưu tiên workflow cục bộ `tan-giong-doc-ban-tin`: `mc-an-thanh-thuy` cho MC Đài An Thạnh Thủy hoặc `hung-tan-chan-that` cho Giọng Hùng Tân chân thật. Hai giọng này chuyên dùng cho voice-over video. Không tự chọn giữa các giọng khi người dùng chưa chỉ định.
 5. **Scene Map**: chia MC / B-roll / người phát biểu / hoạt động / kết. Ghi timecode.
 6. **Edit Plan**: chọn banner và effect theo ngữ cảnh, không phủ kín màn hình.
 7. **FFmpeg Edit**: dùng công thức trong `references/ffmpeg-recipes.md`.

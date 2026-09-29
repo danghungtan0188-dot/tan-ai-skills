@@ -39,6 +39,11 @@ VOICE_SHORTCUTS: Dict[str, str] = {
     "nu-mien-nam": "Thùy Dung",
     "nam-tin-tuc": "Minh Triết",
     "nu-tin-tuc": "Thùy Dung",
+    # Hồ sơ giọng cá nhân được lưu ngoài Git trong CUSTOM_VOICES_FILE.
+    # Các bí danh này chỉ giúp gọi nhất quán trong pipeline ATT NEWS.
+    "mc-an-thanh-thuy": "MC Đài An Thạnh Thủy",
+    "mc-att": "MC Đài An Thạnh Thủy",
+    "hung-tan-chan-that": "Giọng Hùng Tân chân thật",
 }
 
 # Danh muc 14 giong dung san cua VieNeu-TTS-v3-Turbo (chi de tra cuu/hien thi —

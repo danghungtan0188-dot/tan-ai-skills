@@ -1,6 +1,6 @@
 ---
 name: video-thuyet-minh
-description: Quy trình sản xuất video có lời thuyết minh/bản tin tiếng Việt từ đầu đến cuối — nối skill tan-giong-doc-ban-tin (kịch bản → giọng đọc chuẩn phát thanh viên) với skill bien-tap-video/dung-video-su-kien (dựng/chỉnh hình ảnh) và video-use (thực thi ghép). Kích hoạt khi người dùng có 1 kịch bản/bản tin tiếng Việt muốn biến thành video hoàn chỉnh có giọng đọc, muốn lồng giọng đọc vào video đã có/đang dựng, hoặc nói chung "làm video bản tin", "đọc kịch bản này rồi ghép vào video", "làm video thuyết minh". Skill này là lớp điều phối toàn quy trình (workflow orchestrator) — không tự tổng hợp giọng nói hay tự render, mà gọi đúng thứ tự 3 skill trên và xử lý phần đồng bộ lời đọc với hình ảnh + trộn âm thanh mà 3 skill kia không tự làm.
+description: Quy trình sản xuất video có lời thuyết minh/bản tin tiếng Việt từ đầu đến cuối — đọc script bằng MC Đài An Thạnh Thủy hoặc Giọng Hùng Tân chân thật, rồi đồng bộ và ghép voice-over vào MP4/clip video. Kết nối tan-giong-doc-ban-tin với bien-tap-video/dung-video-su-kien và video-use. Kích hoạt khi người dùng muốn đọc kịch bản cho video, lồng giọng vào clip, làm video bản tin hoặc video thuyết minh hoàn chỉnh.
 ---
 
 # Video thuyết minh (kịch bản → giọng đọc → video hoàn chỉnh)
@@ -20,13 +20,13 @@ Không làm: không tự viết lại nội dung kịch bản (chỉ đọc nguy
 
 ## 3 skill được điều phối
 
-1. **`tan-giong-doc-ban-tin`** — kịch bản `.txt`/`.docx` → file audio giọng đọc (WAV/MP3), giọng nam/nữ miền Nam phong cách tin tức hoặc giọng nhân bản riêng.
+1. **`tan-giong-doc-ban-tin`** — kịch bản `.txt`/`.docx` → voice-over WAV/MP3. Với video ATT NEWS hỗ trợ `mc-an-thanh-thuy` và `hung-tan-chan-that`; ngoài ra có giọng nam/nữ miền Nam hoặc giọng nhân bản riêng.
 2. **`bien-tap-video`** (tự route sang `dung-video-su-kien` nếu đúng chủ đề sự kiện) — nhận diện chủ đề, lập kịch bản dựng hình ảnh.
 3. **`video-use`** — thực thi: cắt/ghép hình theo kịch bản dựng, ghép audio giọng đọc vào đúng vị trí, trộn âm thanh, xuất file cuối.
 
 ## Quy trình cốt lõi
 
-1. **Tiếp nhận đầu vào.** Xác nhận với người dùng: file kịch bản (đường dẫn `.txt`/`.docx`), có sẵn video/footage nền chưa hay cần dựng mới, giọng đọc muốn dùng (nam/nữ/giọng nhân bản), mục đích (video bản tin có hình nền tĩnh/động, hay lồng giọng đọc vào video sự kiện đã dựng).
+1. **Tiếp nhận đầu vào.** Xác nhận file kịch bản, MP4/clip/footage cần lồng tiếng và giọng muốn dùng. Nếu người dùng nói “giọng MC An Thạnh Thủy” dùng `mc-an-thanh-thuy`; nếu nói “giọng trên”, “giọng Hùng Tân” hoặc “giọng chân thật” dùng `hung-tan-chan-that`. Khi ngữ cảnh không đủ rõ, hỏi lại thay vì tự chọn.
 2. **Bước A — Tạo giọng đọc.** Gọi skill **`tan-giong-doc-ban-tin`** với kịch bản đã xác nhận. Lấy file audio + biết thời lượng chính xác của từng đoạn (script `read_script.py`/log của `synthesize.py` cho biết cách chia đoạn).
 3. **Bước B — Chuẩn bị hình ảnh.**
    - Nếu người dùng đã có video/footage: gọi skill **`bien-tap-video`** để phân tích + nhận diện chủ đề, lập kịch bản dựng hình (route sang `dung-video-su-kien` nếu là sự kiện).

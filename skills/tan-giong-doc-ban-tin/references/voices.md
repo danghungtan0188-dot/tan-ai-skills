@@ -37,3 +37,12 @@ Style (`--style`) áp dụng độc lập với tên giọng — có thể ép `
 ## Giọng đã nhân bản (voice cloning)
 
 Sau khi chạy `clone_voice.py enroll --name "..."`, tên giọng đó xuất hiện thêm trong danh sách trên khi chạy `synthesize.py` (không cần chỉnh sửa bảng này). Xem [../INSTALL.md](../INSTALL.md) mục nhân bản giọng.
+
+### Bí danh ATT NEWS cục bộ
+
+| Bí danh | Hồ sơ giọng | Mục đích |
+|---|---|---|
+| `mc-an-thanh-thuy`, `mc-att` | MC Đài An Thạnh Thủy | Chuyên đọc script MC/bản tin để lồng vào MP4 và clip video |
+| `hung-tan-chan-that` | Giọng Hùng Tân chân thật | Chuyên đọc lời thuyết minh/kịch bản cho video và bản tin |
+
+Các bí danh chỉ trỏ tới hồ sơ trong `~/.tan-giong-doc-ban-tin/voices/giong_cua_toi.json`. Repo không chứa embedding hoặc WAV mẫu.
