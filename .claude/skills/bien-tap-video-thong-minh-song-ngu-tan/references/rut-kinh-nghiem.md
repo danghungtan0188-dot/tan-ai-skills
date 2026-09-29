@@ -1,9 +1,10 @@
 # Rút kinh nghiệm sau mỗi video
 
 Mục tiêu: **video sau khá hơn video trước**, và cái khá hơn đó phải nằm lại trong repo, không nằm
-trong trí nhớ của một phiên làm việc.
+trong trí nhớ của một phiên làm việc. Nhưng skill không được phình ra vì nhận xét nhất thời.
 
 Chạy phần này **ngay sau khi giao video**, trước khi đóng phiên. Không để dồn.
+Gọi nhanh bằng `/rut-kinh-nghiem`.
 
 ## Luật gốc: kinh nghiệm chỉ tính khi có chỗ neo
 
@@ -31,6 +32,21 @@ Sau mỗi video, trả lời đúng bốn câu, ngắn gọn, **kèm số đo th
 3. **Lỗi nào máy đáng lẽ bắt được mà không bắt?** — đây là loại quý nhất: biến thẳng thành test.
 4. **Cái gì hay, nên giữ làm mặc định?**
 
+## Bài học nào được đưa vào skill
+
+Không phải cái gì cũng thành luật. Phân loại trước:
+
+| Loại | Xử lý |
+|---|---|
+| Sở thích cho riêng một video/chiến dịch | giữ trong hồ sơ dự án, **không** thành mặc định toàn cục |
+| Mẫu dựng đã được người dùng xác nhận và dùng lại được | đưa vào `references/`, ghi rõ **phạm vi áp dụng** |
+| Lỗi kỹ thuật đo được | sửa script **và** thêm test hồi quy |
+| Sai sự thật, mất dữ liệu, vi phạm quyền, mất an toàn | thành ràng buộc cứng ngay, kèm kiểm tự động nếu làm được |
+| Ý tưởng chưa được xem, chưa ai xác nhận | để nguyên dạng đề xuất, đừng viết như quy trình chuẩn |
+
+Một bài học chỉ đủ điều kiện đưa vào khi trả lời được: **điều gì tốt hơn · bằng chứng nào · áp dụng
+ở đâu · trường hợp nào KHÔNG nên áp dụng.** Thiếu vế cuối là dấu hiệu bài học còn mơ hồ.
+
 ## Sau đó làm gì
 
 1. Ghi một dòng vào [nhat-ky-ban-tin.md](nhat-ky-ban-tin.md).
@@ -38,9 +54,20 @@ Sau mỗi video, trả lời đúng bốn câu, ngắn gọn, **kèm số đo th
    vào bảng "Sai sót đã gặp" của [phong-cach-att-news.md](phong-cach-att-news.md).
 3. Chạy `python -m unittest discover -s tests` và `python scripts/sync_skills.py --force`.
 4. Commit riêng một commit cho phần rút kinh nghiệm, để sau này lần lại được video nào sinh ra luật nào.
+5. **Trước video kế tiếp**, đọc lại các dòng nhật ký cùng thể loại và cùng định dạng đầu ra.
 
 `tests/test_kinh_nghiem.py` kiểm nhật ký: mọi chỗ neo khai trong cột **Chốt bằng** phải có thật.
 Khai `test:TenClass` mà class đó không tồn tại thì test đỏ — chặn thói quen ghi cho có.
+
+Chỉ sửa nguồn chuẩn `skills/`; không sửa `.claude/skills/` hay `.agents/skills/` vì lần đồng bộ sau
+sẽ ghi đè. Đồng bộ xong **không** đồng nghĩa đã commit; chỉ commit/push khi người dùng yêu cầu.
+
+## Đo "video sau tốt hơn" bằng gì
+
+Không đánh giá bằng cảm giác chung. So theo tiêu chí liên quan tới chính yêu cầu đó: đúng nội dung
+và số liệu · bố cục logic · đúng thời lượng · chất lượng chọn cảnh · độ mượt điểm nối · độ rõ lời ·
+đồng bộ giọng–phụ đề · chữ đọc được trên điện thoại · đúng nhận diện ATT NEWS · số lỗi kỹ thuật ·
+**số vòng phải sửa lại**. Không hy sinh tính chính xác hay an toàn để đổi lấy nhịp nhanh và hiệu ứng.
 
 ## Đừng làm
 
@@ -49,3 +76,5 @@ Khai `test:TenClass` mà class đó không tồn tại thì test đỏ — chặ
   chốt được; chỉ chốt thứ lặp lại ở mọi video.
 - Đừng sửa lại bài học cũ cho gọn. Nếu một luật hoá ra sai, **thêm dòng mới ghi rõ đã thay** và
   nói vì sao, giữ lại dấu vết.
+- Đừng commit clip nguồn, file render, mẫu giọng, voice embedding, token, ID hồ sơ nhà cung cấp
+  hay đường dẫn chứa dữ liệu riêng. Cần ví dụ thì dùng dữ liệu giả.
