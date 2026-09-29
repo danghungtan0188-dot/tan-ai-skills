@@ -29,6 +29,9 @@ Phân tích trước, chọn phong cách sau. Không áp một preset cho mọi 
 
 ## Nâng cấp chi tiết
 
+- **Sau mỗi video phải rút kinh nghiệm:** [references/rut-kinh-nghiem.md](references/rut-kinh-nghiem.md) — bốn câu hỏi cố định, ghi một dòng vào [references/nhat-ky-ban-tin.md](references/nhat-ky-ban-tin.md), và **mỗi bài học phải neo vào một test / một luật trong script / một dòng tài liệu** thì mới tính là đã lưu.
+
+- **Học sau mỗi video:** [references/vong-lap-cai-tien.md](references/vong-lap-cai-tien.md) — ghi nhận phản hồi, phân biệt kinh nghiệm riêng với quy tắc dùng lại, chỉ nâng cấp repo/skill khi bài học có bằng chứng; lỗi kỹ thuật phải có test hồi quy khi có thể.
 - **Dựng từ video thô:** [references/dung-tu-video-tho.md](references/dung-tu-video-tho.md) — `survey_rushes.py` → `build_edit_plan.py` → `assemble.py`; luật cỡ cảnh, độ dài cảnh, chống nhảy hình, khớp đúng thời lượng yêu cầu.
 - **Tìm kho clip:** [references/kho-clip.md](references/kho-clip.md) — thứ tự Desktop → Documents → Google Drive, quy tắc lọc video liên quan và cách đưa file Drive về vùng làm việc trước khi khảo sát.
 - **Song ngữ Việt–Anh:** [references/quy-trinh-song-ngu.md](references/quy-trinh-song-ngu.md) — lời Việt theo kịch bản (ASR chỉ lấy mốc), glossary, `check_translation.py`, 4 chế độ xuất (`export_subtitles.py`), kiểm SRT/VTT (`check_subtitles.py`).
@@ -49,6 +52,7 @@ Phân tích trước, chọn phong cách sau. Không áp một preset cho mọi 
 7. Kiểm bản dịch `scripts/check_translation.py bilingual.json`, xuất phụ đề `scripts/export_subtitles.py bilingual.json --mode all`, kiểm file rời `scripts/check_subtitles.py`.
 8. Render một lượt. Bản tin ATT NEWS: `scripts/render_att.py INPUT --captions cap.song-ngu.ass --lower-thirds lt.ass --scenes scenes.json --card card.png --outro-dir outro --out OUT.mp4` (xem [references/phong-cach-att-news.md](references/phong-cach-att-news.md)). Video thường: `scripts/render.py INPUT plan.json captions.ass OUTPUT --lower-thirds lt.ass`.
 9. Chạy `scripts/qa.py OUTPUT --source INPUT --cut-authorized no --tail <giây outro> --captions bilingual.json` và xem thủ công các điểm vào/ra chữ, chuyển cảnh, lower-third, 2 giây đầu/cuối.
+10. Sau khi người dùng xem và phản hồi, thực hiện vòng rút kinh nghiệm trong [references/vong-lap-cai-tien.md](references/vong-lap-cai-tien.md). Trước video kế tiếp, đọc lại các bài học đã xác nhận có cùng loại nội dung/phong cách. Không biến một sở thích nhất thời hay một lỗi cá biệt thành luật chung.
 
 ## Ra quyết định theo nội dung
 

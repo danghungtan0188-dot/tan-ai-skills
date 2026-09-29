@@ -24,6 +24,8 @@ người dùng duyệt rồi mới chạy assemble.py — mặc định `cut_aut
 from __future__ import annotations
 import argparse
 import json
+import re
+import subprocess
 from pathlib import Path
 
 BROLL_MIN, BROLL_MAX, PHAT_BIEU_MIN, SAI_SO = 2.5, 8.0, 4.0, 2.0
@@ -114,6 +116,32 @@ def kiem_do_dai(doan: list[dict]) -> list[str]:
             for d in doan if d["loai"] == "broll" and not BROLL_MIN - 0.01 <= d["dur"] <= BROLL_MAX + 0.01]
 
 
+def muc_am(file: str, t: float, cua: float = 0.25) -> float | None:
+    """Mức âm trung bình quanh một mốc cắt, dBFS. None khi clip câm hoặc đo không được."""
+    # không đặt -v error: volumedetect in kết quả ở mức info
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-ss", f"{max(0.0, t - cua):.3f}", "-t", f"{cua * 2:.3f}",
+                        "-i", file, "-vn", "-af", "volumedetect", "-f", "null", "-"],
+                       text=True, capture_output=True, encoding="utf-8", errors="replace")
+    m = re.search(r"mean_volume:\s*(-?[0-9.]+) dB", r.stderr)
+    return float(m.group(1)) if m else None
+
+
+def kiem_tieng_tai_moc(doan: list[dict], nguong: float) -> list[str]:
+    """Cảnh báo khi cắt ngay lúc đang có tiếng to — thường là cắt vào giữa câu nói.
+
+    Máy không phân biệt được tiếng nói với tiếng máy nổ; đây là CẢNH BÁO để nghe lại,
+    không phải lỗi chặn.
+    """
+    canh = []
+    for d in doan:
+        for ten, t in (("vào", d["in"]), ("ra", d["out"])):
+            v = muc_am(d["file"], t)
+            if v is not None and v > nguong:
+                canh.append(f"đoạn {d['n']} ({d['shot']}): mốc {ten} {t}s đang có tiếng {v:.1f} dB "
+                            f"> {nguong} dB — nghe lại xem có cắt giữa câu nói không")
+    return canh
+
+
 def bang_duyet(plan: dict) -> str:
     d = ["  #  mục          cảnh   cỡ     loại       vào→ra (clip)      dài   vị trí   lý do",
          "  " + "-" * 104]
@@ -133,6 +161,8 @@ def main() -> int:
     ap.add_argument("--out", type=Path, default=Path("edit-plan.json"))
     ap.add_argument("--approved", action="store_true",
                     help="người dùng đã yêu cầu/cho phép tự động cắt ghép trong yêu cầu hiện tại")
+    ap.add_argument("--kiem-tieng", action="store_true", help="đo mức âm tại mốc vào/ra (cần ffmpeg)")
+    ap.add_argument("--nguong-tieng", type=float, default=-30.0, help="dBFS, trên mức này thì cảnh báo")
     a = ap.parse_args()
     if a.target <= 0:
         raise SystemExit("--target phải lớn hơn 0 giây")
@@ -153,6 +183,8 @@ def main() -> int:
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(plan, ensure_ascii=False, indent=1), encoding="utf-8")
     print(bang_duyet(plan))
+    for x in (kiem_tieng_tai_moc(doan, a.nguong_tieng) if a.kiem_tieng else []):
+        print("CẢNH BÁO ", x)
     for x in loi:
         print("LỖI      ", x)
     print(f"{'FAIL' if loi else 'PASS'} -> {a.out}")

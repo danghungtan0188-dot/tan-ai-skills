@@ -108,8 +108,26 @@ python scripts/assemble.py edit/edit-plan.json --out edit/rough.mp4 --rushes edi
 - Không chuẩn hoá LUFS ở đây — để `render_att.py` làm một lần ở cuối, tránh chồng hai lớp.
 
 Xong `rough.mp4` thì quay lại đường chạy quen: `detect_scenes.py` → phụ đề song ngữ →
-`make_lower_thirds_ass.py` → `render_att.py` → `qa.py`. Lúc này `qa.py` chạy với
-`--cut-authorized yes` vì bản dựng cố tình khác thời lượng nguồn.
+`make_lower_thirds_ass.py` → `render_att.py` → `qa.py`.
+
+## Bước 5 — kiểm theo kế hoạch, không kiểm theo nguồn
+
+Bản dựng từ nhiều clip **cố tình** khác thời lượng nguồn, nên `--cut-authorized yes` sẽ bỏ luôn
+phép kiểm thời lượng. Thay vào đó kiểm theo chính kế hoạch đã duyệt:
+
+```bash
+python scripts/qa.py edit/final.mp4 --plan edit/edit-plan.json --cut-authorized yes \
+  --tail 4 --captions edit/bilingual.json
+```
+
+- **LỖI** nếu thời lượng lệch kế hoạch quá 0,5 giây, hoặc kế hoạch lệch yêu cầu quá 2 giây.
+- **CẢNH BÁO** nếu không dò thấy mốc cắt ở đúng vị trí đã duyệt — nghĩa là một đoạn có thể bị
+  rơi hoặc lặp. Hai cảnh quá giống nhau thì `scdet` có thể sót, nên đây là cảnh báo để xem tay,
+  không phải lỗi chặn.
+
+Muốn biết có cắt vào giữa câu nói không thì chạy lại bước 3 với `--kiem-tieng`: máy đo mức âm
+quanh từng mốc vào/ra và cảnh báo chỗ đang có tiếng to (mặc định trên −30 dBFS). Máy không phân
+biệt được tiếng nói với tiếng máy nổ — cảnh báo là để **nghe lại**, không phải để tin ngay.
 
 ## Sai sót phải tránh
 

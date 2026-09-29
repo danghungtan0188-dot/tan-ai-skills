@@ -29,6 +29,7 @@ import icons  # noqa: E402
 import validate_graphics  # noqa: E402
 import assemble  # noqa: E402
 import build_edit_plan  # noqa: E402
+import find_clips  # noqa: E402
 import survey_rushes  # noqa: E402
 
 WORDS = [{"s": i * 0.5, "e": i * 0.5 + 0.4, "w": f"w{i}"} for i in range(30)]
@@ -668,6 +669,78 @@ class TestDungTuVideoTho(unittest.TestCase):
                                 "-of", "csv=p=0", str(out)], text=True, capture_output=True,
                                check=True).stdout.strip()
             self.assertAlmostEqual(float(d), 12.0, delta=0.3, msg="ghep xong phai dung do dai yeu cau")
+
+            pj = t / "edit-plan.json"
+            pj.write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+            r = subprocess.run([sys.executable, str(SONG_NGU / "qa.py"), str(out), "--plan", str(pj),
+                                "--cut-authorized", "yes"], text=True, capture_output=True,
+                               encoding="utf-8", errors="replace")
+            self.assertEqual(r.returncode, 0, f"qa --plan phai PASS:\n{r.stdout}\n{r.stderr}")
+            self.assertEqual(json.loads(r.stdout)["ke_hoach"]["so_doan"], 3)
+
+            plan_sai = {**plan, "tong": 30.0}
+            pj.write_text(json.dumps(plan_sai, ensure_ascii=False), encoding="utf-8")
+            r2 = subprocess.run([sys.executable, str(SONG_NGU / "qa.py"), str(out), "--plan", str(pj),
+                                 "--cut-authorized", "yes"], text=True, capture_output=True,
+                                encoding="utf-8", errors="replace")
+            self.assertEqual(r2.returncode, 1, "lech ke hoach phai FAIL")
+            self.assertTrue(any("kế hoạch" in e for e in json.loads(r2.stdout)["errors"]))
+
+
+class TestFindClips(unittest.TestCase):
+    def kho(self, t):
+        t = Path(t)
+        (t / "Khám sức khỏe 20-09").mkdir(parents=True)
+        (t / "outputs").mkdir()
+        (t / "le hoi").mkdir()
+        for p, n in ((t / "Khám sức khỏe 20-09" / "A.mp4", 3), (t / "le hoi" / "B.MOV", 3),
+                     (t / "outputs" / "da_dung.mp4", 3), (t / "le hoi" / "nho.mp4", 0),
+                     (t / "le hoi" / "ghi_chu.txt", 3)):
+            p.write_bytes(b"0" * (n * 1024 * 1024 + 1))
+        return t
+
+    def test_bo_thu_muc_dau_ra_va_duoi_la(self):
+        with tempfile.TemporaryDirectory() as t:
+            ten = {p.name for p in find_clips.quet(self.kho(t))}
+        self.assertEqual(ten, {"A.mp4", "B.MOV", "nho.mp4"}, "phai bo outputs/ va file khong phai video")
+
+    def test_bo_file_qua_nho(self):
+        with tempfile.TemporaryDirectory() as t:
+            ra = find_clips.loc(find_clips.quet(self.kho(t)), None, None, None, 2.0)
+        self.assertEqual({x["name"] for x in ra}, {"A.mp4", "B.MOV"})
+
+    def test_tim_theo_ten_bo_dau_va_khop_ca_thu_muc_cha(self):
+        with tempfile.TemporaryDirectory() as t:
+            ra = find_clips.loc(find_clips.quet(self.kho(t)), "suc khoe", None, None, 0.0)
+        self.assertEqual([x["name"] for x in ra], ["A.mp4"])
+
+    def test_loc_theo_ngay_sua(self):
+        with tempfile.TemporaryDirectory() as t:
+            files = find_clips.quet(self.kho(t))
+            mai = find_clips.ngay("2099-01-01")
+            self.assertEqual(find_clips.loc(files, None, mai, None, 0.0), [])
+            self.assertTrue(find_clips.loc(files, None, None, mai, 0.0))
+
+    def test_khong_dau(self):
+        self.assertEqual(find_clips.khong_dau("Khám Sức Khỏe"), "kham suc khoe")
+
+
+@unittest.skipUnless(shutil.which("ffmpeg"), "khong co ffmpeg")
+class TestKiemTiengTaiMoc(unittest.TestCase):
+    def test_bat_duoc_moc_cat_dang_co_tieng(self):
+        with tempfile.TemporaryDirectory() as t:
+            v = Path(t) / "v.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y",
+                            "-f", "lavfi", "-i", "color=c=black:s=160x90:r=15:d=4",
+                            "-f", "lavfi", "-i", "sine=f=440:d=4",
+                            "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p",
+                            "-c:a", "aac", str(v)], check=True)
+            doan = [{"n": 1, "shot": "0.1", "file": str(v), "in": 1.0, "out": 3.0}]
+            canh = build_edit_plan.kiem_tieng_tai_moc(doan, -30.0)
+            self.assertEqual(len(canh), 2, "ca moc vao va moc ra deu dang co tieng")
+            self.assertIn("nghe lại", canh[0])
+            self.assertEqual(build_edit_plan.kiem_tieng_tai_moc(doan, 0.0), [],
+                             "nguong cao thi khong canh bao")
 
 
 if __name__ == "__main__":

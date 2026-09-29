@@ -32,6 +32,22 @@ ba vị trí được phép tìm mặc định là **Desktop**, **Documents** v�
   và hỏi người dùng chọn; không trộn sự kiện khác nhau vào một video.
 - Không quét ngoài Desktop, Documents và Google Drive nếu người dùng chưa chỉ định vị trí khác.
 
+## Công cụ tìm
+
+Đừng gõ lệnh tìm bằng tay mỗi lần — dùng `find_clips.py` để việc tìm lặp lại được và không sót:
+
+```bash
+python scripts/find_clips.py --tu 2026-09-20 --ten "suc khoe" --out edit/ung-vien.json
+```
+
+- Không có `--kho` thì tự tìm ở Desktop, Documents và thư mục Google Drive đã đồng bộ.
+- `--ten` so khớp **bỏ dấu**, khớp cả tên file lẫn tên thư mục cha.
+- Tự bỏ `outputs`, `render`, `edit`, `thumbs`, `cache`, `.git`, `node_modules` và file nhỏ hơn
+  `--min-mb` (mặc định 2 MB — thường là clip lỡ tay).
+
+Máy chỉ lọc theo **tên và ngày**. Có danh sách rồi vẫn phải khảo sát và xem contact sheet;
+không bao giờ kết luận nội dung từ tên file.
+
 ## Sau khi tìm xong
 
 Đưa tất cả clip đã chọn vào cùng một phạm vi khảo sát (thư mục gốc hoặc `work/ingest/...`), rồi chạy:

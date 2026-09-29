@@ -72,9 +72,9 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ```text
 .claude/agents/     9 agent   — Claude Code chỉ đọc agent ở đây
-.claude/commands/   9 command — slash command
+.claude/commands/  11 command — slash command
 .claude/hooks/      3 hook    — wiring trong .claude/settings.json
-skills/             25 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
+skills/             26 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
 scripts/            script dùng chung (sync_skills.py, video_qa.py)
@@ -87,6 +87,7 @@ tests/              python -m unittest discover -s tests
 |---|---|---|
 | code, API, database, UI, bug, test | **APP** | `app-planner → app-builder → code-reviewer → app-tester → security-reviewer` |
 | video, dựng, phụ đề, hiệu ứng, bản tin | **VIDEO** | `video-analyzer → video-editor → video-reviewer` |
+| nhiều clip thô → một bản tin | **VIDEO** | `find_clips → survey_rushes → chọn cảnh → build_edit_plan → DUYỆT → assemble → qa --plan` |
 | skill, agent, command, hook, tài liệu | **REPO** | tự làm + `python scripts/sync_skills.py --check` |
 
 Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
@@ -95,6 +96,7 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 
 `/build-feature` `/fix` `/review` `/test` `/security-check`
 `/video-news` `/edit-video` `/review-video` `/sync-skills`
+`/dung-tu-kho` (nhiều clip thô → một bản tin) `/rut-kinh-nghiem` (sau mỗi video)
 
 ## Rule bắt buộc đọc
 

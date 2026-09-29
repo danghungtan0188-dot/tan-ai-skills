@@ -1,0 +1,51 @@
+# Rút kinh nghiệm sau mỗi video
+
+Mục tiêu: **video sau khá hơn video trước**, và cái khá hơn đó phải nằm lại trong repo, không nằm
+trong trí nhớ của một phiên làm việc.
+
+Chạy phần này **ngay sau khi giao video**, trước khi đóng phiên. Không để dồn.
+
+## Luật gốc: kinh nghiệm chỉ tính khi có chỗ neo
+
+Một bài học chỉ được coi là "đã lưu" khi nó biến thành **một trong ba thứ** sau:
+
+| Dạng | Khi nào dùng | Neo vào |
+|---|---|---|
+| `test:` | máy đáng lẽ bắt được lỗi này | một class trong `tests/` |
+| `script:` | thành tham số mặc định hoặc một luật chặn trong code | file `.py` trong `scripts/` |
+| `doc:` | thông số đã chốt, quy ước trình bày, thứ tự thao tác | file trong `references/` |
+
+Ghi chú suông không tính — lần sau vẫn quên. Nếu một bài học không neo được vào đâu trong ba chỗ
+trên thì nó chưa đủ rõ để thành kinh nghiệm; viết lại cho cụ thể hơn.
+
+Sở thích riêng của người dùng (không thuộc kỹ thuật dựng) thì lưu vào memory, không nhét vào đây.
+
+## Bốn câu hỏi cố định
+
+Sau mỗi video, trả lời đúng bốn câu, ngắn gọn, **kèm số đo thật**:
+
+1. **Chỗ nào phải làm lại từ hai lần trở lên?** — làm lại nhiều lần nghĩa là quy trình còn thiếu
+   một bước hoặc một tham số chưa chốt.
+2. **Tham số nào lần này chốt được?** — toạ độ, cỡ chữ, mức LUFS, thời lượng, ngưỡng. Ghi con số,
+   không ghi "vừa phải".
+3. **Lỗi nào máy đáng lẽ bắt được mà không bắt?** — đây là loại quý nhất: biến thẳng thành test.
+4. **Cái gì hay, nên giữ làm mặc định?**
+
+## Sau đó làm gì
+
+1. Ghi một dòng vào [nhat-ky-ban-tin.md](nhat-ky-ban-tin.md).
+2. Với mỗi bài học, tạo chỗ neo tương ứng: thêm test, sửa mặc định trong script, hoặc thêm dòng
+   vào bảng "Sai sót đã gặp" của [phong-cach-att-news.md](phong-cach-att-news.md).
+3. Chạy `python -m unittest discover -s tests` và `python scripts/sync_skills.py --force`.
+4. Commit riêng một commit cho phần rút kinh nghiệm, để sau này lần lại được video nào sinh ra luật nào.
+
+`tests/test_kinh_nghiem.py` kiểm nhật ký: mọi chỗ neo khai trong cột **Chốt bằng** phải có thật.
+Khai `test:TenClass` mà class đó không tồn tại thì test đỏ — chặn thói quen ghi cho có.
+
+## Đừng làm
+
+- Đừng ghi bài học khi chưa kiểm chứng. "Hình như để 0,3 s thì đẹp hơn" không phải kinh nghiệm.
+- Đừng biến mọi thứ thành luật cứng. Thứ phụ thuộc từng video (chọn cảnh nào, nói gì) thì không
+  chốt được; chỉ chốt thứ lặp lại ở mọi video.
+- Đừng sửa lại bài học cũ cho gọn. Nếu một luật hoá ra sai, **thêm dòng mới ghi rõ đã thay** và
+  nói vì sao, giữ lại dấu vết.
