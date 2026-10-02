@@ -1,6 +1,6 @@
 ---
 name: tan-giong-doc-ban-tin
-description: Tổng hợp giọng đọc bản tin tiếng Việt từ kịch bản TXT/DOCX bằng VieNeu-TTS để lồng vào MP4 và clip video. Hỗ trợ hai giọng chuyên đọc kịch bản video ATT NEWS là MC Đài An Thạnh Thủy và Giọng Hùng Tân chân thật, cùng giọng nam/nữ miền Nam dựng sẵn; tự mở rộng chữ viết tắt, chia đoạn dài, xuất WAV 48kHz và MP3. Kích hoạt khi người dùng cần đọc script/kịch bản cho video, tạo voice-over bản tin, lồng tiếng clip hoặc nhân bản giọng của chính họ để dùng lại.
+description: Tổng hợp giọng đọc bản tin tiếng Việt từ kịch bản TXT/DOCX bằng VieNeu-TTS để lồng vào MP4 và clip video. Hỗ trợ hai giọng chuyên đọc kịch bản video ATT NEWS là MC Đài An Thạnh Thủy và Giọng Hùng Tân chân thật, cùng giọng nam/nữ miền Nam dựng sẵn; tự mở rộng chữ viết tắt, đổi số và ngày tháng thành chữ, chia đoạn dài, xuất WAV 48kHz và MP3. Kích hoạt khi người dùng cần đọc script/kịch bản cho video, tạo voice-over bản tin, lồng tiếng clip hoặc nhân bản giọng của chính họ để dùng lại.
 ---
 
 # Tân — Giọng đọc bản tin
@@ -38,7 +38,7 @@ Không có API key hay dịch vụ trả phí nào liên quan — VieNeu-TTS ch�
    python scripts/synthesize.py --input duong_dan/ban_tin.txt --voice mc-an-thanh-thuy
    python scripts/synthesize.py --input duong_dan/ban_tin.txt --voice hung-tan-chan-that
    ```
-   `--voice nam` / `--voice nu` là hai giọng miền Nam, phong cách tin tức, dựng sẵn (Minh Triết / Thùy Dung — xem [references/voices.md](references/voices.md) cho toàn bộ 14 giọng). Script tự: đọc TXT/DOCX → tách đoạn → mở rộng chữ viết tắt (`scripts/normalize_vi.py`, tự điển ở [references/abbreviations.json](references/abbreviations.json)) → gọi VieNeu-TTS tổng hợp từng đoạn (thư viện tự chuẩn hoá số/ngày tháng và tự chia nhỏ đoạn dài ở tầng phoneme) → ghép các đoạn bằng khoảng lặng → lưu WAV 48kHz → chuyển MP3 bằng `ffmpeg`.
+   `--voice nam` / `--voice nu` là hai giọng miền Nam, phong cách tin tức, dựng sẵn (Minh Triết / Thùy Dung — xem [references/voices.md](references/voices.md) cho toàn bộ 14 giọng). Script tự: đọc TXT/DOCX → tách đoạn → mở rộng chữ viết tắt (tự điển ở [references/abbreviations.json](references/abbreviations.json)) rồi đổi số/ngày/phần trăm thành chữ (`scripts/normalize_vi.py` — bộ chuẩn hoá số của thư viện đọc sai `22-5-2003`, nên không giao cho nó) → gọi VieNeu-TTS tổng hợp từng đoạn (thư viện tự chia nhỏ đoạn dài ở tầng phoneme) → ghép các đoạn bằng khoảng lặng → lưu WAV 48kHz → chuyển MP3 bằng `ffmpeg`.
 5. **Kiểm tra kết quả** với người dùng: nghe thử file WAV/MP3 xuất ra (mặc định ở `outputs/`), báo lại số đoạn lỗi nếu có (script tiếp tục chạy các đoạn còn lại thay vì dừng hẳn, và tổng kết ở cuối).
 6. **Nếu có lỗi**, tra [references/troubleshooting.md](references/troubleshooting.md) trước khi tự đoán nguyên nhân.
 
@@ -47,7 +47,7 @@ Không có API key hay dịch vụ trả phí nào liên quan — VieNeu-TTS ch�
 - `scripts/check_env.py` — kiểm tra môi trường trước khi dùng lần đầu, hoặc khi có lỗi không rõ nguyên nhân.
 - `scripts/clone_voice.py enroll|list|remove` — nhân bản/quản lý giọng nói riêng của người dùng.
 - `scripts/synthesize.py` — lệnh chính: kịch bản → WAV 48kHz + MP3. Chạy `--help` để xem đầy đủ tuỳ chọn (`--style`, `--gap-ms`, `--mp3-bitrate`, `--out-dir`, `--no-mp3`, `--abbrev-dict`, `--no-abbrev`...).
-- `scripts/normalize_vi.py "<văn bản>"` — chỉ để xem trước kết quả mở rộng viết tắt mà không tổng hợp giọng (hữu ích khi debug tự điển).
+- `scripts/normalize_vi.py "<văn bản>"` — chỉ để xem trước kết quả chuẩn hoá (viết tắt + số/ngày) mà không tổng hợp giọng (hữu ích khi debug tự điển).
 - `scripts/read_script.py <file>` — chỉ để xem trước file được tách đoạn thế nào, không tổng hợp giọng.
 
 Mỗi script hỗ trợ `--help`.

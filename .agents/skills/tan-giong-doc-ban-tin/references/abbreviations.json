@@ -1,5 +1,5 @@
 {
-  "_ghi_chu": "Tu dien viet tat rieng cho van phong ban tin tieng Viet. Sua/them tuy y — moi khoa la mot mau regex (khong phan biet hoa/thuong nhu da khai bao), gia tri la chuoi thay the. Cac mau duoc ap dung THEO THU TU trong file nay, tu tren xuong; dat mau cu the truoc mau tong quat. VieNeu-TTS (qua sea-g2p) da tu chuan hoa so va ngay thang, nen file nay CHI xu ly chu viet tat — khong dong so/ngay o day.",
+  "_ghi_chu": "Tu dien viet tat rieng cho van phong ban tin tieng Viet. Sua/them tuy y — moi khoa la mot mau regex (khong phan biet hoa/thuong nhu da khai bao), gia tri la chuoi thay the. Cac mau duoc ap dung THEO THU TU trong file nay, tu tren xuong; dat mau cu the truoc mau tong quat. So va ngay thang do normalize_vi.normalize_numbers doi thanh chu (chay SAU tu dien nay) — khong dong so/ngay o day.",
   "_dinh_dang_muc": "moi phan tu: {\"pattern\": \"regex ap dung tren tung tu/khop\", \"replacement\": \"chuoi thay the\", \"whole_word\": true/false}",
   "rules": [
     {"pattern": "TP\\.?\\s?HCM", "replacement": "Thành phố Hồ Chí Minh", "whole_word": false},

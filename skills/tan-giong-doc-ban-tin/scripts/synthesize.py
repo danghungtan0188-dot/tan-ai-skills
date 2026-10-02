@@ -110,7 +110,7 @@ def _main() -> int:
     parser.add_argument(
         "--no-abbrev",
         action="store_true",
-        help="Bỏ qua bước mở rộng chữ viết tắt (chỉ dùng chuẩn hoá số/ngày có sẵn của VieNeu-TTS)",
+        help="Bỏ qua bước mở rộng viết tắt và đổi số/ngày thành chữ (để VieNeu-TTS tự đọc — hay sai)",
     )
     args = parser.parse_args()
 
@@ -128,8 +128,8 @@ def _main() -> int:
             rules = normalize_vi.load_rules(Path(args.abbrev_dict) if args.abbrev_dict else None)
         except normalize_vi.NormalizeError as exc:
             return _die(str(exc))
-        paragraphs = [normalize_vi.expand_abbreviations(p, rules) for p in paragraphs]
-        print("Đã mở rộng chữ viết tắt theo tự điển.")
+        paragraphs = [normalize_vi.normalize_text(p, rules) for p in paragraphs]
+        print("Đã mở rộng chữ viết tắt và đổi số/ngày thành chữ.")
 
     try:
         from vieneu import Vieneu
