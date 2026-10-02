@@ -864,6 +864,87 @@ class TestKhuonMau(unittest.TestCase):
         self.assertTrue(c.endswith("--out ra.mp4"))
 
 
+class TestKhuonHinh(unittest.TestCase):
+    """Toc do, zoom, day khung — luu san trong khuon, goi ten moi ap."""
+
+    K = {"hinh": khuon_mau.HINH_SAN}
+
+    def test_tinh_thi_khong_them_loc_nao(self):
+        self.assertEqual(khuon_mau.loc_hinh(khuon_mau.lay_hinh(self.K, "tinh"), 5, 1920, 1080, 30), "")
+        self.assertEqual(khuon_mau.loc_tieng(khuon_mau.lay_hinh(self.K, "tinh")), "")
+
+    def test_zoom_sinh_zoompan_tang_dan(self):
+        f = khuon_mau.loc_hinh(khuon_mau.lay_hinh(self.K, "zoom_cham"), 5, 1920, 1080, 30)
+        self.assertIn("zoompan=", f)
+        self.assertIn("on/150", f, "150 khung = 5 giay x 30fps")
+        self.assertIn("s=1920x1080", f)
+
+    def test_day_ngang_doi_bieu_thuc_x(self):
+        f = khuon_mau.loc_hinh(khuon_mau.lay_hinh(self.K, "day_phai"), 4, 1920, 1080, 25)
+        self.assertIn("x='(iw-iw/zoom)*on/100'", f)
+        self.assertIn("x='(iw-iw/zoom)*(1-on/100)'",
+                      khuon_mau.loc_hinh(khuon_mau.lay_hinh(self.K, "day_trai"), 4, 1920, 1080, 25))
+
+    def test_toc_do_doi_ca_hinh_lan_tieng(self):
+        k = khuon_mau.lay_hinh(self.K, "nhanh_12")
+        self.assertIn("setpts=PTS/1.2", khuon_mau.loc_hinh(k, 5, 1920, 1080, 30))
+        self.assertEqual(khuon_mau.loc_tieng(k), "atempo=1.2")
+
+    def test_chan_ten_la_va_toc_do_ngoai_khoang(self):
+        with self.assertRaises(SystemExit):
+            khuon_mau.lay_hinh(self.K, "khong-co")
+        with self.assertRaises(SystemExit):
+            khuon_mau.lay_hinh({"hinh": {"x": {"toc_do": 4.0}}}, "x")
+
+    def test_assemble_lay_them_vat_lieu_khi_tang_toc(self):
+        from argparse import Namespace
+        plan = {"target": 5.0, "tong": 5.0, "segments": [
+            {"n": 1, "file": "A.mp4", "in": 1.0, "out": 6.0, "dur": 5.0, "hinh": "nhanh_12"}]}
+        ns = Namespace(out=Path("o.mp4"), rushes=None, voice=None, nat_db=-12.0,
+                       size="1920x1080", fps=30, preview=False)
+        c = " ".join(assemble.build_cmd(plan, ns, {"A.mp4": True}, {}, self.K))
+        self.assertIn("-ss 1.000 -t 6.000 -i A.mp4", c, "5s hinh o toc do 1.2 can 6s nguon")
+        self.assertIn("setpts=PTS/1.2", c)
+        self.assertIn("atempo=1.2", c)
+        self.assertIn("atrim=0:5.000", c, "tieng van phai dai dung 5s")
+
+    def test_plan_co_kieu_hinh_ma_thieu_khuon_thi_bao(self):
+        bang = build_edit_plan.nap(RUSHES)
+        _, loi = build_edit_plan.dung_doan(
+            {"muc": [{"id": "m", "canh": [{"shot": "0.1", "co": "toan", "ly_do": "x",
+                                           "hinh": "zoom_cham"}]}]}, bang)
+        self.assertTrue(any("chưa đưa --khuon" in x for x in loi))
+
+    def test_tang_toc_thi_vat_lieu_dung_duoc_ngan_lai(self):
+        bang = build_edit_plan.nap(RUSHES)
+        canh = [{"shot": "0.1", "co": "toan", "in": 0.0, "ly_do": "x", "hinh": "nhanh_12"}]
+        doan, _ = build_edit_plan.dung_doan({"muc": [{"id": "m", "canh": canh}]}, bang, self.K)
+        self.assertAlmostEqual(doan[0]["_max"], 5.0, places=2, msg="canh 6s o toc do 1.2 chi ra 5s hinh")
+
+
+@unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "khong co ffmpeg")
+class TestKhuonHinhChayThat(unittest.TestCase):
+    def test_zoom_va_tang_toc_van_ra_dung_do_dai(self):
+        from argparse import Namespace
+        with tempfile.TemporaryDirectory() as t:
+            v = Path(t) / "v.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y",
+                            "-f", "lavfi", "-i", "testsrc2=s=320x180:r=15:d=12",
+                            "-f", "lavfi", "-i", "sine=f=300:d=12",
+                            "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p",
+                            "-c:a", "aac", "-shortest", str(v)], check=True)
+            out = Path(t) / "o.mp4"
+            plan = {"target": 7.0, "tong": 7.0, "segments": [
+                {"n": 1, "file": str(v), "in": 0.0, "out": 4.0, "dur": 4.0, "hinh": "zoom_cham"},
+                {"n": 2, "file": str(v), "in": 5.0, "out": 8.0, "dur": 3.0, "hinh": "nhanh_12"}]}
+            ns = Namespace(out=out, rushes=None, voice=None, nat_db=-12.0,
+                           size="320x180", fps=15, preview=True)
+            subprocess.run(assemble.build_cmd(plan, ns, {str(v): True}, {},
+                                              {"hinh": khuon_mau.HINH_SAN}), check=True)
+            self.assertEqual(assemble.kiem_dau_ra(out, 7.0, 320, 180, 15), [],
+                             "zoom va tang toc khong duoc lam lech do dai ke hoach")
+
+
 class TestCutSilence(unittest.TestCase):
     """De xuat bo khoang lang va tu dem — de xuat, khong tu cat."""
 

@@ -21,7 +21,12 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+import sys
 from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+from khuon_mau import lay_hinh, loc_hinh, loc_tieng  # noqa: E402
 
 LUFS_CHUAN, GAIN_TOI_DA = -20.0, 12.0
 
@@ -40,7 +45,8 @@ def gain_clip(rushes: Path | None) -> dict[str, float]:
             for c in d["clips"] if c.get("lufs") is not None}
 
 
-def build_cmd(plan: dict, a, tieng: dict[str, bool], gain: dict[str, float]) -> list[str]:
+def build_cmd(plan: dict, a, tieng: dict[str, bool], gain: dict[str, float],
+              khuon: dict | None = None) -> list[str]:
     W, H = (int(v) for v in a.size.split("x"))
     inputs, fc, vlab, alab = [], [], [], []
     n_in = 0                        # chỉ số input thật: clip câm chèn thêm anullsrc nên không dùng k được
@@ -52,14 +58,20 @@ def build_cmd(plan: dict, a, tieng: dict[str, bool], gain: dict[str, float]) -> 
         return n_in - 1
 
     for k, s in enumerate(plan["segments"]):
-        i = them(["-ss", f"{s['in']:.3f}", "-t", f"{s['dur']:.3f}", "-i", s["file"]])
+        kieu = lay_hinh(khuon, s["hinh"]) if (khuon and s.get("hinh")) else None
+        toc = float(kieu.get("toc_do", 1.0)) if kieu else 1.0
+        # tốc độ khác 1 thì phải lấy nhiều/ít vật liệu hơn ở nguồn để đoạn vẫn dài đúng kế hoạch
+        lay = s["dur"] * toc
+        i = them(["-ss", f"{s['in']:.3f}", "-t", f"{lay:.3f}", "-i", s["file"]])
+        mo = f"{loc_hinh(kieu, s['dur'], W, H, a.fps)}," if kieu else ""
         fc.append(f"[{i}:v]scale={W}:{H}:force_original_aspect_ratio=decrease,"
-                  f"pad={W}:{H}:-1:-1:color=black,setsar=1,fps={a.fps},format=yuv420p[v{k}]")
+                  f"pad={W}:{H}:-1:-1:color=black,setsar=1,{mo}fps={a.fps},format=yuv420p[v{k}]")
         vlab.append(f"[v{k}]")
         if tieng[s["file"]]:
             g = gain.get(s["file"], 0.0)
             vol = f"volume={g:.2f}dB," if abs(g) > 0.05 else ""
-            fc.append(f"[{i}:a]{vol}aresample=48000,aformat=channel_layouts=stereo,"
+            tempo = f"{loc_tieng(kieu)}," if kieu and loc_tieng(kieu) else ""
+            fc.append(f"[{i}:a]{vol}aresample=48000,aformat=channel_layouts=stereo,{tempo}"
                       f"atrim=0:{s['dur']:.3f},asetpts=PTS-STARTPTS[a{k}]")
         else:                       # clip câm: chèn im lặng đúng độ dài, nếu không concat lệch tiếng
             j = them(["-f", "lavfi", "-t", f"{s['dur']:.3f}", "-i", "anullsrc=r=48000:cl=stereo"])
@@ -114,6 +126,7 @@ def main() -> int:
     ap.add_argument("plan", type=Path)
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--rushes", type=Path, help="để cân mức tiếng giữa các clip")
+    ap.add_argument("--khuon", type=Path, help="khuon.json — để dùng kiểu chuyển động ghi trong plan")
     ap.add_argument("--voice", type=Path, help="file lời đọc lồng lên trên")
     ap.add_argument("--nat-db", type=float, default=-12.0, help="mức tiếng hiện trường khi có lời đọc")
     ap.add_argument("--size", default="1920x1080")
@@ -125,7 +138,7 @@ def main() -> int:
         raise SystemExit("Kế hoạch còn lỗi (valid=false) — sửa chon-canh.json rồi chạy lại build_edit_plan.py")
     if not plan.get("segments"):
         raise SystemExit("Kế hoạch không có đoạn nào")
-    for ten, p in (("--voice", a.voice), ("--rushes", a.rushes)):
+    for ten, p in (("--voice", a.voice), ("--rushes", a.rushes), ("--khuon", a.khuon)):
         if p and not p.exists():
             raise SystemExit(f"Không thấy file {ten}: {p}")
     if plan.get("cut_authorized") is not True:
@@ -136,7 +149,11 @@ def main() -> int:
     if thieu:
         raise SystemExit("Không thấy clip: " + ", ".join(thieu))
     a.out.parent.mkdir(parents=True, exist_ok=True)
-    cmd = build_cmd(plan, a, {f: co_tieng(f) for f in files}, gain_clip(a.rushes))
+    khuon = json.loads(a.khuon.read_text(encoding="utf-8")) if a.khuon else None
+    can_khuon = [s["n"] for s in plan["segments"] if s.get("hinh") and s["hinh"] != "tinh"]
+    if can_khuon and not khuon:
+        raise SystemExit(f"Đoạn {can_khuon} có kiểu hình nhưng thiếu --khuon")
+    cmd = build_cmd(plan, a, {f: co_tieng(f) for f in files}, gain_clip(a.rushes), khuon)
     subprocess.run(cmd, check=True)
     W, H = (int(v) for v in a.size.split("x"))
     loi = kiem_dau_ra(a.out, sum(s["dur"] for s in plan["segments"]), W, H, a.fps)

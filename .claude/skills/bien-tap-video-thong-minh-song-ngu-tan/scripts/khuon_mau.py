@@ -26,6 +26,19 @@ import re
 import shlex
 from pathlib import Path
 
+# Chuyển động khung hình dùng lại được. Thứ này phụ thuộc nội dung từng đoạn nên KHÔNG
+# tự áp — phải gọi tên trong chon-canh.json. Hỏng hình thì bỏ tên đi là xong.
+HINH_SAN = {
+    "tinh":      {"zoom_tu": 1.0,  "zoom_den": 1.0,  "day": "giua", "toc_do": 1.0},
+    "zoom_cham": {"zoom_tu": 1.0,  "zoom_den": 1.08, "day": "giua", "toc_do": 1.0},
+    "zoom_ra":   {"zoom_tu": 1.08, "zoom_den": 1.0,  "day": "giua", "toc_do": 1.0},
+    "day_phai":  {"zoom_tu": 1.08, "zoom_den": 1.08, "day": "trai_sang_phai", "toc_do": 1.0},
+    "day_trai":  {"zoom_tu": 1.08, "zoom_den": 1.08, "day": "phai_sang_trai", "toc_do": 1.0},
+    "nhanh_12":  {"zoom_tu": 1.0,  "zoom_den": 1.0,  "day": "giua", "toc_do": 1.2},
+    "cham_80":   {"zoom_tu": 1.0,  "zoom_den": 1.0,  "day": "giua", "toc_do": 0.8},
+}
+TOC_DO_MIN, TOC_DO_MAX = 0.5, 2.0      # giới hạn của atempo
+
 LENH_GIU = ("--card-pos", "--extra-logo", "--outro-dir", "--bugs-dir", "--audio-pre",
             "--lufs", "--tp", "--card", "--card-video")
 
@@ -53,9 +66,53 @@ def doc_lenh(p: Path) -> dict:
     return ra
 
 
-def trich(ass: list[Path], lenh: Path | None, ghi_chu: str) -> dict:
+def trich(ass: list[Path], lenh: Path | None, ghi_chu: str, hinh: dict | None = None) -> dict:
     return {"ghi_chu": ghi_chu, "ass": [doc_ass(p) for p in ass],
-            "lenh": doc_lenh(lenh) if lenh else {}}
+            "lenh": doc_lenh(lenh) if lenh else {},
+            "hinh": hinh if hinh is not None else dict(HINH_SAN)}
+
+
+def lay_hinh(khuon: dict, ten: str) -> dict:
+    h = (khuon.get("hinh") or HINH_SAN).get(ten)
+    if h is None:
+        co = ", ".join(sorted(khuon.get("hinh") or HINH_SAN))
+        raise SystemExit(f"Khuôn không có kiểu hình '{ten}'. Có: {co}")
+    t = float(h.get("toc_do", 1.0))
+    if not TOC_DO_MIN <= t <= TOC_DO_MAX:
+        raise SystemExit(f"'{ten}': tốc độ {t} ngoài khoảng {TOC_DO_MIN}–{TOC_DO_MAX}")
+    return h
+
+
+def loc_hinh(h: dict, giay: float, W: int, H: int, fps: int) -> str:
+    """Chuỗi lọc hình cho một đoạn. Trả chuỗi rỗng khi đoạn đó không có chuyển động.
+
+    Zoom/đẩy dùng zoompan vì crop không đổi được kích thước theo từng khung.
+    Tốc độ đổi bằng setpts; đoạn vẫn dài đúng `giay` vì lấy thêm/bớt vật liệu ở nguồn.
+    """
+    z0, z1 = float(h.get("zoom_tu", 1.0)), float(h.get("zoom_den", 1.0))
+    toc = float(h.get("toc_do", 1.0))
+    loc = []
+    if abs(z0 - 1.0) > 1e-3 or abs(z1 - 1.0) > 1e-3:
+        n = max(1, round(giay * toc * fps))      # số khung NGUỒN mà zoompan đi qua
+        z = f"{z0}" if abs(z1 - z0) < 1e-6 else f"{z0}+({z1}-{z0})*on/{n}"
+        day = h.get("day", "giua")
+        if day == "trai_sang_phai":
+            x = f"(iw-iw/zoom)*on/{n}"
+        elif day == "phai_sang_trai":
+            x = f"(iw-iw/zoom)*(1-on/{n})"
+        else:
+            x = "iw/2-(iw/zoom/2)"
+        # zoompan sinh PTS sai hẳn (một đoạn 4 giây ra 4096 giây) — phải dựng lại mốc theo số khung
+        loc.append(f"zoompan=z='{z}':d=1:x='{x}':y='ih/2-(ih/zoom/2)':s={W}x{H}:fps={fps}")
+        loc.append(f"setpts=N/{fps}/TB")
+    if abs(toc - 1.0) > 1e-3:                    # đổi tốc độ SAU khi mốc đã đúng
+        loc.append(f"setpts=PTS/{toc}")
+    return ",".join(loc)
+
+
+def loc_tieng(h: dict) -> str:
+    toc = float(h.get("toc_do", 1.0))
+    return "" if abs(toc - 1.0) < 1e-3 else f"atempo={toc}"
 
 
 def chon_ass(khuon: dict, ten_file: str | None) -> dict:
@@ -116,12 +173,19 @@ def main() -> int:
     t.add_argument("--ass", type=Path, action="append", required=True, help="lặp lại được nhiều lần")
     t.add_argument("--lenh", type=Path, help="file text chứa dòng lệnh render_att.py đã dùng")
     t.add_argument("--ghi-chu", default="")
+    t.add_argument("--hinh", type=Path, help="JSON kiểu chuyển động riêng; bỏ trống thì dùng bộ sẵn")
     t.add_argument("--out", type=Path, required=True)
     p = sub.add_parser("ap", help="áp khuôn cho cue mới")
     p.add_argument("khuon", type=Path)
     p.add_argument("--cues", type=Path, required=True, help="bilingual.json")
     p.add_argument("--ass-goc", help="tên file ass trong khuôn muốn dùng")
     p.add_argument("--out-ass", type=Path, required=True)
+    h = sub.add_parser("hinh", help="in chuỗi lọc của một kiểu chuyển động")
+    h.add_argument("khuon", type=Path)
+    h.add_argument("--ten", required=True)
+    h.add_argument("--giay", type=float, required=True)
+    h.add_argument("--size", default="1920x1080")
+    h.add_argument("--fps", type=int, default=30)
     l = sub.add_parser("lenh", help="in lại lệnh render với tham số cũ")
     l.add_argument("khuon", type=Path)
     l.add_argument("input")
@@ -130,15 +194,24 @@ def main() -> int:
     a = ap_.parse_args()
 
     if a.cmd == "trich":
-        k = trich(a.ass, a.lenh, a.ghi_chu)
+        k = trich(a.ass, a.lenh, a.ghi_chu,
+                  json.loads(a.hinh.read_text(encoding="utf-8")) if a.hinh else None)
         a.out.parent.mkdir(parents=True, exist_ok=True)
         a.out.write_text(json.dumps(k, ensure_ascii=False, indent=1), encoding="utf-8")
         for x in k["ass"]:
             print(f"  {x['file']}: {x['width']}x{x['height']}, style " + ", ".join(x["ten_style"]))
         print(f"  lệnh: {k['lenh'] or 'không có'}")
+        print("  kiểu hình: " + ", ".join(sorted(k["hinh"])))
         print("->", a.out)
         return 0
     khuon = json.loads(a.khuon.read_text(encoding="utf-8"))
+    if a.cmd == "hinh":
+        W, H = (int(v) for v in a.size.split("x"))
+        kieu = lay_hinh(khuon, a.ten)
+        print("video:", loc_hinh(kieu, a.giay, W, H, a.fps) or "(không đổi)")
+        print("tiếng:", loc_tieng(kieu) or "(không đổi)")
+        print(f"vật liệu cần ở nguồn: {a.giay * float(kieu.get('toc_do', 1.0)):.2f}s")
+        return 0
     if a.cmd == "ap":
         d = json.loads(a.cues.read_text(encoding="utf-8"))
         a.out_ass.parent.mkdir(parents=True, exist_ok=True)

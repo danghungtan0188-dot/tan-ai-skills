@@ -72,6 +72,9 @@ Viết `chon-canh.json`. Cấu trúc theo **mục nội dung**, không theo th�
 - `loai`: `broll` (mặc định) hoặc `phat_bieu`.
 - `in`/`out`: giây trong clip gốc; bỏ trống thì lấy trọn cảnh.
 - `ly_do`: bắt buộc. Không nghĩ ra lý do thì đừng đưa cảnh đó vào.
+- `hinh` (tuỳ chọn): tên kiểu chuyển động trong khuôn — `zoom_cham`, `day_phai`, `nhanh_12`…
+  Có dùng thì phải đưa `--khuon` cho cả `build_edit_plan.py` và `assemble.py`.
+  Xem [khuon-tu-video-cu.md](khuon-tu-video-cu.md).
 
 **Cách dựng cho ra chất bản tin:** mỗi mục mở bằng một cảnh rộng rồi siết dần vào cận; không để
 hai cảnh cùng cỡ đứng cạnh nhau; xen cận cảnh chi tiết (tay, giấy tờ, thiết bị) giữa hai cảnh

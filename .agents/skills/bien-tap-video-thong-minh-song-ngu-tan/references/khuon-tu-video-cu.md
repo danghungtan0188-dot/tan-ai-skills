@@ -11,7 +11,7 @@ Video sau không phải chỉnh lại kiểu chữ, màu, vị trí logo từ đ
 | Bộ lọc màu, chuỗi lọc âm | **được** | cùng chỗ trên |
 | Cắt khoảng lặng, cắt từ đệm (ờ, à) | **đề xuất được**, không tự cắt | `cut_silence.py` |
 | Phụ đề từ giọng nói | **được**, nhưng là bản nháp | `build_bilingual.py tu-asr` |
-| Tốc độ, zoom, scale, vị trí khung hình | **không** — tuỳ từng đoạn | chỉnh tay cho từng đoạn |
+| Tốc độ, zoom, scale, vị trí khung hình | **lưu sẵn được**, nhưng gọi tên cho từng đoạn | `khuon_mau.py hinh` + `"hinh"` trong `chon-canh.json` |
 | Chọn cảnh, nội dung, lời bình | **không** | người làm quyết định |
 
 Khuôn chỉ giữ thứ **lặp lại ở mọi video**. Thứ phụ thuộc nội dung từng video thì chép sang là hỏng.
@@ -73,7 +73,46 @@ python scripts/cut_silence.py --doi-moc edit/bilingual.json edit/anh-xa.json --o
 
 Mốc rơi đúng vào đoạn bị cắt sẽ bị dồn về mép gần nhất, nên vẫn phải xem lại đồng bộ bằng mắt.
 
-## 4. Phụ đề từ giọng nói khi không có kịch bản
+## 4. Tốc độ, zoom, đẩy khung — lưu sẵn, gọi tên cho từng đoạn
+
+Khuôn có sẵn 7 kiểu chuyển động. Xem chuỗi lọc của một kiểu:
+
+```bash
+python scripts/khuon_mau.py hinh khuon-att.json --ten zoom_cham --giay 5
+```
+
+| Tên | Làm gì |
+|---|---|
+| `tinh` | không đổi gì (mặc định) |
+| `zoom_cham` | zoom vào 1,00 → 1,08 |
+| `zoom_ra` | zoom ra 1,08 → 1,00 |
+| `day_phai` / `day_trai` | giữ zoom 1,08, đẩy ngang qua khung |
+| `nhanh_12` | chạy nhanh 1,2× (hình **và** tiếng) |
+| `cham_80` | chạy chậm 0,8× |
+
+Gọi tên trong `chon-canh.json`, từng đoạn một:
+
+```json
+{"shot": "2.3", "co": "trung", "ly_do": "bác sĩ đo huyết áp", "hinh": "zoom_cham"}
+```
+
+rồi đưa khuôn cho cả hai bước:
+
+```bash
+python scripts/build_edit_plan.py edit/rushes.json edit/chon-canh.json --target 180 \
+  --khuon khuon-att.json --out edit/edit-plan.json
+python scripts/assemble.py edit/edit-plan.json --out edit/rough.mp4 --khuon khuon-att.json
+```
+
+**Đoạn vẫn dài đúng kế hoạch.** Tốc độ 1,2× thì máy lấy thêm vật liệu ở nguồn (5 giây hình cần 6
+giây nguồn) nên tổng không đổi; `build_edit_plan.py` tự tính lại giới hạn kéo dài của cảnh đó.
+Cảnh không đủ vật liệu cho tốc độ nhanh sẽ báo lỗi ngay.
+
+**Cân nhắc:** đổi tốc độ lời nói trong bản tin nghe rất lộ — chỉ nên dùng cho hình không có tiếng
+nói. Zoom chậm thì an toàn, nhưng zoom vào ảnh đã mềm sẽ càng mờ. Thấy hỏng hình thì bỏ trường
+`"hinh"` đi là về như cũ, không phải dựng lại.
+
+## 5. Phụ đề từ giọng nói khi không có kịch bản
 
 Có kịch bản gốc thì **đừng dùng** phần này — ASR nghe sai tên riêng, chức danh, số liệu
 (xem đầu `build_bilingual.py`). Chỉ dùng cho phỏng vấn, tiếng hiện trường, khi không có bản chữ.

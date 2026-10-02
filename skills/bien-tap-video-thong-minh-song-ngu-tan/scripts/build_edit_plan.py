@@ -26,7 +26,11 @@ import argparse
 import json
 import re
 import subprocess
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from khuon_mau import lay_hinh  # noqa: E402
 
 BROLL_MIN, BROLL_MAX, PHAT_BIEU_MIN, SAI_SO = 2.5, 8.0, 4.0, 2.0
 CO_HOP_LE = ("toan", "trung", "can")
@@ -37,7 +41,7 @@ def nap(rushes: dict) -> dict:
     return {s["id"]: (c, s) for c in rushes["clips"] for s in c["shots"]}
 
 
-def dung_doan(chon: dict, bang: dict) -> tuple[list[dict], list[str]]:
+def dung_doan(chon: dict, bang: dict, khuon: dict | None = None) -> tuple[list[dict], list[str]]:
     doan, loi = [], []
     for muc in chon["muc"]:
         for c in muc["canh"]:
@@ -55,16 +59,27 @@ def dung_doan(chon: dict, bang: dict) -> tuple[list[dict], list[str]]:
                 loi.append(f"{sid}: thiếu lý do chọn cảnh")
             if c.get("co") not in CO_HOP_LE:
                 loi.append(f"{sid}: cỡ cảnh '{c.get('co')}' phải là {'/'.join(CO_HOP_LE)}")
+            toc = 1.0
+            if c.get("hinh"):
+                if khuon is None:
+                    loi.append(f"{sid}: có kiểu hình '{c['hinh']}' nhưng chưa đưa --khuon")
+                else:
+                    try:
+                        toc = float(lay_hinh(khuon, c["hinh"]).get("toc_do", 1.0))
+                    except SystemExit as e:
+                        loi.append(f"{sid}: {e}")
             loai = c.get("loai", "broll")
             if loai not in LOAI_HOP_LE:          # gõ sai sẽ lọt qua luật b-roll, thành cắt bừa
                 loi.append(f"{sid}: loại '{loai}' phải là {'/'.join(LOAI_HOP_LE)}")
                 loai = "broll"
             # nới dài nhất có thể: b-roll không được trùm sang cảnh khác, phát biểu chỉ giới hạn bởi clip
-            toi_da = (shot["end"] if loai == "broll" else clip["duration"]) - t0
+            # tốc độ nhanh ăn nhiều vật liệu hơn: 5 giây hình ở tốc độ 1,2 cần 6 giây nguồn
+            toi_da = ((shot["end"] if loai == "broll" else clip["duration"]) - t0) / toc
             doan.append({"n": len(doan) + 1, "muc": muc["id"], "ten_muc": muc.get("ten", ""),
                          "shot": sid, "clip": clip["idx"], "file": clip["file"], "name": clip["name"],
                          "in": round(t0, 2), "out": round(t1, 2), "dur": round(t1 - t0, 2),
                          "co": c.get("co"), "loai": loai, "ly_do": c.get("ly_do", ""),
+                         "hinh": c.get("hinh"), "toc_do": toc,
                          "_max": round(min(toi_da, BROLL_MAX if loai == "broll" else toi_da), 2)})
     return doan, loi
 
@@ -165,6 +180,7 @@ def main() -> int:
     ap.add_argument("--out", type=Path, default=Path("edit-plan.json"))
     ap.add_argument("--approved", action="store_true",
                     help="người dùng đã yêu cầu/cho phép tự động cắt ghép trong yêu cầu hiện tại")
+    ap.add_argument("--khuon", type=Path, help="khuon.json — bắt buộc khi cảnh có kiểu hình")
     ap.add_argument("--kiem-tieng", action="store_true", help="đo mức âm tại mốc vào/ra (cần ffmpeg)")
     ap.add_argument("--nguong-tieng", type=float, default=-30.0, help="dBFS, trên mức này thì cảnh báo")
     a = ap.parse_args()
@@ -173,7 +189,8 @@ def main() -> int:
     rushes = json.loads(a.rushes.read_text(encoding="utf-8"))
     chon = json.loads(a.chon.read_text(encoding="utf-8"))
     bang = nap(rushes)
-    doan, loi = dung_doan(chon, bang)
+    khuon = json.loads(a.khuon.read_text(encoding="utf-8")) if a.khuon else None
+    doan, loi = dung_doan(chon, bang, khuon)
     if not doan:
         raise SystemExit("Không có đoạn nào hợp lệ")
     loi += kiem_luat(doan, bang)

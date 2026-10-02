@@ -20,3 +20,4 @@ Ghi thêm dòng ở **cuối bảng**, không sửa dòng cũ. Luật cũ hoá r
 | 2026-09-30 | — (rà soát code) | — | `amix=inputs=2:duration=first` lấy độ dài theo lời đọc: lời ngắn hơn phim thì đuôi phim mất tiếng, lời dài hơn thì tiếng tràn ra ngoài kế hoạch | `test:TestAssembleLoiDoc` |
 | 2026-09-30 | — (rà soát code) | — | Luật "duyệt trước, cắt sau" nằm trong tài liệu thì vẫn chạy được; phải chặn bằng code: `cut_authorized`, `valid`, kế hoạch rỗng, thiếu file | `test:TestAssembleTuChoi` |
 | 2026-09-30 | — (rà soát code) | — | Render xong không probe lại thì không biết file thật có đúng thời lượng/khung/fps không | `script:assemble.py` |
+| 2026-10-02 | — (kiểu chuyển động) | — | `zoompan` sinh mốc thời gian sai hẳn: một đoạn 4 giây ra 4096 giây; phải thêm `setpts=N/fps/TB` ngay sau nó, và đổi tốc độ chỉ được làm SAU khi mốc đã đúng | `test:TestKhuonHinhChayThat` |
