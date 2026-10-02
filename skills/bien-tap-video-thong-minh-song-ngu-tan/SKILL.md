@@ -31,6 +31,7 @@ Phân tích trước, chọn phong cách sau. Không áp một preset cho mọi 
 
 - **Sau mỗi video phải rút kinh nghiệm:** [references/rut-kinh-nghiem.md](references/rut-kinh-nghiem.md) — bốn câu hỏi cố định, ghi một dòng vào [references/nhat-ky-ban-tin.md](references/nhat-ky-ban-tin.md), và **mỗi bài học phải neo vào một test / một luật trong script / một dòng tài liệu** thì mới tính là đã lưu.
 
+- **Làm theo khuôn video cũ:** [references/khuon-tu-video-cu.md](references/khuon-tu-video-cu.md) — `khuon_mau.py` chép nguyên kiểu chữ/màu/viền/vị trí và tham số logo, outro, LUFS từ project cũ; `cut_silence.py` đề xuất bỏ khoảng lặng và từ đệm (không tự cắt); `build_bilingual.py tu-asr` tạo phụ đề nháp từ giọng nói khi không có kịch bản.
 - **Dựng từ video thô:** [references/dung-tu-video-tho.md](references/dung-tu-video-tho.md) — `survey_rushes.py` → `build_edit_plan.py` → `assemble.py`; luật cỡ cảnh, độ dài cảnh, chống nhảy hình, khớp đúng thời lượng yêu cầu.
 - **Tìm kho clip:** [references/kho-clip.md](references/kho-clip.md) — thứ tự Desktop → Documents → Google Drive, quy tắc lọc video liên quan và cách đưa file Drive về vùng làm việc trước khi khảo sát.
 - **Song ngữ Việt–Anh:** [references/quy-trinh-song-ngu.md](references/quy-trinh-song-ngu.md) — lời Việt theo kịch bản (ASR chỉ lấy mốc), glossary, `check_translation.py`, 4 chế độ xuất (`export_subtitles.py`), kiểm SRT/VTT (`check_subtitles.py`).

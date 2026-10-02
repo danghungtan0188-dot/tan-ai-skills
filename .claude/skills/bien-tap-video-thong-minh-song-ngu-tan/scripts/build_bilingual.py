@@ -34,6 +34,29 @@ def transcribe(src: Path, out: Path) -> list[dict]:
     return words
 
 
+def cues_tu_asr(words: list[dict], max_chars: int = 52, nghi: float = 0.6) -> list:
+    """Chia lời ASR thành cue NHÁP khi không có kịch bản gốc (phỏng vấn, hiện trường).
+
+    Ngắt khi: chạm giới hạn ký tự, người nói nghỉ hơn `nghi` giây, hoặc hết câu.
+    Lời Việt trong file ra là **nháp của máy** — phải nghe lại và sửa trước khi dùng,
+    và còn phải tự điền tiếng Anh. Có kịch bản gốc thì đừng dùng chế độ này.
+    """
+    cues, i = [], 0
+    while i < len(words):
+        j, chu = i, words[i]["w"]
+        while j + 1 < len(words):
+            sau = words[j + 1]
+            if len(chu) + 1 + len(sau["w"]) > max_chars or sau["s"] - words[j]["e"] > nghi:
+                break
+            j += 1
+            chu = f"{chu} {sau['w']}"
+            if chu.endswith((".", "?", "!")):
+                break
+        cues.append([i, j, chu.strip(), ""])
+        i = j + 1
+    return cues
+
+
 def build(words: list[dict], cues: list, max_chars: int = 52) -> dict:
     segs, loi, truoc = [], [], 0.0
     for k, (i, j, vi, en) in enumerate(cues, 1):
@@ -62,6 +85,10 @@ def main() -> int:
     t = sub.add_parser("transcribe")
     t.add_argument("input", type=Path)
     t.add_argument("--out", type=Path, default=Path("asr_words.json"))
+    n = sub.add_parser("tu-asr", help="sinh cues.json nháp từ ASR khi không có kịch bản")
+    n.add_argument("words", type=Path)
+    n.add_argument("--out", type=Path, default=Path("cues-nhap.json"))
+    n.add_argument("--max-chars", type=int, default=52)
     b = sub.add_parser("build")
     b.add_argument("words", type=Path)
     b.add_argument("cues", type=Path)
@@ -70,6 +97,14 @@ def main() -> int:
     a = ap.parse_args()
     if a.cmd == "transcribe":
         transcribe(a.input, a.out)
+        return 0
+    if a.cmd == "tu-asr":
+        w = json.loads(a.words.read_text(encoding="utf-8"))
+        c = cues_tu_asr(w, a.max_chars)
+        a.out.parent.mkdir(parents=True, exist_ok=True)
+        a.out.write_text(json.dumps(c, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"{len(c)} cue nháp -> {a.out}")
+        print("NHÁP: lời Việt là bản máy nghe, phải sửa theo tai mình; tiếng Anh còn trống.")
         return 0
     data = build(json.loads(a.words.read_text(encoding="utf-8")),
                  json.loads(a.cues.read_text(encoding="utf-8")), a.max_chars)

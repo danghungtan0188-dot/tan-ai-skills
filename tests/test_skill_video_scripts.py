@@ -29,7 +29,9 @@ import icons  # noqa: E402
 import validate_graphics  # noqa: E402
 import assemble  # noqa: E402
 import build_edit_plan  # noqa: E402
+import cut_silence  # noqa: E402
 import find_clips  # noqa: E402
+import khuon_mau  # noqa: E402
 import survey_rushes  # noqa: E402
 
 WORDS = [{"s": i * 0.5, "e": i * 0.5 + 0.4, "w": f"w{i}"} for i in range(30)]
@@ -789,6 +791,178 @@ class TestAssembleLoiDoc(unittest.TestCase):
             self.assertTrue(any("thời lượng thật" in x for x in loi))
             self.assertTrue(any("khung" in x for x in loi))
             self.assertTrue(any("fps" in x for x in loi))
+
+
+ASS_CU = """[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, Outline, Alignment, MarginV
+Style: EN,Arial,42,&H0000E7FF,&H0012263E,2,2,158
+Style: VI,Arial,46,&H00FFFFFF,&H0012263E,2,2,100
+
+[Events]
+Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text
+Dialogue: 0,0:00:00.00,0:00:02.00,EN,,0,0,0,,Hello
+"""
+
+
+class TestKhuonMau(unittest.TestCase):
+    """Chep kieu chu, logo, tham so tu project cu sang project moi."""
+
+    def khuon(self, t):
+        p = Path(t) / "cu.ass"
+        p.write_text(ASS_CU, encoding="utf-8")
+        lenh = Path(t) / "lenh.txt"
+        lenh.write_text('python scripts/render_att.py in.mp4 --card-pos 889,231 '
+                        '--extra-logo yte.png --lufs -14 --tp -1.0 --out ra.mp4', encoding="utf-8")
+        return khuon_mau.trich([p], lenh, "ATT NEWS")
+
+    def test_trich_doc_dung_style_va_kich_thuoc(self):
+        with tempfile.TemporaryDirectory() as t:
+            k = self.khuon(t)
+        a = k["ass"][0]
+        self.assertEqual((a["width"], a["height"]), (1920, 1080))
+        self.assertEqual(a["ten_style"], ["EN", "VI"])
+        self.assertIn("Arial,42", a["styles"][0])
+
+    def test_trich_nhat_tham_so_tu_lenh_cu(self):
+        with tempfile.TemporaryDirectory() as t:
+            k = self.khuon(t)
+        self.assertEqual(k["lenh"]["--card-pos"], "889,231")
+        self.assertEqual(k["lenh"]["--extra-logo"], "yte.png")
+        self.assertEqual(k["lenh"]["--lufs"], "-14")
+        self.assertNotIn("--out", k["lenh"], "duong dan ra khong phai khuon")
+
+    def test_ap_giu_nguyen_khoi_style_cu(self):
+        with tempfile.TemporaryDirectory() as t:
+            k = self.khuon(t)
+        ass = khuon_mau.ap(k, [{"start": 1.0, "end": 3.0, "vi": "Xin chào", "en": "Hello"}])
+        self.assertIn("Style: EN,Arial,42,&H0000E7FF,&H0012263E,2,2,158", ass)
+        self.assertIn("Style: VI,Arial,46", ass)
+        self.assertIn("PlayResX: 1920", ass)
+        self.assertIn("Dialogue: 0,0:00:01.00,0:00:03.00,EN,,0,0,0,,Hello", ass)
+        self.assertIn("Dialogue: 1,0:00:01.00,0:00:03.00,VI,,0,0,0,,Xin chào", ass)
+
+    def test_ap_chan_cue_hong(self):
+        with tempfile.TemporaryDirectory() as t:
+            k = self.khuon(t)
+        with self.assertRaises(SystemExit):
+            khuon_mau.ap(k, [{"start": 3.0, "end": 1.0, "vi": "a", "en": "b"}])
+        with self.assertRaises(SystemExit):
+            khuon_mau.ap(k, [{"start": 1.0, "end": 3.0, "vi": "a", "en": ""}])
+
+    def test_lenh_dung_lai_tham_so_cu(self):
+        with tempfile.TemporaryDirectory() as t:
+            k = self.khuon(t)
+        c = " ".join(khuon_mau.lenh_render(k, "moi.mp4", "ra.mp4", ["--scenes", "s.json"]))
+        self.assertIn("--card-pos 889,231", c)
+        self.assertIn("--lufs -14", c)
+        self.assertIn("--scenes s.json", c)
+        self.assertTrue(c.endswith("--out ra.mp4"))
+
+
+class TestCutSilence(unittest.TestCase):
+    """De xuat bo khoang lang va tu dem — de xuat, khong tu cat."""
+
+    def test_giu_lai_mot_phan_khoang_lang(self):
+        c = cut_silence.de_xuat([(10.0, 12.0)], [], 0.4, cut_silence.TU_DEM)
+        self.assertEqual((c[0]["start"], c[0]["end"]), (10.2, 11.8), "phai chua lai 0.4s")
+
+    def test_bo_qua_khoang_lang_ngan_hon_muc_giu(self):
+        self.assertEqual(cut_silence.de_xuat([(10.0, 10.2)], [], 0.4, cut_silence.TU_DEM), [])
+
+    def test_bat_tu_dem_nhung_bo_qua_tu_dai(self):
+        w = [{"s": 1.0, "e": 1.2, "w": "ờ"}, {"s": 2.0, "e": 2.3, "w": "xã"},
+             {"s": 3.0, "e": 5.0, "w": "à"}]
+        c = cut_silence.de_xuat([], w, 0.4, cut_silence.TU_DEM)
+        self.assertEqual(len(c), 1, "chi cat tu dem ngan")
+        self.assertIn("từ đệm", c[0]["ly_do"])
+
+    def test_gop_doan_cat_chong_nhau(self):
+        c = cut_silence.gop([{"start": 1.0, "end": 3.0, "ly_do": "a"},
+                             {"start": 2.0, "end": 4.0, "ly_do": "b"}])
+        self.assertEqual(len(c), 1)
+        self.assertEqual((c[0]["start"], c[0]["end"]), (1.0, 4.0))
+
+    def test_doan_giu_la_phan_bu(self):
+        giu = cut_silence.doan_giu([{"start": 2.0, "end": 3.0}], 10.0)
+        self.assertEqual(giu, [(0.0, 2.0), (3.0, 10.0)])
+
+    def test_doi_moc_phu_de_sau_khi_cat(self):
+        ax = cut_silence.anh_xa([(0.0, 2.0), (3.0, 10.0)])
+        self.assertEqual(cut_silence.doi_moc(1.0, ax), 1.0)
+        self.assertEqual(cut_silence.doi_moc(4.0, ax), 3.0, "bo 1s thi moc lui 1s")
+        self.assertEqual(cut_silence.doi_moc(2.5, ax), 2.0, "moc roi vao doan cat thi don ve mep")
+        self.assertEqual(cut_silence.doi_moc(99.0, ax), 9.0)
+
+    def test_khong_cat_khi_chua_duyet(self):
+        with tempfile.TemporaryDirectory() as t:
+            v = Path(t) / "v.mp4"
+            v.write_bytes(b"0")
+            dx = Path(t) / "dx.json"
+            dx.write_text(json.dumps({"cat": [{"start": 1.0, "end": 2.0, "ly_do": "x"}]}),
+                          encoding="utf-8")
+            r = subprocess.run([sys.executable, str(SONG_NGU / "cut_silence.py"), str(v),
+                                "--de-xuat", str(dx), "--ap", str(Path(t) / "o.mp4")],
+                               text=True, capture_output=True, encoding="utf-8", errors="replace")
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("--approved", r.stderr)
+
+
+@unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "khong co ffmpeg")
+class TestCutSilenceChayThat(unittest.TestCase):
+    def test_do_duoc_khoang_lang_va_cat_dung(self):
+        with tempfile.TemporaryDirectory() as t:
+            v = Path(t) / "v.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y",
+                            "-f", "lavfi", "-i", "color=c=black:s=160x90:r=15:d=6",
+                            "-f", "lavfi", "-i",
+                            "sine=f=440:d=6,volume=enable='between(t,2,4)':volume=0",
+                            "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p",
+                            "-c:a", "aac", "-shortest", str(v)], check=True)
+            lang = cut_silence.do_lang(str(v), -35.0, 1.0)
+            self.assertTrue(lang, "phai do duoc khoang lang 2-4s")
+            self.assertAlmostEqual(lang[0][0], 2.0, delta=0.3)
+
+            cat = cut_silence.de_xuat(lang, [], 0.35, cut_silence.TU_DEM)
+            giu = cut_silence.doan_giu(cat, 6.0)
+            out = Path(t) / "gon.mp4"
+            subprocess.run(cut_silence.cat_video(str(v), giu, out, True), check=True)
+            moi = cut_silence.thoi_luong(str(out))
+            bo = sum(c["end"] - c["start"] for c in cat)
+            self.assertAlmostEqual(moi, 6.0 - bo, delta=0.3)
+            self.assertLess(moi, 6.0, "phai ngan hon ban goc")
+
+            ax = cut_silence.anh_xa(giu)
+            self.assertEqual(cut_silence.doi_moc(0.5, ax), 0.5, "phan truoc cho cat giu nguyen moc")
+            self.assertLess(cut_silence.doi_moc(5.0, ax), 5.0, "phan sau cho cat phai lui lai")
+
+
+class TestCuesTuAsr(unittest.TestCase):
+    def test_ngat_cue_khi_nguoi_noi_nghi(self):
+        w = [{"s": 0.0, "e": 0.3, "w": "Xin"}, {"s": 0.3, "e": 0.6, "w": "chào"},
+             {"s": 2.0, "e": 2.3, "w": "Hôm"}, {"s": 2.3, "e": 2.6, "w": "nay"}]
+        c = build_bilingual.cues_tu_asr(w)
+        self.assertEqual(len(c), 2)
+        self.assertEqual(c[0][:3], [0, 1, "Xin chào"])
+        self.assertEqual(c[1][3], "", "tieng Anh de trong cho nguoi dich")
+
+    def test_ngat_cue_khi_qua_dai(self):
+        w = [{"s": i * 0.3, "e": i * 0.3 + 0.2, "w": "chữ"} for i in range(40)]
+        c = build_bilingual.cues_tu_asr(w, max_chars=20)
+        self.assertGreater(len(c), 1)
+        self.assertTrue(all(len(x[2]) <= 20 for x in c))
+
+    def test_cue_nhap_dung_duoc_voi_build(self):
+        w = [{"s": i * 0.5, "e": i * 0.5 + 0.4, "w": f"w{i}"} for i in range(10)]
+        c = build_bilingual.cues_tu_asr(w)
+        for x in c:
+            x[3] = "en"
+        d = build_bilingual.build(w, c)
+        self.assertTrue(d["meta"]["needs_review"])
 
 
 class TestFindClips(unittest.TestCase):
