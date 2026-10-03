@@ -38,6 +38,8 @@ cỡ đứng cạnh nhau; phát biểu đặt sau khi đã có bối cảnh.
 
 **7. Hoàn thiện + QA.** Phụ đề song ngữ, banner, logo, outro theo
 [references/phong-cach-att-news.md](skills/bien-tap-video-thong-minh-song-ngu-tan/references/phong-cach-att-news.md),
+Intro, thẻ số liệu, lower-third động: `python -m tan_studio do-hoa ...` rồi `render_att.py --do-hoa FILE,GIAY`
+(dùng lower-third động thì bỏ `--lower-thirds` ASS cho khỏi hai lớp).
 rồi `scripts/qa.py OUT --plan edit/edit-plan.json --cut-authorized yes --tail <giây outro>`.
 FAIL → sửa → chạy lại, tối đa 3 vòng.
 

@@ -23,6 +23,7 @@ Input → video-analyzer → chọn template → video-editor → render → vid
 
 Chủ đề là sự kiện/hội nghị/hội thi kiểu Việt Nam → dùng skill `dung-video-su-kien`.
 Cần lower-third/title dựng bằng code → dùng skill `chuyen-gia-edit-video-tan`.
+Cần intro ATT NEWS, thẻ số liệu, lower-third **động** → `python -m tan_studio do-hoa intro|so-lieu|lower-third` (xem `--anh` trước), đắp bằng `render_att.py --do-hoa FILE,GIAY`.
 Cần phụ đề song ngữ Anh trên / Việt dưới → dùng skill `bien-tap-video-thong-minh-song-ngu-tan`.
 
 **3. Xử lý phần chưa biết.** Với mỗi mục trong `unknowns` cần cho bản tin (tên người phát biểu, chức vụ, đơn vị, nội dung lời nói): hỏi người dùng **một lần, gộp thành một câu hỏi**. Không bịa. Chưa có thì để trống lower-third, không điền đại.

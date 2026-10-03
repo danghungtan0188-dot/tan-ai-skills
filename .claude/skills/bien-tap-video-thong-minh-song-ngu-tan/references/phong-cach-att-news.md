@@ -65,6 +65,18 @@ Cảnh ngắn hơn 4 giây thì rút banner cho vừa cảnh; cảnh 3 giây th�
 
 Tên và chức vụ **chỉ lấy từ kịch bản hoặc người dùng xác nhận**, không đoán từ khuôn mặt.
 
+**Bản động (Remotion).** Cùng vị trí 65,5% chiều cao, cùng màu ATT NEWS, có hiệu ứng vào/ra:
+
+```bash
+python -m tan_studio do-hoa lower-third --dat ten="..." --dat chuc_vu="..." --thoi-luong 4 --anh 2   # xem 1 khung trước
+python -m tan_studio do-hoa lower-third --dat ten="..." --dat chuc_vu="..." --thoi-luong 4 --out lt1.mov
+python scripts/render_att.py INPUT ... --do-hoa lt1.mov,12.5     # đắp từ giây 12,5 — bỏ --lower-thirds ASS
+```
+
+Cùng cách đó cho `intro` (đặt ở giây 0, che cả phần trường quay — chỉ dùng khi nguồn không có MC mở đầu) và
+`so-lieu` (thẻ số đếm lên + biểu đồ cột, phủ cả khung trong lúc giọng đọc vẫn chạy). Banner động **chưa tự né cảnh**
+như `make_lower_thirds_ass.py --scenes`: tự chọn giây và `--thoi-luong` nằm gọn trong một cảnh (xem `scenes.json`).
+
 ## 5. Âm thanh và mã hoá
 
 Loudnorm **2 lượt linear** (đo trước, áp một mức gain cố định) — không bóp dải động.

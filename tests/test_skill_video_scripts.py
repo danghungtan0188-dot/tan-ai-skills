@@ -433,7 +433,7 @@ class TestRenderAttLopHinh(unittest.TestCase):
         from argparse import Namespace
         with tempfile.TemporaryDirectory() as t:
             goc = dict(input=Path("in.mp4"), captions=None, lower_thirds=None, card=None,
-                       card_video=None, card_pos="900,240", extra_logo=None, overlay=[],
+                       card_video=None, card_pos="900,240", extra_logo=None, overlay=[], do_hoa=[],
                        replace=[], outro_dir=None, bugs_dir=t, preview=False, out=Path("o.mp4"))
             return " ".join(render_att.build_cmd(Namespace(**{**goc, **kw}), 26.0, 100.0, "anull"))
 
@@ -450,6 +450,13 @@ class TestRenderAttLopHinh(unittest.TestCase):
     def test_khong_co_captions_thi_khong_thua_dau_phay(self):
         self.assertIn("]trim=0:100.0", self.cmd())
         self.assertIn("subtitles=", self.cmd(captions="cap.ass"))
+
+    def test_do_hoa_remotion_tren_logo_duoi_phu_de(self):
+        c = self.cmd(do_hoa=["lt.mov,4.5"], captions="cap.ass")
+        self.assertIn("setpts=PTS-STARTPTS+4.5/TB", c)
+        self.assertIn("enable='gte(t,4.5)'", c)
+        self.assertLess(c.index("[att]"), c.index("[dh"), "do hoa phai nam tren logo ATT")
+        self.assertLess(c.index("[dh"), c.index("subtitles="), "phu de phai nam tren do hoa")
 
     def test_card_pos_doi_duoc(self):
         self.assertIn("overlay=889:231", self.cmd(card=Path("c.png"), card_pos="889,231"))

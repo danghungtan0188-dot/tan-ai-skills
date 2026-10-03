@@ -10,6 +10,7 @@ Lớp và vị trí ở 1920×1080:
   Facebook/Zalo   (46,H-h-46) α 0.94  suốt video
   ATT NEWS        (1612,130)         chỉ khi t ≥ studio_end — phần trường quay đã in sẵn logo
   logo phụ        cao 78, cách ATT NEWS 14 px về trái, suốt video (vd logo y tế)
+  đồ hoạ động     clip Remotion trong suốt (do-hoa/, --do-hoa FILE,BAT_DAU) phủ cả khung, trên logo
   banner, phụ đề  lớp trên cùng
 Âm thanh: loudnorm 2 lượt linear. Outro: nối khung PNG 30 fps + đoạn im lặng cùng độ dài.
 Mã hoá: preset faster, crf 20 (máy nóng nhanh); --preview: veryfast, crf 27.
@@ -75,6 +76,11 @@ def build_cmd(a, studio_end: float, dur: float, af: str) -> list[str]:
     if a.extra_logo:
         i = them(["-i", str(a.extra_logo)])
         lop(f"[{i}:v]format=rgba,scale=-1:78[xl];[{{cur}}][xl]overlay=x=1598-w:y=130[{{nxt}}]")
+    for spec in a.do_hoa:                # intro/số liệu/lower-third Remotion (.mov ProRes 4444) — "file,bắt_đầu"
+        f, t0 = spec.rsplit(",", 1)
+        i = them(["-i", f])
+        lop(f"[{i}:v]scale=1920:1080,setpts=PTS-STARTPTS+{float(t0)}/TB[dh{i}];"
+            f"[{{cur}}][dh{i}]overlay=0:0:eof_action=pass:enable='gte(t,{float(t0)})'[{{nxt}}]")
     # video đã đốt sẵn phụ đề thì bỏ trống --captions, đừng đắp thêm lớp thứ hai
     subs = "".join(f"subtitles='{q(Path(p).resolve())}'," for p in (a.lower_thirds, a.captions) if p)
     outro = sorted(Path(a.outro_dir).glob("f_*.png")) if a.outro_dir else []
@@ -112,6 +118,8 @@ def main() -> int:
     ap.add_argument("--extra-logo", type=Path)
     ap.add_argument("--overlay", action="append", default=[],
                     metavar="FILE,X,Y,BAT_DAU,KET_THUC", help="PNG phụ, lặp lại được nhiều lần")
+    ap.add_argument("--do-hoa", action="append", default=[], metavar="FILE,BAT_DAU",
+                    help="clip đồ hoạ động trong suốt từ `python -m tan_studio do-hoa` (intro, số liệu, lower-third)")
     ap.add_argument("--outro-dir", type=Path)
     ap.add_argument("--bugs-dir", default=".")
     ap.add_argument("--audio-pre", default="highpass=f=70,lowpass=f=15500",

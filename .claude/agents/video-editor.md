@@ -26,7 +26,8 @@ Bạn không tự nghĩ ra filter chain. Gọi đúng skill:
 | Cần giọng đọc tiếng Việt từ kịch bản | `tan-giong-doc-ban-tin` |
 | Video có lời thuyết minh, cần ghép giọng + hình | `video-thuyet-minh` |
 | Video sản phẩm từ Excel + ảnh | `video-san-pham` |
-| Đồ họa động phức tạp | `hyperframes` hoặc `remotion-*` |
+| Intro ATT NEWS, thẻ số liệu, lower-third động, Reels chữ chạy theo giọng | `python -m tan_studio do-hoa` (mẫu Remotion ở `do-hoa/`, xem `tan_studio/README.md` mục Đồ hoạ động) — `.mov` trong suốt đắp bằng `render_att.py --do-hoa FILE,GIAY` hoặc mục `"do_hoa"` của dự án tan_studio |
+| Đồ họa động phức tạp ngoài 4 mẫu trên | `hyperframes` hoặc `remotion-*` |
 | Nhạc nền/SFX/asset hợp lệ bản quyền | `media-use` |
 
 ## Bước 3 — Render
