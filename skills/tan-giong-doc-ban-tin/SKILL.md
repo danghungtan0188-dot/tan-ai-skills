@@ -21,6 +21,8 @@ Xem [INSTALL.md](INSTALL.md) — hướng dẫn từng bước cho Windows (uv/p
 
 Không có API key hay dịch vụ trả phí nào liên quan — VieNeu-TTS chạy hoàn toàn offline trên máy sau khi tải mô hình lần đầu.
 
+Nếu người dùng đã cài CIT Voice Studio và muốn dùng nó, đọc [references/cit-voice-studio.md](references/cit-voice-studio.md). Đây là nhà cung cấp TTS cục bộ **tùy chọn** gọi qua API; không tải bộ cài hoặc tắt cơ chế bảo vệ Windows thay người dùng. VieNeu-TTS vẫn là mặc định.
+
 ## Quy trình cốt lõi
 
 1. **Kiểm tra môi trường.** Chạy `python scripts/check_env.py` nếu chưa chắc máy đã sẵn sàng (Python, `vieneu`, `ffmpeg`, `python-docx`, GPU tuỳ chọn).
@@ -38,7 +40,7 @@ Không có API key hay dịch vụ trả phí nào liên quan — VieNeu-TTS ch�
    python scripts/synthesize.py --input duong_dan/ban_tin.txt --voice mc-an-thanh-thuy
    python scripts/synthesize.py --input duong_dan/ban_tin.txt --voice hung-tan-chan-that
    ```
-   `--voice nam` / `--voice nu` là hai giọng miền Nam, phong cách tin tức, dựng sẵn (Minh Triết / Thùy Dung — xem [references/voices.md](references/voices.md) cho toàn bộ 14 giọng). Script tự: đọc TXT/DOCX → tách đoạn → mở rộng chữ viết tắt (tự điển ở [references/abbreviations.json](references/abbreviations.json)) rồi đổi số/ngày/phần trăm thành chữ (`scripts/normalize_vi.py` — bộ chuẩn hoá số của thư viện đọc sai `22-5-2003`, nên không giao cho nó) → gọi VieNeu-TTS tổng hợp từng đoạn (thư viện tự chia nhỏ đoạn dài ở tầng phoneme) → ghép các đoạn bằng khoảng lặng → lưu WAV 48kHz → chuyển MP3 bằng `ffmpeg`.
+   `--voice nam` / `--voice nu` là hai giọng miền Nam, phong cách tin tức, dựng sẵn (Minh Triết / Thùy Dung — xem [references/voices.md](references/voices.md) cho toàn bộ 25 giọng). Script tự: đọc TXT/DOCX → tách đoạn → mở rộng chữ viết tắt (tự điển ở [references/abbreviations.json](references/abbreviations.json)) rồi đổi số/ngày/phần trăm thành chữ (`scripts/normalize_vi.py` — bộ chuẩn hoá số của thư viện đọc sai `22-5-2003`, nên không giao cho nó) → gọi VieNeu-TTS tổng hợp từng đoạn (thư viện tự chia nhỏ đoạn dài ở tầng phoneme) → ghép các đoạn bằng khoảng lặng → lưu WAV 48kHz → chuyển MP3 bằng `ffmpeg`.
 5. **Kiểm tra kết quả** với người dùng: nghe thử file WAV/MP3 xuất ra (mặc định ở `outputs/`), báo lại số đoạn lỗi nếu có (script tiếp tục chạy các đoạn còn lại thay vì dừng hẳn, và tổng kết ở cuối).
 6. **Nếu có lỗi**, tra [references/troubleshooting.md](references/troubleshooting.md) trước khi tự đoán nguyên nhân.
 
@@ -46,7 +48,9 @@ Không có API key hay dịch vụ trả phí nào liên quan — VieNeu-TTS ch�
 
 - `scripts/check_env.py` — kiểm tra môi trường trước khi dùng lần đầu, hoặc khi có lỗi không rõ nguyên nhân.
 - `scripts/clone_voice.py enroll|list|remove` — nhân bản/quản lý giọng nói riêng của người dùng.
+- `scripts/import_hf_voices.py [--xem]` — nạp 11 giọng dựng sẵn mới (Mỹ Duyên, Kim Thanh, Minh Quân Pro…) mà gói `vieneu` chưa kèm, từ repo model chính thức trên Hugging Face. Chạy một lần mỗi máy; có sao lưu kho giọng.
 - `scripts/synthesize.py` — lệnh chính: kịch bản → WAV 48kHz + MP3. Chạy `--help` để xem đầy đủ tuỳ chọn (`--style`, `--gap-ms`, `--mp3-bitrate`, `--out-dir`, `--no-mp3`, `--abbrev-dict`, `--no-abbrev`...).
+- `scripts/cit_voice_api.py health|voices|generate` — gọi CIT Voice Studio đang chạy ở localhost; chỉ dùng khi người dùng đã chọn nhà cung cấp này. Đọc [references/cit-voice-studio.md](references/cit-voice-studio.md) trước khi bật truy cập LAN.
 - `scripts/normalize_vi.py "<văn bản>"` — chỉ để xem trước kết quả chuẩn hoá (viết tắt + số/ngày) mà không tổng hợp giọng (hữu ích khi debug tự điển).
 - `scripts/read_script.py <file>` — chỉ để xem trước file được tách đoạn thế nào, không tổng hợp giọng.
 

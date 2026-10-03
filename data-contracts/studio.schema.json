@@ -1,0 +1,737 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/danghungtan0188-dot/tan-ai-skills/data-contracts/studio.schema.json",
+  "title": "Hợp đồng dữ liệu tan_studio",
+  "description": "Script → NormalizedScript → RunReport (hồ sơ lần chạy) + Findings; người dùng → Verdict / FindingVerdict / Observation (quan sát) → Rule (đề xuất → đã duyệt).",
+  "$defs": {
+    "NormalizedScript": {
+      "type": "object",
+      "required": [
+        "kind",
+        "created_at",
+        "segments",
+        "original_text",
+        "normalized_text"
+      ],
+      "properties": {
+        "kind": {
+          "const": "NormalizedScript"
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "disabled_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "original_text": {
+          "type": "string",
+          "description": "Luôn giữ nguyên văn bản gốc"
+        },
+        "normalized_text": {
+          "type": "string"
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "index",
+              "original",
+              "normalized",
+              "changes",
+              "flags"
+            ],
+            "properties": {
+              "index": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "original": {
+                "type": "string"
+              },
+              "normalized": {
+                "type": "string"
+              },
+              "changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "quy_tac",
+                    "tu",
+                    "thanh",
+                    "ly_do"
+                  ],
+                  "properties": {
+                    "quy_tac": {
+                      "type": "string"
+                    },
+                    "tu": {
+                      "type": "string"
+                    },
+                    "thanh": {
+                      "type": "string"
+                    },
+                    "ly_do": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "flags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "loai",
+                    "doan",
+                    "ly_do"
+                  ],
+                  "properties": {
+                    "loai": {
+                      "enum": [
+                        "can_xem_lai",
+                        "tu_kho_tts"
+                      ]
+                    },
+                    "doan": {
+                      "type": "string"
+                    },
+                    "ly_do": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "RunReport": {
+      "type": "object",
+      "required": [
+        "kind",
+        "run_id",
+        "project",
+        "created_at",
+        "status",
+        "noi_dung",
+        "app_version",
+        "config_hash",
+        "config",
+        "versions",
+        "inputs",
+        "steps"
+      ],
+      "properties": {
+        "kind": {
+          "const": "RunReport"
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "run_dir": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        },
+        "project_file": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "DONE",
+            "DONE_WITH_WARNINGS",
+            "INCOMPLETE",
+            "FAILED"
+          ]
+        },
+        "inputs": {
+          "type": "object",
+          "required": [
+            "kich_ban",
+            "media"
+          ],
+          "properties": {
+            "kich_ban": {
+              "$ref": "#/$defs/FileFingerprint"
+            },
+            "media": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FileFingerprint"
+              }
+            }
+          }
+        },
+        "config": {
+          "type": "object"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "status"
+            ],
+            "properties": {
+              "name": {
+                "enum": [
+                  "chuan_hoa",
+                  "giong_doc",
+                  "phu_de",
+                  "kiem_truoc",
+                  "dung_video",
+                  "kiem_tra"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "DONE",
+                  "FAILED",
+                  "SKIPPED",
+                  "NOT_RUN"
+                ]
+              },
+              "outputs": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "error": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "duration_s": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "FAILED"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "error"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "SKIPPED",
+                        "NOT_RUN"
+                      ]
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "reason"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "app_version": {
+          "type": "string"
+        },
+        "config_hash": {
+          "type": "string",
+          "minLength": 8
+        },
+        "noi_dung": {
+          "enum": [
+            "chua_danh_gia",
+            "chap_nhan",
+            "tu_choi"
+          ],
+          "description": "Đánh giá nội dung nghe nhìn — chỉ người dùng đặt được; máy chỉ kiểm kỹ thuật"
+        },
+        "xem_truoc": {
+          "type": "boolean"
+        },
+        "chay_lai_tu": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ho_so": {
+          "type": "object",
+          "properties": {
+            "luu_van_ban": {
+              "type": "boolean"
+            }
+          }
+        },
+        "versions": {
+          "type": "object",
+          "required": [
+            "tan_studio",
+            "tan_studio_ma_nguon",
+            "tep_skill",
+            "quy_tac_ap_dung"
+          ]
+        }
+      }
+    },
+    "FileFingerprint": {
+      "type": "object",
+      "required": [
+        "path",
+        "size",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer"
+        },
+        "sha256": {
+          "type": "string"
+        },
+        "sha256_mot_phan": {
+          "type": "boolean"
+        },
+        "mtime": {
+          "type": "string"
+        }
+      }
+    },
+    "Finding": {
+      "type": "object",
+      "required": [
+        "id",
+        "ma",
+        "muc_do",
+        "buoc",
+        "vi_tri",
+        "ly_do",
+        "goi_y",
+        "dau_van_tay"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ma": {
+          "type": "string"
+        },
+        "muc_do": {
+          "enum": [
+            "loi",
+            "canh_bao",
+            "thong_tin"
+          ]
+        },
+        "buoc": {
+          "enum": [
+            "chuan_hoa",
+            "giong_doc",
+            "phu_de",
+            "dung_video"
+          ]
+        },
+        "vi_tri": {
+          "type": "object",
+          "properties": {
+            "doan": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "tu": {
+              "type": "string"
+            },
+            "thoi_diem": {
+              "type": "number"
+            },
+            "cue": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          }
+        },
+        "ly_do": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goi_y": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dau_van_tay": {
+          "type": "string"
+        }
+      }
+    },
+    "Observation": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id",
+        "lan_chay",
+        "luc",
+        "loai",
+        "buoc",
+        "vi_tri",
+        "mo_ta",
+        "uu_tien",
+        "pham_vi_de_nghi",
+        "nguon",
+        "dau_van_tay"
+      ],
+      "properties": {
+        "kind": {
+          "const": "Observation"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^qs-"
+        },
+        "lan_chay": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "luc": {
+          "type": "string"
+        },
+        "loai": {
+          "enum": [
+            "script",
+            "phat_am",
+            "giong_doc",
+            "hinh_anh",
+            "chon_canh",
+            "nhip_dung",
+            "phu_de",
+            "am_thanh",
+            "thuong_hieu",
+            "ky_thuat"
+          ]
+        },
+        "buoc": {
+          "type": "string"
+        },
+        "vi_tri": {
+          "type": "object"
+        },
+        "mo_ta": {
+          "type": "string",
+          "minLength": 1
+        },
+        "de_xuat": {
+          "type": "string"
+        },
+        "uu_tien": {
+          "enum": [
+            "cao",
+            "trung_binh",
+            "thap"
+          ]
+        },
+        "pham_vi_de_nghi": {
+          "enum": [
+            "du_an",
+            "chung"
+          ]
+        },
+        "nguon": {
+          "enum": [
+            "nguoi_dung",
+            "tu_dong"
+          ]
+        },
+        "phat_hien": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dau_van_tay": {
+          "type": "string"
+        },
+        "trung_voi": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lap_lai_tu_lan_chay": {
+          "type": "array"
+        },
+        "quy_tac": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "Verdict": {
+      "type": "object",
+      "required": [
+        "kind",
+        "lan_chay",
+        "ket_luan",
+        "luc"
+      ],
+      "properties": {
+        "kind": {
+          "const": "Verdict"
+        },
+        "lan_chay": {
+          "type": "string"
+        },
+        "ket_luan": {
+          "enum": [
+            "chap_nhan",
+            "tu_choi"
+          ]
+        },
+        "ghi_chu": {
+          "type": "string"
+        },
+        "luc": {
+          "type": "string"
+        }
+      }
+    },
+    "FindingVerdict": {
+      "type": "object",
+      "required": [
+        "kind",
+        "lan_chay",
+        "phat_hien",
+        "ket_luan"
+      ],
+      "properties": {
+        "kind": {
+          "const": "FindingVerdict"
+        },
+        "ket_luan": {
+          "enum": [
+            "dung",
+            "sai"
+          ]
+        }
+      }
+    },
+    "Rule": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id",
+        "loai",
+        "trang_thai",
+        "bat",
+        "pham_vi",
+        "dieu_kien",
+        "bien_doi",
+        "vi_du",
+        "kiem_thu",
+        "nguon",
+        "phien_ban",
+        "lich_su"
+      ],
+      "properties": {
+        "kind": {
+          "const": "Rule"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^qt-"
+        },
+        "loai": {
+          "const": "phat_am"
+        },
+        "trang_thai": {
+          "enum": [
+            "de_xuat",
+            "mau_thuan",
+            "da_duyet",
+            "tu_choi"
+          ]
+        },
+        "bat": {
+          "type": "boolean"
+        },
+        "pham_vi": {
+          "enum": [
+            "du_an",
+            "ca_nhan",
+            "he_thong"
+          ]
+        },
+        "dieu_kien": {
+          "type": "object",
+          "required": [
+            "tu"
+          ],
+          "properties": {
+            "tu": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "bien_doi": {
+          "type": "object",
+          "required": [
+            "doc_thanh"
+          ],
+          "properties": {
+            "doc_thanh": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "vi_du": {
+          "type": "object",
+          "required": [
+            "truoc",
+            "sau"
+          ]
+        },
+        "kiem_thu": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "dau_vao",
+              "ky_vong"
+            ]
+          }
+        },
+        "xac_nhan": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "boi": {
+              "const": "nguoi-dung"
+            }
+          }
+        },
+        "nguon": {
+          "type": "object",
+          "required": [
+            "quan_sat"
+          ]
+        },
+        "phien_ban": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "lich_su": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "luc",
+              "hanh_dong",
+              "phien_ban"
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "trang_thai": {
+                "const": "da_duyet"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "xac_nhan"
+            ],
+            "properties": {
+              "xac_nhan": {
+                "type": "object",
+                "required": [
+                  "boi",
+                  "luc"
+                ]
+              },
+              "kiem_thu": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "trang_thai": {
+                "not": {
+                  "const": "da_duyet"
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "bat": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

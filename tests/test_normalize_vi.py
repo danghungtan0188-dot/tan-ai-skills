@@ -70,6 +70,20 @@ class TestNormalizeNumbers(unittest.TestCase):
     def test_khong_dung_vao_chu(self):
         self.check("Ủy ban nhân dân xã", "Ủy ban nhân dân xã")
 
+    def test_gio(self):
+        self.check("lúc 14:30 và 7h", "lúc mười bốn giờ ba mươi phút và bảy giờ")
+
+    def test_tien_te(self):
+        self.check("giá 50.000đ, $5", "giá năm mươi nghìn đồng, năm đô la Mỹ")
+
+    def test_don_vi(self):
+        self.check("dài 5 km, rộng 2 ha", "dài năm ki lô mét, rộng hai héc ta")
+
+    def test_mo_ho_thi_giu_nguyen(self):
+        # Khong chac doc the nao -> khong doan; tan_studio se danh dau can xem lai.
+        for src in ("tăng 2.5 lần", "Quyết định 1402/QĐ-UBND", "tỷ số 1/2"):
+            self.check(src, src)
+
 
 class TestNormalizeText(unittest.TestCase):
     def test_viet_tat_roi_toi_so(self):

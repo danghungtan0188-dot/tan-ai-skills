@@ -1,0 +1,16 @@
+{
+  "_ghi_chu": "Tiêu chí nghiệm thu cho workflow mẫu. Chạy: python -m tan_studio nghiem-thu. Đổi kịch bản mẫu thì sửa tiêu chí ở đây cho khớp.",
+  "du_an": "du-an-thu-nghiem.json",
+  "tep": ["du-an-thu-nghiem.json", "kich-ban.txt"],
+  "van_ban_chuan_hoa_phai_co": [
+    "ngày hai mươi hai tháng năm năm hai nghìn không trăm hai mươi sáu",
+    "Ủy ban nhân dân",
+    "chín mươi tám phần trăm",
+    "một tỷ năm trăm triệu đồng",
+    "mười một giờ ba mươi phút"
+  ],
+  "van_ban_chuan_hoa_khong_duoc_co": ["UBND", "BHYT", "98%", "11h30"],
+  "phat_hien_phai_co": ["tu:VNeID", "tu:ủy"],
+  "khung": "1080x1920",
+  "phu_de_phai_co": "22-5-2026"
+}

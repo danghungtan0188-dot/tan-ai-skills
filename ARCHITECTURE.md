@@ -76,6 +76,8 @@ Video
 | Rules | `rules/` | Tài liệu người đọc, được agent/command/skill tham chiếu bằng đường dẫn. |
 | Data contracts | `data-contracts/` | JSON Schema, kiểm được bằng test. |
 | Script dùng chung | `scripts/` | Dùng bởi cả hook, command và agent. |
+| CLI workflow | `tan_studio/` | `python -m tan_studio`: nối chuẩn hoá → TTS → phụ đề → MP4 → QA bằng cách nạp lại script trong `skills/` và `scripts/`, không chép code. Hợp đồng dữ liệu: `data-contracts/studio.schema.json`. |
+| Remotion engine | `remotion-studio/` | Composition React `AttNews`; nhận props JSON cùng audio/SRT/ảnh/clip từ `tan_studio` hoặc skill video, render song song với HyperFrames. |
 | Tests | `tests/` | `python -m unittest discover -s tests` |
 
 **Quy ước đường dẫn:** agent và command được nạp như prompt, khi Claude đọc file thì cwd là gốc repo. Vì vậy mọi liên kết tới file cấp repo phải **tính từ gốc repo** (`rules/global.md`), không dùng `../`. Liên kết trong nội bộ một skill thì tính từ thư mục skill (`references/frontend.md`). Test `tests/test_architecture.py` ép quy ước này.

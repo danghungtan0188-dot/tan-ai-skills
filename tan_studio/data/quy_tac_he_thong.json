@@ -1,0 +1,4 @@
+{
+  "_ghi_chu": "Quy tắc phạm vi HỆ THỐNG (mọi dự án). Chỉ thêm bằng `python -m tan_studio quy-tac duyet ... --pham-vi he_thong`. Mỗi quy tắc có nguồn, người xác nhận, phiên bản, lịch sử và ca kiểm thử — tests/test_tan_studio.py chạy lại toàn bộ.",
+  "quy_tac": []
+}

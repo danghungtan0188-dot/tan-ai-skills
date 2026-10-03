@@ -113,36 +113,73 @@ def _month(m: int) -> str:
     return "tư" if m == 4 else number_to_words(m)
 
 
-_FULL_DATE = re.compile(r"\b(\d{1,2})([/.-])(\d{1,2})\2(\d{4})\b")
-_DAY_MONTH = re.compile(r"(?<=ngày )(\d{1,2})[/-](\d{1,2})\b(?![/.-]\d)")
-_MONTH_YEAR = re.compile(r"(?<=tháng )(\d{1,2})/(\d{4})\b")
-_NUMBER = re.compile(r"(\d{1,3}(?:\.\d{3})+(?![\d.])|\d+(?:,\d+)?)(\s?%)?")
+def _full_date(m: re.Match) -> str:
+    d, mo, y = int(m.group(1)), int(m.group(3)), int(m.group(4))
+    if not (1 <= d <= 31 and 1 <= mo <= 12):
+        return m.group(0)
+    prefix = "" if m.string[: m.start()].endswith("ngày ") else "ngày "
+    return f"{prefix}{number_to_words(d)} tháng {_month(mo)} năm {number_to_words(y)}"
+
+
+def _time(m: re.Match) -> str:
+    h, mi = int(m.group(1)), int(m.group(2) or m.group(3) or 0)
+    if h > 23 or mi > 59:
+        return m.group(0)
+    return f"{number_to_words(h)} giờ" + (f" {number_to_words(mi)} phút" if mi else "")
+
+
+def _number(m: re.Match) -> str:
+    raw = m.group(1)
+    if "," in raw:
+        whole, frac = raw.split(",")
+        words = f"{_digits_or_number(whole)} phẩy {_digits_or_number(frac)}"
+    else:
+        words = _digits_or_number(raw.replace(".", ""))
+    return words + (" phần trăm" if m.group(2) else "")
+
+
+_AMOUNT = r"(\d[\d.,]*\d|\d)"
+_UNITS = {
+    "km/h": "ki lô mét trên giờ", "km²": "ki lô mét vuông", "km2": "ki lô mét vuông",
+    "m²": "mét vuông", "m2": "mét vuông", "m³": "mét khối", "m3": "mét khối",
+    "km": "ki lô mét", "cm": "xen ti mét", "mm": "mi li mét", "m": "mét",
+    "kg": "ki lô gam", "g": "gam", "ha": "héc ta", "ml": "mi li lít",
+    "kW": "ki lô oát", "MW": "mê ga oát", "°C": "độ xê",
+}
+_UNIT_RE = "|".join(re.escape(u) for u in sorted(_UNITS, key=len, reverse=True))
+
+# (ten, mo ta, regex, ham thay). Chay theo thu tu: tien/don vi doi ky hieu thanh chu
+# nhung giu chu so, de quy tac "so" doc sau cung. Dang mo ho ("2.5", "1402/QĐ",
+# "1/2" khong co chu "ngày") khong khop quy tac nao -> giu nguyen chu so.
+NUMBER_RULES = [
+    ("ngay_thang_nam", "dd/mm/yyyy, dd-mm-yyyy, dd.mm.yyyy -> ngày .. tháng .. năm ..",
+     re.compile(r"\b(\d{1,2})([/.-])(\d{1,2})\2(\d{4})\b"), _full_date),
+    ("ngay_thang", "dd/mm đứng sau chữ 'ngày'",
+     re.compile(r"(?<=ngày )(\d{1,2})[/-](\d{1,2})\b(?![/.-]\d)"),
+     lambda m: f"{number_to_words(int(m.group(1)))} tháng {_month(int(m.group(2)))}"),
+    ("thang_nam", "mm/yyyy đứng sau chữ 'tháng'",
+     re.compile(r"(?<=tháng )(\d{1,2})/(\d{4})\b"),
+     lambda m: f"{_month(int(m.group(1)))} năm {number_to_words(int(m.group(2)))}"),
+    ("gio", "14:30, 7h30, 7h -> .. giờ .. phút",
+     re.compile(r"\b(\d{1,2})(?::(\d{2})|h(\d{2})?)\b(?!:\d)"), _time),
+    ("tien_te", "đ, VNĐ, VND, USD, $, € -> đồng / đô la Mỹ / ơ rô",
+     re.compile(rf"\$\s?{_AMOUNT}|€\s?{_AMOUNT}|{_AMOUNT}\s?(đ|VNĐ|VND|USD|EUR|€)(?!\w)"),
+     lambda m: (m.group(1) and f"{m.group(1)} đô la Mỹ") or (m.group(2) and f"{m.group(2)} ơ rô")
+     or f"{m.group(3)} " + {"USD": "đô la Mỹ", "EUR": "ơ rô", "€": "ơ rô"}.get(m.group(4), "đồng")),
+    ("don_vi", "km, m², kg, ha, °C... đứng sau số -> chữ",
+     re.compile(rf"{_AMOUNT}\s?({_UNIT_RE})(?![\w²³/])"),
+     lambda m: f"{m.group(1)} {_UNITS[m.group(2)]}"),
+    ("so", "số nguyên, số có dấu chấm hàng nghìn, số thập phân dấu phẩy, phần trăm",
+     re.compile(r"(?<![\w/])(?<!\d\.)(\d{1,3}(?:\.\d{3})+(?![\d.])|\d+(?:,\d+)?)(?![\w/])(?!\.\d)(\s?%)?"),
+     _number),
+]
 
 
 def normalize_numbers(text: str) -> str:
-    """Doi ngay thang, so, so thap phan, phan tram thanh chu."""
-
-    def full_date(m: re.Match) -> str:
-        d, mo, y = int(m.group(1)), int(m.group(3)), int(m.group(4))
-        if not (1 <= d <= 31 and 1 <= mo <= 12):
-            return m.group(0)
-        prefix = "" if text[: m.start()].endswith("ngày ") else "ngày "
-        return f"{prefix}{number_to_words(d)} tháng {_month(mo)} năm {number_to_words(y)}"
-
-    out = _FULL_DATE.sub(full_date, text)
-    out = _DAY_MONTH.sub(lambda m: f"{number_to_words(int(m.group(1)))} tháng {_month(int(m.group(2)))}", out)
-    out = _MONTH_YEAR.sub(lambda m: f"{_month(int(m.group(1)))} năm {number_to_words(int(m.group(2)))}", out)
-
-    def number(m: re.Match) -> str:
-        raw = m.group(1)
-        if "," in raw:
-            whole, frac = raw.split(",")
-            words = f"{_digits_or_number(whole)} phẩy {_digits_or_number(frac)}"
-        else:
-            words = _digits_or_number(raw.replace(".", ""))
-        return words + (" phần trăm" if m.group(2) else "")
-
-    return _NUMBER.sub(number, out)
+    """Doi ngay thang, gio, tien, don vi, so, phan tram thanh chu."""
+    for _, _, regex, fn in NUMBER_RULES:
+        text = regex.sub(fn, text)
+    return text
 
 
 def normalize_text(text: str, rules: Optional[List[dict]] = None) -> str:

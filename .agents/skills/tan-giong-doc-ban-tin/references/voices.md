@@ -30,6 +30,24 @@ Nguồn: `src/vieneu/assets/voices_v3_turbo.json` trong repo [pnnbao97/VieNeu-TT
 | **Minh Triết** | **Nam** | **Nam** | **tin_tuc** |
 | **Thùy Dung** | **Nữ** | **Nam** | **tin_tuc** |
 
+## 11 giọng thêm (phải nạp: `python scripts/import_hf_voices.py`)
+
+Gói `vieneu` 3.2.x chỉ kèm 14 giọng ở trên. Repo model chính thức [pnnbao-ump/VieNeu-TTS-v3-Turbo](https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo) (thư mục `gguf/voices/`, Apache-2.0) có thêm 11 giọng cùng định dạng. Script tải về và ghi vào kho giọng `~/.tan-giong-doc-ban-tin/voices/giong_cua_toi.json` (sao lưu trước khi ghi). Vùng miền và phong cách lấy từ `manifest.json` của repo model.
+
+| Tên giọng | Giới tính | Vùng | Phong cách |
+|---|---|---|---|
+| Mỹ Duyên | Nữ | Nam | doc_truyen |
+| Kim Thanh | Nữ | Nam | doc_truyen |
+| Đức Trí | Nam | Nam | doc_truyen |
+| Adam | Nam | Nam | tu_nhien |
+| Ngọc Huyền | Nữ | Bắc | tu_nhien |
+| Quỳnh Anh | Nữ | Bắc | doc_truyen |
+| Minh Quân Pro | Nam | Bắc | tu_nhien |
+| Anh Khôi | Nam | Bắc | doc_truyen |
+| Thiền Tâm Đức | Nam | Bắc | doc_truyen |
+| Mạnh Dũng | Nam | Bắc | tu_nhien |
+| Adam bựa | Nam | Bắc | tu_nhien |
+
 Dùng tên giọng trực tiếp qua `--voice "Tên giọng"`, ví dụ `--voice "Xuân Vĩnh"` để có giọng nam miền Nam phong cách tự nhiên (không phải tin tức), hoặc `--voice "Thục Đoan"` cho giọng nữ miền Nam phong cách kể chuyện.
 
 Style (`--style`) áp dụng độc lập với tên giọng — có thể ép `--style tu_nhien` lên giọng `Minh Triết` nếu muốn giọng đọc tin nghe tự nhiên hơn, dù giọng này vốn được huấn luyện cho phong cách tin_tuc là chính.

@@ -1,0 +1,18 @@
+{
+  "_ghi_chu": "Bộ câu mẫu đánh giá TTS. tu_khoa viết dạng chữ thường đã chuẩn hoá; đạt khi đa số lượt ASR nghe thấy MỌI từ khoá. Thêm câu mới thì tăng phien_ban để so sánh giữa các lần chạy cho đúng.",
+  "phien_ban": 1,
+  "cau": [
+    {"id": "ngay-01", "nhom": "ngay_thang", "van_ban": "Ông sinh ngày 22-5-2003 tại xã An Thạnh Thủy.", "tu_khoa": ["hai mươi hai tháng năm", "hai nghìn không trăm lẻ ba"], "ghi_chu": "lỗi cũ: '22 tháng 5203'"},
+    {"id": "ngay-02", "nhom": "ngay_thang", "van_ban": "Hội nghị diễn ra ngày 26/9 và kết thúc tháng 4/2026.", "tu_khoa": ["hai mươi sáu tháng chín", "tháng tư"]},
+    {"id": "so-01", "nhom": "so", "van_ban": "Quyết định số 1402 ngày 26 đã được ban hành.", "tu_khoa": ["một nghìn bốn trăm lẻ hai", "ngày hai mươi sáu"], "ghi_chu": "lỗi cũ: hai số dính nhau"},
+    {"id": "so-02", "nhom": "so", "van_ban": "Tỷ lệ đạt 98%, tăng 3,5 lần so với năm trước.", "tu_khoa": ["chín mươi tám phần trăm", "ba phẩy năm"]},
+    {"id": "tien-01", "nhom": "tien_te", "van_ban": "Tổng kinh phí là 1.500.000 đồng, mỗi suất 50.000đ.", "tu_khoa": ["một triệu năm trăm nghìn", "năm mươi nghìn đồng"]},
+    {"id": "gio-01", "nhom": "gio", "van_ban": "Buổi lễ bắt đầu lúc 7h30 sáng.", "tu_khoa": ["bảy giờ ba mươi"]},
+    {"id": "viettat-01", "nhom": "viet_tat", "van_ban": "UBND xã phối hợp với CSGT bảo đảm ATGT.", "tu_khoa": ["ủy ban nhân dân", "cảnh sát giao thông", "an toàn giao thông"]},
+    {"id": "ten-01", "nhom": "ten_rieng", "van_ban": "Dự hội nghị có đồng chí Nguyễn Hữu Minh.", "tu_khoa": ["nguyễn hữu minh"], "ghi_chu": "'Hữu' hay bị nuốt thành 'Hủ'"},
+    {"id": "ten-02", "nhom": "ten_rieng", "van_ban": "Đồng chí Mai Lưu Quốc Đạt phát biểu chỉ đạo.", "tu_khoa": ["mai lưu quốc đạt"], "ghi_chu": "vần 'ưu' là điểm yếu của giọng Minh Triết"},
+    {"id": "uy-01", "nhom": "tu_kho", "van_ban": "Phó Bí thư Thường trực Đảng ủy xã chủ trì.", "tu_khoa": ["đảng ủy"], "ghi_chu": "chữ 'ủy' hay thành 'Nguyễn'"},
+    {"id": "dau-cau-01", "nhom": "dau_cau", "van_ban": "Người dân phấn khởi; chính quyền vào cuộc, kịp thời hỗ trợ!", "tu_khoa": ["phấn khởi", "kịp thời hỗ trợ"]},
+    {"id": "co-phan-01", "nhom": "tu_kho", "van_ban": "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam.", "tu_khoa": ["cổ phần"], "ghi_chu": "hay thành 'của phòng'"}
+  ]
+}

@@ -8,3 +8,7 @@ __pycache__/
 # File media và sản phẩm làm việc — nặng, không thuộc mã nguồn skill
 /dongthap_reel.mp4
 /outputs/
+
+# Kết quả chạy thử của tan_studio
+/tan_studio/vi-du/ket-qua/
+/tan_studio/vi-du/hoc/

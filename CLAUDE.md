@@ -78,6 +78,9 @@ skills/             26 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ +
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
 scripts/            script dùng chung (sync_skills.py, video_qa.py)
+tan_studio/         CLI script→giọng→phụ đề→MP4 (python -m tan_studio), gọi lại code trong skills/
+do-hoa/             Remotion: intro, số liệu, lower-third, chữ chạy — tan_studio gọi qua `do-hoa` / mục "do_hoa"
+remotion-studio/    Engine Remotion React nhận audio/SRT/media qua props JSON; chạy song song HyperFrames
 tests/              python -m unittest discover -s tests
 ```
 
@@ -88,6 +91,7 @@ tests/              python -m unittest discover -s tests
 | code, API, database, UI, bug, test | **APP** | `app-planner → app-builder → code-reviewer → app-tester → security-reviewer` |
 | video, dựng, phụ đề, hiệu ứng, bản tin | **VIDEO** | `video-analyzer → video-editor → video-reviewer` |
 | nhiều clip thô → một bản tin | **VIDEO** | `find_clips → survey_rushes → chọn cảnh → build_edit_plan → DUYỆT → assemble → qa --plan` |
+| script → giọng đọc → video có phụ đề, chạy một lệnh | **STUDIO** | `python -m tan_studio chay <du-an.json>` — xem `tan_studio/README.md` |
 | skill, agent, command, hook, tài liệu | **REPO** | tự làm + `python scripts/sync_skills.py --check` |
 
 Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.

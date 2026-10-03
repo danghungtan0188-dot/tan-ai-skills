@@ -37,7 +37,7 @@ COMMAND → AGENT → SKILL → RULES → IMPLEMENTATION → HOOK → TEST/REVIE
 | Hooks | `.claude/hooks/` + `.claude/settings.json` | 3 |
 | Skills | `skills/` (nguồn chuẩn) | 25 |
 | Rules | `rules/` | 4 |
-| Data contracts | `data-contracts/` | 2 schema |
+| Data contracts | `data-contracts/` | 3 schema |
 | Tests | `tests/` | 66 test |
 
 **Command gọi được:**
@@ -56,6 +56,20 @@ Chi tiết đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md). Bản đồ ngắn 
 python -m unittest discover -s tests    # test kiến trúc + hook + data contract
 python scripts/sync_skills.py --check   # 3 bản skill đã khớp chưa
 ```
+
+## Chạy cả luồng bằng một lệnh: tan_studio
+
+Kịch bản → chuẩn hoá → giọng đọc → phụ đề → MP4 → QA, có báo cáo từng lần chạy và học có kiểm soát.
+Hướng dẫn đầy đủ: [tan_studio/README.md](tan_studio/README.md).
+
+```bash
+python -m tan_studio kiem-tra
+python -m tan_studio chay tan_studio/vi-du/du-an.json
+```
+
+## Engine Remotion dùng chung
+
+`remotion-studio/` là project Remotion chạy thật, dùng song song với HyperFrames. Composition `AttNews` nhận props JSON, audio, SRT, ảnh hoặc clip do pipeline hiện tại tạo ra. Xem [remotion-studio/README.md](remotion-studio/README.md) để preview, chuẩn bị tài nguyên và render.
 
 ## Gọi đúng skill video (bảng định tuyến)
 

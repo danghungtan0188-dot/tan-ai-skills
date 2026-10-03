@@ -33,7 +33,8 @@ def load_schemas() -> dict[str, dict]:
 
 class TestSchemas(unittest.TestCase):
     def test_co_du_hai_schema(self):
-        self.assertEqual(sorted(load_schemas()), ["app.schema.json", "video.schema.json"])
+        self.assertEqual(sorted(load_schemas()),
+                         ["app.schema.json", "studio.schema.json", "video.schema.json"])
 
     def test_schema_hop_le(self):
         if jsonschema is None:

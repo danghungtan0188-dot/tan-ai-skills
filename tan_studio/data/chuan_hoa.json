@@ -1,0 +1,10 @@
+{
+  "_ghi_chu": "tu_kho_tts: từ mà giọng VieNeu hay đọc sai dù văn bản đúng — chỉ gắn cờ, không sửa chữ. Nguồn: các lần làm bản tin tháng 8-9/2026.",
+  "tu_kho_tts": {
+    "ủy": "giọng Minh Triết hay đọc thành 'Nguyễn'/'quý' — tách câu ở dấu phẩy, đọc nhiều bản rồi lọc",
+    "uỷ": "giọng Minh Triết hay đọc thành 'Nguyễn'/'quý' — tách câu ở dấu phẩy, đọc nhiều bản rồi lọc",
+    "Hữu": "hay bị nuốt thành 'Hủ' khi đứng trước tên khác — đọc nhiều bản rồi lọc",
+    "Lưu": "vần 'ưu' là điểm yếu thứ hai của giọng Minh Triết",
+    "cổ phần": "hay thành 'của phòng' — thêm dấu phẩy ngay sau giúp đúng 3/4 lần"
+  }
+}
