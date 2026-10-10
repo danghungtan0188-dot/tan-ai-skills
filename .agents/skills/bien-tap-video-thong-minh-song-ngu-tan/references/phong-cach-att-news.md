@@ -190,6 +190,32 @@ Hai điều phải nhớ:
 | Dùng ảnh chụp màn hình nhỏ làm logo nền tảng | 53 px là quá thấp cho phát sóng — xin file gốc lớn |
 | `x264` báo lỗi "width not divisible by 2" | mọi kích thước phải chẵn (1030 chứ không 1031) |
 | Tin tang lễ, liệt sĩ mà outro có biểu tượng like | dùng `make_outro.py --no-like` |
+| Chấm TTS bằng whisper `small`: giọng nữ miền Nam bị nghe "vùng"→"phùng", "khốc"→"khúc", "làng"→"lạng", "Thạnh"→"thanh", "Nhứt"→"nhất" ở mọi bản | `small` chỉ để lọc thô; bản được chọn phải nghe lại bằng `medium` trước khi kết luận sai. Lần An Thạnh Thủy, `medium` xác nhận đúng cả 5 chữ và bắt được lỗi thật "cách mạng"→"các bạn" |
+| `tan_studio do-hoa --out x.mov` lỗi "FFmpeg quit with code 3236495362" (ffmpeg kèm Remotion hỏng khi ghép ProRes 4444 trên máy này) | `npx remotion render ... --sequence --image-format=png` rồi đắp bằng ffmpeg hệ thống; tên PNG đổi số chữ số theo số khung (90 khung: `element-%02d`, 108 khung: `element-%03d`) |
+| Intro Remotion là thẻ nền đặc, đè lên giây đầu sẽ che cảnh mở và đọc chồng lên lời bình | đặt intro TRƯỚC lời bình (lệch giọng đọc đúng bằng thời lượng intro, 3,0 s), và chữ `phuDe` của intro không trùng phụ đề câu đầu |
+| `tan_studio dung_video` ép 30 fps và chia đều media theo số file — footage 50p dựng theo mốc lời bình bị giật và lệch cảnh | dựng theo mốc từng cụm thì tự ghép ffmpeg ở 25p; chỉ dùng `tan_studio` khi chia đều là chấp nhận được |
+| `zoompan` trên ảnh có `-loop 1` nhân khung: cảnh 6,7 s thành video 1166 s; ảnh 4:3 vào khung 16:9 bị kéo méo | ảnh đơn không `-loop`, `d=` = số khung; `crop` về 16:9 trước `zoompan`; zoom nhẹ (≤ 1,08) vào giữa để không mất chữ ở mép bản đồ |
+| Clip TikTok tải lại có sẵn hiệu ứng chuyển cảnh, viền đen bên trong khung (cropdetect không thấy) | xem contact sheet từng giây trước khi chọn đoạn |
+| `adelay` + `apad` trong filter_complex rồi mã AAC tạo lỗ hổng mốc thời gian (2,50→4,06 s): trình phát liền mạch sẽ cho giọng vào sớm ~1,3 s so với hình và phụ đề; `video_qa.py` không bắt | dựng sẵn WAV đủ dài (im lặng + giọng + im lặng) bằng code rồi map thẳng; kiểm `ffprobe -show_entries packet=pts_time` không có khoảng > 0,03 s |
+| Sửa nhỏ (banner, phần kết) mà render lại cả video 1:54 trong một lượt `filter_complex` 19 cảnh: 10–15 phút mỗi lần, làm lại 6 lần | dựng theo phần, cache từng phần đã render, chỉ render lại phần đổi rồi nối bằng `concat -c copy` |
+| Máy treo màn hình khi render nặng | giới hạn affinity 2 nhân + ưu tiên thấp (`creationflags=0x4000` / PowerShell `PriorityClass`), x264 `-threads 2`; filter của ffmpeg tự mở thêm luồng nên phải giới hạn số nhân, không chỉ `-threads` |
+| `xfade` lỗi -22 "timebase do not match" khi ghép mp4 dựng sẵn (timebase 1/12800) với cảnh 1/25 | thêm `fps=25,settb=1/25` cho mọi input trước `xfade` |
+| Render lại đè lên file đã giao: lỗi giữa chừng làm hỏng bản người dùng đang dùng | render ra tên tạm, kiểm QA xong mới đổi tên đè |
+| Font Georgia trên Windows thiếu dấu tiếng Việt chồng: "Hầm" thành "Hâ`m" | chữ có chân dùng `'Times New Roman', Cambria`; luôn xuất 1 khung PNG kiểm dấu trước khi render |
+| Windows Application Control chặn `numba` (DLL load failed) nên `librosa` (yin, resample) hỏng | đo F0 bằng tự tương quan numpy (khung 40 ms, ngưỡng 0,45); đổi cách đo thì đo lại cho mọi bản trước khi so |
+| `loudnorm` 2 lượt với lời phỏng vấn tự chuyển sang dynamic: LRA 9,6 thành 5,5 | lời nói hiện trường chỉ tăng gain (đo I trước) + `alimiter` nhẹ; kiểm lại LRA (lần này 8,9) |
+| Phủ b-roll lên đúng khúc nhân chứng chỉ tay vào hiện vật (giây 13–17): người dùng phải nhắc | trước khi đặt b-roll lên lời phỏng vấn, dò chuyển động vùng tay (khác biệt khung 4 fps) để tìm cử chỉ, giữ mặt nhân chứng ở khúc đó |
+| `xfade` gặp một cảnh ngắn hơn `offset + duration` thì lặng lẽ bỏ hết các cảnh sau, không báo lỗi (hình 172 s, tiếng 198 s) | dựng từng cảnh xong `ffprobe` ngay, cảnh hụt `< dd − 0,05 s` thì dừng; cuối cùng so hình–tiếng (`video_qa.py` kiểm `av_length`, lệch > 0,5 s là FAIL) |
+| Chuỗi PNG Remotion qua `tpad` + `trim=duration` rớt khung (17,08 s ra 16,16 s); `blend` sau `settb=1/25` làm hỏng mốc thời gian (15,2 s ra 13,4 s) | cảnh PNG: `fps=25,settb=1/25,…,tpad=stop_mode=clone:stop_duration=2` rồi cắt bằng `-t`, **không** `trim`; cảnh `blend` không `settb`, `tpad` nền trước rồi `blend=…:shortest=1` |
+| Khóa cache cảnh chỉ băm lệnh lọc, không có độ dài: câu đọc dài thêm 0,2 s vẫn lấy lại file cũ ngắn hơn | đưa độ dài cảnh `dd` vào khóa băm |
+| Bộ chấm TTS ghi đè `chon.json` bằng bản máy tự chọn, mất bộ đã duyệt tay | bộ đã duyệt lưu file riêng (`chon_duyet.json`), ghép giọng chỉ đọc file đó |
+| VieNeu phát thêm tiếng ngắn sau quãng lặng cuối câu (3/33 câu); cắt lặng theo biên độ > 0,01 giữ lại nên người xem nghe "đọc lạ" | cắt bằng `scripts/cat_gon_tts.py` (lặng ≥ 0,35 s, RMS < 0,02, đuôi < 0,6 s); sau ghép, chạy lại hàm trên từng câu phải ra 0 đuôi lạ |
+| Cụm TTS chỉ 2 chữ ("bệnh binh") rất bấp bênh: 9/10 bản thành "bình tĩnh" | tách cụm ngắn vẫn được nhưng sinh ≥ 10 bản, chọn bằng medium nghe 3 lần |
+| ASR hội thoại phòng vọng: whisper lặp một câu suốt clip, bịa "hãy subscribe…" | cắt khúc 20 s nghe **độc lập** (`condition_on_previous_text=False`), medium, lọc `highpass=120,lowpass=6000,afftdn,dynaudnorm`; chỉ dùng khúc mà 3 lần nghe khớp nhau; dòng chứa "subscribe/đăng ký kênh" là bịa |
+| Một lệnh ffmpeg gộp ~26 đầu vào (xfade + đồ họa) treo cứng 2 lần: CPU 0 %, file đứng ở 38 MB rồi 316 MB | mỗi cảnh render riêng 1 đầu vào (cache), `xfade` theo cụm ≤ 5, lượt cuối mới đắp đồ họa/phụ đề/tiếng; xuất ra tên tạm `_dang_render_` rồi đổi tên |
+| Whisper với `initial_prompt` chép nguyên câu gợi ý thành lời thoại | khi nghe kiểm thì không dùng `initial_prompt`; muốn gợi từ khó thì so bằng danh sách từ bắt buộc sau khi nghe |
+| File danh sách việc Remotion viết trên Windows có `` cuối dòng: tên composition sai, render không chạy | đọc qua `tr -d ''` hoặc ghi file bằng `newline="
+"` |
 
 Thông số ATT NEWS trong `tro-ly-video-ban-tin-tan/references/att-news.md` ghi icon mạng xã hội
 "4–8% chiều rộng", lệch với thực tế 194 px (10%). **File này là nguồn chuẩn.**

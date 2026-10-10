@@ -29,6 +29,7 @@ VIDEO_EXT = {".mp4", ".mov", ".mkv", ".webm", ".avi", ".m4v"}
 AUDIO_EXT = {".mp3", ".wav", ".m4a", ".aac", ".flac", ".ogg"}
 MIN_BYTES = 1024
 DURATION_TOLERANCE = 0.1  # giay
+AV_TOLERANCE = 0.5  # giay — hinh lech tieng qua muc nay la mat canh
 
 
 def probe(path: Path) -> dict:
@@ -119,12 +120,14 @@ def summarise_probe(data: dict) -> dict:
             "height": int(video.get("height", 0)),
             "pix_fmt": video.get("pix_fmt", ""),
             "fps": parse_fps(video.get("r_frame_rate", "0/1")),
+            "duration": float(video.get("duration", 0) or 0),
         }
     if audio:
         summary["audio"] = {
             "codec": audio.get("codec_name", ""),
             "sample_rate": int(audio.get("sample_rate", 0) or 0),
             "channels": int(audio.get("channels", 0) or 0),
+            "duration": float(audio.get("duration", 0) or 0),
         }
     return summary
 
@@ -193,6 +196,15 @@ def check(args) -> dict:
                        f"{audio['channels']}ch")
             if suffix == ".mp4" and audio["codec"] != "aac":
                 report.add("audio_codec", hard, f"{audio['codec']} thay vi aac")
+
+    # Hinh va tieng phai dai bang nhau: xfade gap mot canh ngan se lang le bo het hinh phia sau
+    # (video6: hinh 172 s, tieng 198 s, cac buoc khac van PASS).
+    vd, ad = summary.get("video", {}).get("duration", 0), summary.get("audio", {}).get("duration", 0)
+    if vd and ad:
+        if abs(vd - ad) > AV_TOLERANCE:
+            report.add("av_length", hard, f"Hinh {vd:.2f} s, tieng {ad:.2f} s (lech {vd - ad:+.2f} s)")
+        else:
+            report.add("av_length", "PASS", f"lech {vd - ad:+.3f} s")
 
     if args.audio and "audio" in summary:
         mean = mean_volume_db(artifact)
