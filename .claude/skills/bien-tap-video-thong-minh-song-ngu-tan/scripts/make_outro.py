@@ -106,7 +106,7 @@ def render(title: list[str], sub: str, logo: Path, out: Path, seconds: float = 4
     lop_cta = Image.new("RGBA", (W, 120), (0, 0, 0, 0))
     dc = ImageDraw.Draw(lop_cta)
     dc.text((150, 8), cta, font=f(BOLD, 40), fill=VANG + (255,))
-    dc.text((150, 64), credit, font=f(REG, 26), fill=XANH_NHAT + (255,))
+    dc.text((150, 62), credit, font=f(REG, 34), fill=XANH_NHAT + (255,))
     lg0 = Image.open(logo).convert("RGBA")
     lg0 = lg0.resize((round(lg0.width * 128 / lg0.height), 128), Image.LANCZOS)
     lx, ly = W - 150 - lg0.width, 842

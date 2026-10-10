@@ -253,5 +253,33 @@ class TestCheckRender(unittest.TestCase):
         self.assertNotIn("nhac.mp3", names, "File sau -i la dau vao")
 
 
+class TestCheckRenderChayNen(unittest.TestCase):
+    """Video "Truyen thong cach mang" (10/2026): lenh render chay nen bi hook bao FAIL gia
+    ("moov atom not found", 0 byte) vi hook chay luc file con dang ghi."""
+
+    def setUp(self):
+        import tempfile
+        self.dir = tempfile.TemporaryDirectory()
+        self.out = Path(self.dir.name) / "dang_ghi.mp4"
+        self.out.write_bytes(b"")  # giong file luc ffmpeg vua mo de ghi
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def payload(self, nen: bool) -> dict:
+        tool_input = {"command": f'ffmpeg -y -i a.mp4 -c:v libx264 "{self.out.as_posix()}"'}
+        if nen:
+            tool_input["run_in_background"] = True
+        return {"hook_event_name": "PostToolUse", "tool_name": "Bash", "tool_input": tool_input}
+
+    def test_bo_qua_lenh_chay_nen(self):
+        result = run_hook("check_render.py", self.payload(nen=True))
+        self.assertEqual(result.returncode, 0, "Lenh nen chua render xong, khong duoc bao FAIL")
+
+    def test_van_chan_file_hong_khi_chay_thuong(self):
+        result = run_hook("check_render.py", self.payload(nen=False))
+        self.assertEqual(result.returncode, 2, "File 0 byte sau lenh thuong phai bi chan")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

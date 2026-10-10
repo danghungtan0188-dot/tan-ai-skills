@@ -54,8 +54,13 @@ def main() -> int:
     except (json.JSONDecodeError, ValueError):
         return 0
 
-    command = (payload.get("tool_input") or {}).get("command", "")
+    tool_input = payload.get("tool_input") or {}
+    command = tool_input.get("command", "")
     if not isinstance(command, str) or not re.search(r"\bffmpeg\b", command):
+        return 0
+    # Lenh chay nen: hook chay ngay khi lenh vua khoi dong, file con dang ghi (0 byte / "moov atom
+    # not found") -> FAIL gia. Kiem tra o buoc QA sau khi lenh nen xong (video_qa.py --strict).
+    if tool_input.get("run_in_background"):
         return 0
     if not QA_SCRIPT.exists():
         return 0
