@@ -223,6 +223,9 @@ Hai điều phải nhớ:
 | Ghép phim tổng hợp: đoạn thẻ kết im lặng bị chuẩn hóa độ to kéo +52,5 dB | đoạn I < −40 LUFS giữ nguyên; các đoạn khác chỉ chỉnh ±3 dB |
 | Ghép nhiều phần thành một phim: cảnh tư liệu và khúc hội thoại lặp giữa các phần (cùng giây tư liệu ở phần 3 và 5; cùng câu hội thoại ở phần 4 và 5) | trước khi ghép: lập bảng mọi đoạn nguồn (file + giây) của tất cả các phần để bắt trùng, cộng so dấu vân hình 2 khung/giây; mỗi đoạn nguồn chỉ dùng một lần trong cả phim |
 | Lấy khoảng giây tư liệu theo một khung xem thử: 102,5–104 s chỉ 0,6 s đầu là rừng dừa, sau là máy bay phản lực (sai bối cảnh 1954) | xem từng nửa giây của khoảng định dùng trước khi đưa vào |
+| Tiếng nhân chứng gốc đỉnh −1 dBFS, qua AAC + chuẩn hóa vượt 0 dBFS (+1,5): loa phát ra tiếng rè ở chỗ nói to; QA đo mean_volume không bắt | mọi đoạn tiếng qua `alimiter=limit=0.79` (−2 dBFS) trước khi mã hóa; kiểm đỉnh giải mã lại của file cuối < −1 dBFS |
+| Đuôi lạ VieNeu nằm trong các video làm trước khi có `cat_gon_tts.py`; mốc `end` trong `moc.json` cũ đã tính luôn đuôi lạ | rà lại mọi phần cũ bằng `cat_gon` trên từng câu trước khi ghép phim tổng hợp; muốn tắt đuôi phải đo lại điểm hết chữ, không dùng `end` cũ |
+| Windows App Control chặn `torch` (DLL load failed) giữa chừng: không đọc lại câu TTS được | chọn lại trong các bản đã đọc sẵn (`ban/<câu>_*.wav`), chấm bằng faster-whisper (không cần torch); vá tiếng câu vào đúng mốc thay vì dựng lại cả phần |
 ` cuối dòng: tên composition sai, render không chạy | đọc qua `tr -d '
 '` hoặc ghi file bằng `newline="
 "` |
