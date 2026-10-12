@@ -14,6 +14,7 @@ import { LowerThird, lowerThirdSchema } from "./mau/LowerThird";
 import { SoLieu, soLieuSchema } from "./mau/SoLieu";
 import { SoLieuTran, soLieuTranSchema } from "./mau/SoLieuTran";
 import { TheKet, theKetSchema } from "./mau/TheKet";
+import { TieuChi, tieuChiSchema } from "./mau/TieuChi";
 import { TieuDeLon, tieuDeLonSchema } from "./mau/TieuDeLon";
 import { TriAn, triAnSchema } from "./mau/TriAn";
 import { TuyenVanChuyen, tuyenVanChuyenSchema } from "./mau/TuyenVanChuyen";
@@ -24,6 +25,17 @@ const chung = { fps: FPS, width: 1920, height: 1080, durationInFrames: 120 } as 
 
 export const RemotionRoot: React.FC = () => (
   <>
+    <Composition
+      id="TieuChi"
+      component={TieuChi}
+      schema={tieuChiSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{
+        tiLe: "16:9", thoiLuong: 10, tieuDe: "", so: 5, dat: [2, 4, 5], taiHien: 0.5, taiDat: [2, 3, 4],
+        dongDat: "", taiHoiTu: 6, ketLuan: "Mẫu", taiKet: 7, kieu: "tram",
+      }}
+      {...chung}
+    />
     <Composition
       id="MocThoiGian"
       component={MocThoiGian}

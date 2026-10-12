@@ -214,7 +214,12 @@ Hai điều phải nhớ:
 | ASR hội thoại phòng vọng: whisper lặp một câu suốt clip, bịa "hãy subscribe…" | cắt khúc 20 s nghe **độc lập** (`condition_on_previous_text=False`), medium, lọc `highpass=120,lowpass=6000,afftdn,dynaudnorm`; chỉ dùng khúc mà 3 lần nghe khớp nhau; dòng chứa "subscribe/đăng ký kênh" là bịa |
 | Một lệnh ffmpeg gộp ~26 đầu vào (xfade + đồ họa) treo cứng 2 lần: CPU 0 %, file đứng ở 38 MB rồi 316 MB | mỗi cảnh render riêng 1 đầu vào (cache), `xfade` theo cụm ≤ 5, lượt cuối mới đắp đồ họa/phụ đề/tiếng; xuất ra tên tạm `_dang_render_` rồi đổi tên |
 | Whisper với `initial_prompt` chép nguyên câu gợi ý thành lời thoại | khi nghe kiểm thì không dùng `initial_prompt`; muốn gợi từ khó thì so bằng danh sách từ bắt buộc sau khi nghe |
-| File danh sách việc Remotion viết trên Windows có `` cuối dòng: tên composition sai, render không chạy | đọc qua `tr -d ''` hoặc ghi file bằng `newline="
+| File danh sách việc Remotion viết trên Windows có `
+| Giữa bản thảo và bản chính thức, người dùng dọn clip nguồn sang thư mục khác: render 1080p chết ở cảnh đầu (ffmpeg exit −2, không in lỗi vì `-v error` + `check=True`) | trước khi render bản chính thức, kiểm mọi đường dẫn nguồn còn tồn tại; thiếu thì tìm theo tên + độ dài khớp (video5 có bản sao C0222–C0229) rồi mới chạy |
+| Render lại một lớp đồ họa (chuỗi PNG) nhưng cảnh dựng từ nó vẫn lấy bản cache cũ, vì khóa chỉ băm lệnh lọc + độ dài | khóa cache cảnh PNG thêm thời điểm tạo thư mục PNG (`st_mtime`); render lại đồ họa thì cảnh tự render lại |
+| Đồ họa lộ đáp án trước lời đọc: thẻ tiêu chí đạt (2, 4, 5) đã sáng hơn thẻ không đạt từ lúc mới hiện | mọi thẻ/số liệu hiện ở cùng độ mờ, chỉ sáng lên đúng mốc lời đọc nhắc tới (`taiDat`) |
+` cuối dòng: tên composition sai, render không chạy | đọc qua `tr -d '
+'` hoặc ghi file bằng `newline="
 "` |
 
 Thông số ATT NEWS trong `tro-ly-video-ban-tin-tan/references/att-news.md` ghi icon mạng xã hội
