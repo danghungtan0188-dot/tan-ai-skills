@@ -145,7 +145,7 @@ export const RemotionRoot: React.FC = () => (
       component={TieuDeLon}
       schema={tieuDeLonSchema}
       calculateMetadata={metadata(true)}
-      defaultProps={{ tiLe: "16:9", thoiLuong: 3, chu: "XÃ AN THẠNH THỦY", co: 150, phu: "" }}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 3, chu: "XÃ AN THẠNH THỦY", co: 150, phu: "", nenSang: false }}
       {...chung}
     />
     <Composition

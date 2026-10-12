@@ -218,6 +218,11 @@ Hai điều phải nhớ:
 | Giữa bản thảo và bản chính thức, người dùng dọn clip nguồn sang thư mục khác: render 1080p chết ở cảnh đầu (ffmpeg exit −2, không in lỗi vì `-v error` + `check=True`) | trước khi render bản chính thức, kiểm mọi đường dẫn nguồn còn tồn tại; thiếu thì tìm theo tên + độ dài khớp (video5 có bản sao C0222–C0229) rồi mới chạy |
 | Render lại một lớp đồ họa (chuỗi PNG) nhưng cảnh dựng từ nó vẫn lấy bản cache cũ, vì khóa chỉ băm lệnh lọc + độ dài | khóa cache cảnh PNG thêm thời điểm tạo thư mục PNG (`st_mtime`); render lại đồ họa thì cảnh tự render lại |
 | Đồ họa lộ đáp án trước lời đọc: thẻ tiêu chí đạt (2, 4, 5) đã sáng hơn thẻ không đạt từ lúc mới hiện | mọi thẻ/số liệu hiện ở cùng độ mờ, chỉ sáng lên đúng mốc lời đọc nhắc tới (`taiDat`) |
+| Chọn đoạn clip theo thời điểm mà không đo rung: `C0313` giây 15–19 lia máy (chuyển động gấp 5–9 lần), người xem thấy giật | trước khi dựng, đo chuyển động từng giây của mọi đoạn quay thật (`tblend` khác biệt khung, 320×180); giây nào > 3,5 thì chọn đoạn khác; cảnh quay cầm tay không thêm đẩy máy `zoompan` |
+| Đo rung trên tư liệu đen trắng đã phủ hiệu ứng phim cũ: hạt nhiễu và nhấp nháy sáng tối bị đếm thành chuyển động | đo trước khi phủ hiệu ứng, hoặc trừ độ sáng/tương phản chung từng khung rồi mới so; chuyển động lớn trong tư liệu chiến trận là cảnh động, không phải rung máy — phải xem bằng mắt |
+| Ghép phim tổng hợp: đoạn thẻ kết im lặng bị chuẩn hóa độ to kéo +52,5 dB | đoạn I < −40 LUFS giữ nguyên; các đoạn khác chỉ chỉnh ±3 dB |
+| Ghép nhiều phần thành một phim: cảnh tư liệu và khúc hội thoại lặp giữa các phần (cùng giây tư liệu ở phần 3 và 5; cùng câu hội thoại ở phần 4 và 5) | trước khi ghép: lập bảng mọi đoạn nguồn (file + giây) của tất cả các phần để bắt trùng, cộng so dấu vân hình 2 khung/giây; mỗi đoạn nguồn chỉ dùng một lần trong cả phim |
+| Lấy khoảng giây tư liệu theo một khung xem thử: 102,5–104 s chỉ 0,6 s đầu là rừng dừa, sau là máy bay phản lực (sai bối cảnh 1954) | xem từng nửa giây của khoảng định dùng trước khi đưa vào |
 ` cuối dòng: tên composition sai, render không chạy | đọc qua `tr -d '
 '` hoặc ghi file bằng `newline="
 "` |
