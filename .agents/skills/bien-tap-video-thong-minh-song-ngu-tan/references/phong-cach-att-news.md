@@ -226,6 +226,11 @@ Hai điều phải nhớ:
 | Tiếng nhân chứng gốc đỉnh −1 dBFS, qua AAC + chuẩn hóa vượt 0 dBFS (+1,5): loa phát ra tiếng rè ở chỗ nói to; QA đo mean_volume không bắt | mọi đoạn tiếng qua `alimiter=limit=0.79` (−2 dBFS) trước khi mã hóa; kiểm đỉnh giải mã lại của file cuối < −1 dBFS |
 | Đuôi lạ VieNeu nằm trong các video làm trước khi có `cat_gon_tts.py`; mốc `end` trong `moc.json` cũ đã tính luôn đuôi lạ | rà lại mọi phần cũ bằng `cat_gon` trên từng câu trước khi ghép phim tổng hợp; muốn tắt đuôi phải đo lại điểm hết chữ, không dùng `end` cũ |
 | Windows App Control chặn `torch` (DLL load failed) giữa chừng: không đọc lại câu TTS được | chọn lại trong các bản đã đọc sẵn (`ban/<câu>_*.wav`), chấm bằng faster-whisper (không cần torch); vá tiếng câu vào đúng mốc thay vì dựng lại cả phần |
+| Máy sập nguồn giữa chừng: file ghép đủ độ dài, ffprobe báo đúng, nhưng có hàng nghìn khối 64 KB toàn 0 (tiếng giải mã chỉ 436/667 s); bản có nhạc trộn từ file đó cũng hỏng | sau khi ghép, giải mã tiếng kiểm độ dài (`ghep.py` làm sẵn); nghi ngờ thì đếm khối 0 trong file |
+| Tiếng súng/nổ cảnh đen trắng thấp hơn giọng 19 dB: người xem nói "không nghe tiếng súng" | theo clip VHTV: nền chiến trận thấp hơn giọng ~6 dB lúc nghỉ, ~11 dB dưới giọng, không tắt hẳn (`_ghep/nhac/tron.py`) |
+| Dải tối mờ sau đồ họa số liệu bị chê "làm mờ" cảnh quay | `SoLieuTran`/`HaTang`/`GiamNgheo` đặt `nenMo: false` — chữ có bóng đậm, cảnh giữ sáng |
+| Khung cắt bỏ logo/banner in cứng cắt luôn đầu người đứng sát mép trên | xem cả khung gốc trước khi cắt; đầu sát mép thì xoá logo bằng `delogo` thay vì cắt cao; tránh đoạn có banner tên in cứng (dò từng giây) |
+| Mở đầu bằng flycam thị trấn/vòng xoay bị chê "không đúng" cho câu "vùng đất từng chịu nhiều mất mát" | mở đầu phim quê hương: flycam cao, nghiêng về đồng ruộng; cầu/phố để cho câu hạ tầng, dân số |
 ` cuối dòng: tên composition sai, render không chạy | đọc qua `tr -d '
 '` hoặc ghi file bằng `newline="
 "` |

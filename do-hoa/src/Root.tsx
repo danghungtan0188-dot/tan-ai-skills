@@ -5,7 +5,9 @@ import { AnhKet, anhKetSchema } from "./mau/AnhKet";
 import { AnhTuLieu, anhTuLieuSchema } from "./mau/AnhTuLieu";
 import { BanDoXa, banDoXaSchema } from "./mau/BanDoXa";
 import { BannerPhongSu, bannerPhongSuSchema } from "./mau/BannerPhongSu";
+import { GiamNgheo, giamNgheoSchema } from "./mau/GiamNgheo";
 import { HaoGiaoThong, haoGiaoThongSchema } from "./mau/HaoGiaoThong";
+import { HaTang, haTangSchema } from "./mau/HaTang";
 import { HopThongTin, hopThongTinSchema } from "./mau/HopThongTin";
 import { MocThoiGian, mocThoiGianSchema } from "./mau/MocThoiGian";
 import { ChuDong, chuDongSchema } from "./mau/ChuDong";
@@ -25,6 +27,25 @@ const chung = { fps: FPS, width: 1920, height: 1080, durationInFrames: 120 } as 
 
 export const RemotionRoot: React.FC = () => (
   <>
+    <Composition
+      id="HaTang"
+      component={HaTang}
+      schema={haTangSchema}
+      calculateMetadata={metadata(true)}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 5, tieuDe: "", nenMo: true, muc: [{ loai: "giao_thong", nhan: "Giao thông", tai: 0.5 }] }}
+      {...chung}
+    />
+    <Composition
+      id="GiamNgheo"
+      component={GiamNgheo}
+      schema={giamNgheoSchema}
+      calculateMetadata={metadata(true)}
+      defaultProps={{
+        tiLe: "16:9", thoiLuong: 8, tieuDe: "Tỷ lệ hộ nghèo", truoc: { so: 40, nhan: "Sau chiến tranh", tienTo: "~", soLe: 0 },
+        nay: { so: 0.58, nhan: "Hiện nay", tienTo: "", soLe: 2 }, taiTruoc: 0.5, taiNay: 3, nenMo: true,
+      }}
+      {...chung}
+    />
     <Composition
       id="TieuChi"
       component={TieuChi}
@@ -79,7 +100,7 @@ export const RemotionRoot: React.FC = () => (
       component={SoLieuTran}
       schema={soLieuTranSchema}
       calculateMetadata={metadata(true)}
-      defaultProps={{ tiLe: "16:9", thoiLuong: 5, tieuDe: "", muc: [{ so: 100, nhan: "mẫu", tai: 0.3, tienTo: "" }] }}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 5, tieuDe: "", nenMo: true, muc: [{ so: 100, nhan: "mẫu", tai: 0.3, tienTo: "", soLe: 0, donVi: "" }] }}
       {...chung}
     />
     <Composition
