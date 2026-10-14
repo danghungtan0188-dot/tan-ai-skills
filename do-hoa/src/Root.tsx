@@ -21,6 +21,8 @@ import { TieuDeLon, tieuDeLonSchema } from "./mau/TieuDeLon";
 import { TriAn, triAnSchema } from "./mau/TriAn";
 import { TuyenVanChuyen, tuyenVanChuyenSchema } from "./mau/TuyenVanChuyen";
 import { VetSang, vetSangSchema } from "./mau/VetSang";
+import { TranhGiay, tranhGiaySchema } from "./mau/TranhGiay";
+import { AnhBayVao, anhBayVaoSchema } from "./mau/AnhBayVao";
 
 // Kích thước/thời lượng thật tính trong calculateMetadata từ props `tiLe` + `thoiLuong`.
 const chung = { fps: FPS, width: 1920, height: 1080, durationInFrames: 120 } as const;
@@ -256,6 +258,22 @@ export const RemotionRoot: React.FC = () => (
           { chu: "cho hơn một trăm hộ dân.", start: 3.2, end: 5.6 },
         ],
       }}
+      {...chung}
+    />
+    <Composition
+      id="TranhGiay"
+      component={TranhGiay}
+      schema={tranhGiaySchema}
+      calculateMetadata={metadata(true)}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 6, dongTren: "Ủy ban nhân dân", dongChinh: "Xã An Thạnh Thủy", dongDuoi: "Đêm hội trăng rằm 2026", moCua: true }}
+      {...chung}
+    />
+    <Composition
+      id="AnhBayVao"
+      component={AnhBayVao}
+      schema={anhBayVaoSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 7, anh: ["anh1.jpg", "anh2.jpg", "anh3.jpg", "anh4.jpg"], cachNhau: 0.45, tieuDe: "" }}
       {...chung}
     />
   </>

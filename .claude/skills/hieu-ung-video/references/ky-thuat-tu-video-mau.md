@@ -88,8 +88,73 @@ ffmpeg -i in.mp4 -vf "scale=1080:-2,pad=1080:1920:0:(oh-ih)/2:black,drawtext=fon
 
 `chu.txt` lưu UTF-8. Mỗi dòng là một dòng chữ.
 
-## Thấy trong mẫu nhưng chưa làm công thức
+## 8. Hai dải chồng trên–dưới
 
-- **Intro tranh giấy nhiều lớp** (trăng, sóng, mây cắt giấy chuyển động lớp) cho lễ hội: làm bằng HyperFrames/Remotion, không làm bằng ffmpeg.
+Mỗi dải là một cảnh, có khe đen ở giữa. Video tổng kết dùng ngay đầu phim để vừa mở màn vừa cho thấy hai hoạt động cùng lúc:
+
+```bash
+ffmpeg -i a.mp4 -i b.mp4 -filter_complex "[0]crop=iw:ih*0.46:0:ih*0.27[t];[1]crop=iw:ih*0.46:0:ih*0.27[u];[t][u]vstack,pad=iw:ih/0.92:0:(oh-ih)/2:black,scale=1920:1080" out.mp4
+```
+
+## 9. Lưới 3×2 cùng một cảnh
+
+Nhân một cảnh thành 6 ô trên nền đen. Dùng như nhịp nhấn, khoảng 1 giây, rồi cắt về toàn khung:
+
+```bash
+ffmpeg -i in.mp4 -filter_complex "[0]scale=iw/3-8:-2,pad=iw+8:ih+8:4:4:black,split=6[a][b][c][d][e][f];[a][b][c][d][e][f]xstack=inputs=6:layout=0_0|w0_0|w0+w1_0|0_h0|w0_h0|w0+w1_h0,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black" out.mp4
+```
+
+## 10. Chữ lồng video (video chạy bên trong chữ)
+
+Video tổng kết dùng cho con số năm, video lễ dùng cho tên địa phương. Chữ trắng trên nền đen làm mặt nạ alpha:
+
+```bash
+ffmpeg -i in.mp4 -f lavfi -i "color=black:s=1920x1080:d=<GIAY>" -filter_complex "[1]drawtext=fontfile='C\:/Windows/Fonts/arialbd.ttf':text='2026':fontsize=560:fontcolor=white:x=(w-tw)/2:y=(h-th)/2,format=gray[m];[0]format=yuva420p[v];[v][m]alphamerge[k];[1][k]overlay" -pix_fmt yuv420p out.mp4
+```
+
+Chữ càng đậm, càng to thì càng thấy rõ hình bên trong. Dùng font đậm (`arialbd.ttf`). Video lễ còn phóng to chữ cho tới khi máy "chui" qua một chữ cái vào cảnh. Hiệu ứng đó dựng bằng Remotion.
+
+## 11. Mẫu chuyển động trong `do-hoa/` (Remotion)
+
+Hai mẫu dựng từ cách làm của video lễ hội và video tổng kết. Hình vẽ là SVG tự dựng, không lấy ảnh của video mẫu.
+
+| Mẫu | Làm gì | Xuất |
+|---|---|---|
+| `TranhGiay` | Intro tranh giấy nhiều lớp: trời hoàng hôn, trăng lên, núi – mây – 3 lớp sóng đổ bóng như giấy cắt, máy đẩy tới. Chữ vàng viền tối hiện từ mờ sang nét, đốm sáng lấp lánh. Cuối clip tranh tách đôi như cửa mở để lộ video bên dưới | `.mov` ProRes 4444 nền trong suốt |
+| `AnhBayVao` | Nền là ảnh chính khử màu và làm mờ. Từng ảnh viền trắng bay vào từ một hướng, nghiêng nhẹ, xếp chồng. Ảnh cuối danh sách đáp giữa rồi phóng to phủ kín, nền trở lại màu, tiêu đề hiện ở dưới | `.mp4` toàn khung |
+
+Lệnh render, chạy trong `do-hoa/`:
+
+```bash
+npx remotion render src/index.ts TranhGiay out.mov --props=tranh.json --concurrency=2
+npx remotion render src/index.ts AnhBayVao out.mp4 --props=anh.json --public-dir=<thu_muc_anh> --concurrency=2
+```
+
+```json
+{"tiLe":"16:9","thoiLuong":6,"dongTren":"Ủy ban nhân dân","dongChinh":"Xã An Thạnh Thủy","dongDuoi":"Đêm hội trăng rằm 2026","moCua":true}
+{"tiLe":"16:9","thoiLuong":7,"anh":["anh1.jpg","anh2.jpg","anh3.jpg","anh4.jpg","anh5.jpg"],"cachNhau":0.45,"tieuDe":"Chương trình phòng, chống đuối nước 2026"}
+```
+
+- `anh` nhận từ 2 đến 8 ảnh. **Ảnh cuối là ảnh chính**, được phóng to toàn khung.
+- Ảnh chính nên là ảnh không có viền đen. Ảnh cắt từ video bị viền đen hai bên thì viền đó cũng phóng to theo.
+- `moCua: false` thì tranh giữ tới hết clip, không tách đôi.
+- Muốn xem nhanh một khung trước khi render cả clip: `npx remotion still src/index.ts TranhGiay hinh.png --props=tranh.json --frame=105`.
+
+## Thấy trong mẫu, ghi lại để dựng sau
+
+Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
+
+- **Số năm lăn như đồng hồ đo:** "2025" thành "2026", chữ số cuối trượt lên, số mới từ trên rơi xuống.
+- **Tiêu đề kết có bóng phản chiếu:** các chữ cái hiện ngẫu nhiên từng chữ, bóng ngược mờ bên dưới, nền tia sáng hội tụ.
+- **Nhãn góc gõ ngẫu nhiên:** tên đơn vị ở góc hiện ra từng chữ cái theo thứ tự lộn xộn.
+- **Trái tim vẽ bằng vệt hạt vàng** làm cảnh kết.
+- **Ảnh bay tràn khung nhiều ảnh nhỏ** như một bức tường ảnh chuyển động trên nền đen.
+- **Cửa sổ nhỏ nở ra toàn khung**, có bo góc tròn.
+- **Mặt nạ cong như đồng hồ cát** đóng vào khung.
+- **Vỡ khối pixel** khi chuyển cảnh.
+- **Xoáy (swirl)** ở cảnh flycam kết.
+- **Khung tranh minh họa tách thành 3 dải dọc** để lộ cảnh flycam.
+- **Tên địa điểm 2 dòng:** dòng trên vàng, dòng dưới đỏ, cả hai có viền.
 - **Chữ ký tên kênh giãn chữ** (chữ in hoa cách đều, mờ ở góc): `drawtext` không có giãn chữ. Chèn khoảng trắng giữa các ký tự trong file chữ.
 - **Màu flycam điện ảnh** (trời ngả xanh lục, đất cam): gần với `Cinematic` trong [bo-loc-mau.md](bo-loc-mau.md).
+- **Hiệu ứng đã có trong repo:** vệt sáng (`light_leak`), làm mờ khi phóng (`zoom_blur`), lóe trắng (`flash_white`), tách màu RGB (`glitch_rgb`). Xem `references/effect-catalog.md` của skill `chuyen-gia-edit-video-tan`.
