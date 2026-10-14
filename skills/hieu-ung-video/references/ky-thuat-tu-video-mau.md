@@ -140,6 +140,27 @@ npx remotion render src/index.ts AnhBayVao out.mp4 --props=anh.json --public-dir
 - `moCua: false` thì tranh giữ tới hết clip, không tách đôi.
 - Muốn xem nhanh một khung trước khi render cả clip: `npx remotion still src/index.ts TranhGiay hinh.png --props=tranh.json --frame=105`.
 
+## 12. Vòng tròn khép về đen (iris) có viền sáng
+
+Kết clip dọc kiểu TikTok: khung co thành vòng tròn quanh người nói rồi khép hẳn. Ví dụ dưới bắt đầu ở giây 1, khép trong 1,6 giây:
+
+```bash
+ffmpeg -i in.mp4 -vf "format=yuv420p,geq=lum='st(0,hypot(X-W/2,Y-H/2)/hypot(W/2,H/2));st(1,max(0,1-max(0,T-1)/1.6));if(lt(ld(0),ld(1)-0.03),lum(X,Y),if(lt(ld(0),ld(1)),lum(X,Y)*0.6+60,16))':cb='if(lt(hypot(X-W/2,Y-H/2)/hypot(W/2,H/2),max(0,1-max(0,T-1)/1.6)),cb(X,Y),128)':cr='if(lt(hypot(X-W/2,Y-H/2)/hypot(W/2,H/2),max(0,1-max(0,T-1)/1.6)),cr(X,Y),128)'" out.mp4
+```
+
+`geq` chạy chậm, chỉ áp cho 2–3 giây cuối. Đã thử: vòng co đúng, viền sáng rõ.
+
+## Clip dọc nói/hát trước máy (video thứ 10)
+
+Đã có trong repo, không ghi lại: phụ đề nhấn từng từ (`karaoke_word`), mũi tên, vòng tròn và khung chỉ chỗ bấm trên màn hình app (`callouts.py`).
+
+Chưa làm công thức:
+- Ảnh vật thật (thẻ, điện thoại) bật ra cạnh tay, có vòng sáng quanh.
+- Phóng sát mặt đột ngột theo nhịp nhạc.
+- Sticker phản ứng góc khung.
+- Nút "Follow" có con trỏ bấm ở cuối clip.
+- Vệt bóng khi tay chuyển động nhanh. Đã thử `lagfun`, nhưng trên cảnh ít chuyển động thì chưa thấy rõ, nên chưa ghi thành công thức.
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
