@@ -34,6 +34,7 @@ Biến yêu cầu, tư liệu gốc và video tham chiếu thành phương án d
 - **MC AI / lip-sync:** [references/mc-ai-lip-sync.md](references/mc-ai-lip-sync.md) — quyền khuôn mặt/giọng nói, nhãn nội dung AI, nối `mc-lip-sync`, QA miệng–răng–mắt–tóc–tay–viền–ánh sáng–liên tục (`scripts/mc_qa_frames.py`).
 - **Chức năng kiểu CapCut:** [references/capcut-catalog.md](references/capcut-catalog.md) — trạng thái thật của từng chức năng trên máy.
 - **Banner – chú thích – icon truyền hình VN:** [references/he-thong-do-hoa-truyen-hinh.md](references/he-thong-do-hoa-truyen-hinh.md) — 5 phong cách, 15 banner, chú thích, 22 icon, motion, 7 preset, kiểm tự động `scripts/validate_graphics.py`.
+- **Reel hướng dẫn thủ tục công:** [references/phong-cach-reels-huong-dan-thu-tuc-cong.md](references/phong-cach-reels-huong-dan-thu-tuc-cong.md) — presenter + minh họa màn hình app, hook/callout/phụ đề và checklist quyền riêng tư; ghi rõ ranh giới quan sát, không sao chép danh tính/tài sản người tham khảo.
 - **Song ngữ:** [skills/bien-tap-video-thong-minh-song-ngu-tan/references/quy-trinh-song-ngu.md](skills/bien-tap-video-thong-minh-song-ngu-tan/references/quy-trinh-song-ngu.md) — dùng `check_subtitles.py` của skill đó cho mọi file SRT/VTT.
 
 ## Banner người phát biểu
