@@ -21,6 +21,7 @@ Không làm: không tự bịa hiệu ứng không có thật trong CapCut/công
 | **Effects/chuyển động camera** | [references/chuyen-dong-camera.md](references/chuyen-dong-camera.md) | Ken Burns (zoom/pan ảnh tĩnh), speed ramp, freeze frame, slow-motion |
 | **Stickers/icon overlay** | [references/nhan-dan-sticker.md](references/nhan-dan-sticker.md) | icon mạng xã hội, nhãn/badge, khung viền |
 | **Adjustment** — hiệu chỉnh hình ảnh | [references/hieu-chinh.md](references/hieu-chinh.md) | sáng/tương phản/bão hòa, làm nét, giảm rung (kèm cảnh báo rủi ro) |
+| **Rút từ video mẫu** | [references/ky-thuat-tu-video-mau.md](references/ky-thuat-tu-video-mau.md) | mây mở cảnh, dải nét xoay, cửa mở, gương/vạn hoa, bloom, ảnh khung nghiêng, khung dọc 9:16, nhịp cắt theo loại video |
 
 Xem nhanh toàn bộ tên hiệu ứng trong [assets/thu-vien-hieu-ung.md](assets/thu-vien-hieu-ung.md).
 
