@@ -7,6 +7,8 @@ Dùng filter `drawtext` của ffmpeg. Font tiếng Việt đã xác nhận hoạ
 1. **Dùng `textfile=` thay vì `text=` cho tiếng Việt** — tránh lỗi escape shell với dấu và ký tự đặc biệt. Ghi từng dòng chữ ra 1 file `.txt` UTF-8 riêng trước.
 2. **Font phải là `.ttf` hỗ trợ Unicode tiếng Việt** — `segoeuib.ttf` hoặc `arialbd.ttf` trên Windows đã test OK. Font không hỗ trợ sẽ ra ký tự lỗi/ô vuông.
 3. Trên Windows, đường dẫn font trong filter cần escape dấu `:` — viết `C\:/Windows/Fonts/segoeuib.ttf`.
+4. **File chữ không được kết thúc bằng xuống dòng kiểu Windows (CRLF).** `Set-Content` của PowerShell tự thêm `
+`, làm `drawtext` không vẽ gì mà cũng **không báo lỗi** (gặp thật 16/10/2026). Ghi bằng `printf 'chữ' > file.txt` trong bash hoặc `Set-Content -NoNewline`, rồi trích một khung xem chữ có hiện chưa.
 
 ## Banner/lower-third tiêu đề (đã dùng thật trong dự án)
 

@@ -175,6 +175,26 @@ Nhịp chậm: 17–22 giây một cảnh, mỗi cảnh là một ý của văn 
 
 **Bài học:** nội dung là văn bản pháp lý nên chữ phải ở yên đủ lâu để đọc. Họ giữ mỗi trang chữ 8–15 giây, chữ gõ xong thì đứng yên. Số tiền, số ngày phải viết đúng như văn bản.
 
+## Promo đài truyền hình nhịp nhanh (reel THĐT, 49 giây, 10/2026)
+
+Nhịp rất nhanh: 46 cảnh trong 49 giây, trung bình **1,1 giây một cảnh**. Giọng đọc nam phát thanh viên, âm lượng tổng −14,3 LUFS, LRA 5,2 LU. Mức này hợp với mạng xã hội; bản phát sóng truyền hình vẫn để −23 LUFS. Cấu trúc 4 đoạn:
+
+1. **Montage nghề làm báo (0–12 giây):** cảnh hậu trường cắt 1 cảnh/giây. Giữa các cảnh có:
+   - lóe sáng tách màu cầu vồng: preset `light_leak` + `glitch_rgb` đã có
+   - chia khung 2–3 ô dọc lệch nhau
+   - nhãn chữ thập nhỏ màu cam nhấp nháy
+2. **Vòng HUD đếm số:** vòng tròn kiểu ống kính, có vạch chia, số đếm tăng ở giữa, đè lên từng cảnh. Vòng này thu lại thành logo đài. HyperFrames có sẵn: luật `counting-dynamic-scale` + `camcorder-hud`/`sdf-iris`.
+3. **Câu hỏi bật theo lời đọc:** "Bạn cần gì?", "Bạn yêu thích điều gì?"… Chữ đỏ in hoa trong ô trắng, trồi lên 0,25 giây đúng lúc phát thanh viên đọc. Viền vàng mờ ở mép trên và dưới khung.
+4. **Kêu gọi hành động:** gia đình xem TV, máy đẩy vào màn hình có mã QR khảo sát. Tay cầm điện thoại quét mã, màn hình điện thoại chiếu phiếu khảo sát. Kết bằng 2 mã QR và 2 logo trên nền tia sáng xanh.
+
+Công thức ô câu hỏi (đã thử):
+
+```bash
+ffmpeg -i in.mp4 -vf "drawtext=fontfile='C\:/Windows/Fonts/arialbd.ttf':textfile=hoi.txt:fontsize=56:fontcolor=0xD7141A:box=1:boxcolor=white:boxborderw=22:x=(w-tw)/2:y=h*0.42+18*max(0\,1-t/0.25):alpha='min(1,t/0.25)'" out.mp4
+```
+
+Muốn hiện ở giây khác thì thay `t` bằng `(t-<GIAY>)` và thêm `enable='between(t,<GIAY>,<HET>)'`.
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
