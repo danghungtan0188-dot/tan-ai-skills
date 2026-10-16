@@ -7,8 +7,8 @@ Tóm tắt bằng lời của mình từ repo `heygen-com/hyperframes` (giấy p
 | Thành phần | Có chưa | Ghi chú |
 |---|---|---|
 | 13 skill `hyperframes*`, `general-video`, `motion-graphics`, `product-launch-video`, `media-use` | có | cài ở `~\.claude\skills` và `~\.agents\skills`, dùng được cho mọi dự án |
-| 8 skill mới trong repo gốc | **chưa cài** | xem bảng dưới |
-| Phần mềm render (CLI) | **chưa cài** | gọi bằng `npx hyperframes@latest <lệnh>`, lần đầu tự tải |
+| 8 skill mới trong repo gốc | có (16/10/2026) | đã chép vào `~\.claude\skills` và `~\.agents\skills`; cả 21 skill khớp bản 14/10/2026 |
+| Phần mềm render (CLI) | có, bản 0.8.164 | gọi bằng `npx hyperframes@latest <lệnh>`; `doctor` báo thiếu whisper-cpp, MusicGen, Docker (đều tùy chọn) |
 | Git LFS | chưa cài | 43 file test lớn trong bản sao báo "khác", không ảnh hưởng việc đọc |
 
 8 skill mới đáng cài, có trong `hyperframes/skills/`:
@@ -115,4 +115,8 @@ Nối với danh sách "ghi lại để dựng sau" trong [ky-thuat-tu-video-mau
 | cần một hiệu ứng có sẵn trong registry, hoặc dựng cả video chuyển động từ ý tưởng/bài viết | HyperFrames: `npx hyperframes@latest add <mẫu>` |
 | quảng cáo HeyGen có người dẫn (trả phí) | skill `heygen-video`, phải hỏi bạn từng lần |
 
-**Chưa kiểm:** mình mới đọc repo, chưa cài CLI nên chưa render thử mẫu HyperFrames nào trên máy này. Lần đầu dùng, chạy `npx hyperframes@latest doctor` trước để xem máy đủ điều kiện chưa.
+**Đã thử trên máy này (16/10/2026):** `init --example=blank` → `add lt-clean-bar` → sửa tên/chức vụ tiếng Việt trong `compositions/lt-clean-bar.html` → gắn vào `index.html` bằng thẻ `data-composition-src` → `check` sạch → `render`. Mất 21,6 giây cho 5 giây video, ra H.264 1920×1080, dấu tiếng Việt hiển thị đúng.
+
+Hai điều cần nhớ:
+- Mẫu `warm-grain` có sẵn **lỗi tương phản** (chữ trắng trên nền cam, 2,77:1). `check` chặn lỗi này, phải đổi màu chữ mới render được. Không phải lỗi do mình.
+- Đặt `HYPERFRAMES_SKIP_SKILLS=1` khi `init`, để nó không tự cài đè các skill.

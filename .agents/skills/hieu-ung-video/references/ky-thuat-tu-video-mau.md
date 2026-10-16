@@ -161,6 +161,20 @@ Chưa làm công thức:
 - Nút "Follow" có con trỏ bấm ở cuối clip.
 - Vệt bóng khi tay chuyển động nhanh. Đã thử `lagfun`, nhưng trên cảnh ít chuyển động thì chưa thấy rõ, nên chưa ghi thành công thức.
 
+## Video giải đáp chính sách dạng đồ họa (2 video BHXH, 10/2026)
+
+Nhịp chậm: 17–22 giây một cảnh, mỗi cảnh là một ý của văn bản. Hợp với tin giải đáp thủ tục của xã/phường. Cấu trúc chung:
+
+1. **Intro logo:** vệt sáng quét qua, chữ tiêu đề bật vào, có bóng phản chiếu dưới sàn. Dùng mẫu `Intro` trong `do-hoa/`, hoặc `titlecard-lockup` + `light-sweep-pass` của HyperFrames ([hoc-tu-hyperframes.md](hoc-tu-hyperframes.md)).
+2. **Thẻ câu hỏi:** câu hỏi đặt giữa nền sáng có đốm bokeh, cụm từ khóa tô **cam**.
+3. **MC ảo trong trường quay** (video ghi "có sử dụng AI"), có màn hình bên phải chiếu hình minh họa. MC AI thuộc skill `heygen-video` (trả phí, phải hỏi trước).
+4. **Trang minh họa:**
+   - Mẫu 1: nền trắng, hình minh họa phẳng bên trái, chữ căn giữa bên phải, cụm quan trọng tô cam hoặc đỏ.
+   - Mẫu 2: hộp chữ bo góc, chữ **gõ dần từng ký tự** (preset `typewriter` đã có) trên nền tranh minh họa, tiêu đề chủ đề cố định ở khung trên.
+5. **Thanh nhận diện cố định** góc dưới phải suốt video; logo đơn vị góc trên trái.
+
+**Bài học:** nội dung là văn bản pháp lý nên chữ phải ở yên đủ lâu để đọc. Họ giữ mỗi trang chữ 8–15 giây, chữ gõ xong thì đứng yên. Số tiền, số ngày phải viết đúng như văn bản.
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
