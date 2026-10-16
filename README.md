@@ -12,6 +12,7 @@ Kho lưu trữ AI Skills phục vụ công việc, học tập và nghiên cứu
 | [bien-tap-video](skills/bien-tap-video/SKILL.md) | Hoàn thiện | Skill biên tập video thông minh: đưa vào 1 video, tự phân tích metadata + khung hình (script `phan_tich_video.py`), nhận diện chủ đề (sự kiện, quảng cáo, vlog du lịch, phỏng vấn/tutorial, đám cưới/kỷ niệm, thể thao, ẩm thực, mạng xã hội ngắn), rồi áp dụng đúng phong cách dựng theo bộ nguyên tắc chất lượng chuyên nghiệp dùng chung. Là lớp điều phối — phối hợp với `dung-video-su-kien`, video-use, HyperFrames, remotion-* để dựng thật. |
 | [video-thuyet-minh](skills/video-thuyet-minh/SKILL.md) | Hoàn thiện | Quy trình sản xuất video có lời thuyết minh/bản tin tiếng Việt từ đầu đến cuối: nối `tan-giong-doc-ban-tin` (giọng đọc) với `bien-tap-video`/`dung-video-su-kien` (hình ảnh) và `video-use` (thực thi ghép), xử lý phần đồng bộ lời đọc với hình ảnh và trộn âm thanh (ducking nhạc nền dưới giọng đọc) mà 3 skill kia không tự làm. Là lớp điều phối toàn quy trình, không tự tổng hợp giọng hay tự render. |
 | [hieu-ung-video](skills/hieu-ung-video/SKILL.md) | Hoàn thiện | Thư viện công thức hiệu ứng kiểu CapCut: chuyển cảnh (xfade), chữ/hoạt hình chữ, bộ lọc màu, chuyển động camera (Ken Burns/speed ramp/freeze), sticker/icon, hiệu chỉnh hình ảnh — mỗi mục có lệnh ffmpeg thực thi được ngay, kèm cảnh báo rủi ro đã gặp thật (stabilize xuyên cắt cảnh gây vỡ hình, seek-artifact khi kiểm tra khung hình). Được các skill dựng video khác gọi tới khi cần 1 hiệu ứng cụ thể. |
+| [video-shotcraft](skills/video-shotcraft/SKILL.md) | Tích hợp tham khảo | Định tuyến shot recipe cinematic cho video sản phẩm/UI bằng Remotion; tham khảo thư viện nguồn có 124 recipe cards / khoảng 150 shot, có ghi nguồn và lưu ý giấy phép. Không sao chép toàn bộ repo ngoài vào đây. |
 | [video-san-pham](skills/video-san-pham/SKILL.md) | Hoàn thiện | Dựng **từng video sản phẩm** khi được yêu cầu, từ 1 dòng Excel/CSV sản phẩm + ảnh: AI viết kịch bản đúng dữ liệu thật → `tan-giong-doc-ban-tin` tạo giọng đọc → ASR cấp từ đồng bộ phụ đề (vai trò Whisper) → dựng cảnh có chuyển động qua Remotion/HyperFrames → ghép và xuất đúng định dạng TikTok/Facebook qua `video-use` (vai trò FFmpeg). Có "nguyên tắc cứng" (không bịa dữ liệu, phụ đề burn cuối cùng, kiểm rủi ro nội dung trước khi xuất) và bước tự kiểm tra đầu ra bằng `ffprobe` (script `kiem_tra_dau_ra.py`), tối đa 3 lần tự sửa trước khi báo người dùng. Không tự động quét/xuất hàng loạt cả file Excel — chỉ xử lý sản phẩm được chỉ định trong từng yêu cầu. |
 | [chuyen-gia-edit-video-tan](skills/chuyen-gia-edit-video-tan/SKILL.md) | Hoàn thiện | Phân tích video mẫu và dựng video chuyên nghiệp bằng code với bộ chức năng tương đương CapCut: Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment. Dùng cho bản tin, sự kiện, MC, phóng sự, Facebook, Zalo, Reels, Shorts. Có `references/effect-catalog.md` liệt kê preset và cách tái tạo bằng ffmpeg. |
 | [bien-tap-video-thong-minh-song-ngu-tan](skills/bien-tap-video-thong-minh-song-ngu-tan/SKILL.md) | Hoàn thiện | Phân tích nội dung/hình ảnh/lời nói/nhịp để tự chọn chiến lược biên tập, kèm phụ đề song ngữ tiếng Anh dòng trên và tiếng Việt dòng dưới. Có mục "Bảy lớp dựng" mô tả đầy đủ Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment kèm ràng buộc an toàn từng lớp. Mặc định `cut_authorized=false` — không tự cắt khi chưa được phép. |
@@ -20,7 +21,7 @@ Kho lưu trữ AI Skills phục vụ công việc, học tập và nghiên cứu
 | [remotion-*](skills) (11 skill: best-practices, captions, create, docs, interactivity, maps, markup, multimedia, render, saas, upgrade) | Hoàn thiện (gói skill nhập từ Remotion) | Kiến thức và quy trình tạo/dựng video lập trình bằng framework Remotion. |
 | [video-use](skills/video-use/SKILL.md) | Hoàn thiện (gói skill nhập ngoài) | Chỉnh sửa video qua hội thoại: cắt, ghép, chèn phụ đề, chỉnh màu. |
 
-`marketing`, `tan-giong-doc-ban-tin`, `dung-video-su-kien`, `bien-tap-video`, `video-thuyet-minh`, `video-san-pham`, `hieu-ung-video`, `chuyen-gia-edit-video-tan`, `bien-tap-video-thong-minh-song-ngu-tan` và `phat-trien-app` là mười skill được xây dựng riêng cho repo này (nguồn chuẩn nằm trong `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`). Các skill còn lại (heygen-*, remotion-*, video-use) là gói skill nhập từ bên ngoài, giữ nguyên theo bản gốc — không tự ý sửa mã nguồn bên trong các thư mục đó.
+`marketing`, `tan-giong-doc-ban-tin`, `dung-video-su-kien`, `bien-tap-video`, `video-thuyet-minh`, `video-san-pham`, `hieu-ung-video`, `chuyen-gia-edit-video-tan`, `bien-tap-video-thong-minh-song-ngu-tan` và `phat-trien-app` là các skill tự xây dựng; `video-shotcraft` là skill tích hợp tham khảo nguồn công khai. Nguồn chuẩn của skill trong repo nằm ở `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`. Các gói nhập ngoài khác (heygen-*, remotion-*, video-use) giữ nguyên theo bản gốc.
 
 ## Kiến trúc hệ thống
 
@@ -35,7 +36,7 @@ COMMAND → AGENT → SKILL → RULES → IMPLEMENTATION → HOOK → TEST/REVIE
 | Agents | `.claude/agents/` | 9 |
 | Commands | `.claude/commands/` | 9 |
 | Hooks | `.claude/hooks/` + `.claude/settings.json` | 3 |
-| Skills | `skills/` (nguồn chuẩn) | 25 |
+| Skills | `skills/` (nguồn chuẩn) | 27 |
 | Rules | `rules/` | 4 |
 | Data contracts | `data-contracts/` | 2 schema |
 | Tests | `tests/` | 66 test |
@@ -69,6 +70,7 @@ python scripts/sync_skills.py --check   # 3 bản skill đã khớp chưa
 | Có kịch bản/bản tin văn bản tự do, muốn đọc thành giọng rồi ghép vào video (có sẵn hoặc cần dựng) | `video-thuyet-minh` | `video-san-pham` (không phải sản phẩm thương mại theo khung HOOK→GIÁ→CTA) |
 | Chỉ cần file giọng đọc, không ghép vào video nào | `tan-giong-doc-ban-tin` | `video-thuyet-minh` (thừa bước, không cần) |
 | Cần 1 hiệu ứng cụ thể (chuyển cảnh, chữ động, filter, zoom/pan, sticker...) trên 1 clip, hoặc muốn tái tạo hiệu ứng thấy trong video tham khảo | `hieu-ung-video` | Không cần gọi tay nếu đang dùng `bien-tap-video`/`video-thuyet-minh`/`video-san-pham` — các skill đó tự gọi khi cần |
+| Video quảng bá SaaS/app/website cần shot cinematic hoặc UI motion bằng Remotion | `video-shotcraft` | Không áp phong cách product-film lên sự kiện/bản tin; xem recipe nguồn trước khi dùng |
 | Cần avatar/người dẫn AI xuất hiện nói chuyện trong video | `heygen-avatar` rồi `heygen-video` | — |
 | Cần dịch/lồng tiếng 1 video đã có sang ngôn ngữ khác | `heygen-translate` | — |
 

@@ -33,6 +33,7 @@ Không làm: không tự sở hữu engine render video (không có khả năng 
    - Ẩm thực/nấu ăn → [references/am-thuc.md](references/am-thuc.md)
    - Nội dung mạng xã hội ngắn (Reels/TikTok/Shorts, không thuộc các nhóm trên) → [references/mang-xa-hoi-ngan.md](references/mang-xa-hoi-ngan.md)
 4b. **Cần 1 hiệu ứng cụ thể** (chuyển cảnh, chữ động, filter màu, zoom/pan, sticker, giảm rung...) → dùng skill **`hieu-ung-video`** để lấy công thức ffmpeg/HyperFrames thực thi được, thay vì tự nghĩ ra filter chain từ đầu.
+4c. **Video product-film có shot cinematic/UI motion bằng Remotion** → dùng skill **`video-shotcraft`** để tìm recipe phù hợp; chỉ dùng khi hợp thể loại, không áp phong cách này lên video sự kiện/bản tin.
 5. **Lập kịch bản dựng (edit plan).** Theo [assets/edit-plan-template.md](assets/edit-plan-template.md), kết hợp cấu trúc/nhịp/màu/nhạc từ bước 3–4 với nội dung thật đã quan sát ở bước 1–2.
 6. **Xác nhận với người dùng** trước khi thực thi nếu edit plan có thay đổi lớn so với video gốc (cắt bỏ đoạn dài, đổi nhạc, đổi màu mạnh) — đây là thay đổi khó đảo ngược đối với file gốc nếu ghi đè.
 7. **Thực thi.**

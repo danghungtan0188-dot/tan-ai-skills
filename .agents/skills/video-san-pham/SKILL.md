@@ -15,6 +15,8 @@ Không làm:
 - Không tự tổng hợp giọng nói, không tự phiên âm, không tự render — việc này thuộc về các skill/công cụ được gọi bên dưới.
 - Không tự thêm nhạc nền/SFX không rõ nguồn gốc bản quyền.
 
+Khi cần shot cinematic/UI motion bằng Remotion, tham khảo skill `video-shotcraft`; chỉ chọn shot phục vụ lợi ích sản phẩm và giữ đúng nhận diện thương hiệu. Skill đó không thay thế quy trình dữ liệu, kiểm chứng nội dung và xuất bản tại đây.
+
 ## Ranh giới với skill khác (tránh gọi nhầm)
 
 - **Có dữ liệu Excel/CSV + ảnh sản phẩm, muốn ra video quảng cáo ngắn cho TikTok/Facebook** → đúng skill này.
