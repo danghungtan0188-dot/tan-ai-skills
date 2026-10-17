@@ -216,7 +216,19 @@ Công thức khung tròn góc (đã thử, 200 px, viền trắng 6 px):
 ffmpeg -i nen.mp4 -i nguoi_noi.mp4 -filter_complex "[1]crop=ih:ih,scale=200:200,format=yuva420p,geq=lum='lum(X,Y)':cb='cb(X,Y)':cr='cr(X,Y)':a='if(lt(hypot(X-100,Y-100),97),255,0)'[pip];color=white:s=212x212,format=yuva420p,geq=lum=235:cb=128:cr=128:a='if(lt(hypot(X-106,Y-106),105),255,0)'[vien];[0][vien]overlay=W-w-34:H-h-34:shortest=1[t];[t][pip]overlay=W-w-40:H-h-40:shortest=1" -pix_fmt yuv420p out.mp4
 ```
 
-`crop=ih:ih` cắt giữa khung; mặt người nói lệch tâm thì thêm `x` vào `crop`. Phóng to/thu nhỏ mượt giữa toàn khung và vòng tròn thì dựng bằng Remotion (`scale` + `borderRadius` theo thời gian) hoặc HyperFrames `card-resize`.
+`crop=ih:ih` cắt giữa khung; mặt người nói lệch tâm thì thêm `x` vào `crop`. Muốn người nói **thu/phóng mượt** giữa toàn khung và vòng tròn thì dùng mẫu Remotion `NguoiNoiPip` (đã render thử):
+
+```bash
+npx remotion render src/index.ts NguoiNoiPip out.mp4 --props=pip.json --public-dir=<thu_muc_file> --concurrency=2
+```
+
+```json
+{"tiLe":"16:9","thoiLuong":8,"video":"nguoi_noi.mp4","doHoa":[{"tu":1.5,"den":4,"file":"anh2.jpg"},{"tu":4,"den":6.5,"file":"bieu_do.mp4"}],"coTron":220}
+```
+
+- Video người nói chạy suốt, giữ nguyên tiếng. Mỗi đoạn `doHoa` phủ ảnh hoặc video toàn khung; người nói thu thành vòng tròn trong 0,45 giây rồi phóng lại.
+- Hai đoạn đồ họa cách nhau dưới 0,9 giây được gộp: người nói **ở yên trong vòng tròn** qua chỗ nối. Bản đầu chưa gộp nên người nói bật ra rồi thu lại ngay, trông giật (đã sửa, đã kiểm khung ở chỗ nối).
+- `thoiLuong` đặt bằng độ dài video người nói.
 
 ## Thấy trong mẫu, ghi lại để dựng sau
 

@@ -23,6 +23,7 @@ import { TuyenVanChuyen, tuyenVanChuyenSchema } from "./mau/TuyenVanChuyen";
 import { VetSang, vetSangSchema } from "./mau/VetSang";
 import { TranhGiay, tranhGiaySchema } from "./mau/TranhGiay";
 import { AnhBayVao, anhBayVaoSchema } from "./mau/AnhBayVao";
+import { NguoiNoiPip, nguoiNoiPipSchema } from "./mau/NguoiNoiPip";
 
 // Kích thước/thời lượng thật tính trong calculateMetadata từ props `tiLe` + `thoiLuong`.
 const chung = { fps: FPS, width: 1920, height: 1080, durationInFrames: 120 } as const;
@@ -274,6 +275,14 @@ export const RemotionRoot: React.FC = () => (
       schema={anhBayVaoSchema}
       calculateMetadata={metadata(false)}
       defaultProps={{ tiLe: "16:9", thoiLuong: 7, anh: ["anh1.jpg", "anh2.jpg", "anh3.jpg", "anh4.jpg"], cachNhau: 0.45, tieuDe: "" }}
+      {...chung}
+    />
+    <Composition
+      id="NguoiNoiPip"
+      component={NguoiNoiPip}
+      schema={nguoiNoiPipSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 8, video: "nguoi_noi.mp4", doHoa: [{ tu: 2, den: 5.5, file: "anh1.jpg" }], coTron: 220 }}
       {...chung}
     />
   </>
