@@ -21,6 +21,15 @@ Kho lưu trữ AI Skills phục vụ công việc, học tập và nghiên cứu
 | [remotion-*](skills) (11 skill: best-practices, captions, create, docs, interactivity, maps, markup, multimedia, render, saas, upgrade) | Hoàn thiện (gói skill nhập từ Remotion) | Kiến thức và quy trình tạo/dựng video lập trình bằng framework Remotion. |
 | [video-use](skills/video-use/SKILL.md) | Hoàn thiện (gói skill nhập ngoài) | Chỉnh sửa video qua hội thoại: cắt, ghép, chèn phụ đề, chỉnh màu. |
 
+## Repos tham khảo đã fork
+
+Các repo dưới đây được giữ thành fork riêng trong tài khoản GitHub để theo dõi nguồn upstream; không nhúng bản sao mã nguồn vào `tan-ai-skills`.
+
+| Repo trong GitHub của anh | Nguồn gốc | Dùng để |
+|---|---|---|
+| [awesome-opus5-5-videos](https://github.com/danghungtan0188-dot/awesome-opus5-5-videos) | [yihui-dev/awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos) | Tham khảo prompt và video creative-coding; kiểm tra quyền của từng tác giả trước khi tái sử dụng nội dung. |
+| [rea](https://github.com/danghungtan0188-dot/rea) | [morluto/rea](https://github.com/morluto/rea) | Phân tích có căn cứ các ứng dụng/website được phép kiểm tra; đây không phải công cụ dựng video. |
+
 `marketing`, `tan-giong-doc-ban-tin`, `dung-video-su-kien`, `bien-tap-video`, `video-thuyet-minh`, `video-san-pham`, `hieu-ung-video`, `chuyen-gia-edit-video-tan`, `bien-tap-video-thong-minh-song-ngu-tan` và `phat-trien-app` là các skill tự xây dựng; `video-shotcraft` là skill tích hợp tham khảo nguồn công khai. Nguồn chuẩn của skill trong repo nằm ở `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`. Các gói nhập ngoài khác (heygen-*, remotion-*, video-use) giữ nguyên theo bản gốc.
 
 ## Kiến trúc hệ thống
