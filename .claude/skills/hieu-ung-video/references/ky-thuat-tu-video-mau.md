@@ -195,6 +195,29 @@ ffmpeg -i in.mp4 -vf "drawtext=fontfile='C\:/Windows/Fonts/arialbd.ttf':textfile
 
 Muốn hiện ở giây khác thì thay `t` bằng `(t-<GIAY>)` và thêm `enable='between(t,<GIAY>,<HET>)'`.
 
+## Reel "AI dựng cả video": người nói + đồ họa thay nhau (85 giây, dọc, 10/2026)
+
+Video tiếng Anh, một người nói trước máy kể việc giao cho AI dựng video. Nhịp chậm (14 giây một cảnh), nhưng **đồ họa đổi liên tục trong từng cảnh**. Âm lượng −14,2 LUFS, LRA chỉ 1,9 LU: nén rất mạnh cho điện thoại, không dùng cho bản tin.
+
+**Bố cục khung dọc:** nền đen. Dòng tiêu đề cố định phía trên, dòng kêu gọi bình luận cố định phía dưới. Nội dung 16:9 nằm giữa. Gần với mục 7 ở trên, thêm dòng chữ cố định dưới đáy.
+
+**Cách dựng đáng học:**
+1. **Người nói ↔ khung tròn góc.** Khi đồ họa chiếm khung, người nói thu thành vòng tròn nhỏ viền trắng ở góc dưới phải, vẫn nói tiếp. Hết đồ họa thì phóng lại toàn khung. Người xem không mất mặt người nói.
+2. **Phụ đề từng từ có một từ nhấn đổi kiểu chữ:** chữ đậm không chân trắng, riêng từ khóa đổi sang **chữ nghiêng có chân màu đỏ cam** ("entire", "everything", "copy", "touched"). Kiểu chữ nhấn này lặp lại ở mọi tiêu đề đồ họa ("one *habit*", "five *months*", "saved *instructions*"), thành nhận diện riêng của kênh. Áp cho mình: chữ đậm trắng + từ khóa nghiêng màu vàng ATT.
+3. **Thẻ bay ra từ sau lưng người nói:** người nói nhắc tới "thẻ", "chú thích" thì thẻ nhỏ bay ra hai bên. Cần tách người khỏi nền (HyperFrames `media-use` có tách nền) hoặc chỉ đặt thẻ ở vùng trống.
+4. **Đồ họa minh họa đúng lời:** nói "5 tháng" thì hiện dòng thời gian có ảnh; nói "hai điều thay đổi" thì hiện 2 thẻ số "1", "2" rồi mỗi thẻ lật thành ảnh; nói "chi phí" thì một máy in nhả **hóa đơn** liệt kê từng việc; nói "skill" thì xấp giấy hướng dẫn rơi vào một chiếc hộp có nhãn.
+5. **Cảnh đổi bằng mặt nạ:** vòng tròn hoặc góc trắng lấn vào khung; tiêu đề chữ lớn trên nền đỏ có đường viền bo tròn tự vẽ quanh chữ.
+
+**Bài học về cách làm, không phải hiệu ứng:** tác giả nói AI dựng đẹp lên khi **giao từng việc một** (nghiên cứu → cắt → lên kế hoạch đồ họa → dựng đồ họa → kiểm từng khung → lưu điều đã sửa) và **lưu điều đã sửa vào skill** để lần sau tốt hơn. Repo này đã làm đúng như vậy: chuỗi agent `video-analyzer → video-editor → video-reviewer` và lệnh `/rut-kinh-nghiem` sau mỗi video.
+
+Công thức khung tròn góc (đã thử, 200 px, viền trắng 6 px):
+
+```bash
+ffmpeg -i nen.mp4 -i nguoi_noi.mp4 -filter_complex "[1]crop=ih:ih,scale=200:200,format=yuva420p,geq=lum='lum(X,Y)':cb='cb(X,Y)':cr='cr(X,Y)':a='if(lt(hypot(X-100,Y-100),97),255,0)'[pip];color=white:s=212x212,format=yuva420p,geq=lum=235:cb=128:cr=128:a='if(lt(hypot(X-106,Y-106),105),255,0)'[vien];[0][vien]overlay=W-w-34:H-h-34:shortest=1[t];[t][pip]overlay=W-w-40:H-h-40:shortest=1" -pix_fmt yuv420p out.mp4
+```
+
+`crop=ih:ih` cắt giữa khung; mặt người nói lệch tâm thì thêm `x` vào `crop`. Phóng to/thu nhỏ mượt giữa toàn khung và vòng tròn thì dựng bằng Remotion (`scale` + `borderRadius` theo thời gian) hoặc HyperFrames `card-resize`.
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
