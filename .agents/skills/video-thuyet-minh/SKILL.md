@@ -15,6 +15,7 @@ Không làm: không tự viết lại nội dung kịch bản (chỉ đọc nguy
 
 - **Có kịch bản/bản tin văn bản + muốn giọng đọc ghép vào hình ảnh (có sẵn hoặc cần dựng)** → đúng skill này.
 - **Chỉ cần file giọng đọc, không cần ghép vào video nào cả** → dùng thẳng `tan-giong-doc-ban-tin`, không cần qua skill này.
+- **Muốn biến SRT thành video bảng trắng nét vẽ tay theo trình tự lời thoại** → dùng `srt-whiteboard-animation`; nếu chưa có SRT/audio, skill này điều phối phần kịch bản/giọng đọc trước rồi bàn giao SRT và hình minh họa sang whiteboard.
 - **Sản phẩm thương mại cụ thể + dữ liệu Excel/CSV + ảnh sản phẩm, muốn ra video quảng cáo TikTok/Facebook theo khung HOOK→TÍNH NĂNG→GIÁ→CTA** → dùng `video-san-pham` (skill đó đã tự gọi `tan-giong-doc-ban-tin` cho phần giọng đọc, không cần qua skill này).
 - **⚠️ Bài học thực tế:** trong phiên làm việc trước, quy trình "kịch bản → giọng đọc → ghép vào video" đã bị làm thủ công bằng lệnh ffmpeg trực tiếp thay vì gọi đúng skill này — kết quả vẫn ra được nhưng đi vòng, tốn thời gian và dễ bỏ sót bước (ví dụ đồng bộ thời lượng, trộn âm thanh). Khi gặp đúng tình huống "kịch bản + video cần lồng giọng đọc", **luôn vào skill này trước**, không tự xử lý tay bằng ffmpeg ngay từ đầu.
 

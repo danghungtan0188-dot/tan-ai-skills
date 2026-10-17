@@ -13,6 +13,7 @@ Kho lưu trữ AI Skills phục vụ công việc, học tập và nghiên cứu
 | [video-thuyet-minh](skills/video-thuyet-minh/SKILL.md) | Hoàn thiện | Quy trình sản xuất video có lời thuyết minh/bản tin tiếng Việt từ đầu đến cuối: nối `tan-giong-doc-ban-tin` (giọng đọc) với `bien-tap-video`/`dung-video-su-kien` (hình ảnh) và `video-use` (thực thi ghép), xử lý phần đồng bộ lời đọc với hình ảnh và trộn âm thanh (ducking nhạc nền dưới giọng đọc) mà 3 skill kia không tự làm. Là lớp điều phối toàn quy trình, không tự tổng hợp giọng hay tự render. |
 | [hieu-ung-video](skills/hieu-ung-video/SKILL.md) | Hoàn thiện | Thư viện công thức hiệu ứng kiểu CapCut: chuyển cảnh (xfade), chữ/hoạt hình chữ, bộ lọc màu, chuyển động camera (Ken Burns/speed ramp/freeze), sticker/icon, hiệu chỉnh hình ảnh — mỗi mục có lệnh ffmpeg thực thi được ngay, kèm cảnh báo rủi ro đã gặp thật (stabilize xuyên cắt cảnh gây vỡ hình, seek-artifact khi kiểm tra khung hình). Được các skill dựng video khác gọi tới khi cần 1 hiệu ứng cụ thể. |
 | [video-shotcraft](skills/video-shotcraft/SKILL.md) | Tích hợp tham khảo | Định tuyến shot recipe cinematic cho video sản phẩm/UI bằng Remotion; tham khảo thư viện nguồn có 124 recipe cards / khoảng 150 shot, có ghi nguồn và lưu ý giấy phép. Không sao chép toàn bộ repo ngoài vào đây. |
+| [srt-whiteboard-animation](skills/srt-whiteboard-animation/SKILL.md) | Tích hợp mã nguồn MIT | Chuyển SRT thành video whiteboard vẽ theo nhịp lời thoại; kèm preview, công cụ render và hướng dẫn ComfyUI local tùy chọn để chuẩn bị line art. Nguồn/commit và giấy phép được ghi trong thư mục skill. |
 | [video-san-pham](skills/video-san-pham/SKILL.md) | Hoàn thiện | Dựng **từng video sản phẩm** khi được yêu cầu, từ 1 dòng Excel/CSV sản phẩm + ảnh: AI viết kịch bản đúng dữ liệu thật → `tan-giong-doc-ban-tin` tạo giọng đọc → ASR cấp từ đồng bộ phụ đề (vai trò Whisper) → dựng cảnh có chuyển động qua Remotion/HyperFrames → ghép và xuất đúng định dạng TikTok/Facebook qua `video-use` (vai trò FFmpeg). Có "nguyên tắc cứng" (không bịa dữ liệu, phụ đề burn cuối cùng, kiểm rủi ro nội dung trước khi xuất) và bước tự kiểm tra đầu ra bằng `ffprobe` (script `kiem_tra_dau_ra.py`), tối đa 3 lần tự sửa trước khi báo người dùng. Không tự động quét/xuất hàng loạt cả file Excel — chỉ xử lý sản phẩm được chỉ định trong từng yêu cầu. |
 | [chuyen-gia-edit-video-tan](skills/chuyen-gia-edit-video-tan/SKILL.md) | Hoàn thiện | Phân tích video mẫu và dựng video chuyên nghiệp bằng code với bộ chức năng tương đương CapCut: Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment. Dùng cho bản tin, sự kiện, MC, phóng sự, Facebook, Zalo, Reels, Shorts. Có `references/effect-catalog.md` liệt kê preset và cách tái tạo bằng ffmpeg. |
 | [bien-tap-video-thong-minh-song-ngu-tan](skills/bien-tap-video-thong-minh-song-ngu-tan/SKILL.md) | Hoàn thiện | Phân tích nội dung/hình ảnh/lời nói/nhịp để tự chọn chiến lược biên tập, kèm phụ đề song ngữ tiếng Anh dòng trên và tiếng Việt dòng dưới. Có mục "Bảy lớp dựng" mô tả đầy đủ Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment kèm ràng buộc an toàn từng lớp. Mặc định `cut_authorized=false` — không tự cắt khi chưa được phép. |
@@ -21,16 +22,18 @@ Kho lưu trữ AI Skills phục vụ công việc, học tập và nghiên cứu
 | [remotion-*](skills) (11 skill: best-practices, captions, create, docs, interactivity, maps, markup, multimedia, render, saas, upgrade) | Hoàn thiện (gói skill nhập từ Remotion) | Kiến thức và quy trình tạo/dựng video lập trình bằng framework Remotion. |
 | [video-use](skills/video-use/SKILL.md) | Hoàn thiện (gói skill nhập ngoài) | Chỉnh sửa video qua hội thoại: cắt, ghép, chèn phụ đề, chỉnh màu. |
 
-## Repos tham khảo đã fork
+## Nguồn dự án và công cụ ngoài
 
-Các repo dưới đây được giữ thành fork riêng trong tài khoản GitHub để theo dõi nguồn upstream; không nhúng bản sao mã nguồn vào `tan-ai-skills`.
+Hai repo dưới đây đã được fork riêng trong tài khoản GitHub để theo dõi upstream:
 
 | Repo trong GitHub của anh | Nguồn gốc | Dùng để |
 |---|---|---|
 | [awesome-opus5-5-videos](https://github.com/danghungtan0188-dot/awesome-opus5-5-videos) | [yihui-dev/awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos) | Tham khảo prompt và video creative-coding; kiểm tra quyền của từng tác giả trước khi tái sử dụng nội dung. |
 | [rea](https://github.com/danghungtan0188-dot/rea) | [morluto/rea](https://github.com/morluto/rea) | Phân tích có căn cứ các ứng dụng/website được phép kiểm tra; đây không phải công cụ dựng video. |
 
-`marketing`, `tan-giong-doc-ban-tin`, `dung-video-su-kien`, `bien-tap-video`, `video-thuyet-minh`, `video-san-pham`, `hieu-ung-video`, `chuyen-gia-edit-video-tan`, `bien-tap-video-thong-minh-song-ngu-tan` và `phat-trien-app` là các skill tự xây dựng; `video-shotcraft` là skill tích hợp tham khảo nguồn công khai. Nguồn chuẩn của skill trong repo nằm ở `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`. Các gói nhập ngoài khác (heygen-*, remotion-*, video-use) giữ nguyên theo bản gốc.
+ComfyUI được hướng dẫn như công cụ local tùy chọn tại [quy trình tạo line art](skills/srt-whiteboard-animation/references/comfyui-local-assets.md); không nhúng mã ComfyUI vào kho này. Whiteboard skill được vendored riêng theo MIT tại `skills/srt-whiteboard-animation` và giữ lại thông tin nguồn trong `UPSTREAM.md`.
+
+`marketing`, `tan-giong-doc-ban-tin`, `dung-video-su-kien`, `bien-tap-video`, `video-thuyet-minh`, `video-san-pham`, `hieu-ung-video`, `chuyen-gia-edit-video-tan`, `bien-tap-video-thong-minh-song-ngu-tan` và `phat-trien-app` là các skill tự xây dựng; `video-shotcraft` là skill tích hợp tham khảo, còn `srt-whiteboard-animation` là skill MIT được vendored và có ghi nguồn. Nguồn chuẩn của các skill nằm trong `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`. Các gói nhập ngoài khác (heygen-*, remotion-*, video-use) giữ nguyên theo bản gốc.
 
 ## Kiến trúc hệ thống
 
@@ -45,7 +48,7 @@ COMMAND → AGENT → SKILL → RULES → IMPLEMENTATION → HOOK → TEST/REVIE
 | Agents | `.claude/agents/` | 9 |
 | Commands | `.claude/commands/` | 9 |
 | Hooks | `.claude/hooks/` + `.claude/settings.json` | 3 |
-| Skills | `skills/` (nguồn chuẩn) | 27 |
+| Skills | `skills/` (nguồn chuẩn) | 28 |
 | Rules | `rules/` | 4 |
 | Data contracts | `data-contracts/` | 2 schema |
 | Tests | `tests/` | 66 test |
@@ -69,7 +72,7 @@ python scripts/sync_skills.py --check   # 3 bản skill đã khớp chưa
 
 ## Gọi đúng skill video (bảng định tuyến)
 
-5 skill video trong repo này chia lớp rõ ràng: **skill điều phối** (người dùng gọi trực tiếp) → tự động gọi **skill module/thực thi** bên dưới. Dùng bảng sau để không gọi nhầm:
+Các skill video trong repo này chia lớp rõ ràng: **skill điều phối** (người dùng gọi trực tiếp) → tự động gọi **skill module/thực thi** bên dưới. Dùng bảng sau để không gọi nhầm:
 
 | Tình huống của bạn | Gọi skill này | KHÔNG gọi skill này |
 |---|---|---|
@@ -80,6 +83,7 @@ python scripts/sync_skills.py --check   # 3 bản skill đã khớp chưa
 | Chỉ cần file giọng đọc, không ghép vào video nào | `tan-giong-doc-ban-tin` | `video-thuyet-minh` (thừa bước, không cần) |
 | Cần 1 hiệu ứng cụ thể (chuyển cảnh, chữ động, filter, zoom/pan, sticker...) trên 1 clip, hoặc muốn tái tạo hiệu ứng thấy trong video tham khảo | `hieu-ung-video` | Không cần gọi tay nếu đang dùng `bien-tap-video`/`video-thuyet-minh`/`video-san-pham` — các skill đó tự gọi khi cần |
 | Video quảng bá SaaS/app/website cần shot cinematic hoặc UI motion bằng Remotion | `video-shotcraft` | Không áp phong cách product-film lên sự kiện/bản tin; xem recipe nguồn trước khi dùng |
+| Có file SRT và muốn lời thoại được vẽ thành video whiteboard từng nét | `srt-whiteboard-animation` | Không dùng nếu cần footage thật hoặc nhiều phong cách cảnh; ComfyUI chỉ là công cụ tạo line art tùy chọn |
 | Cần avatar/người dẫn AI xuất hiện nói chuyện trong video | `heygen-avatar` rồi `heygen-video` | — |
 | Cần dịch/lồng tiếng 1 video đã có sang ngôn ngữ khác | `heygen-translate` | — |
 
