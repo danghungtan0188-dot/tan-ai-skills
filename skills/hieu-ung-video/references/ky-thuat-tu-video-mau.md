@@ -230,6 +230,19 @@ npx remotion render src/index.ts NguoiNoiPip out.mp4 --props=pip.json --public-d
 - Hai đoạn đồ họa cách nhau dưới 0,9 giây được gộp: người nói **ở yên trong vòng tròn** qua chỗ nối. Bản đầu chưa gộp nên người nói bật ra rồi thu lại ngay, trông giật (đã sửa, đã kiểm khung ở chỗ nối).
 - `thoiLuong` đặt bằng độ dài video người nói.
 
+## Reel kể chuyện nghề có giọng AI "Adam" (2 phút 44 giây, 10/2026)
+
+Không có người trên hình; giọng AI nam miền Bắc kể chuyện đời thường, câu mở đầu gây tò mò. Cảnh dài (23 giây một cảnh), nhưng chữ và nhãn đổi liên tục theo lời. Bố cục cố định đáng học cho video **giải thích bằng màn hình/tài liệu**:
+
+- **Nền tối có lưới mờ**, đốm sáng vàng nhẹ ở góc trái.
+- **Bên trái:** hình minh họa (bản vẽ, ảnh chụp màn hình). **Bên phải:** phụ đề lớn 2–3 dòng, chữ đang đọc tô **vàng**, chữ chưa đọc màu trắng.
+- **Nhãn vàng nhỏ cố định góc trên phải** nhắc chủ đề cả video ("Nhận làm website, nhận luôn file CAD"). Góc trên trái có tiêu đề đoạn chữ in hoa, có một từ nền vàng.
+- **Danh sách đánh số hiện dần** theo lời ("01 LOGO", "02 WEBSITE"…).
+- **Chú thích hỏi chấm trên ảnh:** nói "nét nào là tường?" thì nhãn đen "TƯỜNG?" bật lên đúng chỗ, kèm **vòng tròn vàng** khoanh vùng rối. Cách này khiến người xem nhìn đúng chỗ đang nói.
+- **Quay màn hình** có nhãn nhỏ góc dưới trái ghi đang xem gì ("Mở bộ file CAD gốc").
+
+Đã có sẵn: phụ đề tô từng từ (`karaoke_word`), vòng khoanh và nhãn (`callouts.py`), danh sách hiện dần (HyperFrames `kinetic-type-beats`). Giọng đã lưu thành **"Adam - video AutoCAD"** (xem kho giọng của skill `tan-giong-doc-ban-tin`).
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
