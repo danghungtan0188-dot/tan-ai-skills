@@ -242,6 +242,10 @@ Hai điều phải nhớ:
 | Mẫu Remotion `TranhGiayPhuNu`: lá sen vẽ bằng cung SVG có hai mép khe đặt ở x = r (không nằm trên đường tròn) → cung lệch tâm, gân thò ra ngoài như xương cá | mép khe đặt đúng trên đường tròn (r·cosθ, ±r·sinθ), cờ cung lớn 1, sweep 0; trước khi render cả clip, `npx remotion still` 4 khung và xem bằng mắt |
 | `clipPath: inset(%)` trên thẻ `<svg>` không làm dải băng mở dần (hiện nguyên thanh đỏ trơn) | mở dải băng bằng `scale: "<mo> 1"` quanh tâm |
 | Remotion in stack trace `bringToFront` sau khi render xong | không phải file hỏng: kiểm `nb_frames` bằng ffprobe và giải mã hết (`ffmpeg -v error -i out.mp4 -f null -` = 0 lỗi) |
+| Bộ chọn TTS (sàn cứng, ít chữ khó sai nhất trước) chọn trúng bản **lặp chữ** dài 4,9 s (các bản khác 3,1 s) vì nó sai ít chữ khó nhất | chọn bằng `scripts/chon_ban_tts.py`: loại bản dài > 1,3 × trung vị trước, rồi mới sàn cứng |
+| Giọng "Nữ VNeID Sổ sức khỏe": "vun đắp" ra "vùng đắp" 24/24 bản (cả câu dài lẫn cụm tách); whisper `small` không nghe ra "vẻ vang" ở bản nào, `medium` tìm được 1/12 bản đúng; "Dịu dàng" đúng 4/12 | cụm ngắn khó: đọc ≥ 12 bản, nghe lại bằng `medium`; chữ sai ở MỌI bản là đặc điểm giọng — báo người dùng, đề xuất đổi chữ, đừng đọc thêm |
+| PowerShell: `Start-Process npx` lỗi "not a valid Win32 application"; `python -c "...{...}..."` bị hiểu là scriptblock; `--props` JSON có BOM thì Remotion từ chối | gọi `npx.cmd`; logic Python có `{}` viết ra file `.py`; ghi props bằng Python `encoding="utf-8"` (không BOM) |
+| Trộn lớp ánh sáng (light leak HyperFrames nền đen) bằng `blend=screen` trên YUV làm lệch màu | đổi `format=gbrp` cả hai đầu vào trước `blend=all_mode=screen:all_opacity=0.55`, rồi `format=yuv420p`. Ước thời gian trên máy này: Remotion 2.745 khung `--concurrency=2` 999 s; HyperFrames 2 worker 194 s |
 ` cuối dòng: tên composition sai, render không chạy | đọc qua `tr -d '
 '` hoặc ghi file bằng `newline="
 "` |
