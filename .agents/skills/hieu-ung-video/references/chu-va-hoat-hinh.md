@@ -7,7 +7,8 @@ Dùng filter `drawtext` của ffmpeg. Font tiếng Việt đã xác nhận hoạ
 1. **Dùng `textfile=` thay vì `text=` cho tiếng Việt** — tránh lỗi escape shell với dấu và ký tự đặc biệt. Ghi từng dòng chữ ra 1 file `.txt` UTF-8 riêng trước.
 2. **Font phải là `.ttf` hỗ trợ Unicode tiếng Việt** — `segoeuib.ttf` hoặc `arialbd.ttf` trên Windows đã test OK. Font không hỗ trợ sẽ ra ký tự lỗi/ô vuông.
 3. Trên Windows, đường dẫn font trong filter cần escape dấu `:` — viết `C\:/Windows/Fonts/segoeuib.ttf`.
-4. **File chữ không được kết thúc bằng xuống dòng kiểu Windows (CRLF).** `Set-Content` của PowerShell tự thêm `
+4. **File chữ không được kết thúc bằng xuống dòng kiểu Windows (CRLF).** `Set-Content` của PowerShell tự thêm `
+
 `, làm `drawtext` không vẽ gì mà cũng **không báo lỗi** (gặp thật 16/10/2026). Ghi bằng `printf 'chữ' > file.txt` trong bash hoặc `Set-Content -NoNewline`, rồi trích một khung xem chữ có hiện chưa.
 
 ## Banner/lower-third tiêu đề (đã dùng thật trong dự án)
@@ -50,3 +51,15 @@ Hiện số giây đếm ngược từ `<TONG_GIAY>` về 0, dùng `%{eif\:...\:
 ## Phụ đề (caption) burn-in
 
 Ưu tiên dùng `helpers/render.py` của `video-use` (đã có sẵn force_style chuẩn `bold-overlay` cho short-form, và style `natural-sentence` cho nội dung dài) thay vì tự viết filter `subtitles=` thủ công — video-use đã xử lý đúng thứ tự (phụ đề luôn burn SAU CÙNG, sau mọi overlay khác).
+
+## Phụ đề có nền tối và cụm từ nhấn (ASS)
+
+Cảnh nền sáng hoặc vàng làm mất chữ trắng/vàng chỉ có viền. Dùng hộp nền mờ (`BorderStyle=3`); cụm nhấn đổi font nghiêng màu vàng ngay trong dòng:
+
+```
+Style: C,Segoe UI,56,&H00FFFFFF,&H00FFFFFF,&H00101010,&H66000000,1,0,0,0,100,100,0,0,3,14,0,2,120,120,90,1
+Dialogue: 0,0:00:01.00,0:00:04.30,C,,0,0,0,,{\fad(150,150)}Some days, everything feels {\fnGeorgia\i1\b0\c&H002DCDFF&\fs62}hard{\r}.
+```
+
+Viết file ASS bằng Python thì dùng chuỗi raw (`r"..."`): `"\f"` trong chuỗi thường thành ký tự form feed, mất thẻ `\fad`, `\fn` mà không báo lỗi.
+

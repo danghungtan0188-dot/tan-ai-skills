@@ -15,6 +15,17 @@ ffmpeg -loop 1 -i anh.jpg -t 5 \
 - Đổi `x=`/`y=` để pan (lia) thay vì chỉ zoom tĩnh giữa khung — ví dụ pan từ trái sang phải: `x='if(eq(on,1),0,x+2)'`.
 - **Luôn scale ảnh gốc lên độ phân giải cao hơn đích trước khi zoompan** (ví dụ đích 1080p thì scale ảnh lên ít nhất 4K) để tránh vỡ nét khi zoom.
 
+## Đẩy máy chậm trên video (push-in)
+
+`crop` **không** đổi được `w`/`h` theo thời gian (lỗi "Failed to configure input pad"). Phóng to từng khung bằng `scale ... :eval=frame` rồi `crop` cố định (đã chạy thật 18/10/2026):
+
+```bash
+# 1.00 -> 1.08 trong 10 giây
+ffmpeg -i in.mp4 -vf "scale=w='2*trunc(960*(1+0.08*t/10))':h='2*trunc(540*(1+0.08*t/10))':eval=frame:flags=lanczos,crop=1920:1080" out.mp4
+# đứng yên tới giây 4, rồi phóng 1.00 -> 1.18 trong 5,2 giây
+ffmpeg -i in.mp4 -vf "scale=w='2*trunc(960*(1+0.18*max(0\,t-4)/5.2))':h='2*trunc(540*(1+0.18*max(0\,t-4)/5.2))':eval=frame,crop=1920:1080" out.mp4
+```
+
 ## Speed ramp (tăng/giảm tốc mượt trong 1 clip)
 
 Đơn giản hóa (tốc độ đổi đột ngột tại 1 mốc, đã dùng thật trong dự án — MC đọc nhanh hơn 1.18x, đồng bộ setpts+atempo giữ khớp khẩu hình):

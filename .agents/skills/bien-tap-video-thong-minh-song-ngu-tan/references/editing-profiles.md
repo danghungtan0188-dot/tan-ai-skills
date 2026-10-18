@@ -16,3 +16,15 @@
 - “Bước 1, hướng dẫn, cách làm, bài học” ưu tiên `education`.
 - Shot rate cao, ít lời, nhạc chủ đạo ưu tiên `social_montage`.
 - Không đủ bằng chứng: chọn `official_news` cho nội dung cơ quan hoặc `documentary_event` cho sự kiện chung, rồi báo độ tin cậy thấp.
+
+## Video quảng bá dịch vụ của người dùng (tiếng Anh, đăng Facebook/TikTok)
+
+Chốt sau video "Every day, one small step" (18/10/2026, 2:40, bản ngang 16:9):
+
+- Một bản ngang 16:9 là đủ; không làm thêm bản dọc khi chưa được yêu cầu.
+- Đoạn người dùng tự nói tiếng Anh: giữ tiếng gốc, **không phụ đề**; thay bằng ô chữ câu chốt đặt ở vùng nền mờ hai bên (không che mặt) và thanh tên đầu đoạn.
+- Lời dẫn chen giữa: tiếng Anh, giọng "Hùng Tân chân thật - English" (đọc đúng 100% cả 15 bản thử).
+- Phụ đề lời dẫn: chữ đậm trắng + cụm nhấn Georgia nghiêng vàng `&H002DCDFF`, **có nền tối** ASS `BorderStyle=3`, `BackColour=&H66000000`, viền 14. Không có nền thì chữ mất trên cảnh nền vàng/sáng (gặp thật ở cảnh minh họa nền vàng).
+- Thẻ kêu gọi: dịch vụ là **"nhận"** (NHẬN EDIT VIDEO · DỰNG VIDEO AI · LÀM WEB APP & TOOLS · INBOX NGAY), tiêu đề "Your video, *edit with Tan*". Chữ trên thẻ kêu gọi phải đưa người dùng xem trước khi render.
+- Âm lượng tổng −16 LUFS, đỉnh −1,4 dBFS, 2 lượt linear.
+
