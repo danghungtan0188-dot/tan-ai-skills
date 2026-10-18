@@ -83,6 +83,12 @@ Loudnorm **2 lượt linear** (đo trước, áp một mức gain cố định) 
 `render_att.py` tự làm. Mã hoá `-preset faster -crf 20`: bản sk2 ra 64 MB so với 110 MB của
 `preset medium`, mắt không thấy khác, máy đỡ nóng.
 
+**Nhạc nền tự soạn** (khi không có nhạc được phép dùng): đo năng lượng theo dải trước khi ghép —
+dưới 150 Hz nên ≤ khoảng 10%. Bản tranh giấy 20/10 đầu tiên 55% vì bass sin; nâng bass một quãng tám
++ cắt dưới 60 Hz còn 7%, giai điệu rõ trên loa điện thoại. Tiếng gảy/chuông nhọn đỉnh: chặn đỉnh
+≤ 3 dB **trước** khi mã hoá (`alimiter=limit=0.5:level=disabled` giảm 2,4 dB, LRA giữ 3,0 LU), chốt
+−16,5 LUFS, đỉnh **sau AAC** −3,0 dBTP. `video_qa.py --audio` có mục `true_peak` (> −1 dBTP = FAIL ở `--strict`).
+
 ## 5b. Khi nguồn đã được dựng sẵn
 
 Có lúc người dùng đưa file **đã có phụ đề và banner đốt vào hình**. Kiểm trước bằng cách trích
@@ -233,6 +239,9 @@ Hai điều phải nhớ:
 | Dải tối mờ sau đồ họa số liệu bị chê "làm mờ" cảnh quay | `SoLieuTran`/`HaTang`/`GiamNgheo` đặt `nenMo: false` — chữ có bóng đậm, cảnh giữ sáng |
 | Khung cắt bỏ logo/banner in cứng cắt luôn đầu người đứng sát mép trên | xem cả khung gốc trước khi cắt; đầu sát mép thì xoá logo bằng `delogo` thay vì cắt cao; tránh đoạn có banner tên in cứng (dò từng giây) |
 | Mở đầu bằng flycam thị trấn/vòng xoay bị chê "không đúng" cho câu "vùng đất từng chịu nhiều mất mát" | mở đầu phim quê hương: flycam cao, nghiêng về đồng ruộng; cầu/phố để cho câu hạ tầng, dân số |
+| Mẫu Remotion `TranhGiayPhuNu`: lá sen vẽ bằng cung SVG có hai mép khe đặt ở x = r (không nằm trên đường tròn) → cung lệch tâm, gân thò ra ngoài như xương cá | mép khe đặt đúng trên đường tròn (r·cosθ, ±r·sinθ), cờ cung lớn 1, sweep 0; trước khi render cả clip, `npx remotion still` 4 khung và xem bằng mắt |
+| `clipPath: inset(%)` trên thẻ `<svg>` không làm dải băng mở dần (hiện nguyên thanh đỏ trơn) | mở dải băng bằng `scale: "<mo> 1"` quanh tâm |
+| Remotion in stack trace `bringToFront` sau khi render xong | không phải file hỏng: kiểm `nb_frames` bằng ffprobe và giải mã hết (`ffmpeg -v error -i out.mp4 -f null -` = 0 lỗi) |
 ` cuối dòng: tên composition sai, render không chạy | đọc qua `tr -d '
 '` hoặc ghi file bằng `newline="
 "` |

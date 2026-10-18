@@ -30,6 +30,9 @@ AUDIO_EXT = {".mp3", ".wav", ".m4a", ".aac", ".flac", ".ogg"}
 MIN_BYTES = 1024
 DURATION_TOLERANCE = 0.1  # giay
 AV_TOLERANCE = 0.5  # giay — hinh lech tieng qua muc nay la mat canh
+# Dinh tieng (true peak) do tren file DA ma hoa: AAC day dinh len (tranh giay 20/10: -1,9 truoc AAC
+# thanh +0,8 dBTP sau AAC ma QA van PASS). Vuot -1 dBTP la nguy co re khi phat.
+TRUE_PEAK_MAX = -1.0
 
 
 def probe(path: Path) -> dict:
@@ -78,6 +81,25 @@ def mean_volume_db(path: Path) -> float | None:
                 return float(line.split("mean_volume:")[1].strip().split()[0])
             except (IndexError, ValueError):
                 return None
+    return None
+
+
+def true_peak_db(path: Path) -> float | None:
+    """Dinh tieng thuc (dBTP, do ebur128) cua track tieng; None neu khong do duoc."""
+    result = subprocess.run(
+        ["ffmpeg", "-v", "info", "-nostats", "-i", str(path), "-af", "ebur128=peak=true",
+         "-f", "null", "-"],
+        text=True, capture_output=True, encoding="utf-8", errors="replace",
+    )
+    lines = result.stderr.splitlines()
+    for i, line in enumerate(lines):
+        if line.strip() == "True peak:":
+            for nxt in lines[i + 1:i + 3]:
+                if "Peak:" in nxt:
+                    try:
+                        return float(nxt.split("Peak:")[1].split()[0])
+                    except (IndexError, ValueError):
+                        return None
     return None
 
 
@@ -215,6 +237,13 @@ def check(args) -> dict:
                        f"mean_volume {mean} dB — track tieng im lang")
         else:
             report.add("audio_level", "PASS", f"mean_volume {mean} dB")
+        peak = true_peak_db(artifact)
+        if peak is None:
+            report.add("true_peak", "WARN", "Khong do duoc dinh tieng")
+        elif peak > TRUE_PEAK_MAX:
+            report.add("true_peak", hard, f"{peak:+.1f} dBTP > {TRUE_PEAK_MAX} — nguy co re; gioi han dinh truoc khi ma hoa")
+        else:
+            report.add("true_peak", "PASS", f"{peak:+.1f} dBTP")
 
     if args.source:
         source = Path(args.source)
