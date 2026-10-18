@@ -31,6 +31,7 @@ export const phuNu96Schema = coBan.extend({
   canh: z.array(canhSchema),
   // màn kết phủ toàn khung sau câu đọc cuối cùng
   ketTren: z.string().default("Chúc mừng"),
+  ketDau: z.number().default(0), // > 0: màn chúc mừng đứng ngay sau intro (giây) thay vì cuối phim
   ketLon: z.string().default("20/10"),
   ketDuoi: z.string().default(""),
 });
@@ -81,6 +82,127 @@ const CanhHoa: React.FC<{ W: number; H: number; t: number; seed: string; so?: nu
     })}
   </svg>
 );
+
+// ---- Trang trí kiểu thiệp chúc mừng (vẽ lại bằng vector): hoa hồng đỏ, ngọc trai bóng, kim tuyến, dải lụa ----
+
+// Một bông hồng: đế đỏ sẫm + các lớp cánh xoắn vào tâm
+const Hong: React.FC<{ x: number; y: number; r: number; xoay: number; id: string }> = ({ x, y, r, xoay, id }) => (
+  <g transform={`translate(${x} ${y}) rotate(${xoay})`}>
+    <defs>
+      <radialGradient id={`hg${id}`} cx="0.45" cy="0.4" r="0.65">
+        <stop offset="0" stopColor="#FF4D5E" /><stop offset="0.55" stopColor="#D0122B" /><stop offset="1" stopColor="#7A0414" />
+      </radialGradient>
+    </defs>
+    <circle r={r} fill={`url(#hg${id})`} />
+    {Array.from({ length: 7 }, (_, k) => {
+      const rr = r * (0.95 - k * 0.12);
+      const g = k * 52;
+      return (
+        <path key={k} d={`M ${-rr} 0 A ${rr} ${rr * 0.86} 0 0 1 ${rr} 0 A ${rr * 0.85} ${rr * 0.5} 0 0 0 ${-rr} 0 Z`} transform={`rotate(${g})`}
+          fill={k % 2 ? "#E8263D" : "#B30E26"} stroke="#FF8090" strokeOpacity={0.7} strokeWidth={r * 0.025} />
+      );
+    })}
+    <circle r={r * 0.14} fill="#8E0619" />
+  </g>
+);
+
+const La: React.FC<{ x: number; y: number; d: number; xoay: number }> = ({ x, y, d, xoay }) => (
+  <g transform={`translate(${x} ${y}) rotate(${xoay})`}>
+    <path d={`M 0 0 C ${d * 0.3} ${-d * 0.32} ${d * 0.75} ${-d * 0.3} ${d} 0 C ${d * 0.75} ${d * 0.3} ${d * 0.3} ${d * 0.32} 0 0 Z`} fill="#2E8B3A" stroke="#1B5E25" strokeWidth={d * 0.03} />
+    <path d={`M ${d * 0.05} 0 L ${d * 0.92} 0`} stroke="#9BD27A" strokeWidth={d * 0.025} />
+  </g>
+);
+
+// Bó 3 bông hồng + lá, bật vào bằng spring rồi đung đưa nhẹ
+export const BoHong: React.FC<{ x: number; y: number; s: number; t: number; id: string; lat?: boolean }> = ({ x, y, s, t, id, lat }) => {
+  const vao = spring({ frame: Math.round(t * FPS), fps: FPS, config: { damping: 11, stiffness: 90 } });
+  return (
+    <svg width={420 * s} height={380 * s} style={{
+      position: "absolute", left: x - 210 * s, top: y - 190 * s, overflow: "visible",
+      scale: `${(lat ? -1 : 1) * vao} ${vao}`, rotate: `${Math.sin(t * 1.1) * 3}deg`,
+      filter: `drop-shadow(0 ${10 * s}px ${14 * s}px rgba(40,0,10,0.45))`,
+    }}>
+      <g transform={`translate(${210 * s} ${190 * s})`}>
+        <La x={-40 * s} y={20 * s} d={150 * s} xoay={150} />
+        <La x={10 * s} y={40 * s} d={140 * s} xoay={95} />
+        <La x={30 * s} y={-30 * s} d={130 * s} xoay={-60} />
+        <La x={-30 * s} y={-40 * s} d={120 * s} xoay={-130} />
+        <Hong x={-60 * s} y={-30 * s} r={70 * s} xoay={10} id={`${id}a`} />
+        <Hong x={55 * s} y={-5 * s} r={64 * s} xoay={-40} id={`${id}b`} />
+        <Hong x={-5 * s} y={55 * s} r={60 * s} xoay={70} id={`${id}c`} />
+      </g>
+    </svg>
+  );
+};
+
+// Ngọc trai bóng hồng–trắng trôi nhấp nhô
+export const NgocTrai: React.FC<{ W: number; H: number; t: number; seed: string; so?: number }> = ({ W, H, t, seed, so = 9 }) => (
+  <AbsoluteFill>
+    {Array.from({ length: so }, (_, i) => {
+      const s = H / 1080;
+      const r = (22 + random(`${seed}nr${i}`) * 34) * s;
+      const x = random(`${seed}nx${i}`) * W + Math.sin(t * 0.5 + i) * 26 * s;
+      // chỉ ở dải mép trên / dưới: không đè tiêu đề và lời đọc
+      const y = (i % 2 ? H * 0.02 + random(`${seed}ny${i}`) * H * 0.1 : H * 0.86 + random(`${seed}ny${i}`) * H * 0.12) + Math.cos(t * 0.7 + i * 2) * 22 * s;
+      const hong = i % 3 !== 0;
+      return (
+        <div key={i} style={{
+          position: "absolute", left: x - r, top: y - r, width: 2 * r, height: 2 * r, borderRadius: "50%",
+          background: hong
+            ? "radial-gradient(circle at 34% 30%, #FFFFFF 0%, #FFD3EC 18%, #F48CC8 55%, #B84D93 100%)"
+            : "radial-gradient(circle at 34% 30%, #FFFFFF 0%, #F6F1FF 25%, #D9CCF0 65%, #9C8BC4 100%)",
+          boxShadow: `0 ${6 * s}px ${14 * s}px rgba(60,0,30,0.35), inset ${-4 * s}px ${-6 * s}px ${10 * s}px rgba(90,20,70,0.35)`,
+          opacity: interpolate(t, [0, 0.6], [0, 0.95], kep),
+        }} />
+      );
+    })}
+  </AbsoluteFill>
+);
+
+// Kim tuyến dạng thanh (tím / vàng / hồng) lật 3D khi rơi
+export const KimTuyen: React.FC<{ W: number; H: number; t: number; seed: string; so?: number }> = ({ W, H, t, seed, so = 18 }) => (
+  <AbsoluteFill>
+    {Array.from({ length: so }, (_, i) => {
+      const s = H / 1080;
+      const v = (40 + random(`${seed}kv${i}`) * 50) * s;
+      const y = ((random(`${seed}ky${i}`) * H + t * v) % (H + 100 * s)) - 50 * s;
+      const x = random(`${seed}kx${i}`) * W + Math.sin(t * 1.3 + i) * 30 * s;
+      const [a, b] = [["#B57CFF", "#6A2FD1"], ["#FFE27A", "#E0A21C"], ["#FF9CC2", "#D94C86"]][i % 3];
+      const lat = Math.cos(t * (2 + random(`${seed}kl${i}`) * 3) + i);
+      return (
+        <div key={i} style={{
+          position: "absolute", left: x, top: y, width: 18 * s, height: 46 * s, borderRadius: 3 * s,
+          background: `linear-gradient(${lat > 0 ? 90 : 270}deg, ${a}, ${b})`,
+          rotate: `${random(`${seed}kg${i}`) * 360 + t * 40}deg`, scale: `1 ${Math.max(0.12, Math.abs(lat))}`,
+          boxShadow: `0 ${3 * s}px ${6 * s}px rgba(40,0,30,0.3)`, opacity: interpolate(t, [0, 0.5], [0, 0.9], kep),
+        }} />
+      );
+    })}
+  </AbsoluteFill>
+);
+
+// Dải lụa lượn sóng ở mép trên và mép dưới
+export const DaiLua: React.FC<{ W: number; H: number; t: number }> = ({ W, H, t }) => {
+  const song = (y0: number, bien: number, pha: number, day: number) => {
+    const d = Array.from({ length: 25 }, (_, k) => {
+      const x = (k / 24) * W;
+      return `${k ? "L" : "M"} ${x} ${y0 + Math.sin(k / 24 * Math.PI * 2.2 + t * 0.9 + pha) * bien}`;
+    }).join(" ");
+    return { d, day };
+  };
+  const s = H / 1080;
+  const dai = [
+    { ...song(H * 0.06, 22 * s, 0, 30 * s), mau: "rgba(255,214,235,0.55)" },
+    { ...song(H * 0.09, 18 * s, 1.6, 14 * s), mau: "rgba(255,255,255,0.45)" },
+    { ...song(H * 0.93, 24 * s, 2.4, 34 * s), mau: "rgba(255,190,220,0.5)" },
+    { ...song(H * 0.96, 16 * s, 4.0, 14 * s), mau: "rgba(255,255,255,0.45)" },
+  ];
+  return (
+    <svg width={W} height={H} style={{ position: "absolute", filter: `blur(${1.2 * s}px)` }}>
+      {dai.map((x, i) => <path key={i} d={x.d} fill="none" stroke={x.mau} strokeWidth={x.day} strokeLinecap="round" />)}
+    </svg>
+  );
+};
 
 // Một chữ của câu đang đọc: trồi lên + bỏ mờ theo thứ tự
 const Chu: React.FC<{ chu: string; t: number; vao: number; vang: boolean; s: number }> = ({ chu, t, vao, vang, s }) => (
@@ -136,6 +258,9 @@ const Canh: React.FC<{ c: z.infer<typeof canhSchema>; font: string; W: number; H
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "linear-gradient(100deg, rgba(120,20,70,0.08) 0%, rgba(110,18,64,0.32) 55%, rgba(80,10,48,0.55) 100%)" }} />
       <Bokeh W={W} H={H} t={tuyetDoi} seed={c.so} />
+      <DaiLua W={W} H={H} t={tuyetDoi} />
+      <NgocTrai W={W} H={H} t={t} seed={`n${c.so}`} />
+      <KimTuyen W={W} H={H} t={t} seed={`k${c.so}`} so={14} />
 
       {/* số cảnh viền mảnh, chìm phía sau chữ */}
       <div style={{
@@ -161,6 +286,9 @@ const Canh: React.FC<{ c: z.infer<typeof canhSchema>; font: string; W: number; H
           </div>
         </div>
       </div>
+
+      {/* bó hồng cài góc trên trái khung ảnh */}
+      {t > 0.7 ? <BoHong x={W * 0.07 + 30 * s} y={(H - caoKhung) / 2 + 40 * s} s={0.62 * s} t={t - 0.7} id={`c${c.so}`} /> : null}
 
       {/* tiêu đề + lời đọc ở bên phải */}
       <div style={{ position: "absolute", left: W * 0.07 + rongKhung + W * 0.06, right: W * 0.05, top: H * 0.13, bottom: H * 0.2, display: "flex", flexDirection: "column", gap: 26 * s }}>
@@ -250,6 +378,10 @@ const MANKet: React.FC<{ W: number; H: number; t: number; font: string; tren: st
           </svg>
         );
       })}
+      <NgocTrai W={W} H={H} t={t} seed="ket" so={10} />
+      <KimTuyen W={W} H={H} t={t} seed="ket" so={22} />
+      {t > 0.5 ? <BoHong x={W * 0.13} y={H * 0.2} s={0.95 * s} t={t - 0.5} id="k1" /> : null}
+      {t > 0.8 ? <BoHong x={W * 0.88} y={H * 0.82} s={0.8 * s} t={t - 0.8} id="k2" lat /> : null}
       {/* chữ */}
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", paddingBottom: H * 0.1 }}>
         <div style={{
@@ -292,7 +424,7 @@ const VetCo: React.FC<{ W: number; H: number; p: number }> = ({ W, H, p }) => {
   );
 };
 
-export const PhuNu96: React.FC<z.infer<typeof phuNu96Schema>> = ({ intro, introDai, font, canh, ketTren, ketLon, ketDuoi }) => {
+export const PhuNu96: React.FC<z.infer<typeof phuNu96Schema>> = ({ intro, introDai, font, canh, ketTren, ketLon, ketDuoi, ketDau }) => {
   const frame = useCurrentFrame();
   const { width: W, height: H, durationInFrames } = useVideoConfig();
   const t = frame / FPS;
@@ -300,7 +432,7 @@ export const PhuNu96: React.FC<z.infer<typeof phuNu96Schema>> = ({ intro, introD
   const ff = dungFont(font);
 
   // ranh giới giữa hai cảnh = điểm giữa vệt cọ
-  const ranh = canh.slice(1).map((c) => c.batDau);
+  const ranh = (ketDau > 0 ? canh : canh.slice(1)).map((c) => c.batDau);
   const fr = (sec: number) => Math.round(sec * FPS);
 
   // intro tách đôi như cửa mở trong 1 giây cuối, lộ cảnh 1 phía dưới
@@ -318,6 +450,10 @@ export const PhuNu96: React.FC<z.infer<typeof phuNu96Schema>> = ({ intro, introD
           </Sequence>
         );
       })}
+      {/* màn chúc mừng ngay sau intro: nằm dưới cửa giấy và dưới vệt cọ sang cảnh 1 */}
+      {ketDau > 0 && t >= canh[0].batDau - ketDau && t < canh[0].batDau ? (
+        <MANKet W={W} H={H} t={t - (canh[0].batDau - ketDau)} font={ff} tren={ketTren} lon={ketLon} duoi={ketDuoi} />
+      ) : null}
       {ranh.map((b) => {
         const p = interpolate(t, [b - CHUYEN / 2, b + CHUYEN / 2], [0, 1], kep);
         return p > 0 && p < 1 ? <VetCo key={b} W={W} H={H} p={p} /> : null;
@@ -335,6 +471,7 @@ export const PhuNu96: React.FC<z.infer<typeof phuNu96Schema>> = ({ intro, introD
         </AbsoluteFill>
       ) : null}
       {(() => {
+        if (ketDau > 0) return null;
         const cuoiCung = canh.length ? canh[canh.length - 1].cau : [];
         const tKet = (cuoiCung.length ? cuoiCung[cuoiCung.length - 1].ketThuc : het - 4) + 0.3;
         return t >= tKet ? <MANKet W={W} H={H} t={t - tKet} font={ff} tren={ketTren} lon={ketLon} duoi={ketDuoi} /> : null;

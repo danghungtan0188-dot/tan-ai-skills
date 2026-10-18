@@ -24,6 +24,7 @@ import { VetSang, vetSangSchema } from "./mau/VetSang";
 import { TranhGiay, tranhGiaySchema } from "./mau/TranhGiay";
 import { TranhGiayPhuNu, tranhGiayPhuNuSchema } from "./mau/TranhGiayPhuNu";
 import { PhuNu96, phuNu96Schema } from "./mau/PhuNu96";
+import { KetLaser, ketLaserSchema } from "./mau/KetLaser";
 import { AnhBayVao, anhBayVaoSchema } from "./mau/AnhBayVao";
 import { NguoiNoiPip, nguoiNoiPipSchema } from "./mau/NguoiNoiPip";
 import { TieuDeNhan, tieuDeNhanSchema } from "./mau/TieuDeNhan";
@@ -290,11 +291,19 @@ export const RemotionRoot: React.FC = () => (
       {...chung}
     />
     <Composition
+      id="KetLaser"
+      component={KetLaser}
+      schema={ketLaserSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 4, font: "", donVi: "Trung tâm Cung ứng dịch vụ công xã An Thạnh Thủy", loiMoi: "Theo dõi ATT NEWS để nhận bản tin của xã mỗi ngày", qrTrai: "", qrPhai: "" }}
+      {...chung}
+    />
+    <Composition
       id="PhuNu96"
       component={PhuNu96}
       schema={phuNu96Schema}
       calculateMetadata={metadata(false)}
-      defaultProps={{ tiLe: "16:9", thoiLuong: 20, intro: "", introDai: 6, font: "", canh: [], ketTren: "Chúc mừng", ketLon: "20/10", ketDuoi: "" }}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 20, intro: "", introDai: 6, font: "", canh: [], ketTren: "Chúc mừng", ketLon: "20/10", ketDuoi: "", ketDau: 0 }}
       {...chung}
     />
     <Composition
