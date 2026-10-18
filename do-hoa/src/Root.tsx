@@ -23,6 +23,7 @@ import { TuyenVanChuyen, tuyenVanChuyenSchema } from "./mau/TuyenVanChuyen";
 import { VetSang, vetSangSchema } from "./mau/VetSang";
 import { TranhGiay, tranhGiaySchema } from "./mau/TranhGiay";
 import { TranhGiayPhuNu, tranhGiayPhuNuSchema } from "./mau/TranhGiayPhuNu";
+import { PhuNu96, phuNu96Schema } from "./mau/PhuNu96";
 import { AnhBayVao, anhBayVaoSchema } from "./mau/AnhBayVao";
 import { NguoiNoiPip, nguoiNoiPipSchema } from "./mau/NguoiNoiPip";
 import { TieuDeNhan, tieuDeNhanSchema } from "./mau/TieuDeNhan";
@@ -286,6 +287,14 @@ export const RemotionRoot: React.FC = () => (
         loiChuc2: "Mạnh khỏe · Hạnh phúc · Thành công",
         dongKy: "",
       }}
+      {...chung}
+    />
+    <Composition
+      id="PhuNu96"
+      component={PhuNu96}
+      schema={phuNu96Schema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 20, intro: "", introDai: 6, font: "", canh: [] }}
       {...chung}
     />
     <Composition
