@@ -22,6 +22,7 @@ import { TriAn, triAnSchema } from "./mau/TriAn";
 import { TuyenVanChuyen, tuyenVanChuyenSchema } from "./mau/TuyenVanChuyen";
 import { VetSang, vetSangSchema } from "./mau/VetSang";
 import { TranhGiay, tranhGiaySchema } from "./mau/TranhGiay";
+import { TranhGiayPhuNu, tranhGiayPhuNuSchema } from "./mau/TranhGiayPhuNu";
 import { AnhBayVao, anhBayVaoSchema } from "./mau/AnhBayVao";
 import { NguoiNoiPip, nguoiNoiPipSchema } from "./mau/NguoiNoiPip";
 import { TieuDeNhan, tieuDeNhanSchema } from "./mau/TieuDeNhan";
@@ -268,6 +269,23 @@ export const RemotionRoot: React.FC = () => (
       schema={tranhGiaySchema}
       calculateMetadata={metadata(true)}
       defaultProps={{ tiLe: "16:9", thoiLuong: 6, dongTren: "Ủy ban nhân dân", dongChinh: "Xã An Thạnh Thủy", dongDuoi: "Đêm hội trăng rằm 2026", moCua: true }}
+      {...chung}
+    />
+    <Composition
+      id="TranhGiayPhuNu"
+      component={TranhGiayPhuNu}
+      schema={tranhGiayPhuNuSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{
+        tiLe: "16:9",
+        thoiLuong: 14,
+        tieuDe: "KỶ NIỆM 96 NĂM",
+        dongTen: "Ngày thành lập Hội Liên hiệp Phụ nữ Việt Nam",
+        dongNgay: "20/10/1930 – 20/10/2026",
+        loiChuc1: "Chúc mừng các bà, các mẹ, các chị em phụ nữ",
+        loiChuc2: "Mạnh khỏe · Hạnh phúc · Thành công",
+        dongKy: "",
+      }}
       {...chung}
     />
     <Composition
