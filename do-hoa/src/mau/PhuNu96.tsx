@@ -29,6 +29,10 @@ export const phuNu96Schema = coBan.extend({
   introDai: z.number().default(6),
   font: z.string().default(""), // file .ttf trong public dir; trống = Arial
   canh: z.array(canhSchema),
+  // màn kết phủ toàn khung sau câu đọc cuối cùng
+  ketTren: z.string().default("Chúc mừng"),
+  ketLon: z.string().default("20/10"),
+  ketDuoi: z.string().default(""),
 });
 
 const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -192,6 +196,88 @@ const Canh: React.FC<{ c: z.infer<typeof canhSchema>; font: string; W: number; H
   );
 };
 
+// Màn kết toàn khung: nền chuyển sắc + tia sáng xoay, cánh hoa bung toả, sao lấp lánh,
+// "Chúc mừng" trắng phát sáng, "20/10" vàng ánh kim nổi khối có vệt sáng lướt, dải băng đỏ dòng phụ.
+const MANKet: React.FC<{ W: number; H: number; t: number; font: string; tren: string; lon: string; duoi: string }> = ({ W, H, t, font, tren, lon, duoi }) => {
+  const s = H / 1080;
+  const vao = interpolate(t, [0, 0.6], [0, 1], { ...kep, easing: muot });
+  const nay = spring({ frame: Math.round((t - 0.35) * FPS), fps: FPS, config: { damping: 9, stiffness: 120, mass: 0.8 } });
+  const quet = interpolate(t, [1.1, 2.1], [-30, 130], kep);
+  const bang = interpolate(t, [0.9, 1.6], [0, 1], { ...kep, easing: muot });
+  const tia = Array.from({ length: 18 }, (_, i) => i * 20);
+  const cx = W / 2, cy = H * 0.47;
+  return (
+    <AbsoluteFill style={{ fontFamily: font, opacity: vao }}>
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, #E8507F 0%, #A3164F 45%, #4A0626 100%)" }} />
+      {/* tia sáng xoay */}
+      <svg width={W} height={H} style={{ position: "absolute", opacity: 0.16, mixBlendMode: "screen" }}>
+        <g transform={`translate(${cx} ${cy}) rotate(${t * 10})`}>
+          {tia.map((g) => (
+            <path key={g} d={`M 0 0 L ${W} ${-W * 0.09} L ${W} ${W * 0.09} Z`} transform={`rotate(${g})`} fill="url(#tiaMau)" />
+          ))}
+        </g>
+        <defs>
+          <linearGradient id="tiaMau" x1="0" x2="1">
+            <stop offset="0" stopColor="#FFE9A8" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#FFE9A8" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+      </svg>
+      {/* cánh hoa bung toả từ tâm */}
+      <svg width={W} height={H} style={{ position: "absolute" }}>
+        {Array.from({ length: 46 }, (_, i) => {
+          const goc = random(`kg${i}`) * Math.PI * 2;
+          const v = (380 + random(`kv${i}`) * 620) * s;
+          const tt = Math.max(0, t - 0.3);
+          const x = cx + Math.cos(goc) * v * (1 - Math.exp(-tt * 1.6));
+          const y = cy + Math.sin(goc) * v * (1 - Math.exp(-tt * 1.6)) + 60 * s * tt * tt;
+          const r = (14 + random(`kr${i}`) * 16) * s;
+          const mau = ["#FFD9E6", "#F48FB1", "#FFD86B", "#FFFFFF"][i % 4];
+          return t > 0.3 ? (
+            <path key={i} d={`M 0 0 C ${-r * 0.6} ${-r * 0.4} ${-r * 0.4} ${-r * 1.2} 0 ${-r * 1.4} C ${r * 0.4} ${-r * 1.2} ${r * 0.6} ${-r * 0.4} 0 0 Z`}
+              transform={`translate(${x} ${y}) rotate(${tt * 160 + i * 31})`} fill={mau} opacity={0.95} />
+          ) : null;
+        })}
+      </svg>
+      {/* sao lấp lánh */}
+      {Array.from({ length: 22 }, (_, i) => {
+        const x = random(`sx${i}`) * W, y = random(`sy${i}`) * H;
+        const nhay = Math.max(0, Math.sin(t * 5 + i * 1.7));
+        const r = (10 + random(`sr${i}`) * 16) * s;
+        return (
+          <svg key={i} width={r * 2} height={r * 2} style={{ position: "absolute", left: x - r, top: y - r, opacity: nhay * vao, scale: `${0.6 + 0.6 * nhay}` }}>
+            <path d={`M ${r} 0 Q ${r * 1.12} ${r * 0.88} ${r * 2} ${r} Q ${r * 1.12} ${r * 1.12} ${r} ${r * 2} Q ${r * 0.88} ${r * 1.12} 0 ${r} Q ${r * 0.88} ${r * 0.88} ${r} 0 Z`} fill="#FFF6C8" />
+          </svg>
+        );
+      })}
+      {/* chữ */}
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", paddingBottom: H * 0.1 }}>
+        <div style={{
+          fontSize: 130 * s, fontWeight: 900, color: "#FFFFFF", fontStyle: "italic",
+          WebkitTextStroke: `${3 * s}px #F06A93`, paintOrder: "stroke fill",
+          textShadow: `0 0 ${34 * s}px rgba(255,190,220,0.95)`,
+          translate: `0px ${(1 - vao) * -60 * s}px`, marginBottom: 6 * s,
+        }}>{tren}</div>
+        <div style={{ position: "relative", fontSize: 330 * s, fontWeight: 900, lineHeight: 1, scale: `${0.3 + 0.7 * nay}` }}>
+          {/* lớp nổi khối phía sau */}
+          <div style={{ position: "absolute", inset: 0, color: "#7A0A2E", translate: `${10 * s}px ${14 * s}px`, filter: `drop-shadow(0 ${16 * s}px ${30 * s}px rgba(40,0,15,0.6))` }}>{lon}</div>
+          {/* mặt chữ vàng ánh kim + vệt sáng lướt */}
+          <div style={{
+            position: "relative", color: "transparent", WebkitBackgroundClip: "text", backgroundClip: "text",
+            backgroundImage: `linear-gradient(105deg, transparent ${quet - 12}%, rgba(255,255,255,0.95) ${quet}%, transparent ${quet + 12}%), linear-gradient(180deg, #FFF8D6 0%, #FFD86B 42%, #E9A23B 70%, #FFE7A0 100%)`,
+          }}>{lon}</div>
+        </div>
+        {duoi ? (
+          <div style={{ marginTop: 26 * s, scale: `${bang} 1`, opacity: bang, background: "#C8102E", padding: `${14 * s}px ${46 * s}px`, borderRadius: 6 * s,
+            boxShadow: `0 ${10 * s}px ${24 * s}px rgba(40,0,15,0.5), inset 0 0 0 ${3 * s}px #F7C873` }}>
+            <div style={{ fontSize: 40 * s, fontWeight: 700, color: "#FFE7A0", letterSpacing: 1 * s, opacity: interpolate(bang, [0.6, 1], [0, 1], kep) }}>{duoi}</div>
+          </div>
+        ) : null}
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
 // Vệt cọ hồng–vàng quét chéo che kín giữa hai cảnh
 const VetCo: React.FC<{ W: number; H: number; p: number }> = ({ W, H, p }) => {
   const x = interpolate(p, [0, 1], [-1.6, 1.6]) * W;
@@ -206,7 +292,7 @@ const VetCo: React.FC<{ W: number; H: number; p: number }> = ({ W, H, p }) => {
   );
 };
 
-export const PhuNu96: React.FC<z.infer<typeof phuNu96Schema>> = ({ intro, introDai, font, canh }) => {
+export const PhuNu96: React.FC<z.infer<typeof phuNu96Schema>> = ({ intro, introDai, font, canh, ketTren, ketLon, ketDuoi }) => {
   const frame = useCurrentFrame();
   const { width: W, height: H, durationInFrames } = useVideoConfig();
   const t = frame / FPS;
@@ -248,7 +334,11 @@ export const PhuNu96: React.FC<z.infer<typeof phuNu96Schema>> = ({ intro, introD
           </Sequence>
         </AbsoluteFill>
       ) : null}
-      {t > het - 4 ? <CanhHoa W={W} H={H} t={t - (het - 4)} seed="ket" so={30} /> : null}
+      {(() => {
+        const cuoiCung = canh.length ? canh[canh.length - 1].cau : [];
+        const tKet = (cuoiCung.length ? cuoiCung[cuoiCung.length - 1].ketThuc : het - 4) + 0.3;
+        return t >= tKet ? <MANKet W={W} H={H} t={t - tKet} font={ff} tren={ketTren} lon={ketLon} duoi={ketDuoi} /> : null;
+      })()}
     </AbsoluteFill>
   );
 };

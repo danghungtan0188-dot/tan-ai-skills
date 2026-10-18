@@ -294,7 +294,7 @@ export const RemotionRoot: React.FC = () => (
       component={PhuNu96}
       schema={phuNu96Schema}
       calculateMetadata={metadata(false)}
-      defaultProps={{ tiLe: "16:9", thoiLuong: 20, intro: "", introDai: 6, font: "", canh: [] }}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 20, intro: "", introDai: 6, font: "", canh: [], ketTren: "Chúc mừng", ketLon: "20/10", ketDuoi: "" }}
       {...chung}
     />
     <Composition

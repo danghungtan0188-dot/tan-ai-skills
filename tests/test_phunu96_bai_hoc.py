@@ -32,6 +32,12 @@ class TestChonBanTTS(unittest.TestCase):
         self.assertNotEqual(chon_ban(ds), "s2d_5")
         self.assertEqual(chon_ban(ds), "s2d_6")
 
+    def test_loai_ban_bi_cut_mep(self):
+        # ban cut duoi (mep -28 dB) du dep nhat cung khong duoc chon
+        ds = [ban("cut", 0.0, [], 11.0, 2.0), ban("lanh", 0.01, [], 8.0, 2.0)]
+        ds[0]["mep"], ds[1]["mep"] = -28.0, -52.0
+        self.assertEqual(chon_ban(ds), "lanh")
+
     def test_phat_am_truoc_ngu_dieu(self):
         # ban ngu dieu dep hon nhung CER vuot san thi khong duoc chon
         ds = [ban("a", 0.00, [], 6.0, 2.0), ban("b", 0.05, [], 11.0, 2.0)]
