@@ -243,6 +243,30 @@ Không có người trên hình; giọng AI nam miền Bắc kể chuyện đờ
 
 Đã có sẵn: phụ đề tô từng từ (`karaoke_word`), vòng khoanh và nhãn (`callouts.py`), danh sách hiện dần (HyperFrames `kinetic-type-beats`). Giọng đã lưu thành **"Adam - video AutoCAD"** (xem kho giọng của skill `tan-giong-doc-ban-tin`).
 
+## Bản đồ hành trình "Follow the red line" (KOYO 2026, 2 phút 5 giây, 10/2026)
+
+Video bài hát về mùa lá đỏ Nhật: một **đường đỏ** đi từ bắc xuống nam qua 8 điểm ngắm lá. Đo được: không có cú cắt nào (`scdet` ngưỡng 12 bắt 0 lần), toàn bộ là **một máy quay ảo bay liên tục** trên bản đồ. Khoảng 10 giây một điểm, xen 2 đoạn điệp khúc "momiji" và 2 lần lùi ra toàn cảnh. Âm lượng mean −16,8 dB, đỉnh −1 dB.
+
+**Nhận diện hình ảnh (đáng học nhất):**
+- **Ba màu:** nền xanh rêu đậm, nét trắng ngà mảnh, nhấn **cam đỏ** (đường đi, khung ảnh, chữ "NEXT"). Không có màu thứ tư. Ảnh thật là chỗ duy nhất có màu tự nhiên.
+- **Khung HUD cố định:** dòng trên gồm tên dự án · "FOLLOW THE RED LINE — vùng · điểm" bên trái và tọa độ `40.591°N 140.978°E` bên phải, gạch mảnh ngăn dưới. Dòng dưới ghi thông số khối địa hình và **nguồn dữ liệu** ("Boundaries: Natural Earth (public domain) · Elevation: AWS Terrain Tiles"). Toàn bộ bằng chữ đơn cách in hoa, giãn chữ.
+- **Ô chặng (trên trái):** "NEXT · STOP 02 / 08 · vùng", tên điểm, rồi **ngày cực to** (10/13) cạnh tên tỉnh, dòng nguồn dự báo nhỏ. Ở cảnh toàn thì ô này đổi thành **bảng 8 điểm + ngày**: điểm đã qua tô cam, điểm kế ghi nhãn "NEXT".
+- **Phụ đề hai thứ tiếng** giữa dưới: tiếng Anh trên, chữ đang hát sáng trắng, phần chưa hát xám; tiếng Nhật nhỏ hơn bên dưới. Điệp khúc thì chữ to lệch phải.
+
+**Chuyển động:**
+1. **Đường đỏ tự vẽ** theo lộ trình, **đầu bút là đốm sáng lóe** có tia lửa nhỏ. Đoạn sắp đi tới vẽ **nét đứt trắng**, đi qua rồi mới thành nét đỏ liền.
+2. **Máy quay nghiêng 3D** (pitch khoảng 45–60°) bám theo đầu bút, ranh giới tỉnh nổi khối mỏng có bóng.
+3. Tới điểm: hoặc **ảnh thật trong khung viền cam** có **đường kẻ gãy khúc nối về đúng điểm** trên bản đồ (kèm dòng ghi nguồn ảnh Wikimedia), hoặc **khối địa hình cắt vuông** vẽ bằng đường đồng mức, có nhãn "TÊN · RELIEF 100–1442 M · tọa độ" nối bằng đường kẻ.
+4. **Điệp khúc:** chữ viết tay "momiji" **tự vẽ nét** màu cam, kèm cây lá vẽ bằng nét đồng mức xếp tầng.
+5. **Lùi ra toàn cảnh** hai lần (giữa bài và cuối): cả nước, đủ 8 điểm và đường đỏ nối liền, câu kết "One line, all the way down".
+
+**Áp vào video của mình:**
+- Bản đồ một tỉnh/xã: ranh giới lấy từ OpenStreetMap hoặc GADM, **kiểm lại sau sáp nhập 2025**; có bản đồ chính thức của xã thì dò theo bản đó (như mẫu `BanDoXa`). Bay máy quay bằng MapLibre (skill `remotion-maps`, miễn phí) hoặc vẽ vector trong Remotion rồi nghiêng bằng CSS `perspective`.
+- **Bỏ khối địa hình 3D** với vùng đồng bằng: miền Tây phẳng nên khối trơ, lại phải dựng three.js nặng máy (máy hay sập nguồn khi chạy nặng). Thay bằng ảnh/clip quay thật trong khung viền + đường kẻ nối.
+- Màu cho ATT NEWS: nền navy + nét trắng + nhấn vàng ATT, giữ đúng luật ba màu.
+- Ghép sẵn với thứ đã có: khung ảnh 3D (`PhuNu96`), viền chạy quanh ranh giới (`BanDoXa`), đầu bút lóe tia lửa (`KetLaser`), phụ đề song ngữ (skill `bien-tap-video-thong-minh-song-ngu-tan`).
+- Dữ liệu điểm nên để trong một file JSON (tên, tọa độ, ngày, ảnh, câu thuyết minh) để mẫu tự dựng; ghi nguồn bản đồ và ảnh ở dòng dưới như video mẫu.
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
