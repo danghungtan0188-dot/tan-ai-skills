@@ -291,6 +291,45 @@ Người nói giải thích dự án cải tạo sông bằng **bản đồ vệ
 
 **Phần "cách làm" (0–33 giây) và kêu gọi:** ô đỏ cam "CÁCH LÀM" cùng danh sách tích xanh hiện dần ("Chuẩn bị file audio", "Kéo vào Claude", "Gọi skill bản đồ", "Nhấn Enter"), đè trên quay màn hình. Sau đó là ô "AI TỰ LÀM HẾT / 100% DO AI" và cuối cùng ô "BÌNH LUẬN: SKILL" để xin tương tác. Danh sách ô tích hiện dần **chưa có mẫu sẵn**; gần nhất là `TieuChi` (thẻ sáng lần lượt theo lời đọc, không có dấu tích).
 
+**Họ làm thế nào (nghe lời người nói + đọc màn hình Claude trong video):**
+1. **Có file giọng đọc trước** (`Audio.mp3`): tự đọc hoặc tạo bằng minimax.audio. Giọng đọc là kịch bản; mọi thứ khác bám theo giọng.
+2. **Kéo file vào Claude desktop (tab Code)**, dự án tên `SON_AI_VIDEO`, rồi **gọi skill bản đồ riêng của họ** ("skill bản đồ hạ tầng") và nhấn Enter. Skill này không công khai (cuối video xin "BÌNH LUẬN: SKILL").
+3. Khoảng **20 phút** máy trả về `SongDay_BanDo_v4.mp4` (117 giây, 1080×1920, 3.521 khung, có tiếng động SFX, chưa có nhạc). Skill **tự tìm ranh giới/sông/cầu từ OpenStreetMap và tự lấy ảnh vệ tinh Esri/Maxar** theo địa danh trong lời đọc.
+4. Tên file là **v4** và Claude ghi "nội dung, cảnh và số liệu giữ nguyên như anh đã duyệt": thực tế là **có duyệt nội dung và sửa qua 3 lượt**, không phải một Enter là xong như lời quảng cáo.
+
+**Skill của họ tự kiểm 5 mục trên file cuối (nên học nguyên):**
+
+| Mục | Ngưỡng họ dùng |
+|---|---|
+| Đủ khung | 3.521 khung = thời lượng × 30 |
+| Độ to | −14,0 LUFS, đỉnh −1,7 dBFS |
+| Tọa độ khớp ảnh vệ tinh | so 12 khung, lệch nhiều nhất 0,22 px |
+| Không khung nhảy | 0 khung giật |
+| Máy quay êm | lia tối đa 12,8 px/khung, zoom tối đa 6,6 %/khung |
+
+**Lỗi họ sửa từ v3 sang v4 (lỗi điển hình của video bản đồ, phải có bước kiểm riêng):** nhãn đè nhãn ("BỜ HỮU" đè "SÔNG BÙI"); tên xã mờ lộ xuyên qua ô thông tin; hai nhãn "SÔNG ĐÁY" cùng lúc; nhãn thò ra dưới ghim ("CẦU 72 II"); nhãn bị mép thẻ cắt ("CẦU MAI LĨNH").
+
+**Toàn bộ đồ họa đã thấy (xem 3 giây/khung từ giây 46 tới hết):**
+- Mở: ảnh vệ tinh toàn vùng, sông vẽ dần từ **ghim "ĐẬP ĐÁY"** xuôi xuống, nhãn cầu chấm vàng hiện lần lượt dọc sông.
+- Sông đoạn đang nói phát sáng xanh ngọc đậm, đoạn khác mờ; **nét đứt trắng** chạy giữa lòng sông = phương án nắn dòng; nhãn số đo bên bờ ("BỜ HỮU ~17,6 KM", "BỜ TẢ ~16,2 KM").
+- Nhãn trạng thái dạng viên thuốc ("● PHƯƠNG ÁN ĐANG NGHIÊN CỨU", "HỒ SƠ ĐỀ XUẤT ĐANG LẤY Ý KIẾN"); ô cảnh báo tam giác vàng "Chưa phải quy hoạch cuối cùng".
+- Phóng sát tới cầu (ảnh vệ tinh rõ nhà cửa), **thước đo bề rộng đường** "~40 M TRÊN BẢN ĐỒ", ô "QUY MÔ: mặt đường ~20 m · 4 làn xe · nền đường ~33–35 m" có hình mặt cắt làn xe.
+- **Số lớn đếm lên** "6.000+ HỘ DỰ KIẾN" (dòng phụ "~24.000 người · toàn tuyến · theo hồ sơ").
+- **Biểu tượng người + dấu hỏi** mọc lên trên khu dân cư; ô đỏ có hình sổ đỏ "Có sổ đỏ chưa chắc là ĐẤT AN TOÀN".
+- Bảng **đối chiếu lớp** có ô tích (Tuyến sông, Tuyến đường, Quy hoạch liên quan) — tích tới đâu lớp đó hiện tới đó.
+- **Vùng quỹ đất viền vàng nhấp nháy** quanh phường, ô so sánh 200 ha / 25 ha bằng hai ô vuông đúng tỷ lệ.
+- Sơ đồ "Nhà đầu tư ⇄ Nhà nước" (bản đồ tối đi), ô tổng hợp số liệu dự án có dấu chấm đầu dòng.
+- Tuyến đường mới **vẽ dần nét vàng phát sáng** cắt qua ảnh vệ tinh; mũi tên trắng nhỏ chạy theo dòng nước.
+- Ô "CHỈ CẦN NHỚ 3 THỨ" có 3 ô tích; cuối là 3 câu hỏi dạng viên thuốc và câu kết chữ lớn hai dòng; nút "+ FOLLOW" đỏ.
+- Mỗi ô thông tin đều **nối nghĩa với lời đang nói**, xuất hiện 0,3–0,5 giây sau từ khóa và tắt khi chuyển ý.
+
+**Để sau này mình tự làm (kế hoạch, chưa dựng):** một skill "bản đồ từ giọng đọc" theo chuỗi sẵn có của repo:
+1. Giọng đọc (VieNeu) → `faster-whisper` lấy mốc từng chữ → tách địa danh, số liệu.
+2. Lấy dữ liệu: ranh giới/sông/đường/cầu từ OpenStreetMap (Overpass), ảnh vệ tinh tải về một lần thành ảnh lớn (kỹ thuật static map của `remotion-maps`), ghi nguồn ở đáy.
+3. **Duyệt kịch bản cảnh trước khi render** (danh sách cảnh: vùng nhìn, lớp hiện, ô số liệu, mốc giây) — đúng luật DUYỆT của repo.
+4. Dựng bằng Remotion (đã có đầu bút lóe `KetLaser`, viền chạy ranh giới `BanDoXa`, phụ đề từng chữ); render nhẹ 2 luồng.
+5. Tự kiểm 5 mục như trên **cộng kiểm nhãn**: không đè nhau, không bị mép cắt, không trùng tên — làm bằng cách tính hộp chữ trong code rồi so từng cặp, không chỉ nhìn bằng mắt.
+
 **Áp vào video của mình:**
 - Hợp cho **video giải thích quy hoạch, công trình, tuyến đường, kênh thủy lợi** của xã: sông/kênh phát sáng, có mũi tên dòng chảy, ô số liệu và dòng nguồn ghi rõ "chưa phải quy hoạch duyệt". Dòng nguồn như vậy rất nên học cho tin chính quyền.
 - **Ảnh vệ tinh:** Esri World Imagery dùng được nếu ghi nguồn đúng điều khoản Esri (kiểm điều khoản trước khi dùng cho bản phát sóng); ranh giới, sông, đường lấy từ OpenStreetMap (ghi "© OpenStreetMap"). Ranh giới xã phường **sau sáp nhập 2025** phải đối chiếu bản đồ chính thức.
