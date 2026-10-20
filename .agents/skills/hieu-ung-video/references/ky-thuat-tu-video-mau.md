@@ -260,6 +260,39 @@ Video bài hát về mùa lá đỏ Nhật: một **đường đỏ** đi từ b
 4. **Điệp khúc:** chữ viết tay "momiji" **tự vẽ nét** màu cam, kèm cây lá vẽ bằng nét đồng mức xếp tầng.
 5. **Lùi ra toàn cảnh** hai lần (giữa bài và cuối): cả nước, đủ 8 điểm và đường đỏ nối liền, câu kết "One line, all the way down".
 
+**Xem dày 1,5 giây/khung cả video — cấu trúc thật (học kỹ):**
+
+*Khung chuyện:* mở bằng toàn cảnh nước Nhật có 8 điểm, **tiêu đề chữ Nhật lớn "紅葉前線" (hai chữ trắng, hai chữ cam) + dòng phụ "KOYO ZENSEN · FOLLOW THE RED LINE"**; kết lại đúng khung đó ("See you in the red") — **mở và kết là một khung** (bookend). Giữa bài và cuối bài có 2 lần lùi ra toàn cảnh, bảng danh sách tích dần từng điểm, các điểm đã qua sáng lên.
+
+*Mỗi điểm (khoảng 10 giây) lặp cùng 6 nhịp:*
+1. **Bay theo đường đỏ** tới điểm: máy nghiêng, nét đứt trắng phía trước, đầu bút lóe.
+2. **Mặt phẳng hóa địa hình:** một ô chữ nhật phẳng nhỏ ở điểm đến **nở ra và trồi lên** thành khối/vùng địa hình vẽ bằng đường đồng mức trắng mảnh.
+3. **Đường đỏ chạy trên địa hình** theo đúng lộ trình (đèo, thung lũng), có vệt sáng và tia lửa.
+4. **Biểu tượng riêng của nơi đó, dựng bằng cùng bộ nét + hạt cam** — đây là chỗ hay nhất:
+   - núi lá vàng → **cây hình nón xoắn bằng chấm cam**;
+   - hẻm suối → **thác bằng hàng trăm nét dọc cam**;
+   - đèo 48 khúc cua → **dải đường zíc zắc leo dốc + số đếm "08 → 48"**;
+   - hàng cây ngân hạnh 300 m → **vòm chấm vàng + thước đo "300 M"**;
+   - núi soi bóng sông → **cây chấm cam và bóng ngược của nó**;
+   - cổng torii → **khung dây cổng torii** vẽ nét;
+   - cầu treo → **đường kích thước kiểu bản vẽ "390 M" (dài) rồi "173 M" (cao)**.
+5. **Hạt lá bay tụ vào khung → thành ảnh thật** viền cam, đường kẻ nối về điểm; phụ đề đổi câu.
+6. **Ảnh thu lại thành một dải mỏng rồi trượt đi**, đường đỏ đi tiếp sang điểm sau. **Không có cú cắt nào** — mọi thứ mọc ra từ đường và quay về đường.
+
+*Điệp khúc:* chữ viết tay "momiji" tự vẽ nét cam + cây lá dựng bằng đường đồng mức xếp tầng; chữ lớn lệch phải.
+
+*Nhịp với nhạc:* mỗi điểm đổi đúng đầu câu hát; số đếm, thước đo bật đúng chữ được hát ("three hundred ninety metres").
+
+*Nhiều khả năng dựng bằng:* trình duyệt + WebGL (three.js hoặc deck.gl) với địa hình AWS Terrain Tiles và ranh giới Natural Earth, render từng khung rồi mã hóa bằng ffmpeg (metadata `Lavf62 / libx264` — không phải phần mềm dựng tay). HyperFrames có sẵn bộ chuyển Three.js nên dựng được kiểu này; nhưng WebGL 3D **rất nặng** cho máy hay sập nguồn.
+
+**Bài học lớn rút ra (áp cho mọi video bản đồ/giải thích):**
+- **Một bộ từ vựng hình ảnh** (nét mảnh + hạt một màu nhấn) dùng xuyên suốt, nhưng **mỗi điểm có một ẩn dụ riêng** dựng từ chính bộ từ vựng đó → vừa đồng bộ vừa không nhàm.
+- **Số liệu thành hình:** thay vì chỉ ghi "390 m", vẽ đường kích thước kiểu bản vẽ kỹ thuật ngay trên vật thể.
+- **Ảnh thật là phần thưởng**, xuất hiện sau phần đồ họa và mọc ra từ hạt/đường — không chèn ảnh trơ.
+- **Mở = kết**, và có 1–2 lần lùi ra toàn cảnh để người xem nắm tiến độ.
+
+**Phiên bản nhẹ máy cho mình (chưa dựng):** địa hình miền Tây phẳng nên bỏ khối 3D; "trồi lên" thay bằng **ảnh vệ tinh mở ra từ ô chữ nhật** (mẫu `BanDoVeTinh` đã có ảnh nền + phóng). Ẩn dụ từng điểm làm bằng SVG trong Remotion, ví dụ: ruộng lúa → lưới ô vuông chấm vàng mọc dần; kênh → các nét chảy song song; cầu → đường kích thước "dài … m"; chợ nổi → chấm ghe tụ lại; trường/trạm y tế → khung dây nhà. Hạt bay tụ thành ảnh: lấy mẫu màu ảnh thành lưới chấm, chấm bay từ đường vào đúng ô rồi hòa sang ảnh.
+
 **Áp vào video của mình:**
 - Bản đồ một tỉnh/xã: ranh giới lấy từ OpenStreetMap hoặc GADM, **kiểm lại sau sáp nhập 2025**; có bản đồ chính thức của xã thì dò theo bản đó (như mẫu `BanDoXa`). Bay máy quay bằng MapLibre (skill `remotion-maps`, miễn phí) hoặc vẽ vector trong Remotion rồi nghiêng bằng CSS `perspective`.
 - **Bỏ khối địa hình 3D** với vùng đồng bằng: miền Tây phẳng nên khối trơ, lại phải dựng three.js nặng máy (máy hay sập nguồn khi chạy nặng). Thay bằng ảnh/clip quay thật trong khung viền + đường kẻ nối.
