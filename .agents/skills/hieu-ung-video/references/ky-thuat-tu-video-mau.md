@@ -330,6 +330,11 @@ Người nói giải thích dự án cải tạo sông bằng **bản đồ vệ
 4. Dựng bằng Remotion (đã có đầu bút lóe `KetLaser`, viền chạy ranh giới `BanDoXa`, phụ đề từng chữ); render nhẹ 2 luồng.
 5. Tự kiểm 5 mục như trên **cộng kiểm nhãn**: không đè nhau, không bị mép cắt, không trùng tên — làm bằng cách tính hộp chữ trong code rồi so từng cặp, không chỉ nhìn bằng mắt.
 
+**Đã dựng thử (10/2026): mẫu Remotion `BanDoVeTinh`** (`do-hoa/src/mau/BanDoVeTinh.tsx`), bản 24 giây kênh Chợ Gạo – xã An Thạnh Thủy. Thư mục dựng `Desktop/video/_bando_chogao/` có đủ chuỗi script: `lay_chi_tiet.py` (Overpass: ranh giới, sông, đường, cầu) → `tai_ve_tinh.py` (ghép ô Esri z15 cho nền, z17 cho cận cảnh, lưu từng ô) → `du_lieu_ban_do.py` (đổi toạ độ sang pixel ảnh nền) → `props.py` → render 2 luồng (723 khung mất 751 s — chậm hơn mẫu thường vì ảnh vệ tinh lớn + bộ lọc).
+- **Bài học dữ liệu:** đếm "đoạn kênh trong xã" bằng điểm-trong-đa-giác cho 8,3 km nhưng thực ra **kênh là ranh giới** giữa An Thạnh Thủy và Tân Thuận Bình — chỉ phát hiện khi **vẽ chồng lên ảnh rồi nhìn**. Luôn vẽ chồng dữ liệu lên ảnh nền trước khi viết lời đọc có số liệu; đo "dọc ranh giới" bằng khoảng cách tới đường ranh (< 150 m).
+- **Bài học nhãn (học từ GeoReel `render/flyover.html`):** đặt nhãn theo thứ tự ưu tiên, tính khung chữ trên màn hình; đụng thì đẩy lên từng dòng + đường kẻ nối về điểm; gần mép thì canh vào trong; có **vùng cấm** (tiêu đề, bản đồ nhỏ, ô số liệu, phụ đề); hết chỗ thì **ẩn** chứ không để đè/cắt. Bản đầu chưa có luật này dính đúng 3 lỗi nhóm Sông Đáy từng sửa (đè nhãn, lộ chữ qua ô, mép cắt).
+- Nét kênh OSM vẽ từ vết GPS (`source=osm-gpx`) lệch lòng kênh khi phóng sát: phóng > 1,8× thì làm nhạt nét để lộ mặt nước thật.
+
 **Áp vào video của mình:**
 - Hợp cho **video giải thích quy hoạch, công trình, tuyến đường, kênh thủy lợi** của xã: sông/kênh phát sáng, có mũi tên dòng chảy, ô số liệu và dòng nguồn ghi rõ "chưa phải quy hoạch duyệt". Dòng nguồn như vậy rất nên học cho tin chính quyền.
 - **Ảnh vệ tinh:** Esri World Imagery dùng được nếu ghi nguồn đúng điều khoản Esri (kiểm điều khoản trước khi dùng cho bản phát sóng); ranh giới, sông, đường lấy từ OpenStreetMap (ghi "© OpenStreetMap"). Ranh giới xã phường **sau sáp nhập 2025** phải đối chiếu bản đồ chính thức.

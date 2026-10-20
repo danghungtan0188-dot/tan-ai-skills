@@ -25,6 +25,7 @@ import { TranhGiay, tranhGiaySchema } from "./mau/TranhGiay";
 import { TranhGiayPhuNu, tranhGiayPhuNuSchema } from "./mau/TranhGiayPhuNu";
 import { PhuNu96, phuNu96Schema } from "./mau/PhuNu96";
 import { KetLaser, ketLaserSchema } from "./mau/KetLaser";
+import { BanDoVeTinh, banDoVeTinhSchema } from "./mau/BanDoVeTinh";
 import { AnhBayVao, anhBayVaoSchema } from "./mau/AnhBayVao";
 import { NguoiNoiPip, nguoiNoiPipSchema } from "./mau/NguoiNoiPip";
 import { TieuDeNhan, tieuDeNhanSchema } from "./mau/TieuDeNhan";
@@ -287,6 +288,20 @@ export const RemotionRoot: React.FC = () => (
         loiChuc1: "Chúc mừng các bà, các mẹ, các chị em phụ nữ",
         loiChuc2: "Mạnh khỏe · Hạnh phúc · Thành công",
         dongKy: "",
+      }}
+      {...chung}
+    />
+    <Composition
+      id="BanDoVeTinh"
+      component={BanDoVeTinh}
+      schema={banDoVeTinhSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{
+        tiLe: "9:16", thoiLuong: 4, font: "", nen: { file: "nen.jpg", w: 1000, h: 1000, mPx: 4.7 }, can: null,
+        tieuDe: { nho: "GÓC NHÌN BẢN ĐỒ", lon: "TÊN TUYẾN", phu: "" }, nguon: [],
+        xa: { ten: "", vong: [[0, 0], [1, 0], [1, 1], [0, 0]], nhan: [0, 0] }, kenh: { ten: "", duong: [[0, 0], [1, 1]], nhan: [0, 0] },
+        langGieng: [], tuyen: [], cau: null, so: null, canh: [{ tu: 0, cx: 500, cy: 500, zoom: 1 }],
+        moc: { kenh: 0, xa: 0, so: 99, tuyen: 99, cau: 99, het: 4 }, cau_doc: [],
       }}
       {...chung}
     />
