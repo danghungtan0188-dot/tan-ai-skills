@@ -289,7 +289,7 @@ Người nói giải thích dự án cải tạo sông bằng **bản đồ vệ
 5. **So sánh diện tích bằng hai ô vuông** đúng tỷ lệ (200 ha so với 25 ha) và **vùng quy hoạch viền vàng** khoanh trên ảnh vệ tinh.
 6. Máy quay **trượt/phóng dần** theo dòng sông tới đoạn đang nói.
 
-**Phần "cách làm" (0–33 giây) và kêu gọi:** ô đỏ cam "CÁCH LÀM" cùng danh sách tích xanh hiện dần ("Chuẩn bị file audio", "Kéo vào Claude", "Gọi skill bản đồ", "Nhấn Enter"), đè trên quay màn hình. Sau đó là ô "AI TỰ LÀM HẾT / 100% DO AI" và cuối cùng ô "BÌNH LUẬN: SKILL" để xin tương tác. Kiểu danh sách tích này đã có tương đương: thẻ ô tích của `TieuChi`.
+**Phần "cách làm" (0–33 giây) và kêu gọi:** ô đỏ cam "CÁCH LÀM" cùng danh sách tích xanh hiện dần ("Chuẩn bị file audio", "Kéo vào Claude", "Gọi skill bản đồ", "Nhấn Enter"), đè trên quay màn hình. Sau đó là ô "AI TỰ LÀM HẾT / 100% DO AI" và cuối cùng ô "BÌNH LUẬN: SKILL" để xin tương tác. Danh sách ô tích hiện dần **chưa có mẫu sẵn**; gần nhất là `TieuChi` (thẻ sáng lần lượt theo lời đọc, không có dấu tích).
 
 **Áp vào video của mình:**
 - Hợp cho **video giải thích quy hoạch, công trình, tuyến đường, kênh thủy lợi** của xã: sông/kênh phát sáng, có mũi tên dòng chảy, ô số liệu và dòng nguồn ghi rõ "chưa phải quy hoạch duyệt". Dòng nguồn như vậy rất nên học cho tin chính quyền.
