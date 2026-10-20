@@ -267,6 +267,37 @@ Video bài hát về mùa lá đỏ Nhật: một **đường đỏ** đi từ b
 - Ghép sẵn với thứ đã có: khung ảnh 3D (`PhuNu96`), viền chạy quanh ranh giới (`BanDoXa`), đầu bút lóe tia lửa (`KetLaser`), phụ đề song ngữ (skill `bien-tap-video-thong-minh-song-ngu-tan`).
 - Dữ liệu điểm nên để trong một file JSON (tên, tọa độ, ngày, ảnh, câu thuyết minh) để mẫu tự dựng; ghi nguồn bản đồ và ảnh ở dòng dưới như video mẫu.
 
+## Reel dọc "Góc nhìn quy hoạch — Sông Đáy" (3 phút 10 giây, 9:16, 10/2026)
+
+Người nói giải thích dự án cải tạo sông bằng **bản đồ vệ tinh động** do AI dựng (Claude + một skill bản đồ, giọng đọc từ minimax.audio). Đo được: cả video chỉ **1 cú cắt** (giây 33, từ đoạn khoe "cách làm" sang bản đồ), còn lại một khung bản đồ chạy liên tục, đồ họa đổi theo lời. Âm lượng −14,1 LUFS, LRA 2,3 LU: nén mạnh kiểu mạng xã hội.
+
+**Bố cục khung dọc (đáng học):**
+- Nền đen có **lưới ô vuông trắng mờ**, nửa dưới hắt **ánh vàng** từ dưới lên.
+- **Thẻ bản đồ dọc bo góc, viền xanh ngọc dày** chiếm giữa khung. Người nói đứng nhỏ, tách nền, ở **góc dưới trái**, đè lên mép thẻ.
+- Trong thẻ, giữ cố định:
+  - **trên trái:** dòng nhỏ giãn chữ "GÓC NHÌN QUY HOẠCH", tên lớn "SÔNG ĐÁY", dòng phụ "Dự án cải tạo · Hà Nội";
+  - **trên phải:** mũi tên chỉ Bắc và **bản đồ nhỏ định vị** (ô vàng khoanh đoạn đang xem);
+  - **trái dưới:** thước tỷ lệ "2 km";
+  - **dưới:** dòng nhỏ giãn chữ "THỨ HAI" rồi **tiêu đề lớn phát sáng** ("CẢI TẠO SÔNG ĐÁY", "BẰNG QUỸ ĐẤT"); **phụ đề từng cụm từ**, chữ trắng, từ khóa vàng;
+  - **đáy:** 2 dòng nguồn ("Ảnh vệ tinh: Esri, Maxar · Sông, cầu, ranh giới xã/phường: © OpenStreetMap · Số liệu: hồ sơ đề xuất… chưa phải quy hoạch duyệt") và **thanh tiến độ mảnh** chạy theo thời lượng.
+
+**Đồ họa trên bản đồ:**
+1. **Dòng sông phát sáng xanh ngọc** (nét dày có quầng), **mũi tên trắng nhỏ chạy dọc theo dòng** chỉ hướng nước chảy.
+2. **Nhãn địa danh** chữ in hoa nhỏ (xã, cầu); cầu có chấm vàng. Đường giao thông là nét vàng mảnh.
+3. **Ô thông tin đáy kính tối viền xanh**: danh sách gạch đầu dòng số liệu ("Nạo vét…", "Đào mới tổng ~13,9 km"); **bảng bật/tắt lớp** có ô tích (Tuyến sông · Tuyến đường · Quy hoạch liên quan) và lớp tương ứng hiện lên theo ô được tích.
+4. **Sơ đồ hai bên** (Nhà đầu tư ⇄ Nhà nước) với mũi tên phát sáng hai màu ngược chiều; lúc này **bản đồ tối đi** để sơ đồ nổi lên.
+5. **So sánh diện tích bằng hai ô vuông** đúng tỷ lệ (200 ha so với 25 ha) và **vùng quy hoạch viền vàng** khoanh trên ảnh vệ tinh.
+6. Máy quay **trượt/phóng dần** theo dòng sông tới đoạn đang nói.
+
+**Phần "cách làm" (0–33 giây) và kêu gọi:** ô đỏ cam "CÁCH LÀM" cùng danh sách tích xanh hiện dần ("Chuẩn bị file audio", "Kéo vào Claude", "Gọi skill bản đồ", "Nhấn Enter"), đè trên quay màn hình. Sau đó là ô "AI TỰ LÀM HẾT / 100% DO AI" và cuối cùng ô "BÌNH LUẬN: SKILL" để xin tương tác. Kiểu danh sách tích này đã có tương đương: thẻ ô tích của `TieuChi`.
+
+**Áp vào video của mình:**
+- Hợp cho **video giải thích quy hoạch, công trình, tuyến đường, kênh thủy lợi** của xã: sông/kênh phát sáng, có mũi tên dòng chảy, ô số liệu và dòng nguồn ghi rõ "chưa phải quy hoạch duyệt". Dòng nguồn như vậy rất nên học cho tin chính quyền.
+- **Ảnh vệ tinh:** Esri World Imagery dùng được nếu ghi nguồn đúng điều khoản Esri (kiểm điều khoản trước khi dùng cho bản phát sóng); ranh giới, sông, đường lấy từ OpenStreetMap (ghi "© OpenStreetMap"). Ranh giới xã phường **sau sáp nhập 2025** phải đối chiếu bản đồ chính thức.
+- Dựng bằng Remotion: ảnh vệ tinh nền (kỹ thuật static map của `remotion-maps`) + đường SVG cho sông/đường + các ô kính tối. Giữ ba màu: nền tối, xanh ngọc (nước), vàng (đường, vùng quy hoạch); với ATT NEWS đổi viền thẻ sang navy/vàng.
+- Bản ngang 16:9 cho Facebook: đặt thẻ bản đồ bên trái, phụ đề và ô số liệu bên phải, giống bố cục cảnh `PhuNu96`.
+- Giọng: dùng giọng VieNeu sẵn có của mình, không cần minimax (dịch vụ ngoài, có thể tính phí; phải hỏi trước).
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
