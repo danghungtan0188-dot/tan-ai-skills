@@ -8,11 +8,15 @@ Vi du:
   python scripts/video_qa.py out.mp4 --strict --audio
   python scripts/video_qa.py out.mp4 --source raw.mp4 --cut-authorized
 
+--strict --audio con kiem them loi nhin/nghe thay duoc: khung dau den (anh bia), duoi den (reel lap
+loe den), doan den giua >= 1 s, do to tong ngoai -18..-12 LUFS, bitrate qua cao.
+
 Exit 0 = PASS (hoac WARN), exit 1 = FAIL, exit 2 = khong chay duoc ffprobe.
 """
 
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -33,6 +37,13 @@ AV_TOLERANCE = 0.5  # giay — hinh lech tieng qua muc nay la mat canh
 # Dinh tieng (true peak) do tren file DA ma hoa: AAC day dinh len (tranh giay 20/10: -1,9 truoc AAC
 # thanh +0,8 dBTP sau AAC ma QA van PASS). Vuot -1 dBTP la nguy co re khi phat.
 TRUE_PEAK_MAX = -1.0
+# Nguong chat luong nghe/nhin (chi chay o --strict --audio). Do tren 6 video da giao (10/2026):
+# I -16..-13,4 LUFS, bpp 0,056..0,166; den giua video chi la chuyen canh qua den ~0,4 s.
+# Khong kiem LRA tuyet doi: giong TTS VieNeu chua qua limiter da chi 1,6 LU. Bop dai dong phai do
+# truoc/sau buoc xu ly am thanh, khong do mot con so tren file cuoi.
+LUFS_RANGE = (-18.0, -12.0)  # ban tin -16, mang xa hoi -14
+BPP_MAX = 0.25  # bit/diem anh/khung: vuot = file nang, Zalo/Facebook nen lai
+DEN_GIUA_CANH_BAO, DEN_GIUA_LOI = 1.0, 3.0  # giay
 
 
 def probe(path: Path) -> dict:
@@ -103,6 +114,19 @@ def true_peak_db(path: Path) -> float | None:
     return None
 
 
+def quet_chat_luong(path: Path, has_video: bool) -> dict:
+    """Mot luot giai ma: doan den (blackdetect) + do to tong (EBU R128)."""
+    cmd = ["ffmpeg", "-hide_banner", "-nostats", "-i", str(path)]
+    if has_video:
+        cmd += ["-vf", "blackdetect=d=0.3:pix_th=0.1"]
+    cmd += ["-af", "ebur128", "-f", "null", "-"]
+    err = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace").stderr
+    den = [(float(a), float(b)) for a, b in re.findall(r"black_start:([\d.]+) black_end:([\d.]+)", err)]
+    tong = err[err.rfind("Summary:"):]
+    i = re.search(r"I:\s+(-?[\d.]+) LUFS", tong)
+    return {"den": den, "lufs": float(i.group(1)) if i else None}
+
+
 class Report:
     def __init__(self, artifact: Path):
         self.artifact = artifact
@@ -143,6 +167,7 @@ def summarise_probe(data: dict) -> dict:
             "pix_fmt": video.get("pix_fmt", ""),
             "fps": parse_fps(video.get("r_frame_rate", "0/1")),
             "duration": float(video.get("duration", 0) or 0),
+            "bit_rate": int(video.get("bit_rate", 0) or 0),
         }
     if audio:
         summary["audio"] = {
@@ -152,6 +177,39 @@ def summarise_probe(data: dict) -> dict:
             "duration": float(audio.get("duration", 0) or 0),
         }
     return summary
+
+
+def chat_luong(report: Report, artifact: Path, summary: dict, hard: str) -> None:
+    """Loi nhin/nghe thay duoc ma kiem dinh dang khong bat: doan den, do to tong, bitrate qua cao."""
+    video, dur = summary.get("video"), summary["duration"]
+    q = quet_chat_luong(artifact, bool(video))
+    if video:
+        dau = [d for d in q["den"] if d[0] <= 0.05]
+        duoi = [d for d in q["den"] if d[1] >= dur - 0.1 and d[0] > 0.05]
+        giua = [d for d in q["den"] if d not in dau + duoi and d[1] - d[0] >= DEN_GIUA_CANH_BAO]
+        if dau:
+            report.add("black_start", "WARN", f"Den {dau[0][1]:.1f} s dau — anh bia Facebook/Zalo se den, mat nguoi xem")
+        if duoi:
+            report.add("black_tail", "WARN", f"Den tu {duoi[0][0]:.1f} s toi het — reel lap lai se loe den; "
+                                             "giu khung cuoi (tpad=stop_mode=clone) neu khong co y")
+        for a, b in giua:
+            report.add("black_middle", hard if b - a >= DEN_GIUA_LOI else "WARN", f"Den {a:.1f}–{b:.1f} s ({b - a:.1f} s)")
+        if not (dau or duoi or giua):
+            report.add("black_frames", "PASS", "khong co doan den bat thuong")
+        if video["bit_rate"] and video["width"] and video["fps"]:
+            bpp = video["bit_rate"] / (video["width"] * video["height"] * video["fps"])
+            # khong canh bao bitrate thap: ma hoa crf tu ha bitrate khi hinh don gian (nen mot mau 0,1 Mbps
+            # van net), nen bitrate thap khong co nghia la vo khoi
+            if bpp > BPP_MAX:
+                report.add("bitrate", "WARN", f"{video['bit_rate'] / 1e6:.1f} Mbps (bpp {bpp:.3f}) — file nang, "
+                                              "nen tang se nen lai; tang crf hoac lam ban _ZALO")
+            else:
+                report.add("bitrate", "PASS", f"{video['bit_rate'] / 1e6:.1f} Mbps (bpp {bpp:.3f})")
+    if q["lufs"] is not None:
+        lo, hi = LUFS_RANGE
+        report.add("loudness", "PASS" if lo <= q["lufs"] <= hi else "WARN",
+                   f"{q['lufs']:.1f} LUFS" + ("" if lo <= q["lufs"] <= hi else
+                                               f" ngoai {lo:.0f}..{hi:.0f} — loudnorm 2 luot linear ve -16 (ban tin) / -14 (MXH)"))
 
 
 def check(args) -> dict:
@@ -244,6 +302,9 @@ def check(args) -> dict:
             report.add("true_peak", hard, f"{peak:+.1f} dBTP > {TRUE_PEAK_MAX} — nguy co re; gioi han dinh truoc khi ma hoa")
         else:
             report.add("true_peak", "PASS", f"{peak:+.1f} dBTP")
+
+    if args.strict and args.audio and summary["duration"] > 0:
+        chat_luong(report, artifact, summary, hard)
 
     if args.source:
         source = Path(args.source)
