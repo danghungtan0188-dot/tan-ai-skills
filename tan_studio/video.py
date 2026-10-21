@@ -18,10 +18,31 @@ SIZES = {"16:9": (1920, 1080), "9:16": (1080, 1920)}
 IMAGE_EXT = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
 VIDEO_EXT = {".mp4", ".mov", ".mkv", ".m4v", ".avi"}
 FPS = 30
+# Đo trên máy này (clip 1080p 32 giây): qsv q23 cùng dung lượng và SSIM với x264 faster crf21,
+# nhưng CPU làm ít hơn ~5 lần, nhanh hơn ~2,3 lần — đỡ nóng máy.
+MA_HOA = {
+    "qsv": {"day_du": ["-c:v", "h264_qsv", "-global_quality", "23"],
+            "xem_truoc": ["-c:v", "h264_qsv", "-global_quality", "30"]},
+    "cpu": {"day_du": ["-c:v", "libx264", "-preset", "{preset}", "-crf", "21", "-threads", "4"],
+            "xem_truoc": ["-c:v", "libx264", "-preset", "ultrafast", "-crf", "30", "-threads", "4"]},
+}
+_ma_hoa_may = None
 
 
 class VideoError(RuntimeError):
     pass
+
+
+def chon_ma_hoa() -> str:
+    """Thử mã hoá 1 khung bằng Intel QuickSync; chạy được thì dùng, không thì về libx264.
+    Thử thật thay vì đọc `ffmpeg -encoders` vì encoder có trong danh sách vẫn có thể thiếu driver."""
+    global _ma_hoa_may
+    if _ma_hoa_may is None:
+        r = subprocess.run(["ffmpeg", "-v", "error", "-f", "lavfi", "-i", "color=c=black:s=256x256:d=0.2",
+                            *MA_HOA["qsv"]["day_du"], "-pix_fmt", "yuv420p", "-f", "null", "-"],
+                           capture_output=True)
+        _ma_hoa_may = "qsv" if r.returncode == 0 else "cpu"
+    return _ma_hoa_may
 
 
 def frame_size(aspect: str, preview: bool = False) -> tuple[int, int]:
@@ -59,7 +80,7 @@ def check_media(media: list[Path]) -> list[str]:
 
 def build_cmd(audio: Path, ass: Path, media: list[Path], out: Path, aspect: str,
               duration: float, audio_filter: str, preset: str = "faster", preview: bool = False,
-              overlays: list[dict] | None = None) -> list[str]:
+              overlays: list[dict] | None = None, ma_hoa: str = "cpu") -> list[str]:
     """overlays: clip đồ hoạ có alpha (do_hoa.overlays) đắp từ giây `tai`, nằm dưới phụ đề."""
     w, h = frame_size(aspect, preview)
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error"]
@@ -88,8 +109,7 @@ def build_cmd(audio: Path, ass: Path, media: list[Path], out: Path, aspect: str,
     chains.append(f"[{cur}]ass='{render.q(ass.resolve().as_posix())}',format=yuv420p[vout]")
     cmd += ["-filter_complex", ";".join(chains), "-map", "[vout]", "-map", f"{n_audio}:a",
             "-af", f"{audio_filter},aresample=48000", "-t", f"{duration:.3f}",
-            "-c:v", "libx264", "-preset", "ultrafast" if preview else preset, "-crf", "30" if preview else "21",
-            "-threads", "4",
+            *[x.format(preset=preset) for x in MA_HOA[ma_hoa]["xem_truoc" if preview else "day_du"]],
             "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
             "-movflags", "+faststart", str(out)]
     return cmd
@@ -111,7 +131,8 @@ def render_video(audio: Path, cues: list[dict], media: list[Path], out: Path, as
     duration = video_qa.duration_of(Path(audio))
     ass = write_ass(cues, out.with_suffix(".ass"), aspect)
     af = render.loudnorm_linear(str(audio))
-    cmd = build_cmd(Path(audio), ass, media, out, aspect, duration, af, preset, preview, overlays)
+    ma_hoa = chon_ma_hoa()
+    cmd = build_cmd(Path(audio), ass, media, out, aspect, duration, af, preset, preview, overlays, ma_hoa)
     r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
     if r.returncode != 0:
         raise VideoError(f"ffmpeg lỗi (exit {r.returncode}): {r.stderr.strip()[-800:]}")
@@ -129,8 +150,9 @@ def render_video(audio: Path, cues: list[dict], media: list[Path], out: Path, as
         "nhac_nen": None,
         "chuyen_canh": "cắt thẳng",
         "am_thanh": {"loudnorm": "2 lượt linear, -16 LUFS, TP -1.5", "sample_rate": 48000},
-        "ma_hoa": {"video": "h264 yuv420p", "preset": "ultrafast" if preview else preset,
-                   "crf": 30 if preview else 21, "audio": "aac 192k"},
+        "ma_hoa": {"video": "h264 yuv420p",
+                   "bo_ma_hoa": "Intel QuickSync (h264_qsv)" if ma_hoa == "qsv" else "libx264",
+                   "tham_so": " ".join(cmd[cmd.index("-c:v") + 1:cmd.index("-pix_fmt")]), "audio": "aac 192k"},
     }
     return {"video": str(out), "ass": str(ass), "duration_audio": round(duration, 3), "command": cmd,
             "timeline": timeline}

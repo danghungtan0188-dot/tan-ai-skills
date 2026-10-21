@@ -299,6 +299,17 @@ class TestDoHoa(TempHome):
         self.assertIn("enable='between(t,2.000,5.000)'", graph)
         self.assertLess(graph.index("overlay="), graph.index("ass="))  # phụ đề nằm trên đồ hoạ
 
+    def test_ma_hoa_qsv_va_cpu(self):
+        def args(**kw):
+            return video.build_cmd(Path("a.wav"), Path("p.ass"), [], Path("o.mp4"), "16:9", 10.0, "anull", **kw)
+        self.assertIn("h264_qsv", args(ma_hoa="qsv"))
+        self.assertNotIn("-threads", args(ma_hoa="qsv"))
+        cpu = args(ma_hoa="cpu", preset="medium")
+        self.assertEqual(cpu[cpu.index("-c:v"):cpu.index("-pix_fmt")],
+                         ["-c:v", "libx264", "-preset", "medium", "-crf", "21", "-threads", "4"])
+        self.assertIn("ultrafast", args(ma_hoa="cpu", preview=True))
+        self.assertIn(video.chon_ma_hoa(), video.MA_HOA)
+
     @unittest.skipUnless(HAS_FFMPEG and do_hoa.check() is None, "cần ffmpeg + do-hoa/node_modules (cd do-hoa && npm i)")
     def test_lower_third_that_vao_video(self):
         r = workflow.run(self.project(do_hoa={"lower_third": [{"tai": 0.5, "ten": "Bà Trần Thị B", "thoi_luong": 1.5}]}),
