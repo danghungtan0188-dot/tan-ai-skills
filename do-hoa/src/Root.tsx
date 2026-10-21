@@ -26,6 +26,7 @@ import { TranhGiayPhuNu, tranhGiayPhuNuSchema } from "./mau/TranhGiayPhuNu";
 import { PhuNu96, phuNu96Schema } from "./mau/PhuNu96";
 import { KetLaser, ketLaserSchema } from "./mau/KetLaser";
 import { BanDoVeTinh, banDoVeTinhSchema } from "./mau/BanDoVeTinh";
+import { SoLan, soLanSchema } from "./mau/SoLan";
 import { AnhBayVao, anhBayVaoSchema } from "./mau/AnhBayVao";
 import { NguoiNoiPip, nguoiNoiPipSchema } from "./mau/NguoiNoiPip";
 import { TieuDeNhan, tieuDeNhanSchema } from "./mau/TieuDeNhan";
@@ -289,6 +290,14 @@ export const RemotionRoot: React.FC = () => (
         loiChuc2: "Mạnh khỏe · Hạnh phúc · Thành công",
         dongKy: "",
       }}
+      {...chung}
+    />
+    <Composition
+      id="SoLan"
+      component={SoLan}
+      schema={soLanSchema}
+      calculateMetadata={metadata(true)}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 3, tu: "2025", den: "2026", tai: 0.6, tieuDe: "" }}
       {...chung}
     />
     <Composition

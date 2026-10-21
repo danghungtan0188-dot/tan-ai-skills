@@ -375,11 +375,72 @@ Người nói giải thích dự án cải tạo sông bằng **bản đồ vệ
 - Bản ngang 16:9 cho Facebook: đặt thẻ bản đồ bên trái, phụ đề và ô số liệu bên phải, giống bố cục cảnh `PhuNu96`.
 - Giọng: dùng giọng VieNeu sẵn có của mình, không cần minimax (dịch vụ ngoài, có thể tính phí; phải hỏi trước).
 
+## Reel danh sách "Kho skill edit video bằng AI" (Huan.academy, 57 giây, 9:16, 10/2026)
+
+Video giới thiệu 6 nguồn skill, gần như toàn bộ là **quay màn hình trang GitHub**, giọng đọc kể lần lượt từng nguồn. Âm lượng −14,1 LUFS, LRA 1,4 LU: nén mạnh cho điện thoại, không dùng cho bản tin. Cảnh đổi khoảng 2–5 giây một lần (`scene` > 0,25 bắt 19 lần). Khoảng 7 giây cho mỗi nguồn, chữ khóa đổi theo từng vế câu.
+
+**Bố cục cố định:** nền xám rất nhạt có lưới mờ, thêm vài mảng hình mũi tên xám to làm dấu nhận diện kênh. Nửa trên là **thẻ quay màn hình bo góc**. Nửa dưới là **khối chữ khóa hai dòng**: dòng trên chữ đậm nghiêng màu cam có bóng, dòng dưới chữ đậm đen nhỏ hơn ("Tự động / điều hướng góc máy (camera)"). Khối chữ khóa không chép nguyên lời đọc, chỉ tóm 3–6 chữ.
+
+**Cách dựng đáng học:**
+1. **Chữ khóa hiện bằng mờ → rõ, kèm trượt lên:** mỗi lần đổi, khối chữ mới mờ nhòe rồi nét lại trong khoảng 0,3 giây. Đây là kiểu "blur-in", không phải gõ từng chữ.
+2. **Thẻ màn hình vào cũng bằng mờ + phóng:** thẻ nhỏ mờ phóng to dần rồi nét lại (khoảng 0,3 giây). Khi đổi sang nguồn kế, trang cũ bị **đẩy phóng to và nhòe** rồi thay bằng trang mới.
+3. **Bôi đen tên để chỉ:** con trỏ quét chọn tên repo ("Remotion", "Claude Remotion") thành nền xanh, đồng thời trang phóng dần vào phần tiêu đề. Người xem biết ngay đang nói về chữ nào mà không cần mũi tên hay vòng khoanh.
+4. **Người nói lồng thẻ bo góc:** khi chèn người nói, phụ đề trong thẻ hiện **cộng dồn từng từ**, từ khóa tô vàng ("chỉnh sửa hoàn chỉnh").
+5. **Kết bằng nhân vật 3D hoạt hình** giống người làm kênh, mặc áo có logo, nói câu kêu gọi. Chữ phía trên đổi từ "Gom sẵn kho mã nguồn" sang **Comment "EDIT"**. Cảnh cuối là **thẻ hồ sơ** có vòng xoay tải, con trỏ bấm "Follow" thành "Following".
+
+**Bài học về cách làm kênh:** đây là kiểu **bình luận từ khóa để nhận link** (comment-to-DM). Danh sách không ghi link trong video, buộc người xem bình luận và theo dõi. Hợp với video quảng bá dịch vụ của mình nếu có sẵn tài liệu tặng kèm.
+
+**6 nguồn trong video, đối chiếu với repo này:**
+
+| Nguồn | Repo | Repo này |
+|---|---|---|
+| Remotion Agent Skills | `remotion-dev/skills` | đã cài (`remotion-*`) |
+| HyperFrames của HeyGen | `heygen-com/hyperframes` | đã cài (`hyperframes*`) |
+| iArt TikTok Video Skills | `iart-ai/tiktok-video-skills` (14★, MIT) | chưa có. Nói là có chèn hiệu ứng âm thanh tự động |
+| Claude Remotion Skill | `haidrrrry/claude-remotion-skill` (563★, MIT) | chưa có. Motion graphics bằng Remotion, gần với `do-hoa/` |
+| ghost-editor | `kurbaitaev/ghost-editor` (74★) | chưa có. Cắt người nói, "phụ đề tránh mặt", bắt chước bản dựng mẫu. Trùng việc với `cut_silence.py` và `talking-head-recut` |
+| Skillry | `yihui-dev/awesome-opus5-5-videos` (7,8k★) | chưa có. Kho hơn 400 video làm bằng Opus 5.5 **kèm câu lệnh gốc**: nên xem để lấy ý tưởng và câu lệnh |
+
+Số sao kiểm qua `gh` ngày 21/10/2026. Chưa đọc mã của các repo chưa có.
+
+**Áp vào video của mình:**
+- Khung "thẻ quay màn hình + khối chữ khóa hai dòng" hợp cho video **hướng dẫn thủ tục, VNeID, dịch vụ công**: quay màn hình điện thoại hoặc trang web, bôi đen ô cần bấm, chữ khóa tóm bước.
+- Chữ khóa ATT NEWS: dòng trên vàng ATT, dòng dưới trắng trên nền navy, thay cho cam và đen.
+- Dựng bằng Remotion: `filter: blur(Npx)` giảm từ khoảng 12 về 0 cùng `translateY` và `opacity` trong 8–10 khung. Dùng chung một hàm cho cả thẻ và chữ để nhịp đồng đều.
+
+### Luật lấy từ mã nguồn ghost-editor (đọc ngày 21/10/2026)
+
+`kurbaitaev/ghost-editor` ghi lại các lần dựng hỏng kèm số đo. Những điều áp được cho reel của mình:
+
+- **Số đo 6 reel top:** 113/119 chỗ chuyển là **cắt thẳng**. Cảnh trung bình khoảng 3 giây. Hiệu ứng âm thanh 0,4–0,9 lần mỗi 10 giây, đặt **trên đồ họa**, không đặt ở chỗ cắt. B-roll chiếm 20–35% thời lượng. Mặc định là tiết chế.
+- **Ngân sách video người nói:** mặt người nói trên hình ≥ 65% thời lượng; B-roll toàn khung ≤ 25%; chèn ≤ 3 lần mỗi phút. Reel hỏng điển hình: 31 cửa sổ chèn, người nói chỉ còn 33%. Chèn kiểu khung nhỏ, ảnh polaroid, chia đôi để mặt vẫn trên hình; toàn khung chỉ dành cho chỗ chuyển ý.
+- **Đuôi đen ở điểm lặp:** hình người nói hết trước nhạc thì 0,3–0,5 giây cuối bị đen, lóe lên mỗi khi reel lặp lại. Giữ khung cuối bằng `tpad=stop_mode=clone:stop_duration=1` rồi cắt bằng độ dài tiếng; xem 0,4 giây cuối của mọi bản render.
+- **Cắt hình và tiếng riêng thì khớp vào lưới khung hình:** mỗi đoạn làm tròn riêng thì tiếng lệch dần (43–54 ms sau 23 đoạn). Tính mốc cắt theo số khung rồi mới đổi ra giây, cắt hình và tiếng cùng mốc đó.
+- **Âm thanh:** hiệu ứng đặt **sớm hơn hình 2–3 khung**; nhạc nền thấp hơn giọng khoảng 18 dB và nén xuống dưới mọi câu nói; âm thanh vui không đè lên chữ đang nói, tối đa 1–3 lần mỗi phút, không lặp lại trong một reel.
+- **Zoom:** không zoom ở mọi chỗ cắt (người xem thấy khó chịu), cả reel tối đa 3 lần. Giấu chỗ nhảy hình bằng hòa tan 0,2 giây hoặc đổi cỡ cảnh.
+- **Chữ:** cắt theo mốc từng từ của whisper, không theo mốc cả đoạn. Màu nhấn sáng (vàng, xanh chanh) thì chữ trên nhãn phải tối.
+- **Một phong cách là một hệ thống:** ghi rõ phần cố định (màu, chữ, khung) và phần thay theo kịch bản; dán lại cảnh của reel trước vào chỗ kịch bản không cần thì người xem thấy "cùng một bản dựng". ATT NEWS đang làm đúng như vậy.
+
+### Mẫu `SoLan`: số lăn như đồng hồ đo
+
+Ý tưởng cột chữ số lấy từ `iart-ai/tiktok-video-skills` (`digit-flip.md`, MIT). Mỗi chữ số là một cột 0–9; cột trượt xuống để số mới rơi từ trên vào, có vượt nhẹ rồi khớp. Cột đổi lần lượt **từ phải sang trái**, cách nhau 0,12 giây, mỗi cột lăn 0,7 giây; chữ số không đổi đứng yên. Dấu chấm, dấu phẩy giữ nguyên chỗ. Chữ vàng ATT viền navy, nền trong suốt (`.mov` ProRes 4444) để đắp lên video.
+
+```bash
+npx remotion render src/index.ts SoLan so.mov --props=so.json --concurrency=2
+```
+
+```json
+{"tiLe":"16:9","thoiLuong":3,"tu":"9.875","den":"12.040","tai":0.5,"tieuDe":"Số hộ dùng VNeID"}
+```
+
+- `tu`, `den` là chuỗi, viết sẵn dấu chấm kiểu Việt Nam. Số dài hơn thì chữ số mới bên trái hiện mờ dần.
+- `tai`: giây bắt đầu lăn. Xong hết khi `tai + 0,7 + 0,12 × (số cột đổi − 1)`; đặt `thoiLuong` dư ra ít nhất 1 giây.
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
 
-- **Số năm lăn như đồng hồ đo:** "2025" thành "2026", chữ số cuối trượt lên, số mới từ trên rơi xuống.
+- **Số năm lăn như đồng hồ đo:** "2025" thành "2026", chữ số cuối trượt lên, số mới từ trên rơi xuống. **Đã có:** mẫu `SoLan` trong `do-hoa/` (xem phần reel "Kho skill edit video bằng AI").
 - **Tiêu đề kết có bóng phản chiếu:** các chữ cái hiện ngẫu nhiên từng chữ, bóng ngược mờ bên dưới, nền tia sáng hội tụ.
 - **Nhãn góc gõ ngẫu nhiên:** tên đơn vị ở góc hiện ra từng chữ cái theo thứ tự lộn xộn.
 - **Trái tim vẽ bằng vệt hạt vàng** làm cảnh kết.
