@@ -16,7 +16,10 @@ def loudnorm_linear(path, pre="highpass=f=70,lowpass=f=15500", lufs=-16, tp=-1.5
     return (f"{pre},loudnorm=I={lufs}:TP={tp}:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}"
             f":measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
 def main():
-    p=argparse.ArgumentParser(); p.add_argument("input"); p.add_argument("plan"); p.add_argument("captions"); p.add_argument("output"); p.add_argument("--lower-thirds"); p.add_argument("--preview",action="store_true"); a=p.parse_args()
+    p=argparse.ArgumentParser(); p.add_argument("input"); p.add_argument("plan"); p.add_argument("captions"); p.add_argument("output"); p.add_argument("--lower-thirds"); p.add_argument("--preview",action="store_true"); p.add_argument("--tranh-mat",action="store_true",help="dời phụ đề khỏi mặt người (phu_de_tranh_mat.py)"); a=p.parse_args()
+    if a.tranh_mat:
+        import sys; sys.path.insert(0,str(pathlib.Path(__file__).resolve().parent)); from phu_de_tranh_mat import chay
+        a.captions=str(chay(a.input,pathlib.Path(a.captions)))
     plan=json.loads(pathlib.Path(a.plan).read_text(encoding="utf-8")); style=plan.get("style",{}); vf=FILTERS.get(style.get("filter"),FILTERS["natural"])
     if a.lower_thirds: vf += f",subtitles='{q(pathlib.Path(a.lower_thirds).resolve())}'"
     vf += f",subtitles='{q(pathlib.Path(a.captions).resolve())}'"

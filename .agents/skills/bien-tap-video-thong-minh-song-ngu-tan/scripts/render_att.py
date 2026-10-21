@@ -3,7 +3,7 @@
 
     python render_att.py INPUT --captions captions.ass --scenes scenes.json --out OUT.mp4
         [--lower-thirds lower-thirds.ass] [--card screen_card.png] [--extra-logo logo.png]
-        [--outro-dir outro_frames] [--bugs-dir .] [--studio-end GIAY] [--preview]
+        [--outro-dir outro_frames] [--bugs-dir .] [--studio-end GIAY] [--preview] [--tranh-mat]
 
 Lớp và vị trí ở 1920×1080:
   thẻ TV          (900,240)          chỉ khi t < studio_end
@@ -130,7 +130,12 @@ def main() -> int:
                     help="thay nguyên một đoạn bằng video khác (vd bản gốc chưa gắn chữ)")
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--preview", action="store_true")
+    ap.add_argument("--tranh-mat", action="store_true",
+                    help="dời phụ đề khỏi mặt người trong INPUT (phu_de_tranh_mat.py); lower-third giữ nguyên")
     a = ap.parse_args()
+    if a.tranh_mat and a.captions:
+        from phu_de_tranh_mat import chay
+        a.captions = str(chay(str(a.input), Path(a.captions)))
     se = a.studio_end if a.studio_end is not None else (
         json.loads(a.scenes.read_text(encoding="utf-8"))["studio_end"] if a.scenes else None)
     if se is None:
