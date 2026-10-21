@@ -22,7 +22,7 @@ const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const muot = Easing.bezier(0.16, 1, 0.3, 1);
 const NEON = "#8FF3FF";
 
-const dungFont = (file: string) => {
+const useFont = (file: string) => {
   const [xong] = React.useState(() => (file ? delayRender("font") : null));
   React.useEffect(() => {
     if (!file || xong === null) return;
@@ -57,7 +57,7 @@ export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi
   const t = frame / FPS;
   const het = durationInFrames / FPS;
   const s = W / 1920;
-  const ff = dungFont(font);
+  const ff = useFont(font);
 
   // logo ATT NEWS vẽ lại bằng vector theo tỉ lệ file gốc 268×78 (ô ATT nền sáng + ô NEWS navy)
   const lw = 1000 * s, lh = lw * 78 / 268;

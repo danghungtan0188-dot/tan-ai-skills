@@ -40,7 +40,7 @@ const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const muot = Easing.bezier(0.16, 1, 0.3, 1);
 const CHUYEN = 0.9; // giây vệt cọ chuyển cảnh
 
-const dungFont = (file: string) => {
+const useFont = (file: string) => {
   const [xong] = React.useState(() => (file ? delayRender("font") : null));
   React.useEffect(() => {
     if (!file || xong === null) return;
@@ -429,7 +429,7 @@ export const PhuNu96: React.FC<z.infer<typeof phuNu96Schema>> = ({ intro, introD
   const { width: W, height: H, durationInFrames } = useVideoConfig();
   const t = frame / FPS;
   const het = durationInFrames / FPS;
-  const ff = dungFont(font);
+  const ff = useFont(font);
 
   // ranh giới giữa hai cảnh = điểm giữa vệt cọ
   const ranh = (ketDau > 0 ? canh : canh.slice(1)).map((c) => c.batDau);

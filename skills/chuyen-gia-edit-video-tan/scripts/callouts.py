@@ -163,8 +163,15 @@ def track(video: str, box, start: float, end: float) -> list[dict]:
     ok, fr = cap.read()
     if not ok:
         raise SystemExit("Không đọc được khung ở mốc start")
+    # khung tràn mép làm OpenCV báo "bad allocation" khó hiểu: cắt cho nằm trong hình trước
+    H, W = fr.shape[:2]
+    x0, y0 = max(0, int(box[0])), max(0, int(box[1]))
+    x1, y1 = min(W, int(box[0] + box[2])), min(H, int(box[1] + box[3]))
+    if x1 - x0 < 8 or y1 - y0 < 8:
+        raise SystemExit(f"Khung bám {tuple(box)} nằm ngoài hình {W}x{H}")
+    box = (x0, y0, x1 - x0, y1 - y0)
     tr = cv2.TrackerMIL_create()
-    tr.init(fr, tuple(int(v) for v in box))
+    tr.init(fr, box)
     out, t = [{"t": round(start, 3), "x": box[0], "y": box[1], "w": box[2], "h": box[3]}], start
     while t < end:
         ok, fr = cap.read()

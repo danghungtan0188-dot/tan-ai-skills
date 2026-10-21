@@ -33,7 +33,7 @@ const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const muot = Easing.bezier(0.45, 0, 0.2, 1);
 const NGOC = "#3FF0D0", VANG = "#FFCD2D", VIEN = "#2BD9A6";
 
-const dungFont = (file: string) => {
+const useFont = (file: string) => {
   const [xong] = React.useState(() => (file ? delayRender("font") : null));
   React.useEffect(() => {
     if (!file || xong === null) return;
@@ -64,7 +64,7 @@ export const BanDoVeTinh: React.FC<z.infer<typeof banDoVeTinhSchema>> = (p) => {
   const t = frame / FPS;
   const het = durationInFrames / FPS;
   const s = W / 1080;
-  const ff = dungFont(p.font);
+  const ff = useFont(p.font);
 
   // thẻ bản đồ
   const le = 34 * s, the = { x: le, y: 70 * s, w: W - 2 * le, h: H - 140 * s };

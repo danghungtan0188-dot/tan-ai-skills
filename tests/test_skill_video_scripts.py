@@ -303,6 +303,19 @@ class TestCallouts(unittest.TestCase):
         self.assertGreater(callouts.bar_chart(kit, [1, 2], ["a", "b"], "T").width, 0)
         self.assertGreater(callouts.steps_card(kit, ["mot", "hai"], active=0).height, 0)
 
+    @unittest.skipUnless(shutil.which("ffmpeg"), "can ffmpeg")
+    def test_track_khung_tran_mep_duoc_cat_vao_trong(self):
+        # khung tran mep duoi tung lam OpenCV bao "bad allocation"
+        with tempfile.TemporaryDirectory() as d:
+            v = Path(d) / "nen.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc2=s=640x360:d=1",
+                            "-pix_fmt", "yuv420p", str(v)], check=True)
+            pts = callouts.track(str(v), (500, 300, 200, 100), 0.1, 0.3)
+            self.assertEqual((pts[0]["w"], pts[0]["h"]), (140, 60))
+            self.assertGreater(len(pts), 1)
+            with self.assertRaises(SystemExit):
+                callouts.track(str(v), (700, 400, 50, 50), 0.1, 0.3)
+
     def test_sendcmd_bo_diem_mat_dau(self):
         txt = callouts.sendcmd([{"t": 0.0, "x": 1, "y": 2}, {"t": 0.1, "lost": True}])
         self.assertEqual(txt.strip().count("\n"), 0)
