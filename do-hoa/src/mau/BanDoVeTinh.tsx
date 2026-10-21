@@ -79,7 +79,9 @@ export const BanDoVeTinh: React.FC<z.infer<typeof banDoVeTinhSchema>> = (p) => {
   const tatSo = interpolate(t, [p.moc.tuyen - 0.4, p.moc.tuyen], [1, 0], kep);
   const veTuyen = interpolate(t, [p.moc.tuyen, p.moc.tuyen + 1.8], [0, 1], { ...kep, easing: Easing.inOut(Easing.cubic) });
   const hienCau = interpolate(t, [p.moc.cau + 0.8, p.moc.cau + 1.3], [0, 1], { ...kep, easing: muot });
-  const toi = interpolate(t, [p.moc.so, p.moc.so + 0.6, p.moc.tuyen - 0.4, p.moc.tuyen], [0, 0.25, 0.25, 0], kep); // tối nền khi có ô số
+  // tối nền khi có ô số; tuyến đến sớm hơn so+1 giây (hoặc moc.so = moc.tuyen) thì mốc không còn tăng dần → Remotion báo lỗi
+  const hetToi = Math.max(p.moc.tuyen, p.moc.so + 1.01);
+  const toi = interpolate(t, [p.moc.so, p.moc.so + 0.6, hetToi - 0.4, hetToi], [0, 0.25, 0.25, 0], kep);
   const tat = interpolate(t, [het - 0.8, het], [1, 0], kep);
   const lK = doDai(p.kenh.duong), lX = doDai(p.xa.vong);
   const nhat = interpolate(cam.zoom, [0.8, 1.8], [1, 0.15], kep); // phóng sát: để lộ lòng kênh thật trên ảnh
