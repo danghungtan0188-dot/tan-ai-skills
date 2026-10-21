@@ -280,6 +280,16 @@ class TestValidateGraphics(unittest.TestCase):
     def test_bat_banner_tran_canh(self):
         self.assertTrue(any("tràn qua mốc cắt" in x for x in self.kiem([self.muc()], cuts=[3.0])))
 
+    @unittest.skipUnless(shutil.which("ffmpeg"), "can ffmpeg")
+    def test_do_mat_chay_duoc_voi_video(self):
+        # OpenCV 5 bo cv2.CascadeClassifier: --video tung vang AttributeError. Gio dung YuNet.
+        with tempfile.TemporaryDirectory() as d:
+            v = Path(d) / "trong.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "color=c=gray:s=1920x1080:d=6",
+                            "-pix_fmt", "yuv420p", str(v)], check=True)
+            self.assertEqual(validate_graphics.faces_at(str(v), 2.5, 1.0), [])
+            self.assertEqual(self.kiem([self.muc()], video=str(v)), [])
+
 
 class TestCallouts(unittest.TestCase):
     def test_hinh_ve_dung_co_khung(self):

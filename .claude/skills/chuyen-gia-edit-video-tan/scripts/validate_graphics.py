@@ -9,7 +9,7 @@ tương phản < 4,5:1 · logo méo > 2% · tin khẩn thiếu verified/source �
 hai đồ hoạ đè nhau cùng lúc · banner tràn qua mốc cắt cảnh.
 CẢNH BÁO: chữ quá dài để đọc kịp trong thời gian hiện.
 
---video: tự dò mặt (OpenCV Haar) ở giữa khung giờ của từng đồ hoạ — thay cho việc chỉ xem mắt.
+--video: tự dò mặt (OpenCV YuNet, assets/models/) ở giữa khung giờ của từng đồ hoạ — thay cho việc chỉ xem mắt.
 --frames: xuất khung giữa mỗi đồ hoạ, vẽ khung đồ hoạ (đỏ) và mặt dò được (vàng) để duyệt nhanh.
 Dò mặt có thể sót mặt nghiêng/nhỏ; vẫn phải xem ảnh ở --frames.
 """
@@ -26,6 +26,7 @@ from broadcast_kit import FRAMES, STYLES, safe_rect  # noqa: E402
 TRAN_NGANG = {"breaking_bar", "status_bar", "ticker_strip", "end_card"}   # được phép tràn hết bề ngang
 BO_QUA_MAT = {"end_card"}                                                # thẻ toàn khung, không có người
 DAI_TOI_DA = 70
+MODEL = Path(__file__).resolve().parents[1] / "assets" / "models" / "face_detection_yunet_2023mar.onnx"
 
 
 def _lum(hexc: str) -> float:
@@ -47,15 +48,16 @@ def giao(a, b) -> bool:
 
 
 def faces_at(video: str, t: float, scale: float) -> list[tuple[int, int, int, int]]:
+    # YuNet (OpenCV zoo, MIT) thay Haar: OpenCV 5 đã bỏ cv2.CascadeClassifier
     import cv2
     cap = cv2.VideoCapture(video)
     cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
     ok, fr = cap.read()
     if not ok:
         return []
-    gray = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
-    cc = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-    found = cc.detectMultiScale(gray, 1.1, 5, minSize=(int(fr.shape[0] * .05),) * 2)
+    det = cv2.FaceDetectorYN.create(str(MODEL), "", (fr.shape[1], fr.shape[0]), 0.7)
+    _, F = det.detect(fr)
+    found = [] if F is None else F[:, :4]
     out = []
     for x, y, w, h in found:          # nới 15% để tính cả tóc và cằm
         m = .15
