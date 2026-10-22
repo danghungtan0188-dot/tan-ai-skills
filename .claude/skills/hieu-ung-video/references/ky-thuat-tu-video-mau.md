@@ -550,6 +550,24 @@ Tác giả công khai trang hậu trường: **4 ngày, 12 bản nháp đưa xem
 - Đo rung bằng cách in vị trí/zoom camera từng khung (như nhóm Sông Đáy: lia ≤ 12,8 px/khung, zoom ≤ 6,6 %/khung) — áp cho `BanDoVeTinh`.
 - Mỗi vòng đổi hướng ghi vào nhật ký như bảng trên.
 
+## Reel dọc "Kho skill edit video bằng A.I" (56 giây, 10/2026)
+
+**Định dạng "danh sách công cụ" (hợp video quảng bá dịch vụ "edit with Tan"):** nền trắng có họa tiết logo xám mờ lặp lại; mỗi ý một **tiêu đề lớn đỏ cam in nghiêng đậm + dòng phụ đen** đặt dưới ảnh, đổi đúng theo lời; giữa là **quay màn hình trang GitHub/README**, con trỏ chỉ vào chữ, phóng nhẹ; 18 cú cắt / 56 giây (~3 giây/cảnh); âm lượng −14,1 LUFS, **LRA 1,4 LU** (nén rất mạnh kiểu mạng xã hội — không dùng cho bản tin); kết bằng **nhân vật hoạt hình 3D** + "Comment EDIT" + thẻ hồ sơ có nút Follow bấm vào.
+
+**Các repo được nêu (đã tra GitHub 22/10/2026):**
+| Repo | Giấy phép | Có gì | So với repo này |
+|---|---|---|---|
+| `remotion-dev/claude-code-plugin` | — | Remotion Agent Skills chính chủ | đã có (11 skill `remotion-*`) |
+| HyperFrames (HeyGen) | Apache-2.0 | HTML → video cho agent | đã có |
+| `iart-ai/motion-skills` (~960★) | MIT | 50 skill motion graphics: chữ động, data-viz, explainer | trùng phần lớn với HyperFrames + `hieu-ung-video`; đọc lấy công thức lẻ, không cài cả bộ |
+| `iart-ai/tiktok-video-skills` | MIT | luật video dọc "giữ người xem khi lướt" | nên đọc, rút luật móc câu 3 giây đầu cho Reels |
+| `haidrrrry/claude-remotion-skill` (~580★) | MIT | skill Remotion cho Claude | trùng `do-hoa` + `remotion-*` |
+| `yihui-dev/awesome-opus5-5-videos` (~9.000★) | MIT | **kho video viral làm bằng Opus 5.5 kèm prompt** (hiển thị trên Skillry) | **đáng dùng nhất**: kho tham chiếu + prompt, đúng bài học "nên có tham chiếu" của hậu trường KOYO |
+| "ghost-editor" (cắt video nói trước máy) | — | không tìm thấy trên GitHub | đã có `video-use`, `talking-head-recut`; nhớ luật **không tự ý cắt lời người nói** |
+| (ngoài reel) `Vincentwei1021/video-shotcraft` (~12.900★) | Apache-2.0 | 152 thẻ "công thức cú máy" cho video sản phẩm Remotion | đáng đọc khi làm video sản phẩm (`video-san-pham`) |
+
+**Bài học:** phần lớn "kho skill" trong các reel kiểu này **trùng thứ đã có**; giá trị thật là **kho tham chiếu có prompt** và các luật cụ thể (móc câu, công thức cú máy) — đọc rồi rút vào skill của mình, không cài chồng.
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
