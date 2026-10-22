@@ -179,11 +179,16 @@ Nhịp chậm: 17–22 giây một cảnh, mỗi cảnh là một ý của văn 
 
 Nhịp rất nhanh: 46 cảnh trong 49 giây, trung bình **1,1 giây một cảnh**. Giọng đọc nam phát thanh viên, âm lượng tổng −14,3 LUFS, LRA 5,2 LU. Mức này hợp với mạng xã hội; bản phát sóng truyền hình vẫn để −23 LUFS. Cấu trúc 4 đoạn:
 
-1. **Montage nghề làm báo (0–12 giây):** cảnh hậu trường cắt 1 cảnh/giây. Giữa các cảnh có:
-   - lóe sáng tách màu cầu vồng: preset `light_leak` + `glitch_rgb` đã có
-   - chia khung 2–3 ô dọc lệch nhau
-   - nhãn chữ thập nhỏ màu cam nhấp nháy
-2. **Vòng HUD đếm số:** vòng tròn kiểu ống kính, có vạch chia, số đếm tăng ở giữa, đè lên từng cảnh. Vòng này thu lại thành logo đài. HyperFrames có sẵn: luật `counting-dynamic-scale` + `camcorder-hud`/`sdf-iris`.
+1. **Mở màn 15 giây, ba khối nhịp tương phản.** Xem lại dày 4 khung/giây mới thấy đúng nhịp. Lần đầu xem 1 khung/giây đã ghi sai thành "1 cảnh/giây".
+
+   | Giây | Khối | Nhịp | Làm gì |
+   |---|---|---|---|
+   | 0–7 | Montage glitch | 0,25–0,5 giây/cảnh | Gần như cảnh nào cũng có một lớp: vạch glitch + tách RGB, ô trượt có viền mảnh, lưới/kính vạn hoa, gương trái–phải, lóe xanh lá 2–3 khung, vệt sáng cầu vồng, lóe ống kính đỏ, ba khung dọc. Rải chữ X kẻ sọc và ô vuông nét đứt màu cam |
+   | 7–10 | Nghỉ | 1–1,5 giây/cảnh | Cảnh tờ báo, máy in, ông cụ đọc báo. **Sạch hoàn toàn**, chỉ đẩy máy nhẹ. Sau 7 giây dồn dập, khoảng nghỉ này kéo sự chú ý vào nội dung chính |
+   | 10–15 | Vòng HUD đếm số | 0,12–0,16 giây/cảnh | Vòng ống kính đứng yên giữa khung, số đếm 2→100: nhanh lúc đầu, chậm dần khi gần 100. Cảnh nền nhảy cắt rất nhanh, có zoom blur xuyên tâm, viền tối ngả xanh ngọc. Kết bằng vỡ ô vuông lộ logo |
+
+   **Bài học:** muốn có nhịp "dồn – nghỉ – dồn" thì đoạn nghỉ phải sạch hẳn hiệu ứng. Hiệu ứng rải đều suốt video sẽ làm mất điểm nhấn.
+2. **Vòng HUD đếm số:** đã có mẫu `HudDemSo` trong `do-hoa/` (xem dưới). Nếu dựng bằng HyperFrames: luật `counting-dynamic-scale` + `camcorder-hud`/`sdf-iris`.
 3. **Câu hỏi bật theo lời đọc:** "Bạn cần gì?", "Bạn yêu thích điều gì?"… Chữ đỏ in hoa trong ô trắng, trồi lên 0,25 giây đúng lúc phát thanh viên đọc. Viền vàng mờ ở mép trên và dưới khung.
 4. **Kêu gọi hành động:** gia đình xem TV, máy đẩy vào màn hình có mã QR khảo sát. Tay cầm điện thoại quét mã, màn hình điện thoại chiếu phiếu khảo sát. Kết bằng 2 mã QR và 2 logo trên nền tia sáng xanh.
 
@@ -194,6 +199,46 @@ ffmpeg -i in.mp4 -vf "drawtext=fontfile='C\:/Windows/Fonts/arialbd.ttf':textfile
 ```
 
 Muốn hiện ở giây khác thì thay `t` bằng `(t-<GIAY>)` và thêm `enable='between(t,<GIAY>,<HET>)'`.
+
+### Công thức khối montage (đã thử trên clip 1280×720, 10/2026)
+
+```bash
+# gương trái–phải, vạch tối giữa (khác mục 4: mục đó lật trên–dưới)
+ffmpeg -i in.mp4 -vf "crop=iw/2:ih:0:0,split[l][r];[r]hflip[f];[l][f]hstack,drawbox=x=iw/2-1:y=0:w=2:h=ih:color=black@0.8:t=fill" out.mp4
+# ba khung dọc từ ba clip, vạch đen ngăn cách
+ffmpeg -i a.mp4 -i b.mp4 -i c.mp4 -filter_complex "[0]crop=ih*9/16*0.95:ih,scale=-2:720[x];[1]crop=ih*9/16*0.95:ih,scale=-2:720[y];[2]crop=ih*9/16*0.95:ih,scale=-2:720[z];[x][y][z]hstack=3,scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,drawbox=x=iw/3-2:y=0:w=4:h=ih:color=black:t=fill,drawbox=x=2*iw/3-2:y=0:w=4:h=ih:color=black:t=fill" out.mp4
+# ô thứ hai có viền trắng mảnh trượt vào từ phải trong 0,25 giây
+ffmpeg -i a.mp4 -i b.mp4 -filter_complex "[1]scale=iw*0.55:-2,pad=iw+6:ih+6:3:3:color=white@0.9[p];[0][p]overlay=x='W-w*min(1,t/0.25)-40':y=H-h-40" out.mp4
+# lóe xanh lá 3 khung kèm tách RGB, giây 0,8
+ffmpeg -i in.mp4 -vf "drawbox=x=0:y=0:w=iw:h=ih:color=0x39E046@0.55:t=fill:enable='between(t,0.8,0.92)',rgbashift=rh=14:bh=-14:enable='between(t,0.76,1.0)'" out.mp4
+# nền cho vòng HUD: zoom blur xuyên tâm (trộn 3 bản phóng 1,00/1,05/1,10) + tông xanh ngọc + viền tối
+ffmpeg -i in.mp4 -vf "split=3[p][q][r];[q]scale=iw*1.05:-2,crop=1280:720[q2];[r]scale=iw*1.10:-2,crop=1280:720[r2];[p][q2][r2]mix=inputs=3,colorbalance=rs=-0.12:gs=0.04:bs=0.06:rm=-0.06:bm=0.04,vignette=PI/3.2" out.mp4
+# nhảy cắt 0,16 giây từ MỘT clip dài: giữ 4 khung trong mỗi 12 (25 fps). -ss phải đặt TRƯỚC -i
+ffmpeg -ss 17 -t 6 -i in.mp4 -an -vf "select='lt(mod(n\,12)\,4)',setpts=N/FRAME_RATE/TB" out.mp4
+```
+
+- `crop=1280:720` trong công thức zoom blur là kích thước clip vào. Clip 1920×1080 thì sửa lại số này.
+- Nhảy cắt: 6 giây nguồn ra khoảng 2 giây. Nếu đặt `-ss` **sau** `-i`, ffmpeg cắt sau khi đã nén thời gian nên ra file rỗng (đã gặp).
+- Vạch glitch, tách RGB, vệt sáng, lóe trắng dùng preset `glitch_rgb`, `light_leak`, `flash_white` (xem cuối file).
+- Vỡ ô vuông giữa hai cảnh: `xfade=transition=pixelize` ([chuyen-canh.md](chuyen-canh.md)).
+- Chưa làm: chữ X kẻ sọc và ô vuông nét đứt màu cam rải nhấp nháy. Nếu dựng thì làm bằng Remotion.
+
+### Mẫu `HudDemSo`: vòng HUD đếm số, vỡ ô lộ logo
+
+Vòng ống kính SVG tự vẽ, gồm vạch chia xoay chậm, 4 mũi tên rỗng chỉ vào tâm, hai vòng nét đứt xoay ngược chiều nhau và một cung sáng chạy vòng. Hai bên có thanh đo dâng theo số. Số đếm từ `tu` tới `den`, nhanh lúc đầu rồi chậm dần khi gần đích. Ở 0,8 giây cuối, số vỡ thành lưới 10×10 ô biến mất ngẫu nhiên, ô khảm xanh tối chớp quanh vùng số, rồi lộ logo ATT NEWS. Nền trong suốt (`.mov` ProRes 4444), dùng để đắp lên montage nhảy cắt đã qua công thức "nền cho vòng HUD" ở trên.
+
+```bash
+npx remotion render src/index.ts HudDemSo hud.mov --props=hud.json --concurrency=2
+```
+
+```json
+{"tiLe":"16:9","thoiLuong":5,"tu":0,"den":100,"tai":0.3,"denLuc":4,"voO":true,"mau":"#FFFFFF"}
+```
+
+- Số đích phải lấy từ kịch bản. Ví dụ "100 năm Báo chí Cách mạng" thì `den: 100`.
+- `voO: false`: giữ số tới hết clip, không vỡ, không hiện logo.
+- Đặt `thoiLuong` ≥ `denLuc` + 1 để số đứng yên ở đích một lúc trước khi vỡ.
+- Đã render thử 5 giây: 150 khung, kênh trong suốt đúng, ghép lên cảnh thật thấy số, thanh đo, vỡ ô và logo đúng thứ tự.
 
 ## Reel "AI dựng cả video": người nói + đồ họa thay nhau (85 giây, dọc, 10/2026)
 
@@ -447,7 +492,7 @@ Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thu
 - **Ảnh bay tràn khung nhiều ảnh nhỏ** như một bức tường ảnh chuyển động trên nền đen.
 - **Cửa sổ nhỏ nở ra toàn khung**, có bo góc tròn.
 - **Mặt nạ cong như đồng hồ cát** đóng vào khung.
-- **Vỡ khối pixel** khi chuyển cảnh.
+- **Vỡ khối pixel** khi chuyển cảnh. **Đã có:** `xfade=transition=pixelize`; vỡ số lộ logo trong mẫu `HudDemSo`.
 - **Xoáy (swirl)** ở cảnh flycam kết.
 - **Khung tranh minh họa tách thành 3 dải dọc** để lộ cảnh flycam.
 - **Tên địa điểm 2 dòng:** dòng trên vàng, dòng dưới đỏ, cả hai có viền.
