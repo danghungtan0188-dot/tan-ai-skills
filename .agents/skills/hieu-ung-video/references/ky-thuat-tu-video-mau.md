@@ -499,6 +499,57 @@ npx remotion render src/index.ts SoLan so.mov --props=so.json --concurrency=2
 - `tu`, `den` là chuỗi, viết sẵn dấu chấm kiểu Việt Nam. Số dài hơn thì chữ số mới bên trái hiện mờ dần.
 - `tai`: giây bắt đầu lăn. Xong hết khi `tai + 0,7 + 0,12 × (số cột đổi − 1)`; đặt `thoiLuong` dư ra ít nhất 1 giây.
 
+## Phóng sự xã "Lương Hòa đồng hành cùng doanh nghiệp" (8 phút 40, 1080p25, 10/2026)
+
+Phim giới thiệu xã (Tây Ninh) nhân ngày Doanh nhân 13/10: lời bình nữ giọng phát thanh + nhạc nền liên tục, xen 4–5 đoạn phỏng vấn (lãnh đạo xã, giám đốc doanh nghiệp) mỗi đoạn ~20 giây. Đo được: **171 cú cắt** (scdet ngưỡng 10), cảnh minh họa **1,5–2,5 giây/cảnh**, đoạn phỏng vấn để nguyên không cắt; âm lượng −14,2 LUFS, LRA 6,6 LU; lúc phỏng vấn nhạc hạ còn ~−23 dB.
+
+**Đáng học, đã thành mẫu Remotion:**
+- **Số đè thẳng lên flycam** (`SoDeFlycam`): không hộp nền; số in nghiêng đậm **xanh dương viền trắng** + chữ đơn vị trắng nghiêng viền tối, góc dưới phải; **trượt vào từ phải có nhòe chuyển động** rồi đứng yên **đúng lúc lời bình đọc số** ("57 doanh nghiệp", "26.600 tỉ đồng", "tổng vốn đăng ký hơn 30.941 tỉ đồng", "832 phần quà"). Mỗi con số đổi cảnh flycam.
+- **Bản đồ xã nổi khối** (`BanDoNoi`): nền xanh đêm có ranh giới xã lân cận mờ → nét trắng sáng chạy hết viền → phủ màu ngọc → khối nổi lên có mép sáng → tên "XÃ LƯƠNG HOÀ" gõ từng chữ góc dưới trái → **lóe trắng nối sang flycam** đúng chỗ đó. Dữ liệu ranh giới lấy từ OSM như `BanDoVeTinh` (`noi.props.json` trong `_bando_chogao/` là ví dụ An Thạnh Thủy).
+
+**Đáng học, chưa thành mẫu (ghi để dựng sau):**
+- **Mở phim:** một vạch sáng ngang mở dần thành dải letterbox rồi bung đầy khung; tiếp đó **montage mảnh kính vỡ** (nhiều mảnh tam giác/hình thang, mỗi mảnh một cảnh flycam, xoay nhẹ, lóe sáng ống kính) — kiểu template After Effects "glass shatter". HyperFrames có hướng tương tự (xem `hoc-tu-hyperframes.md`).
+- **Tựa phim 3D bay vào nghiêng** rồi đứng phẳng giữa khung, đè lên flycam có mảnh kính trôi ("LƯƠNG HÒA / ĐỒNG HÀNH CÙNG DOANH NGHIỆP, / TẠO ĐỘNG LỰC PHÁT TRIỂN", in hoa, trắng, bóng mờ).
+- **Thanh tên người phát biểu** (khác mẫu ATT): dải xanh dương **tràn ngang cả khung**, hai đầu là các vạch xiên xanh nhạt, chấm lưới bán sắc mờ, một vệt sáng ngang; **thanh vào trước, chữ "giải mã" sau** (ký tự hiện ngẫu nhiên lộn xộn rồi đúng chữ) trong ~0,6 giây. Dòng tên in hoa, dòng chức vụ đầy đủ "Phó Bí thư Đảng uỷ, Chủ tịch UBND xã …, tỉnh …".
+- **Phòng màn hình 3D:** nhiều khung ảnh/clip lơ lửng nghiêng trong không gian lưới xanh công nghệ, máy quay xoay qua — dùng tóm tắt các doanh nghiệp.
+- **Chia khung 2–4 ô** cho chuỗi cảnh công nhân làm việc ở đoạn cuối; **vệt sáng ấm (light leak)** phủ flycam đoạn kết + lóe trắng chuyển cảnh.
+- Lời kết gắn dịp: "Nhân kỷ niệm … năm Ngày Doanh nhân Việt Nam 13/10…".
+
+**Cấu trúc phóng sự xã kiểu này (dùng cho video giới thiệu xã của mình):** mở (montage + tựa) → bản đồ xã → số liệu đè flycam theo lời bình → phỏng vấn lãnh đạo → các doanh nghiệp tiêu biểu (b-roll nhanh + phỏng vấn) → hoạt động cộng đồng (số "832 phần quà", "140 triệu đồng") → sự kiện khánh thành → kết flycam vệt sáng ấm + lời gắn dịp.
+
+## Hậu trường video KOYO "Follow the Red Line" — quy trình làm video "wow" với Claude Code (10/2026)
+
+Tác giả công khai trang hậu trường: **4 ngày, 12 bản nháp đưa xem, 29 mốc lưu công việc, 9 lần đổi hướng**; bản cuối 125 giây 1080p60 (124 nghìn lượt xem sau 3 ngày). Đề bài một câu: *"làm video về lá đỏ ở Nhật, giới thiệu đủ địa danh từ Bắc → Nam"*, kèm tham chiếu một video tác giả khen ("ổn nhưng chưa WOW như bản của …").
+
+**Quy trình 5 bước của tác giả (khớp với cách repo này làm, nên giữ):**
+1. Một ý tưởng + **video tham chiếu** + **từ khóa phong cách** (motion graphic, vẽ tay, mực tàu, cắt giấy, địa hình 3D…).
+2. (Tùy) cho Claude **phỏng vấn lại** để hiểu mục đích.
+3. **Làm mẫu 10–20 giây trước** (hoặc 3–4 mẫu để chọn) — không làm cả bài ngay.
+4. Góp ý mẫu đó tới khi ưng theo **4 câu hỏi cố định**: hình ổn chưa? âm thanh ổn chưa? chuyển cảnh ổn chưa? tổng thể đủ "wow" chưa?
+5. Duyệt xong mới kéo dài, **theo từng chặng** (chặng 0–48 giây duyệt rồi mới làm 43–88 giây — hai chặng gối nhau vài giây để nối mượt).
+
+**9 lần đổi hướng — mỗi lần là một luật nên học:**
+| # | Người duyệt nói | Luật rút ra |
+|---|---|---|
+| 1 | học đúng chất bản gốc: địa hình 3D, một đốm sáng vẽ một đường liền | ý chính = **một nét vẽ liền** Bắc → Nam |
+| 2 | chọn giữa nền gần đen và nền xanh lá → "nền xanh màu lá để nổi bật" | **cho chọn 2 bảng màu** ở bước đầu |
+| — | 16 điểm đề cử, chọn 8; 4 bản bài hát AI, chọn bản số 44 | **đưa danh sách để người duyệt chọn**, đừng tự quyết |
+| 3 | "đường line rất ok… rối mắt" (địa hình nhún theo nhạc) | **mặt đất đứng yên**, chỉ đường kẻ và đốm sáng nhấn theo nhịp |
+| 4 | "rất giật" | **đo độ rung từng khung trước khi đưa người xem** |
+| 5 | "rung rung 5 giây đầu" | viết công cụ **in vị trí camera từng khung**; thủ phạm: camera nhấp nhô theo vách núi |
+| 6 | "mỗi điểm nên có biểu tượng riêng, bằng 3D" | 8 biểu tượng **sinh ra từ chính đường kẻ** (thác, đèo, cổng torii…) |
+| 7 | địa hình phủ khắp nơi thì đơn điệu | **bản đồ tĩnh phẳng**, khối 3D chỉ nổi ở **điểm dừng** |
+| 8 | "ổn, nhưng mỗi điểm lướt qua quá nhanh" | **mỗi điểm ≥ 10 giây** chuyển động chậm; không sửa nhạc |
+| 9 | "điểm đến nhìn còn nhỏ, chưa hoành tráng; không có ảnh thật nên khó hình dung" | **camera hạ thấp, đến gần, có sương**; thêm **ảnh thật 2,7 giây kèm dòng ghi nguồn**; làm mẫu 1 điểm cận cảnh, duyệt rồi làm lại cả 6 điểm |
+
+**Nhận xét của tác giả (đúng với kinh nghiệm repo này):** tốn thời gian nhất là **vòng duyệt và góp ý**, không có prompt nào ăn ngay; video đơn giản thì một phát ăn được **khi quy trình đã đóng thành skill**. Nhạc: Suno (trả phí) hoặc model chạy máy **ACE-Step** (tốn GPU/RAM — máy này yếu, hỏi trước khi cài). Tiếng động (SFX) cũng cho Claude làm. Model: Opus làm đẹp hơn Sonnet.
+
+**Áp vào repo này:**
+- Bước 3–5 = luật **DUYỆT** sẵn có, nhưng làm **mẫu chạy 10–20 giây** (có tiếng) thay vì chỉ ảnh tĩnh khi video cần "wow"; render mẫu nhẹ (1 luồng) nhanh hơn nhiều so với render cả bài rồi sửa.
+- Hỏi lại người dùng bằng **4 câu cố định** (hình / âm thanh / chuyển cảnh / wow) để góp ý có cấu trúc.
+- Đo rung bằng cách in vị trí/zoom camera từng khung (như nhóm Sông Đáy: lia ≤ 12,8 px/khung, zoom ≤ 6,6 %/khung) — áp cho `BanDoVeTinh`.
+- Mỗi vòng đổi hướng ghi vào nhật ký như bảng trên.
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:

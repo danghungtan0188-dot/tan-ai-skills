@@ -26,6 +26,8 @@ import { TranhGiayPhuNu, tranhGiayPhuNuSchema } from "./mau/TranhGiayPhuNu";
 import { PhuNu96, phuNu96Schema } from "./mau/PhuNu96";
 import { KetLaser, ketLaserSchema } from "./mau/KetLaser";
 import { BanDoVeTinh, banDoVeTinhSchema } from "./mau/BanDoVeTinh";
+import { SoDeFlycam, soDeFlycamSchema } from "./mau/SoDeFlycam";
+import { BanDoNoi, banDoNoiSchema } from "./mau/BanDoNoi";
 import { SoLan, soLanSchema } from "./mau/SoLan";
 import { HudDemSo, hudDemSoSchema } from "./mau/HudDemSo";
 import { GhepCanh, ghepCanhMetadata, ghepCanhSchema } from "./mau/GhepCanh";
@@ -292,6 +294,24 @@ export const RemotionRoot: React.FC = () => (
         loiChuc2: "Mạnh khỏe · Hạnh phúc · Thành công",
         dongKy: "",
       }}
+      {...chung}
+    />
+    <Composition
+      id="SoDeFlycam"
+      component={SoDeFlycam}
+      schema={soDeFlycamSchema}
+      calculateMetadata={metadata(true)}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 4, font: "Arial, 'Segoe UI', sans-serif", mauSo: "#1E3CFF",
+        muc: [{ tu: 0.3, den: 3.8, truoc: "", so: "57", sau: "doanh nghiệp" }] }}
+      {...chung}
+    />
+    <Composition
+      id="BanDoNoi"
+      component={BanDoNoi}
+      schema={banDoNoiSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 6, font: "Arial, 'Segoe UI', sans-serif", ten: "XÃ …",
+        vong: [[0, 0], [100, 0], [100, 80], [0, 80], [0, 0]], langGieng: [], loeCuoi: true }}
       {...chung}
     />
     <Composition
