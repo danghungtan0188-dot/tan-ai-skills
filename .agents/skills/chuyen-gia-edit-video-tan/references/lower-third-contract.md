@@ -23,3 +23,11 @@ Dùng khi video có người phát biểu, trả lời phỏng vấn hoặc đ�
 - Viết hoa tên ở mức dễ đọc; không viết hoa toàn bộ chức vụ/địa chỉ. Kiểm tra dấu tiếng Việt trước khi render.
 
 Tạo ASS bằng `scripts/make_lower_thirds_ass.py lower-thirds.json lower-thirds.ass --width 1920 --height 1080`.
+
+## Nhịp vào/ra cho chuyên nghiệp (học từ `iart-ai/tiktok-video-skills` + phóng sự Lương Hòa, 10/2026)
+
+- **Không bao giờ bật/tắt cứng**; vào 0,4–0,6 giây, ra nhanh hơn vào (0,27–0,4 giây).
+- **Lần lượt, không ập vào một lúc:** thanh nền → tên → chức vụ, mỗi lớp lệch 3–6 khung. Kiểu truyền hình: thanh quét ngang vào trước, chữ hiện sau (có thể "giải mã" ký tự ngẫu nhiên rồi ra đúng chữ trong ~0,6 giây như phóng sự Lương Hòa).
+- Chỉ chuyển động ở đầu và cuối, **đứng yên khi đang hiện**; đủ thời gian đọc hai lần.
+- Tên lớn hơn chức vụ ≥ 1,6 lần; chức vụ nét mảnh hơn, có thể dùng màu nhấn của kênh (một màu nhấn duy nhất cho cả loạt).
+- 9:16: nâng dải banner lên trên vùng 18 % đáy (phụ đề/nút nền tảng).

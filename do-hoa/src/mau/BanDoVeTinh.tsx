@@ -26,7 +26,8 @@ export const banDoVeTinhSchema = coBan.extend({
   so: z.object({ gia: z.string(), donVi: z.string(), dong: z.string() }).nullable().default(null),
   canh: z.array(z.object({ tu: z.number(), cx: z.number(), cy: z.number(), zoom: z.number() })), // máy quay tới cảnh này từ giây `tu`
   moc: z.object({ kenh: z.number(), xa: z.number(), so: z.number(), tuyen: z.number(), cau: z.number(), het: z.number() }),
-  cau_doc: z.array(z.object({ chu: z.string(), batDau: z.number(), ketThuc: z.number(), nhan: z.array(z.string()).default([]) })),
+  cau_doc: z.array(z.object({ chu: z.string(), batDau: z.number(), ketThuc: z.number(), nhan: z.array(z.string()).default([]),
+    tu: z.array(z.number()).default([]) })), // tu: mốc từng chữ thật (moc_tung_chu.py); trống thì chia đều
 });
 
 const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -266,8 +267,8 @@ export const BanDoVeTinh: React.FC<z.infer<typeof banDoVeTinhSchema>> = (p) => {
           <div key={cau.batDau} style={{ position: "absolute", left: 60 * s, right: 60 * s, bottom: 140 * s, display: "flex", flexWrap: "wrap", justifyContent: "center", rowGap: 4 * s, fontSize: 50 * s, fontWeight: 800, lineHeight: 1.3,
             opacity: interpolate(t, [cau.ketThuc + 0.05, cau.ketThuc + 0.3], [1, 0], kep), textShadow: `0 ${3 * s}px ${10 * s}px #000` }}>
             {cau.chu.split(" ").map((w, i, a) => {
-              const vao = cau.batDau + (i / a.length) * (cau.ketThuc - cau.batDau) * 0.85;
-              const vang = cau.nhan.some((n) => n.split(" ").includes(w.replace(/[,.]/g, "")));
+              const vao = cau.tu.length === a.length ? cau.tu[i] : cau.batDau + (i / a.length) * (cau.ketThuc - cau.batDau) * 0.85;
+              const vang = cau.nhan.some((n) => n.split(" ").some((k) => k === w || k === w.replace(/[,.]$/, ""))); // giữ dấu phẩy trong số "8,3"
               return <span key={i} style={{ color: t >= vao ? (vang ? VANG : "#FFFFFF") : "rgba(255,255,255,0.38)", marginRight: 12 * s }}>{w}</span>;
             })}
           </div>

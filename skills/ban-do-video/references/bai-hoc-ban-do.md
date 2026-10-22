@@ -37,3 +37,16 @@ Thư mục `Desktop/video/_bando_chogao/` — đủ chuỗi script đời đầu
 - Way cầu trên OSM hay mang tên đường ("Đường huyện 25B") → `chuyen_toa_do.py` chỉ lấy way tên bắt đầu "Cầu".
 - Nominatim bị chặn DNS trên máy; Overpass dùng được. Truy vấn relation phải `out geom;` (thiếu `members` nếu dùng `out geom tags;`).
 - Render 723 khung mất 751 giây ở 2 luồng — **chậm vì ảnh nền lớn + bộ lọc**; từ nay 1 luồng và báo trước thời gian. Nhãn "ĐT.877" bị ẩn do hết chỗ — nếu cần thì dời điểm đặt nhãn dọc tuyến.
+
+## 6. Bản đồ kiểu Vox (học từ `iart-ai/map-animation-skills`, MIT, 10/2026)
+
+- **Giật 12 khung/giây cho lớp đồ họa:** nền/máy quay chạy mượt, còn ghim, đường, nhãn chỉ đổi mỗi 2–3 khung (ở 30 khung/giây: lượng tử hoá `frame` về bội số 2–3 trước khi tính giá trị). Đây là "chữ ký" bản đồ Vox — tạo cảm giác làm tay. Tùy chọn, không bật mặc định.
+- **Tập trung + bối cảnh:** vùng đang nói sáng lên, phần còn lại tối đi (mẫu `BanDoVeTinh` đã làm tối nền khi hiện ô số).
+- **Đường vẽ theo thứ tự đọc**; nhãn luôn nằm ngang; máy quay **chậm, có ease** ("thiết lập, đừng quất").
+- **Một mảng `beats` (toạ độ + mốc) là nguồn duy nhất**; thời lượng tính trong `calculateMetadata` từ tổng các beat, không gõ tay.
+- **Kiểm 1 bộ dữ liệu bằng khung tĩnh trước khi render hàng loạt.**
+- **Đường khác cho cảnh 3D thật:** Google Earth Studio (miễn phí, chạy trên trình duyệt) xuất chuỗi ảnh + camera `.jsx` cho After Effects, rồi đắp ghim/nhãn bám theo điểm track. Hợp khi cần flycam 3D vệ tinh mà không dựng WebGL trên máy (cần tài khoản Google; xem điều khoản ghi nguồn của Google Earth).
+
+## 7. Phụ đề theo mốc từng chữ (10/2026)
+
+Bản thử Chợ Gạo chia đều câu theo thời lượng: ở giây 9,1 phụ đề đã sáng tới "ranh giới" trong khi giọng mới đọc tới "kênh" (lệch tới ~1 giây ở câu dài). `moc_tung_chu.py` lấy mốc thật bằng whisper rồi khớp với văn bản đã biết. **Bẫy:** đưa mảng âm thanh 48 kHz thẳng vào faster-whisper ra chữ vô nghĩa ("Mẹ em chơi vô…") và mốc thành nội suy đều — phải chuyển về 16 kHz; script giờ in tỉ lệ khớp và cảnh báo câu dưới 50 %.

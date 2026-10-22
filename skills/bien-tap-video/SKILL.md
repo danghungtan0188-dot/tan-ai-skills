@@ -32,6 +32,7 @@ Không làm: không tự sở hữu engine render video (không có khả năng 
    - Thể thao/hành động → [references/the-thao-hanh-dong.md](references/the-thao-hanh-dong.md)
    - Ẩm thực/nấu ăn → [references/am-thuc.md](references/am-thuc.md)
    - Nội dung mạng xã hội ngắn (Reels/TikTok/Shorts, không thuộc các nhóm trên) → [references/mang-xa-hoi-ngan.md](references/mang-xa-hoi-ngan.md)
+4a. **Người dùng muốn video "wow" dựng bằng code từ một ý tưởng ngắn** (motion graphics, giải thích, bản đồ, video nhạc) → lập đề bài theo [references/viet-de-bai-video-wow.md](references/viet-de-bai-video-wow.md) (khung đầu vào → luật → cấu trúc → chuyển động → âm thanh → phản mẫu; làm mẫu 10–20 giây trước). Video bản đồ → skill **`ban-do-video`**.
 4b. **Cần 1 hiệu ứng cụ thể** (chuyển cảnh, chữ động, filter màu, zoom/pan, sticker, giảm rung...) → dùng skill **`hieu-ung-video`** để lấy công thức ffmpeg/HyperFrames thực thi được, thay vì tự nghĩ ra filter chain từ đầu.
 5. **Lập kịch bản dựng (edit plan).** Theo [assets/edit-plan-template.md](assets/edit-plan-template.md), kết hợp cấu trúc/nhịp/màu/nhạc từ bước 3–4 với nội dung thật đã quan sát ở bước 1–2.
 6. **Xác nhận với người dùng** trước khi thực thi nếu edit plan có thay đổi lớn so với video gốc (cắt bỏ đoạn dài, đổi nhạc, đổi màu mạnh) — đây là thay đổi khó đảo ngược đối với file gốc nếu ghi đè.

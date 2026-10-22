@@ -19,7 +19,7 @@ Thư mục dựng đặt cạnh video của người dùng (ví dụ `Desktop/vi
 2. **Ảnh nền:** `python scripts/tai_ve_tinh.py 15 <lon0> <lat0> <lon1> <lat1> nen15.jpg` (nới bbox xã ~0,03°); cận cảnh điểm quan trọng: z17, khung đủ cao cho khung dọc 9:16 (~2,9 × 4,4 km).
 3. **Đổi toạ độ:** `python scripts/chuyen_toa_do.py osm.json nen15.jpg.json --song "<tên>" --duong "QL.50,ĐT.877" --can cau17.jpg.json --ra ban_do.json`.
 4. **Vẽ chồng và nhìn trước khi viết lời** (PIL vẽ ranh giới, sông, đường, cầu lên ảnh nền thu nhỏ). Đo tuyến so với ranh giới bằng `python scripts/do_ranh.py osm.json --xa-id <id> --way <id>`: tách **km trong xã** và **km dọc ranh giới**. Kênh Chợ Gạo: đếm kiểu điểm-trong-đa-giác ra "8,3 km trong xã" nhưng thật ra kênh là **ranh giới** (8,5 km dọc ranh, 0 km trong xã).
-5. **Lời đọc** viết từ số đã đo, số viết bằng chữ cho VieNeu; chọn bản đọc bằng `chon_ban_tts.py` (skill `bien-tap-video-thong-minh-song-ngu-tan`).
+5. **Lời đọc** viết từ số đã đo, số viết bằng chữ cho VieNeu; chọn bản đọc bằng `chon_ban_tts.py` (skill `bien-tap-video-thong-minh-song-ngu-tan`). Ghép giọng xong chạy `moc_tung_chu.py giong.wav moc.json` (cùng skill) để có **mốc từng chữ thật** cho phụ đề (`cau_doc[].tu`) — không chia đều câu; câu nào báo "ÍT KHỚP" thì nghe lại.
 6. **Props + xem khung tĩnh** (`npx remotion still`) ở mọi mốc đổi cảnh, sửa nhãn/khung tới khi sạch, **rồi** mới render.
 7. **Mẫu 10–20 giây trước** khi video cần "wow" (quy trình hậu trường KOYO): người dùng góp ý theo 4 câu — hình? âm thanh? chuyển cảnh? đủ wow chưa? — duyệt xong mới làm dài theo từng chặng.
 8. **Render nhẹ:** Remotion `--concurrency=1`, ưu tiên thấp; báo trước thời gian (ảnh vệ tinh nặng: 24 giây video ~ 12–25 phút).
