@@ -28,6 +28,7 @@ import { KetLaser, ketLaserSchema } from "./mau/KetLaser";
 import { BanDoVeTinh, banDoVeTinhSchema } from "./mau/BanDoVeTinh";
 import { SoLan, soLanSchema } from "./mau/SoLan";
 import { HudDemSo, hudDemSoSchema } from "./mau/HudDemSo";
+import { GhepCanh, ghepCanhMetadata, ghepCanhSchema } from "./mau/GhepCanh";
 import { AnhBayVao, anhBayVaoSchema } from "./mau/AnhBayVao";
 import { NguoiNoiPip, nguoiNoiPipSchema } from "./mau/NguoiNoiPip";
 import { TieuDeNhan, tieuDeNhanSchema } from "./mau/TieuDeNhan";
@@ -307,6 +308,15 @@ export const RemotionRoot: React.FC = () => (
       schema={hudDemSoSchema}
       calculateMetadata={metadata(true)}
       defaultProps={{ tiLe: "16:9", thoiLuong: 5, tu: 0, den: 100, tai: 0.3, denLuc: 4, voO: true, mau: "#FFFFFF" }}
+      {...chung}
+    />
+    <Composition
+      id="GhepCanh"
+      component={GhepCanh}
+      schema={ghepCanhSchema}
+      calculateMetadata={ghepCanhMetadata}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 5, canh: [{ file: "anh1.jpg", giay: 2 }, { file: "anh2.jpg", giay: 2 }, { file: "anh3.jpg", giay: 2 }],
+        chuyen: ["fade"], chuyenGiay: 0.5, vetSang: false }}
       {...chung}
     />
     <Composition

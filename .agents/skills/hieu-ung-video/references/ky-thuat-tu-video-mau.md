@@ -240,6 +240,24 @@ npx remotion render src/index.ts HudDemSo hud.mov --props=hud.json --concurrency
 - Đặt `thoiLuong` ≥ `denLuc` + 1 để số đứng yên ở đích một lúc trước khi vỡ.
 - Đã render thử 5 giây: 150 khung, kênh trong suốt đúng, ghép lên cảnh thật thấy số, thanh đo, vỡ ô và logo đúng thứ tự.
 
+### Mẫu `GhepCanh`: nối ảnh/clip bằng chuyển cảnh chính thức của Remotion
+
+Dùng hai gói chính thức `@remotion/transitions` và `@remotion/light-leaks` (cùng bản 4.0.532 với `remotion`). Mẫu nối ảnh hoặc clip thành một đoạn liền. Mỗi chỗ nối chọn một kiểu: `fade`, `slide`, `wipe`, `flip`, `clockWipe` (quét hình quạt), `iris` (vòng tròn mở), `pushCut` (đẩy cảnh). Tuỳ chọn đè vệt sáng lên chỗ nối, trộn `screen` cho cảnh vẫn lộ qua. Thời lượng tự tính bằng tổng giây các cảnh trừ phần chồng ở các chỗ nối, nên không cần điền `thoiLuong`.
+
+```bash
+npx remotion render src/index.ts GhepCanh ghep.mp4 --props=ghep.json --public-dir=<thu_muc_media> --concurrency=2
+```
+
+```json
+{"tiLe":"16:9","thoiLuong":1,"canh":[{"file":"1.jpg","giay":1.5},{"file":"2.mp4","giay":2},{"file":"3.jpg","giay":1.5}],"chuyen":["clockWipe","iris"],"chuyenGiay":0.5,"vetSang":true}
+```
+
+- `chuyen` ngắn hơn số chỗ nối thì lặp lại từ đầu.
+- Clip chạy không tiếng (`muted`). Tiếng và nhạc ghép sau bằng ffmpeg.
+- Gói còn có kiểu chạy bằng shader (`zoom-blur`, `film-burn`, `cross-zoom`, `dissolve`, `crosswarp`…). Các kiểu này còn thử nghiệm (OffscreenCanvas) nên chưa đưa vào mẫu.
+- **Máy này:** Windows chặn chạy `node_modules/@remotion/compositor-win32-x64-msvc/remotion.exe` ("Permission denied"). Vì vậy mọi mẫu dùng `OffthreadVideo` đều lỗi `spawn UNKNOWN` khi render. `GhepCanh` dùng `Video` của `@remotion/media` (giải mã bằng WebCodecs) nên không bị. Các mẫu cũ có `OffthreadVideo` gồm `NguoiNoiPip` và `PhuNu96`.
+- Đã render thử 5 cảnh (4 ảnh + 1 clip) với slide, clockWipe, pushCut, iris, có và không có vệt sáng. Ra 165 khung, đúng 5,5 giây; xem khung giữa mỗi chỗ nối đều đúng kiểu.
+
 ## Reel "AI dựng cả video": người nói + đồ họa thay nhau (85 giây, dọc, 10/2026)
 
 Video tiếng Anh, một người nói trước máy kể việc giao cho AI dựng video. Nhịp chậm (14 giây một cảnh), nhưng **đồ họa đổi liên tục trong từng cảnh**. Âm lượng −14,2 LUFS, LRA chỉ 1,9 LU: nén rất mạnh cho điện thoại, không dùng cho bản tin.
