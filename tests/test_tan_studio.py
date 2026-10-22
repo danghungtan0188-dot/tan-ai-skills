@@ -20,7 +20,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
 from tan_studio import (checks, do_hoa, du_lieu, evaluation, long_tieng, metrics, nghiem_thu, normalize,  # noqa: E402
-                        read_json, review, rules, subtitles, tts, video, workflow)
+                        read_json, review, rules, subtitles, tim_canh, tts, video, workflow)
 
 try:
     import jsonschema
@@ -187,6 +187,79 @@ class TestLongTieng(unittest.TestCase):
     def test_toc_do_ngoai_khoang_bi_tu_choi(self):
         with self.assertRaises(tts.EngineError):
             long_tieng.dub(Path("x.srt"), Path("."), "thu-nghiem", max_speed=2.0)
+
+
+class TestTimCanh(unittest.TestCase):
+    """Không ra mạng: thay get_json/get bằng dữ liệu giả."""
+
+    PEXELS = {"videos": [
+        {"id": 1, "duration": 3, "url": "p/1", "user": {"name": "A"},  # quá ngắn
+         "video_files": [{"width": 1920, "height": 1080, "link": "u1"}]},
+        {"id": 2, "duration": 12, "url": "p/2", "user": {"name": "B"}, "video_files": [
+            {"width": 3840, "height": 2160, "link": "4k"}, {"width": 1920, "height": 1080, "link": "hd"},
+            {"width": 1280, "height": 720, "link": "720"}, {"width": 1080, "height": 1920, "link": "doc"}]},
+        {"id": 3, "duration": 9, "url": "p/3", "user": {"name": "C"},  # chỉ có bản nhỏ hơn khung
+         "video_files": [{"width": 1280, "height": 720, "link": "nho"}]},
+    ]}
+
+    def setUp(self):
+        self._env = dict(os.environ)
+        os.environ["PEXELS_API_KEY"] = "k-test"
+        os.environ["PIXABAY_API_KEY"] = "k-test"
+
+    def tearDown(self):
+        os.environ.clear()
+        os.environ.update(self._env)
+
+    def test_chon_ban_nho_nhat_du_khung_dung_chieu(self):
+        ban = [(3840, 2160, "4k"), (1920, 1080, "hd"), (1280, 720, "720"), (1080, 1920, "doc")]
+        self.assertEqual(tim_canh.chon_ban(ban, "16:9")[2], "hd")
+        self.assertEqual(tim_canh.chon_ban(ban, "9:16")[2], "doc")
+        self.assertIsNone(tim_canh.chon_ban([(1280, 720, "x")], "16:9"))
+
+    def test_pexels_loc_do_dai_va_kich_thuoc(self):
+        seen = {}
+
+        def fake(url, headers=None):
+            seen.update(url=url, headers=headers)
+            return self.PEXELS
+        res = tim_canh.tim_pexels("rice field", "16:9", 5, 10, get_json=fake)
+        self.assertEqual([(c["id"], c["url"], c["tac_gia"]) for c in res], [("2", "hd", "B")])
+        self.assertIn("orientation=landscape", seen["url"])
+        self.assertEqual(seen["headers"], {"Authorization": "k-test"})
+
+    def test_pixabay(self):
+        data = {"hits": [{"id": 7, "duration": 20, "pageURL": "x/7", "user": "D", "videos": {
+            "large": {"width": 1920, "height": 1080, "url": "L"}, "small": {"width": 960, "height": 540, "url": "S"},
+            "tiny": {"width": 640, "height": 360, "url": ""}}}]}
+        res = tim_canh.tim_pixabay("lua", "16:9", 5, 3, get_json=lambda url, headers=None: data)
+        self.assertEqual(res[0]["url"], "L")
+        self.assertEqual(tim_canh.tim_pixabay("lua", "9:16", 5, 3, get_json=lambda url, headers=None: data), [])
+
+    def test_thieu_key_bao_loi_ro(self):
+        del os.environ["PEXELS_API_KEY"]
+        with self.assertRaisesRegex(RuntimeError, "PEXELS_API_KEY"):
+            tim_canh.tim_pexels("x", "16:9", 5, 1, get_json=lambda *a, **k: {})
+
+    def test_tai_bo_qua_file_da_co_va_ghi_nguon(self):
+        import io
+        calls = []
+
+        def fake_get(url, timeout=0):
+            calls.append(url)
+            return io.BytesIO(b"mp4-bytes")
+        canh = tim_canh.tim_pexels("rice", "16:9", 5, 10, get_json=lambda *a, **k: self.PEXELS)
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d) / "canh"
+            paths = tim_canh.tai(canh, out, "rice", get=fake_get, log=lambda *_: None)
+            self.assertEqual(paths[0].read_bytes(), b"mp4-bytes")
+            tim_canh.tai(canh, out, "rice", get=fake_get, log=lambda *_: None)
+            self.assertEqual(calls, ["hd"])  # lần hai không tải lại
+            nguon = read_json(out / "nguon.json")
+            self.assertEqual(len(nguon), 1)
+            self.assertEqual(nguon[0]["trang"], "p/2")
+            self.assertNotIn("url", nguon[0])
+            self.assertEqual(list(out.glob("*.part")), [])
 
 
 class TestPhuDe(unittest.TestCase):

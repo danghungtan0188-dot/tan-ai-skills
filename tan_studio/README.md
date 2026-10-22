@@ -33,7 +33,8 @@ python -m tan_studio kiem-tra
 
 Không cần API key. `HF_TOKEN` (tuỳ chọn, xem `.env.example`) chỉ để tải model nhanh hơn — đặt làm biến
 môi trường, không ghi vào file dự án. tan_studio không gửi script/media đi đâu và không dùng chúng để huấn
-luyện mô hình; lần duy nhất ra mạng là thư viện vieneu tải model lần đầu.
+luyện mô hình; lần duy nhất ra mạng là thư viện vieneu tải model lần đầu — và lệnh `tim-canh` khi bạn
+tự gọi (chỉ gửi từ khoá, cần key riêng).
 
 ## Workflow mẫu và nghiệm thu
 
@@ -100,6 +101,20 @@ Câu dài hơn chỗ của nó: (1) lấn sang khoảng lặng trước câu sau
 Không bao giờ cắt chữ. Tự bỏ thẻ định dạng (`<i>`, `{\an8}`) và áp dụng quy tắc phát âm đã duyệt (phạm vi cá nhân/hệ thống).
 Đầu ra: `long-tieng.wav`, `long-tieng.json` (mốc gốc/mốc đặt, tốc độ, số giây bị lùi từng câu), `cau/*.wav` (chạy lại
 thì bỏ qua câu đã đọc). File phụ đề gốc chỉ được đọc.
+
+## Tìm cảnh minh hoạ (Pexels / Pixabay)
+
+Cảnh stock theo từ khoá — hợp video quảng bá, **không** dùng thay tư liệu thật cho bản tin/phim tài liệu.
+Cần key miễn phí, đặt làm biến môi trường `PEXELS_API_KEY` / `PIXABAY_API_KEY` (xem `.env.example`).
+
+```bash
+python -m tan_studio tim-canh "rice field" --out-dir du-an/canh --chi-tim          # xem trước danh sách
+python -m tan_studio tim-canh "rice field" --out-dir du-an/canh --ti-le 9:16 --so-luong 3
+```
+
+Chỉ lấy cảnh đúng chiều khung, dài ≥ `--toi-thieu` giây, chọn bản nhỏ nhất vẫn phủ kín 1920×1080 / 1080×1920
+(cách lọc phỏng theo MoneyPrinterTurbo, MIT). File tên `<nguon>-<id>.mp4`, đã có thì bỏ qua; `nguon.json` ghi
+trang gốc + tác giả để ghi công. Không tự thêm vào dự án: xem rồi tự liệt kê vào `media`.
 
 ## Đồ hoạ động (Remotion)
 

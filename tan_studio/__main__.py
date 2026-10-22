@@ -97,6 +97,26 @@ def cmd_long_tieng(a) -> int:
     return 0
 
 
+def cmd_tim_canh(a) -> int:
+    from .tim_canh import TIM, tai
+    try:
+        canh = TIM[a.nguon](a.tu_khoa, a.ti_le, a.toi_thieu, a.so_luong)
+    except OSError as exc:  # mạng, key sai (HTTP 401/403), hết lượt (429)
+        print(f"LỖI gọi {a.nguon}: {exc}", file=sys.stderr)
+        return 2
+    if not canh:
+        print(f"Không thấy cảnh nào trên {a.nguon} cho {a.tu_khoa!r} ({a.ti_le}, ≥ {a.toi_thieu} giây).")
+        return 1
+    for c in canh:
+        print(f"{c['nguon']}-{c['id']}  {c['rong']}x{c['cao']}  {c['thoi_luong']}s  {c['tac_gia']}  {c['trang']}")
+    if a.chi_tim:
+        return 0
+    paths = tai(canh, Path(a.out_dir), a.tu_khoa)
+    print(f"\nĐã lưu {len(paths)} cảnh + nguon.json (ghi công tác giả) vào {a.out_dir}")
+    print("Xem lại rồi tự thêm file muốn dùng vào \"media\" của dự án.")
+    return 0
+
+
 def cmd_do_hoa(a) -> int:
     from . import do_hoa, subtitles, video
     props = read_json(Path(a.props)) if a.props else {}
@@ -365,6 +385,16 @@ def main(argv=None) -> int:
     s.add_argument("--phong-cach", default="tin_tuc")
     s.add_argument("--toc-do-toi-da", type=float, default=1.15, help="đọc nhanh tối đa (1.0–1.5)")
     s.set_defaults(fn=cmd_long_tieng)
+
+    s = sub.add_parser("tim-canh", help="tìm + tải cảnh minh hoạ từ Pexels/Pixabay theo từ khoá (cần API key)")
+    s.add_argument("tu_khoa", help="từ khoá tiếng Anh cho kết quả tốt hơn, vd \"rice field\"")
+    s.add_argument("--out-dir", required=True, help="thư mục lưu cảnh (nên để cạnh dự án)")
+    s.add_argument("--nguon", default="pexels", choices=["pexels", "pixabay"])
+    s.add_argument("--ti-le", default="16:9", choices=["16:9", "9:16"])
+    s.add_argument("--so-luong", type=int, default=5)
+    s.add_argument("--toi-thieu", type=float, default=5, help="độ dài tối thiểu mỗi cảnh (giây)")
+    s.add_argument("--chi-tim", action="store_true", help="chỉ in danh sách, không tải")
+    s.set_defaults(fn=cmd_tim_canh)
 
     s = sub.add_parser("do-hoa", help="đồ hoạ động Remotion: intro, so-lieu, lower-third, chu-dong")
     s.add_argument("mau", help="intro | so-lieu | lower-third | chu-dong")
