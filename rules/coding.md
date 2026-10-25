@@ -50,3 +50,7 @@ Responsive là bắt buộc (mobile trước). Ảnh có `alt`, form control có
 ## 8. Backend
 
 Mọi endpoint: xác thực đầu vào, kiểm tra quyền, trả mã lỗi đúng ngữ nghĩa. Không tin dữ liệu từ client. Không trả stack trace ra response.
+
+## 9. Đồng bộ tài liệu kiến trúc
+
+Dự án có tài liệu kiến trúc (do `/quet-kien-truc` viết) mà thay đổi đụng tới phần nào trong đó (route, bảng dữ liệu, phân quyền, lệnh chạy…) → cập nhật đúng phần đó cùng lúc với code, rồi chạy `python scripts/check_citations.py <tài liệu> --root <dự án>`. Sửa code làm lệch số dòng của trích dẫn cũng phải sửa trích dẫn. Exit khác 0 = chưa xong.
