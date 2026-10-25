@@ -1,0 +1,32 @@
+{
+  "name": "remotion-studio",
+  "version": "1.0.0",
+  "description": "Remotion engine dùng chung cho tan-ai-skills và ATT NEWS",
+  "repository": {},
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@remotion/cli": "4.0.532",
+    "@remotion/media": "4.0.532",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.532"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config-flat": "4.0.532",
+    "@types/react": "19.2.7",
+    "@types/web": "0.0.166",
+    "eslint": "9.39.5",
+    "prettier": "3.8.1",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "build": "remotion bundle",
+    "render:sample": "remotion render src/index.ts AttNews out/att-news-sample.mp4 --props=props/sample.json",
+    "still:sample": "remotion still src/index.ts AttNews out/att-news-sample.png --frame=90 --props=props/sample.json",
+    "test:bridge": "python -m unittest discover -s tests -v",
+    "upgrade": "remotion upgrade",
+    "lint": "eslint src && tsc"
+  }
+}

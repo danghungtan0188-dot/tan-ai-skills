@@ -1,0 +1,22 @@
+{
+  "title": "Bản tin An Thạnh Thủy",
+  "subtitle": "Remotion đã được kết nối với repo tan-ai-skills",
+  "kicker": "TIN MỚI",
+  "durationSeconds": 8,
+  "width": 1920,
+  "height": 1080,
+  "backgroundColor": "#031a3a",
+  "accentColor": "#e31b23",
+  "backgroundImage": null,
+  "backgroundVideo": null,
+  "voiceover": null,
+  "captions": [
+    {
+      "text": "Khung dựng Remotion dùng chung đã sẵn sàng.",
+      "startMs": 2500,
+      "endMs": 6000,
+      "timestampMs": 2500,
+      "confidence": 1
+    }
+  ]
+}

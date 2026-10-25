@@ -1,0 +1,15 @@
+node_modules
+dist
+build
+.DS_Store
+.env
+.remotion
+public/assets
+props/generated.json
+
+# Ignore the output video from Git but not videos you import into src/.
+out
+
+# Media nặng của từng video (giọng đọc, video nguồn) — giữ trên máy, không đưa lên GitHub
+public/*/*.mp4
+public/*/*.wav
