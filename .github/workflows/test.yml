@@ -1,0 +1,32 @@
+# GitHub tự chạy toàn bộ test sau mỗi lần push hoặc mở PR vào main.
+# Chạy trên máy chủ của GitHub, không dùng tài nguyên máy cá nhân.
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Cài ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Cài thư viện Python mà test dùng
+        run: pip install pillow numpy opencv-python-headless jsonschema defusedxml
+
+      - name: Chạy test
+        run: python -m unittest discover -s tests
