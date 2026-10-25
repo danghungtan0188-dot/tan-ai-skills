@@ -23,6 +23,7 @@ Không làm: không tự bịa hiệu ứng không có thật trong CapCut/công
 | **Adjustment** — hiệu chỉnh hình ảnh | [references/hieu-chinh.md](references/hieu-chinh.md) | sáng/tương phản/bão hòa, làm nét, giảm rung (kèm cảnh báo rủi ro) |
 | **Rút từ video mẫu** | [references/ky-thuat-tu-video-mau.md](references/ky-thuat-tu-video-mau.md) | mây mở cảnh, dải nét xoay, cửa mở, gương/vạn hoa, bloom, ảnh khung nghiêng, khung dọc 9:16, hai dải, lưới 3×2, chữ lồng video, nhịp cắt theo loại video, bản đồ hành trình đường đỏ, bản đồ vệ tinh giải thích quy hoạch (dọc); mẫu Remotion `TranhGiay` (intro tranh giấy), `AnhBayVao` (ảnh bay vào rồi phóng to), `HudDemSo` (vòng HUD đếm số, vỡ ô lộ logo) và `GhepCanh` (nối ảnh/clip bằng chuyển cảnh chính thức của Remotion + vệt sáng); montage glitch nhịp "dồn – nghỉ – dồn" kiểu promo đài |
 | **Học từ HyperFrames** | [references/hoc-tu-hyperframes.md](references/hoc-tu-hyperframes.md) | nguyên tắc dựng tua-được, lệnh CLI, 455 mẫu registry chọn theo nhu cầu, 49 luật chuyển động, bảng ánh xạ hiệu ứng video mẫu → mẫu HyperFrames, khi nào dùng ffmpeg/Remotion/HyperFrames |
+| **Học từ OpenMontage + Diagram Design** | [references/hoc-tu-openmontage-va-diagram-design.md](references/hoc-tu-openmontage-va-diagram-design.md) | nguồn tư liệu miễn phí, cách tả ô cảnh để tìm B-roll, nguyên tắc vẽ sơ đồ gọn (tối đa 9 khối, 1–2 điểm nhấn) |
 
 Xem nhanh toàn bộ tên hiệu ứng trong [assets/thu-vien-hieu-ung.md](assets/thu-vien-hieu-ung.md).
 
