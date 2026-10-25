@@ -13,8 +13,9 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # Windows như máy làm việc thật: script dùng font C:/Windows/Fonts/arial.ttf
+    runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
 
@@ -23,7 +24,7 @@ jobs:
           python-version: "3.14"
 
       - name: Cài ffmpeg
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+        run: choco install ffmpeg -y --no-progress
 
       - name: Cài thư viện Python mà test dùng
         run: pip install pillow numpy opencv-python-headless jsonschema defusedxml
