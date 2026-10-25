@@ -11,6 +11,11 @@ on:
 permissions:
   contents: read
 
+# Như máy làm việc thật: Python đọc/ghi tiếng Việt bằng UTF-8
+env:
+  PYTHONUTF8: "1"
+  PYTHONIOENCODING: utf-8
+
 jobs:
   test:
     # Windows như máy làm việc thật: script dùng font C:/Windows/Fonts/arial.ttf
