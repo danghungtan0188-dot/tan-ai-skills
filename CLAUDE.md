@@ -57,6 +57,16 @@ Với việc nhiều bước, nêu kế hoạch ngắn trước khi làm:
 
 **Không báo "đã xong" khi chưa thật sự kiểm chứng.** Nếu có phần bị bỏ dở hoặc không kiểm được, nói thẳng phần nào và vì sao.
 
+## 5. Lệnh và agent dùng ở mọi dự án
+
+Lệnh `/build-feature` `/fix` `/review` `/test` `/security-check` `/khoi-tao-du-an` (và các lệnh video) cùng 9 agent
+được liên kết từ repo `tan-ai-skills` sang `~/.claude/commands` và `~/.claude/agents`, nên có ở mọi dự án.
+
+- Lệnh/agent nhắc tới `rules/…`, `data-contracts/…`, `scripts/…`, `skills/…` mà **dự án hiện tại không có** →
+  đọc/chạy đúng đường dẫn đó trong `C:\Users\DANG HUNG TAN\Documents\GitHub\tan-ai-skills\`.
+- Luật riêng của dự án (`CLAUDE.md`, `.claude/rules/`) **được ưu tiên** khi khác với luật chung.
+- Dự án mới chưa có khung → gợi ý chạy `/khoi-tao-du-an`.
+
 ---
 
 **Các nguyên tắc này đang phát huy tác dụng nếu:** ít thay đổi thừa trong mỗi lần sửa, ít phải làm lại vì rườm rà, và mọi báo cáo "đã xong" đều đúng sự thật.
@@ -72,12 +82,12 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ```text
 .claude/agents/     9 agent   — Claude Code chỉ đọc agent ở đây
-.claude/commands/  11 command — slash command
+.claude/commands/  12 command — slash command
 .claude/hooks/      3 hook    — wiring trong .claude/settings.json
-skills/             26 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
+skills/             29 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
-scripts/            script dùng chung (sync_skills.py, video_qa.py)
+scripts/            script dùng chung (sync_skills.py, video_qa.py, check_citations.py)
 tan_studio/         CLI script→giọng→phụ đề→MP4 (python -m tan_studio), gọi lại code trong skills/
 do-hoa/             Remotion: intro, số liệu, lower-third, chữ chạy — tan_studio gọi qua `do-hoa` / mục "do_hoa"
 remotion-studio/    Engine Remotion React nhận audio/SRT/media qua props JSON; chạy song song HyperFrames
@@ -101,6 +111,7 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 `/build-feature` `/fix` `/review` `/test` `/security-check`
 `/video-news` `/edit-video` `/review-video` `/sync-skills`
 `/dung-tu-kho` (nhiều clip thô → một bản tin) `/rut-kinh-nghiem` (sau mỗi video)
+`/quet-kien-truc` (quét code dự án app → tài liệu kiến trúc có dẫn nguồn `file:dòng`)
 
 ## Rule bắt buộc đọc
 
