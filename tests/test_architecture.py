@@ -169,7 +169,8 @@ class TestLienKet(unittest.TestCase):
 
     def markdown_files(self):
         return (sorted(AGENTS.glob("*.md")) + sorted(COMMANDS.glob("*.md"))
-                + sorted((REPO_ROOT / "skills" / "phat-trien-app").rglob("*.md")))
+                + sorted((REPO_ROOT / "skills" / "phat-trien-app").rglob("*.md"))
+                + sorted((REPO_ROOT / "skills" / "xay-ai-agent").rglob("*.md")))
 
     def test_khong_dung_duong_dan_len_cap_tren(self):
         for path in self.markdown_files():
@@ -189,8 +190,8 @@ class TestLienKet(unittest.TestCase):
                                     f"Lien ket hong: {target}")
 
     def test_lien_ket_trong_skill_ton_tai(self):
-        skill_root = REPO_ROOT / "skills" / "phat-trien-app"
-        for path in sorted(skill_root.rglob("*.md")):
+        for path in (sorted((REPO_ROOT / "skills" / "phat-trien-app").rglob("*.md"))
+                     + sorted((REPO_ROOT / "skills" / "xay-ai-agent").rglob("*.md"))):
             for target in LINK.findall(path.read_text(encoding="utf-8")):
                 if target.startswith(REPO_LEVEL_PREFIXES) or "://" in target:
                     continue
