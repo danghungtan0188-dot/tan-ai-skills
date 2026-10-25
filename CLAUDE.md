@@ -82,7 +82,7 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ```text
 .claude/agents/     9 agent   — Claude Code chỉ đọc agent ở đây
-.claude/commands/  12 command — slash command
+.claude/commands/  13 command — slash command
 .claude/hooks/      3 hook    — wiring trong .claude/settings.json
 skills/             29 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc

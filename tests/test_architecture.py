@@ -221,5 +221,25 @@ class TestSkills(unittest.TestCase):
                          f"Skill chua dong bo:\n{result.stdout}")
 
 
+class TestSoDemTrongClaudeMd(unittest.TestCase):
+    """So dem trong muc 'Co gi o dau' cua CLAUDE.md phai khop so file that."""
+
+    def test_so_dem_khop_thuc_te(self):
+        text = (REPO_ROOT / "CLAUDE.md").read_text(encoding="utf-8")
+        thuc_te = {
+            ".claude/agents/": len(list(AGENTS.glob("*.md"))),
+            ".claude/commands/": len(list(COMMANDS.glob("*.md"))),
+            ".claude/hooks/": len(list(HOOKS.glob("*.py"))),
+            "skills/": len(list((REPO_ROOT / "skills").glob("*/SKILL.md"))),
+            "rules/": len(list(RULES.glob("*.md"))),
+        }
+        for thu_muc, so in thuc_te.items():
+            with self.subTest(thu_muc=thu_muc):
+                m = re.search(rf"^{re.escape(thu_muc)}\s+(\d+) ", text, re.MULTILINE)
+                self.assertIsNotNone(m, f"CLAUDE.md thieu dong so dem cho {thu_muc}")
+                self.assertEqual(int(m.group(1)), so,
+                                 f"CLAUDE.md ghi {m.group(1)} o {thu_muc}, thuc te {so}")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
