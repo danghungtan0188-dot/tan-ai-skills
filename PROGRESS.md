@@ -4,9 +4,13 @@ Cập nhật: 2026-10-25. Đầu mỗi phiên đọc file này; cuối phiên ("
 
 ## Tình trạng hiện tại
 
-- 29 skill, 12 command, 9 agent, 3 hook. Test: `python -m unittest discover -s tests` (299 bài, đều đạt).
-- Máy và GitHub khớp nhau tới commit `b3daeaa` (repo **công khai**).
-- Đang làm: nâng cấp repo theo bảng chấm điểm (PROGRESS.md → test số đếm → gộp test → GitHub tự chạy test).
+- 29 skill, 13 command, 9 agent, 3 hook. Test: `python -m unittest discover -s tests` (304 bài, đều đạt trên máy; đã gồm test `remotion-studio` và test số đếm trong CLAUDE.md).
+- Repo GitHub **công khai**.
+- Nâng cấp theo bảng chấm điểm: bước 1–3 xong (PROGRESS.md, test số đếm, gộp test). **Bước 4 dở:**
+  `.github/workflows/test.yml` cho GitHub tự chạy test trên Windows. Lần chạy 1 (Linux): 39 lỗi vì thiếu
+  font `C:/Windows/Fonts/arial.ttf` → chuyển sang Windows. Lần 2: còn 5 lỗi vỡ chữ tiếng Việt → bật
+  `PYTHONUTF8=1`. Lần 3 (commit `4c6d79b`): **chưa xem kết quả** — xem bằng `gh run list --workflow test.yml`.
+  Đã sửa 2 lần; nếu lần 3 vẫn lỗi thì dừng, đưa phương án cho người dùng chọn.
 
 ## Đã làm gần đây
 
@@ -29,7 +33,6 @@ Cập nhật: 2026-10-25. Đầu mỗi phiên đọc file này; cuối phiên ("
 
 ## Việc tiếp theo (theo thứ tự ưu tiên)
 
-1. Test tự kiểm số skill/command ghi trong `CLAUDE.md` khớp thực tế.
-2. Gộp test `remotion-studio` vào lệnh test chung.
-3. GitHub Actions tự chạy test sau mỗi lần push.
-4. Soát ảnh VNeID trên repo công khai.
+1. Xem kết quả lần chạy 3 của GitHub Actions; xanh thì bước 4 xong.
+2. Soát ảnh VNeID trên repo công khai.
+3. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
