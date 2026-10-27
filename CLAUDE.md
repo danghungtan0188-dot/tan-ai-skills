@@ -83,7 +83,7 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 ```text
 .claude/agents/     9 agent   — Claude Code chỉ đọc agent ở đây
 .claude/commands/  13 command — slash command
-.claude/hooks/      5 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
+.claude/hooks/      7 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
 skills/             29 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
@@ -126,9 +126,13 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 |---|---|---|
 | `guard_secrets.py` | trước Write/Edit | chặn ghi `.env` thật và secret |
 | `guard_bash.py` | trước Bash/PowerShell | chặn hẳn lệnh phá dữ liệu, ffmpeg ghi đè file gốc; **hỏi người dùng** với push/deploy/publish, `git add -A` |
+| `guard_video.py` | trước Bash/PowerShell chạy `ffmpeg` | chặn `loudnorm` một lượt thiếu `linear=true`, x264/x265 thiếu `-preset faster`, ffmpeg mới khi đang có ffmpeg khác chạy |
+| `guard_tra_phi.py` | trước Bash/PowerShell/Skill/MCP HeyGen | **hỏi người dùng** mỗi lần gọi dịch vụ trả phí HeyGen |
 | `check_render.py` | sau Bash có `ffmpeg` | tự probe file đầu ra, chặn nếu render hỏng |
 | `session_start.py` | đầu phiên, `/clear`, sau tóm tắt | nạp phần đầu `PROGRESS.md` (hoặc `docs/PROGRESS.md`) vào ngữ cảnh |
 | `nhac_test.py` | cuối lượt | đã sửa file code mà chưa chạy test/lint/build sau lần sửa cuối → nhắc một lần (chạy test hoặc ghi NOT RUN) |
+
+Bài học nào đã thành chốt chặn, bài nào còn để người phán đoán: [docs/bai-hoc-va-chot-chan.md](docs/bai-hoc-va-chot-chan.md).
 
 ## Validation
 
