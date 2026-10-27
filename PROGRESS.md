@@ -6,11 +6,9 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
 
 - 29 skill, 13 command, 9 agent, 5 hook (khai báo cả ở `~/.claude/settings.json` nên chạy ở mọi dự án). Test: `python -m unittest discover -s tests` (304 bài, đều đạt trên máy; đã gồm test `remotion-studio` và test số đếm trong CLAUDE.md).
 - Repo GitHub **công khai**.
-- Nâng cấp theo bảng chấm điểm: bước 1–3 xong (PROGRESS.md, test số đếm, gộp test). **Bước 4 dở:**
-  `.github/workflows/test.yml` cho GitHub tự chạy test trên Windows. Lần chạy 1 (Linux): 39 lỗi vì thiếu
-  font `C:/Windows/Fonts/arial.ttf` → chuyển sang Windows. Lần 2: còn 5 lỗi vỡ chữ tiếng Việt → bật
-  `PYTHONUTF8=1`. Lần 3 (commit `4c6d79b`): **chưa xem kết quả** — xem bằng `gh run list --workflow test.yml`.
-  Đã sửa 2 lần; nếu lần 3 vẫn lỗi thì dừng, đưa phương án cho người dùng chọn.
+- Nâng cấp theo bảng chấm điểm: bước 1–4 xong (PROGRESS.md, test số đếm, gộp test, GitHub Actions).
+  `.github/workflows/test.yml` chạy test trên Windows với `PYTHONUTF8=1`; lần 3 (commit `4c6d79b`,
+  25/10) **xanh**. Xem lại bằng `gh run list --workflow test.yml`.
 
 ## Đã làm gần đây
 
@@ -34,6 +32,6 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
 
 ## Việc tiếp theo (theo thứ tự ưu tiên)
 
-1. Xem kết quả lần chạy 3 của GitHub Actions; xanh thì bước 4 xong.
-2. Soát ảnh VNeID trên repo công khai.
-3. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
+1. Soát ảnh VNeID trên repo công khai.
+2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
+3. Harness engineering GĐ4 (bài học memory → chốt chặn; chặn `bash -c`/heredoc) và GĐ5 (nhật ký hook).
