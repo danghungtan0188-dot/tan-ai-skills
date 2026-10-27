@@ -185,6 +185,42 @@ class TestGuardBash(unittest.TestCase):
     def test_chan_force_push(self):
         self.assert_denied("git push --force origin main")
 
+    def test_chan_force_push_co_ngan(self):
+        self.assert_denied("git push -f origin main")
+
+    def test_chan_rm_rf_thu_muc_hien_tai(self):
+        for command in ("rm -rf .", "rm -rf ./*", "rm -rf *", "rm -rf .."):
+            self.assert_denied(command)
+
+    def test_chan_remove_item_o_dia_va_home(self):
+        for command in (
+            r"Remove-Item -Recurse -Force C:\Users\x",
+            r"Remove-Item -Recurse -Force C:\ ",
+            'Remove-Item "D:/" -Recurse',
+            "Remove-Item -Recurse -Force ~",
+            "Remove-Item -Recurse -Force $env:USERPROFILE",
+            "Remove-Item -Recurse -Force .",
+            r"Remove-Item -Path .\* -Recurse -Force",
+            "Get-ChildItem | Remove-Item -Recurse -Force *",
+        ):
+            self.assert_denied(command)
+
+    def test_chan_xoa_de_quy_kieu_cmd(self):
+        for command in (r"del /s /q C:\data", r"rd /s /q C:\data", r"rmdir /S /Q build"):
+            self.assert_denied(command)
+
+    def test_chan_format_o_dia(self):
+        for command in ("format D:", "format.com E: /q", "Format-Volume -DriveLetter D"):
+            self.assert_denied(command)
+
+    def test_chan_ffmpeg_ghi_de_file_nguon(self):
+        for command in (
+            "ffmpeg -y -i clip.mp4 -vf scale=1280:-2 clip.mp4",
+            'ffmpeg -i "D:/Phim/goc.MP4" -c copy "d:\\phim\\goc.mp4"',
+            "ffmpeg -i nen.mp4 -i giong.wav -map 0:v -map 1:a giong.wav",
+        ):
+            self.assert_denied(command)
+
     # --- hoi nguoi dung ---
 
     def test_hoi_git_push(self):
@@ -205,6 +241,11 @@ class TestGuardBash(unittest.TestCase):
     def test_hoi_gh_pr_create(self):
         self.assert_ask("gh pr create --title x --body y")
 
+    def test_hoi_git_add_tat_ca(self):
+        for command in ("git add -A", "git add .", "git add --all", "git add -A && git commit -m x",
+                        'git commit -am "x"', "git commit -a -m x"):
+            self.assert_ask(command)
+
     # --- cho qua ---
 
     def test_cho_qua_git_status(self):
@@ -221,6 +262,27 @@ class TestGuardBash(unittest.TestCase):
 
     def test_cho_qua_ffmpeg(self):
         self.assert_allowed("ffmpeg -i a.mp4 -c:v libx264 out.mp4")
+
+    def test_cho_qua_ffmpeg_hai_dau_vao(self):
+        self.assert_allowed("ffmpeg -i nen.mp4 -i giong.wav -map 0:v -map 1:a ra.mp4")
+
+    def test_cho_qua_ffmpeg_noi_tiep(self):
+        self.assert_allowed("ffmpeg -i goc.mp4 tam.mp4 && ffmpeg -i tam.mp4 ra.mp4")
+
+    def test_cho_qua_remove_item_thu_muc_con(self):
+        for command in (r"Remove-Item -Recurse -Force .\build\cache", "Remove-Item out.mp4",
+                        r"Remove-Item -Recurse C:\Users\x\Temp\nhap"):
+            self.assert_allowed(command)
+
+    def test_cho_qua_git_add_tung_file(self):
+        for command in ("git add tests/test_hooks.py .claude/hooks/guard_bash.py",
+                        "git add ./scripts/video_qa.py", "git commit --amend --no-edit",
+                        "git commit -m x"):
+            self.assert_allowed(command)
+
+    def test_cho_qua_chu_format_thuong(self):
+        for command in ('git log --format="%h %s"', "python -m black --check .", "dir /s *.mp4"):
+            self.assert_allowed(command)
 
 
 class TestCheckRender(unittest.TestCase):
