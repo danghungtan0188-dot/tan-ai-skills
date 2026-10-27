@@ -280,6 +280,26 @@ class TestGuardBash(unittest.TestCase):
                         "git commit -m x"):
             self.assert_allowed(command)
 
+    def test_cho_qua_loi_nhan_commit_nhac_lenh_nguy_hiem(self):
+        for command in (
+            'git commit -m "fix: chan rm -rf . va Remove-Item -Recurse ."',
+            "git commit -m 'chan format D: va git push -f' -m \"ffmpeg -i a.mp4 a.mp4\"",
+            "git commit --message=\"chan del /s /q C:\\data\"",
+            "git commit -q -F - <<'EOF'\nfix: chan Remove-Item -Recurse . va rm -rf ./*\n\ngit add -A\nEOF",
+        ):
+            self.assert_allowed(command)
+
+    def test_loi_nhan_pr_van_hoi_chu_khong_chan(self):
+        self.assert_ask('gh pr create --title "x" --body "chan rm -rf ~ va format D:"')
+
+    def test_van_chan_lenh_that_sau_loi_nhan(self):
+        for command in (
+            'git commit -m "don dep" && rm -rf .',
+            "git commit -F - <<'EOF'\ndon dep\nEOF\nrm -rf .",
+            'psql -c "DROP DATABASE x" -m "ghi chu"',
+        ):
+            self.assert_denied(command)
+
     def test_cho_qua_chu_format_thuong(self):
         for command in ('git log --format="%h %s"', "python -m black --check .", "dir /s *.mp4"):
             self.assert_allowed(command)

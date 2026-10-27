@@ -75,6 +75,31 @@ ASK = [
      "git commit -a (de lo file cua phien khac; nen add tung duong dan)"),
 ]
 
+_LENH_CO_LOI_NHAN = re.compile(r"\bgit\s+commit\b|\bgh\s+(pr|issue|release)\s+create\b")
+_THAM_SO_LOI_NHAN = re.compile(
+    r"(?<=\s)(-m|--message|--title|--body|--notes)(=|\s+)(\"(\\.|[^\"\\])*\"|'[^']*')")
+_HEREDOC = re.compile(r"<<-?\s*(['\"]?)(\w+)\1")
+
+
+def bo_loi_nhan(command: str) -> str:
+    """Bo noi dung loi nhan commit/PR (chi la chu, khong chay) truoc khi so khop."""
+    if not _LENH_CO_LOI_NHAN.search(command):
+        return command
+    ket_qua, dong_ket = [], None
+    for dong in command.split("\n"):
+        if dong_ket is not None:
+            if dong.strip() == dong_ket:
+                dong_ket = None
+                ket_qua.append(dong)
+            continue
+        heredoc = _HEREDOC.search(dong)
+        if heredoc and _LENH_CO_LOI_NHAN.search(dong):
+            dong_ket = heredoc.group(2)
+        ket_qua.append(_THAM_SO_LOI_NHAN.sub(r'\1\2""', dong)
+                       if _LENH_CO_LOI_NHAN.search(dong) else dong)
+    return "\n".join(ket_qua)
+
+
 MEDIA_EXT = (".mp4", ".mov", ".mkv", ".webm", ".avi", ".m4v",
              ".mp3", ".wav", ".m4a", ".aac")
 
@@ -114,6 +139,7 @@ def main() -> int:
     command = (payload.get("tool_input") or {}).get("command")
     if not isinstance(command, str) or not command.strip():
         return 0
+    command = bo_loi_nhan(command)
 
     for pattern, label in DENY:
         if pattern.search(command):
