@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test cho ba hook trong .claude/hooks/.
+"""Test cho cac hook trong .claude/hooks/.
 
 Chay: python -m unittest discover -s tests -v
 
@@ -10,6 +10,7 @@ exit code (0 = cho phep, 2 = chan).
 import json
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -17,9 +18,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 HOOKS = REPO_ROOT / ".claude" / "hooks"
 
 
-def run_hook(script: str, payload: dict) -> subprocess.CompletedProcess:
+def run_hook(script: str, payload: dict, *args: str) -> subprocess.CompletedProcess:
     return subprocess.run(
-        [sys.executable, str(HOOKS / script)],
+        [sys.executable, str(HOOKS / script), *args],
         input=json.dumps(payload),
         text=True, capture_output=True, encoding="utf-8", errors="replace",
         cwd=REPO_ROOT,
@@ -303,6 +304,137 @@ class TestGuardBash(unittest.TestCase):
     def test_cho_qua_chu_format_thuong(self):
         for command in ('git log --format="%h %s"', "python -m black --check .", "dir /s *.mp4"):
             self.assert_allowed(command)
+
+
+def _loi_nguoi_dung(text: str) -> dict:
+    return {"type": "user", "message": {"role": "user", "content": text}}
+
+
+def _goi_cong_cu(name: str, **tool_input) -> dict:
+    return {"type": "assistant", "message": {"role": "assistant", "content": [
+        {"type": "tool_use", "id": "t", "name": name, "input": tool_input}]}}
+
+
+def _ket_qua_cong_cu() -> dict:
+    return {"type": "user", "message": {"role": "user", "content": [
+        {"type": "tool_result", "tool_use_id": "t", "content": "ok"}]}}
+
+
+class TestNhacTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+
+    def chay(self, entries, stop_hook_active=False):
+        transcript = Path(self.tmp.name) / "phien.jsonl"
+        transcript.write_text("\n".join(json.dumps(e) for e in entries), encoding="utf-8")
+        return run_hook("nhac_test.py", {"hook_event_name": "Stop",
+                                         "transcript_path": str(transcript),
+                                         "stop_hook_active": stop_hook_active})
+
+    def assert_nhac(self, entries):
+        result = self.chay(entries)
+        self.assertEqual(result.returncode, 0)
+        decision = json.loads(result.stdout)
+        self.assertEqual(decision["decision"], "block")
+        self.assertIn("NOT RUN", decision["reason"])
+
+    def assert_khong_nhac(self, entries, **kw):
+        result = self.chay(entries, **kw)
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stdout.strip(), "")
+
+    def test_nhac_khi_sua_code_chua_test(self):
+        self.assert_nhac([_loi_nguoi_dung("sua loi"),
+                          _goi_cong_cu("Edit", file_path="src/a.py"), _ket_qua_cong_cu()])
+
+    def test_nhac_khi_test_chay_truoc_lan_sua_cuoi(self):
+        self.assert_nhac([_loi_nguoi_dung("sua loi"),
+                          _goi_cong_cu("Edit", file_path="a.ts"), _ket_qua_cong_cu(),
+                          _goi_cong_cu("Bash", command="npm test"), _ket_qua_cong_cu(),
+                          _goi_cong_cu("Write", file_path="b.tsx"), _ket_qua_cong_cu()])
+
+    def test_khong_nhac_khi_da_chay_test_sau_khi_sua(self):
+        for lenh in ("python -m unittest discover -s tests", "npm run typecheck", "pytest -q",
+                     "python scripts/video_qa.py ra.mp4 --strict", "flutter test"):
+            self.assert_khong_nhac([_loi_nguoi_dung("sua loi"),
+                                    _goi_cong_cu("Edit", file_path="a.py"), _ket_qua_cong_cu(),
+                                    _goi_cong_cu("PowerShell", command=lenh), _ket_qua_cong_cu()])
+
+    def test_khong_nhac_khi_chi_sua_tai_lieu(self):
+        self.assert_khong_nhac([_loi_nguoi_dung("sua tai lieu"),
+                                _goi_cong_cu("Edit", file_path="README.md"), _ket_qua_cong_cu()])
+
+    def test_khong_nhac_khi_sua_o_luot_truoc(self):
+        self.assert_khong_nhac([_loi_nguoi_dung("sua loi"),
+                                _goi_cong_cu("Edit", file_path="a.py"), _ket_qua_cong_cu(),
+                                _loi_nguoi_dung("cam on")])
+
+    def test_khong_nhac_lan_thu_hai(self):
+        self.assert_khong_nhac([_loi_nguoi_dung("sua loi"),
+                                _goi_cong_cu("Edit", file_path="a.py"), _ket_qua_cong_cu()],
+                               stop_hook_active=True)
+
+    def test_toan_cuc_nhuong_ban_cua_repo(self):
+        transcript = Path(self.tmp.name) / "phien.jsonl"
+        transcript.write_text("\n".join(json.dumps(e) for e in [
+            _loi_nguoi_dung("sua loi"), _goi_cong_cu("Edit", file_path="a.py")]), encoding="utf-8")
+        payload = {"transcript_path": str(transcript)}
+        trong_repo = run_hook("nhac_test.py", {**payload, "cwd": str(REPO_ROOT / "skills")},
+                              "--toan-cuc")
+        self.assertEqual(trong_repo.stdout.strip(), "")
+        du_an_khac = run_hook("nhac_test.py", {**payload, "cwd": self.tmp.name}, "--toan-cuc")
+        self.assertEqual(json.loads(du_an_khac.stdout)["decision"], "block")
+
+    def test_cho_qua_khi_transcript_hong_hoac_khong_co(self):
+        transcript = Path(self.tmp.name) / "phien.jsonl"
+        transcript.write_text("khong phai json\n{", encoding="utf-8")
+        for path in (str(transcript), str(Path(self.tmp.name) / "khong-co.jsonl")):
+            result = run_hook("nhac_test.py", {"transcript_path": path})
+            self.assertEqual((result.returncode, result.stdout.strip()), (0, ""))
+
+
+class TestSessionStart(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def chay(self):
+        return run_hook("session_start.py", {"hook_event_name": "SessionStart",
+                                             "source": "startup", "cwd": str(self.root)})
+
+    def ngu_canh(self) -> str:
+        result = self.chay()
+        self.assertEqual(result.returncode, 0)
+        return json.loads(result.stdout)["hookSpecificOutput"]["additionalContext"]
+
+    def test_nap_progress_o_goc(self):
+        (self.root / "PROGRESS.md").write_text("# Tien do\nBuoc tiep: lam X", encoding="utf-8")
+        self.assertIn("Buoc tiep: lam X", self.ngu_canh())
+
+    def test_nap_docs_progress(self):
+        (self.root / "docs").mkdir()
+        (self.root / "docs" / "PROGRESS.md").write_text("Viec dang do: Y", encoding="utf-8")
+        self.assertIn("Viec dang do: Y", self.ngu_canh())
+
+    def test_im_lang_khi_khong_co_progress(self):
+        result = self.chay()
+        self.assertEqual((result.returncode, result.stdout.strip()), (0, ""))
+
+    def test_toan_cuc_nhuong_ban_cua_repo(self):
+        trong_repo = run_hook("session_start.py", {"cwd": str(REPO_ROOT)}, "--toan-cuc")
+        self.assertEqual(trong_repo.stdout.strip(), "")
+        (self.root / "PROGRESS.md").write_text("Viec Z", encoding="utf-8")
+        du_an_khac = run_hook("session_start.py", {"cwd": str(self.root)}, "--toan-cuc")
+        self.assertIn("Viec Z", du_an_khac.stdout)
+
+    def test_cat_bot_file_qua_dai(self):
+        (self.root / "PROGRESS.md").write_text("dau\n" + "x" * 20000 + "\nCUOI", encoding="utf-8")
+        ngu_canh = self.ngu_canh()
+        self.assertIn("dau", ngu_canh)
+        self.assertNotIn("CUOI", ngu_canh)
+        self.assertLess(len(ngu_canh), 5000)
 
 
 class TestCheckRender(unittest.TestCase):

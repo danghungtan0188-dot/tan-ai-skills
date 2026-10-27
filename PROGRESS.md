@@ -1,10 +1,10 @@
 # Tiến độ repo tan-ai-skills
 
-Cập nhật: 2026-10-25. Đầu mỗi phiên đọc file này; cuối phiên ("end session") cập nhật lại.
+Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("end session") cập nhật lại.
 
 ## Tình trạng hiện tại
 
-- 29 skill, 13 command, 9 agent, 3 hook. Test: `python -m unittest discover -s tests` (304 bài, đều đạt trên máy; đã gồm test `remotion-studio` và test số đếm trong CLAUDE.md).
+- 29 skill, 13 command, 9 agent, 5 hook (khai báo cả ở `~/.claude/settings.json` nên chạy ở mọi dự án). Test: `python -m unittest discover -s tests` (304 bài, đều đạt trên máy; đã gồm test `remotion-studio` và test số đếm trong CLAUDE.md).
 - Repo GitHub **công khai**.
 - Nâng cấp theo bảng chấm điểm: bước 1–3 xong (PROGRESS.md, test số đếm, gộp test). **Bước 4 dở:**
   `.github/workflows/test.yml` cho GitHub tự chạy test trên Windows. Lần chạy 1 (Linux): 39 lỗi vì thiếu
@@ -16,6 +16,7 @@ Cập nhật: 2026-10-25. Đầu mỗi phiên đọc file này; cuối phiên ("
 
 | Ngày | Việc |
 |---|---|
+| 27/10 | Harness engineering, nhánh `fix/guard-bash-windows` (chưa push): GĐ1 vá `guard_bash` (lệnh xoá PowerShell/cmd, ffmpeg ghi đè gốc, `git add -A`); GĐ2 hook ra `~/.claude/settings.json` (bản lưu `settings.json.bak-20261027`; đừng đổi tên/di chuyển repo); GĐ3 hook `session_start` + `nhac_test`. Còn GĐ4 (bài học memory → chốt chặn, `bash -c`/heredoc) và GĐ5 (nhật ký hook) |
 | 25/10 | Thêm skill `humanizer` (MIT); ghi chú học từ OpenMontage + Diagram Design; fork 4 repo về GitHub |
 | 25/10 | `.gitignore` chặn `.env`; commit `xay-ai-agent`, `/quet-kien-truc`, `remotion-studio`; push 11 commit |
 | 24/10 | Lệnh `/khoi-tao-du-an` |
