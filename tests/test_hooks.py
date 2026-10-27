@@ -8,6 +8,7 @@ exit code (0 = cho phep, 2 = chan).
 """
 
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -301,9 +302,109 @@ class TestGuardBash(unittest.TestCase):
         ):
             self.assert_denied(command)
 
+    def test_chan_lenh_long_trong_shell_con(self):
+        for command in (
+            'bash -c "rm -rf ."',
+            "sh -c 'rm -rf ~'",
+            'powershell -Command "Remove-Item -Recurse -Force C:\\Users\\x"',
+            'pwsh -NoProfile -c "Remove-Item -Recurse -Force ."',
+            'cmd /c "rd /s /q C:\\data"',
+            'bash -c "git push --force origin main"',
+            "bash <<'EOF'\ncd /tmp\nrm -rf .\nEOF",
+        ):
+            self.assert_denied(command)
+
+    def test_cho_qua_shell_con_vo_hai(self):
+        for command in ('bash -c "ls -la"', 'bash -c "rm -rf ./build/cache"',
+                        "python - <<'EOF'\nprint('rm -rf .')\nEOF",
+                        "bash <<'EOF'\necho xin chao\nEOF"):
+            self.assert_allowed(command)
+
     def test_cho_qua_chu_format_thuong(self):
         for command in ('git log --format="%h %s"', "python -m black --check .", "dir /s *.mp4"):
             self.assert_allowed(command)
+
+
+class TestGuardVideo(unittest.TestCase):
+    """Bai hoc: khong bop dai dong (loudnorm), chay nhe (preset, mot viec nang mot luc)."""
+
+    def chay(self, command, ffmpeg_dang_chay=0):
+        env = {**os.environ, "TAN_HOOK_GIA_LAP_FFMPEG": str(ffmpeg_dang_chay)}
+        return subprocess.run(
+            [sys.executable, str(HOOKS / "guard_video.py")],
+            input=json.dumps(bash_payload(command)), env=env,
+            text=True, capture_output=True, encoding="utf-8", errors="replace", cwd=REPO_ROOT)
+
+    def assert_denied(self, command, **kw):
+        result = self.chay(command, **kw)
+        self.assertEqual(result.returncode, 2, f"Le ra phai chan: {command}")
+        self.assertIn("CHAN BOI HOOK guard_video", result.stderr)
+
+    def assert_allowed(self, command, **kw):
+        result = self.chay(command, **kw)
+        self.assertEqual((result.returncode, result.stdout.strip()), (0, ""),
+                         f"Le ra phai cho qua: {command}\n{result.stderr}")
+
+    def test_chan_loudnorm_mot_luot(self):
+        self.assert_denied("ffmpeg -i a.wav -af loudnorm=I=-16:TP=-1.5:LRA=11 b.wav")
+
+    def test_cho_qua_loudnorm_linear_va_luot_do(self):
+        self.assert_allowed("ffmpeg -i a.wav -af loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=-20.1:"
+                            "measured_TP=-3:measured_LRA=5:measured_thresh=-30:linear=true b.wav")
+        self.assert_allowed("ffmpeg -i a.wav -af loudnorm=I=-16:print_format=json -f null -")
+
+    def test_chan_x264_thieu_preset_hoac_preset_cham(self):
+        for command in ("ffmpeg -i a.mp4 -c:v libx264 -crf 20 b.mp4",
+                        "ffmpeg -i a.mp4 -c:v libx264 -preset medium -crf 20 b.mp4",
+                        "ffmpeg -i a.mp4 -vcodec libx265 -preset slow b.mp4",
+                        'ffmpeg -i "a b.mp4" -c:v libx264 -preset fast "c d.mp4"'):
+            self.assert_denied(command)
+
+    def test_cho_qua_preset_nhanh_va_khong_nen_lai(self):
+        for command in ("ffmpeg -i a.mp4 -c:v libx264 -preset faster -crf 20 b.mp4",
+                        "ffmpeg -i a.mp4 -c:v libx264 -preset veryfast b.mp4",
+                        "ffmpeg -i a.mp4 -c copy b.mp4",
+                        "ffmpeg -i a.mp4 -c:v h264_qsv -global_quality 23 b.mp4",
+                        "grep -n libx264 tan_studio/video.py",
+                        "ffprobe -v error a.mp4"):
+            self.assert_allowed(command)
+
+    def test_chan_ffmpeg_khi_dang_co_ffmpeg_khac_chay(self):
+        self.assert_denied("ffmpeg -i a.mp4 -c copy b.mp4", ffmpeg_dang_chay=1)
+        self.assert_allowed("ffprobe -v error a.mp4", ffmpeg_dang_chay=1)
+        self.assert_allowed("ffmpeg -i a.mp4 -c copy b.mp4", ffmpeg_dang_chay=0)
+
+
+class TestGuardTraPhi(unittest.TestCase):
+    """Bai hoc: khong tu y dung dich vu tra phi (HeyGen)."""
+
+    def chay(self, tool_name, tool_input):
+        return run_hook("guard_tra_phi.py", {"hook_event_name": "PreToolUse",
+                                             "tool_name": tool_name, "tool_input": tool_input})
+
+    def assert_ask(self, tool_name, tool_input):
+        result = self.chay(tool_name, tool_input)
+        self.assertEqual(result.returncode, 0)
+        decision = json.loads(result.stdout)["hookSpecificOutput"]
+        self.assertEqual(decision["permissionDecision"], "ask", f"{tool_name} {tool_input}")
+
+    def assert_allowed(self, tool_name, tool_input):
+        result = self.chay(tool_name, tool_input)
+        self.assertEqual((result.returncode, result.stdout.strip()), (0, ""),
+                         f"{tool_name} {tool_input}")
+
+    def test_hoi_khi_goi_heygen(self):
+        self.assert_ask("mcp__heygen__create_video", {"script": "x"})
+        self.assert_ask("Skill", {"skill": "heygen-video"})
+        self.assert_ask("Skill", {"skill": "heygen-avatar", "args": "x"})
+        self.assert_ask("Bash", {"command": 'curl -X POST https://api.heygen.com/v2/video/generate -d "{}"'})
+        self.assert_ask("PowerShell", {"command": "heygen video create --script s.txt"})
+
+    def test_cho_qua_viec_khong_ton_phi(self):
+        self.assert_allowed("Skill", {"skill": "video-use"})
+        self.assert_allowed("Bash", {"command": "grep -rn heygen skills/"})
+        self.assert_allowed("Bash", {"command": "echo heygen"})
+        self.assert_allowed("Read", {"file_path": "skills/heygen-video/SKILL.md"})
 
 
 def _loi_nguoi_dung(text: str) -> dict:
