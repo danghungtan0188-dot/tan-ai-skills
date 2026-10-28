@@ -2,18 +2,30 @@
 // các tuyến giao thông hào răng cưa vẽ dần, số km đếm lên; sau đó công sự (ô vuông) và mô ngăn địch (gò) hiện
 // theo mốc lời đọc. Toàn khung, toạ độ theo khung 1920x1080.
 import React from "react";
-import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
 import { coBan, FONT, FPS } from "../chung";
 
 const diem = z.tuple([z.number(), z.number()]);
 export const haoGiaoThongSchema = coBan.extend({
   tieuDe: z.string().default(""),
+  nenAnh: z.string().default(""), // ảnh trong public dir: nền trắng đen mờ thay cho giấy cũ
   tuyen: z.array(z.object({ ten: z.string(), diem: z.array(diem), tai: z.number(), lau: z.number().default(2) })),
   km: z.object({ so: z.number(), tienTo: z.string().default(""), tai: z.number(), lau: z.number().default(2) }),
   congSu: z.object({ nhan: z.string(), diem: z.array(diem), tai: z.number() }).optional(),
   moNgan: z.object({ nhan: z.string(), diem: z.array(diem), tai: z.number() }).optional(),
 });
+
+// Nền ảnh trắng đen mờ ảo thay cho giấy cũ (để các sơ đồ đứng gần nhau không bị lặp một kiểu nền)
+const NenAnh: React.FC<{ file: string; frame: number; dai: number }> = ({ file, frame, dai }) => (
+  <AbsoluteFill>
+    <Img src={staticFile(file)} style={{
+      width: "100%", height: "100%", objectFit: "cover", scale: `${interpolate(frame, [0, dai], [1.08, 1.14])}`,
+      filter: "grayscale(1) blur(9px) brightness(1.25) contrast(0.7)",
+    }} />
+    <AbsoluteFill style={{ background: "rgba(236,234,228,0.42)" }} />
+  </AbsoluteFill>
+);
 
 const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const NAU = "#3b2a18";
@@ -37,7 +49,7 @@ const rangCua = (ds: [number, number][]) => {
   return d;
 };
 
-export const HaoGiaoThong: React.FC<z.infer<typeof haoGiaoThongSchema>> = ({ tieuDe, tuyen, km, congSu, moNgan }) => {
+export const HaoGiaoThong: React.FC<z.infer<typeof haoGiaoThongSchema>> = ({ tieuDe, nenAnh, tuyen, km, congSu, moNgan }) => {
   const frame = useCurrentFrame();
   const { width, durationInFrames } = useVideoConfig();
   const s = width / 1920;
@@ -54,7 +66,8 @@ export const HaoGiaoThong: React.FC<z.infer<typeof haoGiaoThongSchema>> = ({ tie
     }) : null;
 
   return (
-    <AbsoluteFill style={{ background: "radial-gradient(ellipse 80% 75% at 50% 45%, #e2d2b0 0%, #c4ab7f 60%, #7a5e3a 100%)", opacity: nen }}>
+    <AbsoluteFill style={{ background: nenAnh ? "#000" : "radial-gradient(ellipse 80% 75% at 50% 45%, #e2d2b0 0%, #c4ab7f 60%, #7a5e3a 100%)", opacity: nen }}>
+      {nenAnh ? <NenAnh file={nenAnh} frame={frame} dai={durationInFrames} /> : (
       <svg width={1920 * s} height={1080 * s} style={{ position: "absolute", opacity: 0.3, mixBlendMode: "multiply" }}>
         <filter id="giay3">
           <feTurbulence type="fractalNoise" baseFrequency="0.012 0.05" numOctaves="4" seed="4" />
@@ -62,6 +75,7 @@ export const HaoGiaoThong: React.FC<z.infer<typeof haoGiaoThongSchema>> = ({ tie
         </filter>
         <rect width="100%" height="100%" filter="url(#giay3)" />
       </svg>
+      )}
       <AbsoluteFill style={{ scale: day }}>
         <svg width={1920 * s} height={1080 * s} viewBox="0 0 1920 1080">
           {tuyen.map((tu, i) => {
