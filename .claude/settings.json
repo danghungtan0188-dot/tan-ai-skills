@@ -9,6 +9,11 @@
             "type": "command",
             "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_secrets.py\"",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_app.py\"",
+            "timeout": 15
           }
         ]
       },
@@ -23,6 +28,11 @@
           {
             "type": "command",
             "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_video.py\"",
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_app.py\"",
             "timeout": 15
           }
         ]

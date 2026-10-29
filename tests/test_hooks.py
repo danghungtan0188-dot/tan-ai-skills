@@ -407,6 +407,101 @@ class TestGuardTraPhi(unittest.TestCase):
         self.assert_allowed("Read", {"file_path": "skills/heygen-video/SKILL.md"})
 
 
+class TestGuardApp(unittest.TestCase):
+    """Luat du an phan mem: hoi truoc khi cai thu vien / migration; khong lo secret ra client."""
+
+    def assert_ask(self, command):
+        result = run_hook("guard_app.py", bash_payload(command))
+        self.assertEqual(result.returncode, 0)
+        self.assertTrue(result.stdout.strip(), f"phai hoi: {command}")
+        decision = json.loads(result.stdout)["hookSpecificOutput"]
+        self.assertEqual(decision["permissionDecision"], "ask", command)
+
+    def assert_allowed(self, command):
+        result = run_hook("guard_app.py", bash_payload(command))
+        self.assertEqual((result.returncode, result.stdout.strip()), (0, ""), command)
+
+    def test_hoi_khi_cai_thu_vien_moi(self):
+        for command in [
+            "npm install axios",
+            "npm i -D vitest",
+            "npm i -g @anthropic-ai/claude-code",
+            "pnpm add zod",
+            "yarn add react-query",
+            "bun add hono",
+            "pip install requests",
+            "python -m pip install --upgrade fastapi",
+            "uv add httpx",
+            "npx expo install expo-camera",
+            "cd app && npm install lodash",
+            'bash -c "npm install left-pad"',
+            "flutter pub add provider",
+        ]:
+            with self.subTest(command=command):
+                self.assert_ask(command)
+
+    def test_cho_qua_cai_lai_theo_lockfile(self):
+        for command in [
+            "npm install",
+            "npm ci",
+            "npm install --save-dev",
+            "pnpm install",
+            "yarn",
+            "pip install -r requirements.txt",
+            "pip install -e .",
+            "python -m pip install --upgrade pip",
+            "npm run build",
+            "npm test",
+        ]:
+            with self.subTest(command=command):
+                self.assert_allowed(command)
+
+    def test_hoi_khi_migration_hoac_xoa_cau_truc(self):
+        for command in [
+            "npx prisma migrate dev --name init",
+            "npx prisma db push",
+            "npx drizzle-kit push",
+            "alembic upgrade head",
+            "python manage.py migrate",
+            "bin/rails db:migrate",
+            "supabase migration up",
+            'psql -c "DROP TABLE orders"',
+            'psql -c "ALTER TABLE users DROP COLUMN phone"',
+            'psql -c "TRUNCATE users"',
+        ]:
+            with self.subTest(command=command):
+                self.assert_ask(command)
+
+    def test_cho_qua_lenh_doc_database(self):
+        self.assert_allowed("npx prisma generate")
+        self.assert_allowed("npx prisma migrate status")
+        self.assert_allowed('psql -c "SELECT * FROM orders LIMIT 5"')
+
+    def test_chan_secret_trong_bien_cong_khai(self):
+        for path, content in [
+            ("src/lib/supabase.ts", "const k = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY"),
+            (".env.example", "VITE_STRIPE_SECRET_KEY="),
+            ("app.config.js", "extra: { key: process.env.EXPO_PUBLIC_ADMIN_PASSWORD }"),
+            ("src/pay.ts", "const stripe = new Stripe('sk_live_" + "a" * 24 + "')"),
+        ]:
+            with self.subTest(path=path):
+                result = run_hook("guard_app.py", write_payload(path, content))
+                self.assertEqual(result.returncode, 2, content)
+                self.assertIn("guard_app", result.stderr)
+
+    def test_cho_qua_bien_cong_khai_hop_le(self):
+        for path, content in [
+            ("src/lib/supabase.ts", "createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, "
+                                    "process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)"),
+            ("server/admin.ts", "process.env.SUPABASE_SERVICE_ROLE_KEY"),
+            ("src/pay.ts", "loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)"),
+            ("docs/bao-mat.md", "Khong bao gio dat NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY."),
+        ]:
+            with self.subTest(path=path):
+                result = run_hook("guard_app.py", write_payload(path, content))
+                self.assertEqual(result.returncode, 0, result.stderr)
+
+
 def _loi_nguoi_dung(text: str) -> dict:
     return {"type": "user", "message": {"role": "user", "content": text}}
 

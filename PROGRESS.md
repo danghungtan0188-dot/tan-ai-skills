@@ -35,12 +35,17 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
 ## Việc tiếp theo (theo thứ tự ưu tiên)
 
 0. **GĐ4 đang dở** (nhánh `feat/bai-hoc-thanh-chot-chan`, đã commit, chưa push; 345 test đạt):
-   a. Cho người dùng xem rồi mới thêm `guard_video.py` (nhóm `Bash|PowerShell`) và `guard_tra_phi.py`
-      (matcher `Bash|PowerShell|Skill|mcp__heygen__.*`) vào `~/.claude/settings.json`, đúng dạng lệnh chịu
-      lỗi khi thiếu file như 5 hook đang có; sao lưu settings trước.
-   b. Thử thật bằng `claude -p` (Haiku) ở thư mục tạm: `bash -c "rm -rf ."` bị chặn; ffmpeg `libx264` thiếu
-      preset bị chặn; gọi skill `heygen-video` thì bị hỏi.
+   a. ✓ (28/10) `guard_video.py` và `guard_tra_phi.py` đã có trong `~/.claude/settings.json`, dạng chịu lỗi;
+      bản lưu `settings.json.bak-20261028`.
+   b. ✓ (30/10) Thử thật bằng `claude -p --model haiku` ở thư mục tạm ngoài repo (chỉ hook toàn cục chạy):
+      `bash -c "rm -rf ."` → guard_bash chặn, file mồi còn nguyên; ffmpeg `libx264` thiếu preset → guard_video
+      chặn, không tạo `out.mp4`; Skill `heygen-video` → guard_tra_phi hỏi (chế độ `-p` coi như từ chối).
    c. Push nhánh, tạo PR vào `main`; người dùng tự merge (Claude bị chặn merge).
+0b. **Harness phần mềm GĐ1** (30/10, nhánh `feat/guard-app` tách từ nhánh GĐ4, đã commit, chưa push): hook `guard_app`
+    hỏi trước khi cài thư viện mới / chạy migration / `DROP TABLE`; chặn secret mang tiền tố công khai và
+    Stripe `sk_live_`. Đã gắn cả `~/.claude/settings.json` (bản lưu `settings.json.bak-20261030-guard-app`).
+    Thử `claude -p`: `npm install left-pad` bị hỏi. Kế tiếp GĐ2–5: cổng "xong" đọc lệnh thật từ CLAUDE.md dự án,
+    `/thiet-ke` chụp màn hình nhỏ/lớn, bộ thử `tests/harness_eval/`, nhật ký hook.
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
 3. Harness engineering GĐ5 (nhật ký mỗi lần hook chặn/hỏi/nhắc).

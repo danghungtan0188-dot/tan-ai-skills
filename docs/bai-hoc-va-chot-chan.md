@@ -19,6 +19,7 @@ Có bài học mới: thêm một dòng vào đây. Nếu là loại "máy" thì
 | Chạy nhẹ, đừng làm nóng máy | máy | `guard_video` chặn x264/x265 thiếu `-preset faster` hoặc nhanh hơn; `tan_studio` mặc định `faster` | `hook:guard_video.py` `test:TestGuardVideo` `code:tan_studio/video.py` |
 | Máy hay sập khi chạy nặng: một việc nặng một lúc | máy | `guard_video` chặn ffmpeg mới khi đang có `ffmpeg.exe` chạy | `hook:guard_video.py` `test:TestGuardVideo` |
 | Không tự ý dùng dịch vụ trả phí (HeyGen) | máy | `guard_tra_phi` hỏi người dùng mỗi lần gọi HeyGen | `hook:guard_tra_phi.py` `test:TestGuardTraPhi` |
+| App: thư viện mới và migration phải hỏi; không đưa secret ra code client | máy | `guard_app` hỏi trước `npm i <gói>`/`pip install <gói>`/migration/`DROP TABLE`; chặn secret mang tiền tố công khai và Stripe `sk_live_` | `hook:guard_app.py` `test:TestGuardApp` |
 | remotion.exe bị Windows chặn | máy | Mẫu Remotion mới không dùng `OffthreadVideo` (trừ `NguoiNoiPip`, `PhuNu96`) | `test:TestRemotionKhongDungOffthreadVideo` |
 | VieNeu-TTS: số phải viết thành chữ | máy | Chuẩn hóa số trước khi đọc | `code:tan_studio/normalize.py` `test:TestSoThanhChu` `test:TestNormalizeNumbers` |
 | Đo bằng ASR phải nghe nhiều lần | máy | Chấm TTS nghe ở nhiều temperature | `code:tan_studio/evaluation.py` `test:TestDanhGiaTTS` |
