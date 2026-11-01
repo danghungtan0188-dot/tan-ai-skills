@@ -48,8 +48,11 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
     **GĐ2** (30/10, cùng nhánh, đã commit, chưa push): `nhac_test` thành cổng "xong" — đọc mục `## Lệnh kiểm tra`
     trong CLAUDE.md dự án (không có thì script `package.json`), đòi chạy thành công đủ từng lệnh sau lần sửa
     cuối; `/khoi-tao-du-an` ghi mục này. Thử `claude -p` ở dự án mẫu: Haiku sửa code → bị chặn → chạy test → PASS.
-    Kế tiếp GĐ3–5: cổng "xong" đọc lệnh thật từ CLAUDE.md dự án,
-    `/thiet-ke` chụp màn hình nhỏ/lớn, bộ thử `tests/harness_eval/`, nhật ký hook.
+    **GĐ4** (01/11, cùng nhánh, đã commit, chưa push): `scripts/harness_eval.py` — 7 ca chạy `claude -p --model haiku`
+    ở thư mục tạm ngoài repo (chỉ hook toàn cục), chấm theo kết quả thật (file còn/mất, hook trả lời, test có
+    chạy); có ca đối chứng "lệnh lành không bị chặn nhầm". Chạy thật: **7/7 PASS**. Test offline phần chấm:
+    `tests/test_harness_eval.py`. Lưu ý: thư mục tạm phải `resolve()` bỏ tên ngắn 8.3, nếu không Claude Code đòi duyệt tay.
+    Kế tiếp: GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật), GĐ5 nhật ký hook.
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
 3. Harness engineering GĐ5 (nhật ký mỗi lần hook chặn/hỏi/nhắc).
