@@ -8,10 +8,15 @@ script nay xu ly tat ca skill trong mot lan, ke ca skill moi chua co script rien
   python scripts/sync_skills.py --force    Ghi de hai ban sao bang noi dung nguon.
 
 Khong dung symlink de tranh rui ro tuong thich tren Windows.
+
+--check con bao loi khi ~/.claude/skills/<ten> la BAN CHEP RIENG cua mot skill trong repo
+(khong phai lien ket ve .claude/skills/<ten>): ban chep do se lech dan voi repo.
+Sua bang junction: mklink /J "%USERPROFILE%\\.claude\\skills\\<ten>" "<repo>\\.claude\\skills\\<ten>"
 """
 
 import argparse
 import hashlib
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -65,6 +70,35 @@ def skill_dirs() -> list[Path]:
                   if p.is_dir() and (p / "SKILL.md").is_file())
 
 
+def noi_dung_skill(root: Path) -> str:
+    """Nhu fingerprint nhung bo file cai dat (uv.lock, *.egg-info) -- .venv da nam trong IGNORE_NAMES."""
+    digest = hashlib.sha256()
+    for path in relevant_files(root):
+        rel = path.relative_to(root)
+        if rel.as_posix() == "uv.lock" or any(p.endswith(".egg-info") for p in rel.parts):
+            continue
+        digest.update(rel.as_posix().encode("utf-8"))
+        digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
+def ban_chep_rieng(skills: list[Path], home_skills: Path) -> list[str]:
+    """Skill co ban chep rieng o home_skills (khong lien ket ve repo) va noi dung da lech repo.
+
+    Ban chep con khop thi cho qua: vd. video-use giu ban cai rieng vi co .venv ben trong.
+    """
+    ket_qua = []
+    for source in skills:
+        o_home = home_skills / source.name
+        if not o_home.exists():
+            continue
+        if Path(os.path.realpath(o_home)) == Path(os.path.realpath(TARGET_ROOTS[0] / source.name)):
+            continue
+        if noi_dung_skill(o_home) != noi_dung_skill(source):
+            ket_qua.append(source.name)
+    return ket_qua
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -107,6 +141,12 @@ def main() -> int:
             for item in out_of_sync:
                 print(f"  - {item}")
             print("Chay: python scripts/sync_skills.py --force")
+            return 1
+        rieng = ban_chep_rieng(skills, Path.home() / ".claude" / "skills")
+        if rieng:
+            print("Ban chep rieng o ~/.claude/skills da lech voi repo -- thay bang junction hoac cap nhat:")
+            for ten in rieng:
+                print(f"  - {ten}")
             return 1
         print("Tat ca da dong bo.")
         return 0

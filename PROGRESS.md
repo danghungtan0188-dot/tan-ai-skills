@@ -52,7 +52,11 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
     ở thư mục tạm ngoài repo (chỉ hook toàn cục), chấm theo kết quả thật (file còn/mất, hook trả lời, test có
     chạy); có ca đối chứng "lệnh lành không bị chặn nhầm". Chạy thật: **7/7 PASS**. Test offline phần chấm:
     `tests/test_harness_eval.py`. Lưu ý: thư mục tạm phải `resolve()` bỏ tên ngắn 8.3, nếu không Claude Code đòi duyệt tay.
-    Kế tiếp: GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật), GĐ5 nhật ký hook.
+    PR #4 (gồm #3) đã merge vào `main` 01/11 (`3f3498f`). Máy vẫn ở nhánh `feat/guard-app`.
+    **Kiểm kê skill** (01/11, nhánh `chore/skill-mot-nguon`, đã commit, chưa push): `docs/kiem-ke-skill.md`, 7 đề xuất. Đã làm đề xuất 1: 15 skill ở
+    `~/.claude/skills` thành junction về repo (bản cũ ở `~/.claude/skills_cu_ban_chep_20261101/`), `video-use`
+    giữ bản cài riêng (.venv); `sync_skills.py --check` bắt bản chép riêng lệch repo.
+    Kế tiếp: đề xuất 2–7 trong `docs/kiem-ke-skill.md`; GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật), GĐ5 nhật ký hook.
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
 3. Harness engineering GĐ5 (nhật ký mỗi lần hook chặn/hỏi/nhắc).
