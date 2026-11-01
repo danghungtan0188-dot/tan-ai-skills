@@ -56,7 +56,17 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
     **Kiểm kê skill** (01/11, nhánh `chore/skill-mot-nguon`, đã commit, chưa push): `docs/kiem-ke-skill.md`, 7 đề xuất. Đã làm đề xuất 1: 15 skill ở
     `~/.claude/skills` thành junction về repo (bản cũ ở `~/.claude/skills_cu_ban_chep_20261101/`), `video-use`
     giữ bản cài riêng (.venv); `sync_skills.py --check` bắt bản chép riêng lệch repo.
-    Kế tiếp: đề xuất 2–7 trong `docs/kiem-ke-skill.md`; GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật), GĐ5 nhật ký hook.
+    **Harness video** (01/11, nhánh `feat/harness-video`, đã commit, chưa push): `docs/harness-video.md` — vòng bán tự động 2 cổng duyệt, bản đồ
+    kiến trúc đích ↔ thành phần thật, lộ trình 7 bước. Bước 1 ✓ (bản đồ + test), bước 2 ✓ `evaluations/bai_thi.py`:
+    10 tiêu chí, ~10 giây, 10/10 DAT, LUFS -16,0; ba kiểu `--hong` đều báo HỒI QUY. PR #5 đã merge.
+    Bước 3 ✓ (đã commit, chưa push): `observability/` — mọi hook ghi khi chặn/hỏi/nhắc, hook mới `ghi_su_dung` (skill/agent/lệnh),
+    xem `python observability/xem.py`; dữ liệu `~/.tan-harness/nhat-ky/` (ngoài repo, chỉ nhãn). Gắn cả
+    `~/.claude/settings.json` (bản lưu `settings.json.bak-20261101-nhat-ky`). Phiên Haiku thật để lại 3 dòng đúng.
+    Bước 4 ✓ (đã commit, chưa push): lệnh `/dung-video` — gợi ý → `edit/brief.json` (hợp đồng `VideoBrief`, kiểm bằng
+    `scripts/kiem_brief.py`) → định tuyến sang `dung-tu-kho` / `video-news` / `edit-video` / `tan_studio` → 2 cổng duyệt →
+    `/rut-kinh-nghiem`. Ca thật `harness_eval --ca dung-video-cong-1`: lần đầu Haiku tự đặt tên trường → thêm khuôn JSON
+    trong lệnh + script kiểm bắt buộc. Kế tiếp bước 5–7 `docs/harness-video.md`. Sau ~2 tuần nhật ký: đề xuất 2–7 `docs/kiem-ke-skill.md`.
+    Khác: GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật).
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
 3. Harness engineering GĐ5 (nhật ký mỗi lần hook chặn/hỏi/nhắc).

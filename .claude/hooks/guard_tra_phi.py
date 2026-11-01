@@ -31,6 +31,15 @@ def dich_vu(tool_name: str, tool_input: dict) -> str | None:
     return None
 
 
+try:
+    from pathlib import Path as _P
+    sys.path.insert(0, str(_P(__file__).resolve().parents[2]))
+    from observability.nhat_ky import ghi_hook
+except Exception:  # nhat ky la phu: loi o day khong duoc lam hong hook
+    def ghi_hook(*_a, **_k):
+        pass
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -38,6 +47,7 @@ def main() -> int:
         return 0
     ten = dich_vu(str(payload.get("tool_name") or ""), payload.get("tool_input") or {})
     if ten:
+        ghi_hook("guard_tra_phi", "hoi", ten, payload)
         print(json.dumps({
             "hookSpecificOutput": {
                 "hookEventName": "PreToolUse",

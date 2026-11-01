@@ -17,6 +17,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 HOOKS = REPO_ROOT / ".claude" / "hooks"
+# Hook ghi nhat ky (observability/): test khong duoc ghi vao nhat ky that cua nguoi dung.
+os.environ["TAN_NHAT_KY_DIR"] = tempfile.mkdtemp(prefix="nhat-ky-test-")
 
 
 def run_hook(script: str, payload: dict, *args: str) -> subprocess.CompletedProcess:

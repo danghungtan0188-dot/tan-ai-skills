@@ -120,6 +120,15 @@ def extract(tool_input: dict) -> tuple[str, str]:
     return path, "\n".join(p for p in parts if isinstance(p, str))
 
 
+try:
+    from pathlib import Path as _P
+    sys.path.insert(0, str(_P(__file__).resolve().parents[2]))
+    from observability.nhat_ky import ghi_hook
+except Exception:  # nhat ky la phu: loi o day khong duoc lam hong hook
+    def ghi_hook(*_a, **_k):
+        pass
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -135,6 +144,7 @@ def main() -> int:
     findings = check_path(path) + check_content(content)
     if not findings:
         return 0
+    ghi_hook("guard_secrets", "chan", "file .env that" if check_path(path) else "secret trong noi dung", payload)
 
     print("CHAN BOI HOOK guard_secrets (rules/security.md):", file=sys.stderr)
     for item in findings:

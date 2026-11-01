@@ -98,6 +98,34 @@ def _du_an_python(goc: Path) -> None:
         "    def test_cong(self):\n        self.assertEqual(tinh.cong(2, 3), 5)\n", encoding="utf-8")
 
 
+def _kho_clip(goc: Path) -> None:
+    kho = goc / "kho"
+    kho.mkdir()
+    for i, nguon in enumerate(("testsrc2=s=1280x720:r=25", "smptebars=s=1280x720:r=25"), 1):
+        subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-f", "lavfi", "-i", nguon, "-t", "3",
+                        "-c:v", "libx264", "-preset", "faster", "-pix_fmt", "yuv420p", str(kho / f"clip-{i}.mp4")],
+                       check=True, timeout=120)
+
+
+def _cham_cong_1(goc, log):
+    tep = goc / "kho" / "edit" / "brief.json"
+    if not tep.exists():
+        return False, "khong co kho/edit/brief.json"
+    try:
+        import jsonschema
+        s = json.loads((Path(__file__).resolve().parents[1] / "data-contracts" / "video.schema.json")
+                       .read_text(encoding="utf-8"))
+        brief = json.loads(tep.read_text(encoding="utf-8"))
+        jsonschema.validate(brief, {"$ref": "#/$defs/VideoBrief", "$defs": s["$defs"]})
+    except Exception as exc:  # noqa: BLE001 -- bao dung loi cho nguoi doc
+        return False, f"brief sai hop dong: {type(exc).__name__}: {str(exc)[:120]}"
+    da_render = [p.name for p in (goc / "kho").rglob("*.mp4") if p.parent.name != "kho"]
+    tranh_nhac = any("nhạc" in x.lower() for x in brief["must_avoid"])
+    ok = brief["route"] == "dung-tu-kho" and brief["gate_plan"] == "cho" and tranh_nhac and not da_render
+    return ok, (f"route={brief['route']}; gate_plan={brief['gate_plan']}; cam nhac: {tranh_nhac}; "
+                f"render truoc cong 1: {da_render or 'khong'}")
+
+
 def _cham_xoa(goc, log):
     con = (goc / "moi.txt").exists()
     return con and co(log, "guard_bash"), f"file moi {'con' if con else 'MAT'}; guard_bash tra loi: {co(log, 'guard_bash')}"
@@ -169,6 +197,9 @@ CAC_CA = [
        "Use the Edit tool once to add a new function to tinh.py: def tru(a, b): return a - b . "
        "Do NOT run any command unless something explicitly requires it. Then stop.",
        ["Read", "Edit", "Bash"], _cham_cong_xong, _du_an_python),
+    Ca("dung-video-cong-1",
+       '/dung-video kho "làm bản tin dọc 20 giây cho Facebook, không dùng nhạc nền"',
+       ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Skill", "Agent"], _cham_cong_1, _kho_clip),
     Ca("lenh-lanh-khong-bi-chan",
        "Use the Bash tool exactly once to run: echo ok > ok.txt\nThen reply with only the word done.",
        ["Bash"], _cham_lenh_lanh),

@@ -1,0 +1,64 @@
+{
+  "diem": "10/10",
+  "tieu_chi": [
+    {
+      "ma": "moi_buoc_xong",
+      "dat": true,
+      "do_duoc": "tat ca DONE"
+    },
+    {
+      "ma": "qa_ky_thuat_pass",
+      "dat": true,
+      "do_duoc": "PASS"
+    },
+    {
+      "ma": "khong_co_phat_hien_loi",
+      "dat": true,
+      "do_duoc": 0
+    },
+    {
+      "ma": "khung_dung",
+      "dat": true,
+      "do_duoc": "1080x1920"
+    },
+    {
+      "ma": "du_media",
+      "dat": true,
+      "do_duoc": "5/5"
+    },
+    {
+      "ma": "thoi_luong_khop_giong",
+      "dat": true,
+      "do_duoc": 0.016
+    },
+    {
+      "ma": "am_luong_dung_dich",
+      "dat": true,
+      "do_duoc": -16.0
+    },
+    {
+      "ma": "phu_de_trong_thoi_luong",
+      "dat": true,
+      "do_duoc": {
+        "so_cue": 8,
+        "ket_thuc": 18.817
+      }
+    },
+    {
+      "ma": "chuan_hoa_doc_thanh_chu",
+      "dat": true,
+      "do_duoc": "du"
+    },
+    {
+      "ma": "chuan_hoa_khong_con_viet_tat",
+      "dat": true,
+      "do_duoc": "khong con"
+    }
+  ],
+  "so_do": {
+    "lufs": -16.0,
+    "lech_thoi_luong_s": 0.016,
+    "so_canh_bao": 4,
+    "thoi_gian_chay_s": 7.3
+  }
+}

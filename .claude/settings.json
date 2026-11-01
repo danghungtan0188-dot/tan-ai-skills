@@ -46,6 +46,16 @@
             "timeout": 15
           }
         ]
+      },
+      {
+        "matcher": "Skill|Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/ghi_su_dung.py\"",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -79,6 +89,17 @@
             "type": "command",
             "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/check_render.py\"",
             "timeout": 60
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/ghi_su_dung.py\"",
+            "timeout": 10
           }
         ]
       }

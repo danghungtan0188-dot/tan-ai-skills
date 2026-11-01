@@ -82,8 +82,8 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ```text
 .claude/agents/     9 agent   — Claude Code chỉ đọc agent ở đây
-.claude/commands/  13 command — slash command
-.claude/hooks/      8 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
+.claude/commands/  14 command — slash command
+.claude/hooks/      9 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
 skills/             29 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
@@ -91,6 +91,8 @@ scripts/            script dùng chung (sync_skills.py, video_qa.py, check_citat
 tan_studio/         CLI script→giọng→phụ đề→MP4 (python -m tan_studio), gọi lại code trong skills/
 do-hoa/             Remotion: intro, số liệu, lower-third, chữ chạy — tan_studio gọi qua `do-hoa` / mục "do_hoa"
 remotion-studio/    Engine Remotion React nhận audio/SRT/media qua props JSON; chạy song song HyperFrames
+evaluations/        bài thi video chuẩn (bai_thi.py) + mốc chuẩn — kiến trúc: docs/harness-video.md
+observability/      nhật ký hook/skill/agent (dữ liệu ở ~/.tan-harness/nhat-ky/, ngoài repo) — xem: python observability/xem.py
 tests/              python -m unittest discover -s tests
 ```
 
@@ -100,6 +102,7 @@ tests/              python -m unittest discover -s tests
 |---|---|---|
 | code, API, database, UI, bug, test | **APP** | `app-planner → app-builder → code-reviewer → app-tester → security-reviewer` |
 | video, dựng, phụ đề, hiệu ứng, bản tin | **VIDEO** | `video-analyzer → video-editor → video-reviewer` |
+| tư liệu + vài gợi ý, muốn bán tự động | **VIDEO** | `/dung-video` → tự chọn một trong các chuỗi dưới, dừng ở 2 cổng duyệt |
 | nhiều clip thô → một bản tin | **VIDEO** | `find_clips → survey_rushes → chọn cảnh → build_edit_plan → DUYỆT → assemble → qa --plan` |
 | script → giọng đọc → video có phụ đề, chạy một lệnh | **STUDIO** | `python -m tan_studio chay <du-an.json>` — xem `tan_studio/README.md` |
 | skill, agent, command, hook, tài liệu | **REPO** | tự làm + `python scripts/sync_skills.py --check` |
@@ -112,6 +115,7 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 `/video-news` `/edit-video` `/review-video` `/sync-skills`
 `/dung-tu-kho` (nhiều clip thô → một bản tin) `/rut-kinh-nghiem` (sau mỗi video)
 `/quet-kien-truc` (quét code dự án app → tài liệu kiến trúc có dẫn nguồn `file:dòng`)
+`/dung-video` (tư liệu + gợi ý → tự định tuyến, 2 cổng duyệt, tự kiểm/sửa, rút kinh nghiệm — cửa vào chung của nhánh VIDEO)
 
 ## Rule bắt buộc đọc
 
@@ -129,6 +133,7 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 | `guard_video.py` | trước Bash/PowerShell chạy `ffmpeg` | chặn `loudnorm` một lượt thiếu `linear=true`, x264/x265 thiếu `-preset faster`, ffmpeg mới khi đang có ffmpeg khác chạy |
 | `guard_tra_phi.py` | trước Bash/PowerShell/Skill/MCP HeyGen | **hỏi người dùng** mỗi lần gọi dịch vụ trả phí HeyGen |
 | `guard_app.py` | trước Bash/PowerShell và Write/Edit | **hỏi người dùng** trước khi cài thư viện mới, chạy migration, `DROP TABLE`/`DROP COLUMN`/`TRUNCATE`; chặn secret trong biến công khai (`NEXT_PUBLIC_*SECRET*`, `VITE_*SERVICE_ROLE*`…) và Stripe `sk_live_` |
+| `ghi_su_dung.py` | trước Skill/Agent và khi gõ lệnh `/...` | ghi nhật ký skill/agent/lệnh được dùng, **không bao giờ chặn**; mọi hook khác cũng ghi mỗi lần chặn/hỏi/nhắc (chỉ nhãn lý do, không ghi nội dung lệnh) |
 | `check_render.py` | sau Bash có `ffmpeg` | tự probe file đầu ra, chặn nếu render hỏng |
 | `session_start.py` | đầu phiên, `/clear`, sau tóm tắt | nạp phần đầu `PROGRESS.md` (hoặc `docs/PROGRESS.md`) vào ngữ cảnh |
 | `nhac_test.py` | cuối lượt | cổng "xong": đã sửa file code thì phải chạy **thành công đủ** lệnh trong mục `## Lệnh kiểm tra` của `CLAUDE.md` dự án (không có thì script lint/typecheck/test/build trong `package.json`, không có nữa thì một lệnh test bất kỳ) → thiếu thì chặn một lần, nêu đúng lệnh còn thiếu |
@@ -141,6 +146,7 @@ Bài học nào đã thành chốt chặn, bài nào còn để người phán �
 python -m unittest discover -s tests   # test kiến trúc + hook + contract
 python scripts/sync_skills.py --check  # 3 bản skill đã khớp chưa
 python scripts/video_qa.py <file> --strict --audio   # QA video đầy đủ
+python evaluations/bai_thi.py          # bài thi video chuẩn (~10 giây) — chạy sau khi sửa tan_studio/skill video
 python scripts/harness_eval.py         # thử hook với AI thật (claude -p Haiku, tốn lượt) — chạy sau khi sửa hook
 ```
 

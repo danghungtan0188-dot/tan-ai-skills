@@ -1,0 +1,22 @@
+{
+  "source": "D:/kho/hoi-thi-2026",
+  "request": "làm bản tin 1 phút kiểu ATT NEWS, có phỏng vấn trưởng ban, không dùng nhạc",
+  "video_type": "ban_tin",
+  "route": "dung-tu-kho",
+  "target_duration": 60,
+  "aspect_ratio": "9:16",
+  "platform": "facebook",
+  "style": "att-news",
+  "must_have": [
+    "phỏng vấn trưởng ban"
+  ],
+  "must_avoid": [
+    "nhạc nền"
+  ],
+  "unknowns": [
+    "họ tên và chức vụ trưởng ban để ghi lower-third"
+  ],
+  "cut_authorized": false,
+  "gate_plan": "cho",
+  "gate_final": "chua_toi"
+}
