@@ -78,7 +78,11 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
     mở demo todomvc, gõ, chụp màn hình được. Dự án web nên thêm `.playwright-cli/` vào .gitignore.
     **Skill ngoài repo** (01/11, nhánh `feat/skill-ngoai` tách từ nhánh PR #7, đã commit, chưa push): `scripts/skills-ngoai.json` (35 mục:
     HyperFrames 8, GSAP 8, Playwright CLI, 16 junction, video-use) + `scripts/cai_skill_ngoai.py --kiem|--cai|--cap-nhat`;
-    máy này 35/35 đạt. `video-editor` định tuyến GSAP (`gsap-timeline`…) và `reverse-any-video`.
+    máy này 35/35 đạt. `video-editor` định tuyến GSAP (`gsap-timeline`…) và `reverse-any-video`. PR #7, #8 đã merge.
+    **Video marketing GĐ A** (01/11, nhánh `feat/video-marketing`, đã commit, chưa push): skill `video-marketing` — `tim_cau_noi.py` (whisper small, câu → giây,
+    khớp < 60% thì dừng), `tach_nguoi.py` (cắt đúng đoạn + `npx hyperframes@0.8.226 remove-background` + YuNet → tren_dau),
+    `ghep_lop.py` (nền → hiệu ứng → người; .webm phải giải mã libvpx-vp9 để giữ alpha). Test thật ghép lớp đạt.
+    CHƯA chạy whisper/tách nền trên video người nói thật — cần người dùng chỉ một clip 9:16. Kế tiếp: GĐ B tra catalog, GĐ C mẫu Bar Chart Race + Checklist.
     Khác: GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật).
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
