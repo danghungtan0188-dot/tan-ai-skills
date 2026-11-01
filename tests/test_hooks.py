@@ -8,6 +8,7 @@ exit code (0 = cho phep, 2 = chan).
 """
 
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -301,9 +302,204 @@ class TestGuardBash(unittest.TestCase):
         ):
             self.assert_denied(command)
 
+    def test_chan_lenh_long_trong_shell_con(self):
+        for command in (
+            'bash -c "rm -rf ."',
+            "sh -c 'rm -rf ~'",
+            'powershell -Command "Remove-Item -Recurse -Force C:\\Users\\x"',
+            'pwsh -NoProfile -c "Remove-Item -Recurse -Force ."',
+            'cmd /c "rd /s /q C:\\data"',
+            'bash -c "git push --force origin main"',
+            "bash <<'EOF'\ncd /tmp\nrm -rf .\nEOF",
+        ):
+            self.assert_denied(command)
+
+    def test_cho_qua_shell_con_vo_hai(self):
+        for command in ('bash -c "ls -la"', 'bash -c "rm -rf ./build/cache"',
+                        "python - <<'EOF'\nprint('rm -rf .')\nEOF",
+                        "bash <<'EOF'\necho xin chao\nEOF"):
+            self.assert_allowed(command)
+
     def test_cho_qua_chu_format_thuong(self):
         for command in ('git log --format="%h %s"', "python -m black --check .", "dir /s *.mp4"):
             self.assert_allowed(command)
+
+
+class TestGuardVideo(unittest.TestCase):
+    """Bai hoc: khong bop dai dong (loudnorm), chay nhe (preset, mot viec nang mot luc)."""
+
+    def chay(self, command, ffmpeg_dang_chay=0):
+        env = {**os.environ, "TAN_HOOK_GIA_LAP_FFMPEG": str(ffmpeg_dang_chay)}
+        return subprocess.run(
+            [sys.executable, str(HOOKS / "guard_video.py")],
+            input=json.dumps(bash_payload(command)), env=env,
+            text=True, capture_output=True, encoding="utf-8", errors="replace", cwd=REPO_ROOT)
+
+    def assert_denied(self, command, **kw):
+        result = self.chay(command, **kw)
+        self.assertEqual(result.returncode, 2, f"Le ra phai chan: {command}")
+        self.assertIn("CHAN BOI HOOK guard_video", result.stderr)
+
+    def assert_allowed(self, command, **kw):
+        result = self.chay(command, **kw)
+        self.assertEqual((result.returncode, result.stdout.strip()), (0, ""),
+                         f"Le ra phai cho qua: {command}\n{result.stderr}")
+
+    def test_chan_loudnorm_mot_luot(self):
+        self.assert_denied("ffmpeg -i a.wav -af loudnorm=I=-16:TP=-1.5:LRA=11 b.wav")
+
+    def test_cho_qua_loudnorm_linear_va_luot_do(self):
+        self.assert_allowed("ffmpeg -i a.wav -af loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=-20.1:"
+                            "measured_TP=-3:measured_LRA=5:measured_thresh=-30:linear=true b.wav")
+        self.assert_allowed("ffmpeg -i a.wav -af loudnorm=I=-16:print_format=json -f null -")
+
+    def test_chan_x264_thieu_preset_hoac_preset_cham(self):
+        for command in ("ffmpeg -i a.mp4 -c:v libx264 -crf 20 b.mp4",
+                        "ffmpeg -i a.mp4 -c:v libx264 -preset medium -crf 20 b.mp4",
+                        "ffmpeg -i a.mp4 -vcodec libx265 -preset slow b.mp4",
+                        'ffmpeg -i "a b.mp4" -c:v libx264 -preset fast "c d.mp4"'):
+            self.assert_denied(command)
+
+    def test_cho_qua_preset_nhanh_va_khong_nen_lai(self):
+        for command in ("ffmpeg -i a.mp4 -c:v libx264 -preset faster -crf 20 b.mp4",
+                        "ffmpeg -i a.mp4 -c:v libx264 -preset veryfast b.mp4",
+                        "ffmpeg -i a.mp4 -c copy b.mp4",
+                        "ffmpeg -i a.mp4 -c:v h264_qsv -global_quality 23 b.mp4",
+                        "grep -n libx264 tan_studio/video.py",
+                        "ffprobe -v error a.mp4"):
+            self.assert_allowed(command)
+
+    def test_chan_ffmpeg_khi_dang_co_ffmpeg_khac_chay(self):
+        self.assert_denied("ffmpeg -i a.mp4 -c copy b.mp4", ffmpeg_dang_chay=1)
+        self.assert_allowed("ffprobe -v error a.mp4", ffmpeg_dang_chay=1)
+        self.assert_allowed("ffmpeg -i a.mp4 -c copy b.mp4", ffmpeg_dang_chay=0)
+
+
+class TestGuardTraPhi(unittest.TestCase):
+    """Bai hoc: khong tu y dung dich vu tra phi (HeyGen)."""
+
+    def chay(self, tool_name, tool_input):
+        return run_hook("guard_tra_phi.py", {"hook_event_name": "PreToolUse",
+                                             "tool_name": tool_name, "tool_input": tool_input})
+
+    def assert_ask(self, tool_name, tool_input):
+        result = self.chay(tool_name, tool_input)
+        self.assertEqual(result.returncode, 0)
+        decision = json.loads(result.stdout)["hookSpecificOutput"]
+        self.assertEqual(decision["permissionDecision"], "ask", f"{tool_name} {tool_input}")
+
+    def assert_allowed(self, tool_name, tool_input):
+        result = self.chay(tool_name, tool_input)
+        self.assertEqual((result.returncode, result.stdout.strip()), (0, ""),
+                         f"{tool_name} {tool_input}")
+
+    def test_hoi_khi_goi_heygen(self):
+        self.assert_ask("mcp__heygen__create_video", {"script": "x"})
+        self.assert_ask("Skill", {"skill": "heygen-video"})
+        self.assert_ask("Skill", {"skill": "heygen-avatar", "args": "x"})
+        self.assert_ask("Bash", {"command": 'curl -X POST https://api.heygen.com/v2/video/generate -d "{}"'})
+        self.assert_ask("PowerShell", {"command": "heygen video create --script s.txt"})
+
+    def test_cho_qua_viec_khong_ton_phi(self):
+        self.assert_allowed("Skill", {"skill": "video-use"})
+        self.assert_allowed("Bash", {"command": "grep -rn heygen skills/"})
+        self.assert_allowed("Bash", {"command": "echo heygen"})
+        self.assert_allowed("Read", {"file_path": "skills/heygen-video/SKILL.md"})
+
+
+class TestGuardApp(unittest.TestCase):
+    """Luat du an phan mem: hoi truoc khi cai thu vien / migration; khong lo secret ra client."""
+
+    def assert_ask(self, command):
+        result = run_hook("guard_app.py", bash_payload(command))
+        self.assertEqual(result.returncode, 0)
+        self.assertTrue(result.stdout.strip(), f"phai hoi: {command}")
+        decision = json.loads(result.stdout)["hookSpecificOutput"]
+        self.assertEqual(decision["permissionDecision"], "ask", command)
+
+    def assert_allowed(self, command):
+        result = run_hook("guard_app.py", bash_payload(command))
+        self.assertEqual((result.returncode, result.stdout.strip()), (0, ""), command)
+
+    def test_hoi_khi_cai_thu_vien_moi(self):
+        for command in [
+            "npm install axios",
+            "npm i -D vitest",
+            "npm i -g @anthropic-ai/claude-code",
+            "pnpm add zod",
+            "yarn add react-query",
+            "bun add hono",
+            "pip install requests",
+            "python -m pip install --upgrade fastapi",
+            "uv add httpx",
+            "npx expo install expo-camera",
+            "cd app && npm install lodash",
+            'bash -c "npm install left-pad"',
+            "flutter pub add provider",
+        ]:
+            with self.subTest(command=command):
+                self.assert_ask(command)
+
+    def test_cho_qua_cai_lai_theo_lockfile(self):
+        for command in [
+            "npm install",
+            "npm ci",
+            "npm install --save-dev",
+            "pnpm install",
+            "yarn",
+            "pip install -r requirements.txt",
+            "pip install -e .",
+            "python -m pip install --upgrade pip",
+            "npm run build",
+            "npm test",
+        ]:
+            with self.subTest(command=command):
+                self.assert_allowed(command)
+
+    def test_hoi_khi_migration_hoac_xoa_cau_truc(self):
+        for command in [
+            "npx prisma migrate dev --name init",
+            "npx prisma db push",
+            "npx drizzle-kit push",
+            "alembic upgrade head",
+            "python manage.py migrate",
+            "bin/rails db:migrate",
+            "supabase migration up",
+            'psql -c "DROP TABLE orders"',
+            'psql -c "ALTER TABLE users DROP COLUMN phone"',
+            'psql -c "TRUNCATE users"',
+        ]:
+            with self.subTest(command=command):
+                self.assert_ask(command)
+
+    def test_cho_qua_lenh_doc_database(self):
+        self.assert_allowed("npx prisma generate")
+        self.assert_allowed("npx prisma migrate status")
+        self.assert_allowed('psql -c "SELECT * FROM orders LIMIT 5"')
+
+    def test_chan_secret_trong_bien_cong_khai(self):
+        for path, content in [
+            ("src/lib/supabase.ts", "const k = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY"),
+            (".env.example", "VITE_STRIPE_SECRET_KEY="),
+            ("app.config.js", "extra: { key: process.env.EXPO_PUBLIC_ADMIN_PASSWORD }"),
+            ("src/pay.ts", "const stripe = new Stripe('sk_live_" + "a" * 24 + "')"),
+        ]:
+            with self.subTest(path=path):
+                result = run_hook("guard_app.py", write_payload(path, content))
+                self.assertEqual(result.returncode, 2, content)
+                self.assertIn("guard_app", result.stderr)
+
+    def test_cho_qua_bien_cong_khai_hop_le(self):
+        for path, content in [
+            ("src/lib/supabase.ts", "createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, "
+                                    "process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)"),
+            ("server/admin.ts", "process.env.SUPABASE_SERVICE_ROLE_KEY"),
+            ("src/pay.ts", "loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)"),
+            ("docs/bao-mat.md", "Khong bao gio dat NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY."),
+        ]:
+            with self.subTest(path=path):
+                result = run_hook("guard_app.py", write_payload(path, content))
+                self.assertEqual(result.returncode, 0, result.stderr)
 
 
 def _loi_nguoi_dung(text: str) -> dict:
@@ -385,6 +581,61 @@ class TestNhacTest(unittest.TestCase):
         self.assertEqual(trong_repo.stdout.strip(), "")
         du_an_khac = run_hook("nhac_test.py", {**payload, "cwd": self.tmp.name}, "--toan-cuc")
         self.assertEqual(json.loads(du_an_khac.stdout)["decision"], "block")
+
+    def du_an(self, claude_md=None, package_json=None):
+        goc = Path(self.tmp.name) / "du-an"
+        (goc / ".git").mkdir(parents=True, exist_ok=True)
+        if claude_md is not None:
+            (goc / "CLAUDE.md").write_text(claude_md, encoding="utf-8")
+        if package_json is not None:
+            (goc / "package.json").write_text(json.dumps(package_json), encoding="utf-8")
+        return goc
+
+    def chay_o(self, goc, entries):
+        transcript = Path(self.tmp.name) / "phien.jsonl"
+        transcript.write_text("\n".join(json.dumps(e) for e in entries), encoding="utf-8")
+        result = run_hook("nhac_test.py", {"hook_event_name": "Stop", "cwd": str(goc),
+                                           "transcript_path": str(transcript)})
+        self.assertEqual(result.returncode, 0)
+        return json.loads(result.stdout)["reason"] if result.stdout.strip() else ""
+
+    def test_cong_xong_doi_du_lenh_trong_claude_md(self):
+        goc = self.du_an(claude_md=(
+            "# Du an\n\n## Lệnh kiểm tra\n\n```bash\nnpm run lint\nnpx tsc --noEmit\n"
+            "# dong ghi chu\nnpm test\nnpx playwright test <file>\n```\n"))
+        sua = [_loi_nguoi_dung("them nut"), _goi_cong_cu("Edit", file_path="src/Nut.vue"),
+               _ket_qua_cong_cu()]
+        ly_do = self.chay_o(goc, sua + [_goi_cong_cu("Bash", command="npm run lint"),
+                                        _ket_qua_cong_cu()])
+        self.assertIn("npx tsc --noEmit; npm test", ly_do)
+        self.assertNotIn("npm run lint", ly_do)
+        self.assertNotIn("playwright", ly_do)
+        du = sua + [_goi_cong_cu("Bash", command="cd web && npm run lint && npx tsc --noEmit"),
+                    _ket_qua_cong_cu(),
+                    _goi_cong_cu("PowerShell", command="npm test"), _ket_qua_cong_cu()]
+        self.assertEqual(self.chay_o(goc, du), "")
+
+    def test_cong_xong_lenh_loi_tinh_nhu_chua_chay(self):
+        goc = self.du_an(claude_md="## Lệnh kiểm tra\n```\npytest -q\n```\n")
+        loi = {"type": "user", "message": {"role": "user", "content": [
+            {"type": "tool_result", "tool_use_id": "t", "content": "1 failed", "is_error": True}]}}
+        ly_do = self.chay_o(goc, [_loi_nguoi_dung("sua"), _goi_cong_cu("Edit", file_path="a.py"),
+                                  _ket_qua_cong_cu(), _goi_cong_cu("Bash", command="pytest -q"), loi])
+        self.assertIn("pytest -q", ly_do)
+
+    def test_cong_xong_doc_script_package_json(self):
+        goc = self.du_an(package_json={"scripts": {
+            "dev": "next dev", "lint": "next lint", "build": "next build",
+            "test": "echo \"Error: no test specified\" && exit 1"}})
+        sua = [_loi_nguoi_dung("sua"), _goi_cong_cu("Write", file_path="app/page.tsx"),
+               _ket_qua_cong_cu()]
+        ly_do = self.chay_o(goc, sua + [_goi_cong_cu("Bash", command="pnpm lint"),
+                                        _ket_qua_cong_cu()])
+        self.assertIn("npm run build", ly_do)
+        self.assertNotIn("npm run lint", ly_do)
+        self.assertNotIn("npm run test", ly_do)
+        self.assertEqual(self.chay_o(goc, sua + [
+            _goi_cong_cu("Bash", command="pnpm lint && pnpm run build"), _ket_qua_cong_cu()]), "")
 
     def test_cho_qua_khi_transcript_hong_hoac_khong_co(self):
         transcript = Path(self.tmp.name) / "phien.jsonl"

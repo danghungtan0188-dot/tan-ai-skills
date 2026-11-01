@@ -100,6 +100,32 @@ def bo_loi_nhan(command: str) -> str:
     return "\n".join(ket_qua)
 
 
+_SHELL_C = re.compile(r"\b(?:bash|sh|zsh|pwsh|powershell)(?:\.exe)?\b(?:\s+-\w+)*?\s+-(?:c|Command)\s+"
+                      r"(?:\"((?:\\.|[^\"\\])*)\"|'([^']*)')", re.I)
+_CMD_C = re.compile(r"\bcmd(?:\.exe)?\s+/c\s+(?:\"([^\"]*)\"|([^\n]+))", re.I)
+_HEREDOC_SHELL = re.compile(r"\b(?:bash|sh|zsh|pwsh)\b[^\n]*<<-?\s*(['\"]?)(\w+)\1")
+
+
+def lenh_long(command: str) -> list[str]:
+    """Lenh nam trong bash -c "...", powershell -Command "...", cmd /c, heredoc dua vao shell."""
+    ket_qua = [m.group(1) if m.group(1) is not None else m.group(2)
+               for m in _SHELL_C.finditer(command)]
+    ket_qua += [m.group(1) if m.group(1) is not None else m.group(2)
+                for m in _CMD_C.finditer(command)]
+    dong_ket = None
+    for dong in command.split("\n"):
+        if dong_ket is not None:
+            if dong.strip() == dong_ket:
+                dong_ket = None
+            else:
+                ket_qua.append(dong)
+            continue
+        heredoc = _HEREDOC_SHELL.search(dong)
+        if heredoc:
+            dong_ket = heredoc.group(2)
+    return ket_qua
+
+
 MEDIA_EXT = (".mp4", ".mov", ".mkv", ".webm", ".avi", ".m4v",
              ".mp3", ".wav", ".m4a", ".aac")
 
@@ -140,9 +166,10 @@ def main() -> int:
     if not isinstance(command, str) or not command.strip():
         return 0
     command = bo_loi_nhan(command)
+    ung_vien = [command, *lenh_long(command)]
 
     for pattern, label in DENY:
-        if pattern.search(command):
+        if any(pattern.search(lenh) for lenh in ung_vien):
             print(
                 f"CHAN BOI HOOK guard_bash (rules/security.md): {label}.\n"
                 "Lenh nay pha du lieu hoac vo hieu hoa bao mat. "
@@ -151,7 +178,7 @@ def main() -> int:
             )
             return 2
 
-    bi_de = ffmpeg_ghi_de_nguon(command)
+    bi_de = next(filter(None, map(ffmpeg_ghi_de_nguon, ung_vien)), None)
     if bi_de:
         print(
             f"CHAN BOI HOOK guard_bash (rules/video.md): ffmpeg ghi de file goc {bi_de}.\n"
@@ -161,7 +188,7 @@ def main() -> int:
         return 2
 
     for pattern, label in ASK:
-        if pattern.search(command):
+        if any(pattern.search(lenh) for lenh in ung_vien):
             print(json.dumps({
                 "hookSpecificOutput": {
                     "hookEventName": "PreToolUse",

@@ -83,11 +83,11 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 ```text
 .claude/agents/     9 agent   — Claude Code chỉ đọc agent ở đây
 .claude/commands/  13 command — slash command
-.claude/hooks/      5 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
+.claude/hooks/      8 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
 skills/             29 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
-scripts/            script dùng chung (sync_skills.py, video_qa.py, check_citations.py)
+scripts/            script dùng chung (sync_skills.py, video_qa.py, check_citations.py, harness_eval.py)
 tan_studio/         CLI script→giọng→phụ đề→MP4 (python -m tan_studio), gọi lại code trong skills/
 do-hoa/             Remotion: intro, số liệu, lower-third, chữ chạy — tan_studio gọi qua `do-hoa` / mục "do_hoa"
 remotion-studio/    Engine Remotion React nhận audio/SRT/media qua props JSON; chạy song song HyperFrames
@@ -126,9 +126,14 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 |---|---|---|
 | `guard_secrets.py` | trước Write/Edit | chặn ghi `.env` thật và secret |
 | `guard_bash.py` | trước Bash/PowerShell | chặn hẳn lệnh phá dữ liệu, ffmpeg ghi đè file gốc; **hỏi người dùng** với push/deploy/publish, `git add -A` |
+| `guard_video.py` | trước Bash/PowerShell chạy `ffmpeg` | chặn `loudnorm` một lượt thiếu `linear=true`, x264/x265 thiếu `-preset faster`, ffmpeg mới khi đang có ffmpeg khác chạy |
+| `guard_tra_phi.py` | trước Bash/PowerShell/Skill/MCP HeyGen | **hỏi người dùng** mỗi lần gọi dịch vụ trả phí HeyGen |
+| `guard_app.py` | trước Bash/PowerShell và Write/Edit | **hỏi người dùng** trước khi cài thư viện mới, chạy migration, `DROP TABLE`/`DROP COLUMN`/`TRUNCATE`; chặn secret trong biến công khai (`NEXT_PUBLIC_*SECRET*`, `VITE_*SERVICE_ROLE*`…) và Stripe `sk_live_` |
 | `check_render.py` | sau Bash có `ffmpeg` | tự probe file đầu ra, chặn nếu render hỏng |
 | `session_start.py` | đầu phiên, `/clear`, sau tóm tắt | nạp phần đầu `PROGRESS.md` (hoặc `docs/PROGRESS.md`) vào ngữ cảnh |
-| `nhac_test.py` | cuối lượt | đã sửa file code mà chưa chạy test/lint/build sau lần sửa cuối → nhắc một lần (chạy test hoặc ghi NOT RUN) |
+| `nhac_test.py` | cuối lượt | cổng "xong": đã sửa file code thì phải chạy **thành công đủ** lệnh trong mục `## Lệnh kiểm tra` của `CLAUDE.md` dự án (không có thì script lint/typecheck/test/build trong `package.json`, không có nữa thì một lệnh test bất kỳ) → thiếu thì chặn một lần, nêu đúng lệnh còn thiếu |
+
+Bài học nào đã thành chốt chặn, bài nào còn để người phán đoán: [docs/bai-hoc-va-chot-chan.md](docs/bai-hoc-va-chot-chan.md).
 
 ## Validation
 
@@ -136,6 +141,7 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 python -m unittest discover -s tests   # test kiến trúc + hook + contract
 python scripts/sync_skills.py --check  # 3 bản skill đã khớp chưa
 python scripts/video_qa.py <file> --strict --audio   # QA video đầy đủ
+python scripts/harness_eval.py         # thử hook với AI thật (claude -p Haiku, tốn lượt) — chạy sau khi sửa hook
 ```
 
 ## Claude KHÔNG được tự ý

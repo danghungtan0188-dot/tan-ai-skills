@@ -87,6 +87,7 @@ export const RemotionRoot: React.FC = () => (
         tiLe: "16:9",
         thoiLuong: 6,
         tieuDe: "",
+        nenAnh: "",
         tuyen: [{ ten: "Tuyến 1", diem: [[300, 500], [1500, 400]], tai: 0.5, lau: 2 }],
         km: { so: 4, tienTo: "gần ", tai: 1, lau: 2 },
       }}
@@ -125,6 +126,7 @@ export const RemotionRoot: React.FC = () => (
         tiLe: "16:9",
         thoiLuong: 6,
         tieuDe: "",
+        nenAnh: "",
         diem: [
           { ten: "A", x: 1400, y: 800, tai: 0.5, canhTrai: false },
           { ten: "B", x: 500, y: 300, tai: 3, canhTrai: false },

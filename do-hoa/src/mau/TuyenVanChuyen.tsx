@@ -2,7 +2,7 @@
 // nền giấy cũ, kênh và quốc lộ vẽ mảnh; đường đi nét đứt màu đồng vẽ dần, chấm sáng chạy theo,
 // tên từng điểm hiện khi chấm tới (mốc `tai` khớp lời đọc). Toàn khung, toạ độ theo khung 1920x1080.
 import React from "react";
-import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
 import { coBan, FONT, FPS } from "../chung";
 
@@ -10,17 +10,29 @@ const diem = z.object({ ten: z.string(), x: z.number(), y: z.number(), tai: z.nu
 
 export const tuyenVanChuyenSchema = coBan.extend({
   tieuDe: z.string().default(""),
+  nenAnh: z.string().default(""), // ảnh trong public dir: nền trắng đen mờ thay cho giấy cũ
   diem: z.array(diem),
   kenh: z.object({ ten: z.string(), tu: z.tuple([z.number(), z.number()]), den: z.tuple([z.number(), z.number()]) }).optional(),
   duong: z.object({ ten: z.string(), tu: z.tuple([z.number(), z.number()]), den: z.tuple([z.number(), z.number()]) }).optional(),
 });
+
+// Nền ảnh trắng đen mờ ảo thay cho giấy cũ (để các sơ đồ đứng gần nhau không bị lặp một kiểu nền)
+const NenAnh: React.FC<{ file: string; frame: number; dai: number }> = ({ file, frame, dai }) => (
+  <AbsoluteFill>
+    <Img src={staticFile(file)} style={{
+      width: "100%", height: "100%", objectFit: "cover", scale: `${interpolate(frame, [0, dai], [1.08, 1.14])}`,
+      filter: "grayscale(1) blur(9px) brightness(1.25) contrast(0.7)",
+    }} />
+    <AbsoluteFill style={{ background: "rgba(236,234,228,0.42)" }} />
+  </AbsoluteFill>
+);
 
 const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const NAU = "#3b2a18";
 const DONG = "#9c6b2c";
 const CHU_CHAN = "'Times New Roman', Cambria, serif";
 
-export const TuyenVanChuyen: React.FC<z.infer<typeof tuyenVanChuyenSchema>> = ({ tieuDe, diem: ds, kenh, duong }) => {
+export const TuyenVanChuyen: React.FC<z.infer<typeof tuyenVanChuyenSchema>> = ({ tieuDe, nenAnh, diem: ds, kenh, duong }) => {
   const frame = useCurrentFrame();
   const { width, durationInFrames } = useVideoConfig();
   const s = width / 1920;
@@ -39,7 +51,8 @@ export const TuyenVanChuyen: React.FC<z.infer<typeof tuyenVanChuyenSchema>> = ({
   });
 
   return (
-    <AbsoluteFill style={{ background: "radial-gradient(ellipse 80% 75% at 50% 45%, #e2d2b0 0%, #c4ab7f 60%, #7a5e3a 100%)", opacity: vao }}>
+    <AbsoluteFill style={{ background: nenAnh ? "#000" : "radial-gradient(ellipse 80% 75% at 50% 45%, #e2d2b0 0%, #c4ab7f 60%, #7a5e3a 100%)", opacity: vao }}>
+      {nenAnh ? <NenAnh file={nenAnh} frame={frame} dai={durationInFrames} /> : (
       <svg width={1920 * s} height={1080 * s} style={{ position: "absolute", opacity: 0.3, mixBlendMode: "multiply" }}>
         <filter id="giay2">
           <feTurbulence type="fractalNoise" baseFrequency="0.012 0.05" numOctaves="4" seed="9" />
@@ -47,6 +60,7 @@ export const TuyenVanChuyen: React.FC<z.infer<typeof tuyenVanChuyenSchema>> = ({
         </filter>
         <rect width="100%" height="100%" filter="url(#giay2)" />
       </svg>
+      )}
       <AbsoluteFill style={{ scale: day }}>
         <svg width={1920 * s} height={1080 * s} viewBox="0 0 1920 1080">
           {kenh ? (
@@ -93,7 +107,7 @@ export const TuyenVanChuyen: React.FC<z.infer<typeof tuyenVanChuyenSchema>> = ({
       <div style={{ position: "absolute", bottom: 40 * s, right: 60 * s, fontFamily: FONT, fontStyle: "italic", fontSize: 26 * s, color: "#5a4630" }}>
         Sơ đồ minh họa
       </div>
-      <AbsoluteFill style={{ background: "radial-gradient(ellipse 75% 70% at 50% 45%, transparent 60%, rgba(40,20,0,0.5) 100%)" }} />
+      <AbsoluteFill style={{ background: `radial-gradient(ellipse 75% 70% at 50% 45%, transparent 60%, ${nenAnh ? "rgba(0,0,0,0.45)" : "rgba(40,20,0,0.5)"} 100%)` }} />
     </AbsoluteFill>
   );
 };
