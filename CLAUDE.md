@@ -91,6 +91,7 @@ scripts/            script dùng chung (sync_skills.py, video_qa.py, check_citat
 tan_studio/         CLI script→giọng→phụ đề→MP4 (python -m tan_studio), gọi lại code trong skills/
 do-hoa/             Remotion: intro, số liệu, lower-third, chữ chạy — tan_studio gọi qua `do-hoa` / mục "do_hoa"
 remotion-studio/    Engine Remotion React nhận audio/SRT/media qua props JSON; chạy song song HyperFrames
+evaluations/        bài thi video chuẩn (bai_thi.py) + mốc chuẩn — kiến trúc: docs/harness-video.md
 tests/              python -m unittest discover -s tests
 ```
 
@@ -141,6 +142,7 @@ Bài học nào đã thành chốt chặn, bài nào còn để người phán �
 python -m unittest discover -s tests   # test kiến trúc + hook + contract
 python scripts/sync_skills.py --check  # 3 bản skill đã khớp chưa
 python scripts/video_qa.py <file> --strict --audio   # QA video đầy đủ
+python evaluations/bai_thi.py          # bài thi video chuẩn (~10 giây) — chạy sau khi sửa tan_studio/skill video
 python scripts/harness_eval.py         # thử hook với AI thật (claude -p Haiku, tốn lượt) — chạy sau khi sửa hook
 ```
 
