@@ -38,8 +38,8 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | Chọn skill (routing) | bảng "Chọn skill thực thi" trong `.claude/agents/video-editor.md`; bảng trong `.claude/commands/edit-video.md` | có, **hai bảng** — xem `docs/kiem-ke-skill.md` đề xuất 4 |
 | Workflow theo loại | `.claude/commands/dung-tu-kho.md` (kho clip → bản tin), `.claude/commands/video-news.md` (bản tin), `.claude/commands/edit-video.md` (tự do), `tan_studio/workflow.py` (kịch bản → video) | có, **ba cửa vào** |
 | Skills | `skills/` (30 skill) — kiểm kê ở `docs/kiem-ke-skill.md` | có, còn chồng chéo |
-| Engines | `tan_studio/` (ffmpeg, TTS, phụ đề), `do-hoa/` (Remotion), `remotion-studio/` | có |
-| Thư viện hiệu ứng, mẫu | `skills/hieu-ung-video/`, `do-hoa/src/mau/` | có |
+| Engines | `tan_studio/` (ffmpeg, TTS, phụ đề), `do-hoa/` (Remotion), `remotion-studio/`, HyperFrames (ngoài repo) | có |
+| Thư viện hiệu ứng, mẫu | `skills/hieu-ung-video/`, `do-hoa/src/mau/`; ngoài repo: HyperFrames + 8 skill GSAP (chuyển động), danh sách ở `scripts/skills-ngoai.json` | có |
 | Phong cách đã chốt | `skills/bien-tap-video-thong-minh-song-ngu-tan/references/phong-cach-att-news.md` | có (ATT NEWS); loại khác chưa |
 | Trạng thái, chạy lại | run.json ghi sau mỗi bước + `python -m tan_studio chay-lai` | có, chỉ trong `tan_studio` |
 | Kiểm định kỹ thuật | `scripts/video_qa.py`, `.claude/hooks/check_render.py`, `tan_studio/nghiem_thu.py` | có |
@@ -71,5 +71,6 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | Q2 | **Hai cổng duyệt là bắt buộc**, không có chế độ tự động 100% | Máy đo được kỹ thuật, không đo được "đúng ý"; `tan_studio` đã tách `status` (kỹ thuật) khỏi `noi_dung` (người đánh giá) |
 | Q3 | **AI chỉ đề xuất bài học**, người duyệt mới thành luật | Tránh lỗi tự nhân lên; giống `tan_studio/rules.py` |
 | Q4 | Cửa vào mới **gọi lại** 3 lệnh đang có, không viết lại | Giữ thứ đang chạy; mỗi lệnh đã có QA 3 vòng |
+| Q7 | Skill do công cụ khác quản (HyperFrames, GSAP, Playwright CLI) **không chép vào repo**; repo giữ danh sách + script kiểm/cài lại (`scripts/cai_skill_ngoai.py`) | Chép vào = hai bản lệch nhau; danh sách giúp máy mới dựng lại đủ bộ bằng một lệnh |
 | Q6 | Nhật ký **ngoài repo** và **chỉ ghi nhãn**, không ghi nội dung lệnh | Repo công khai; lệnh có thể chứa secret hoặc đường dẫn riêng tư (luật "không ghi dữ liệu nhạy cảm vào log") |
 | Q5 | Đầu vào bài thi **tự sinh bằng code** | Repo công khai: không bản quyền, không ảnh cá nhân, file nhỏ, máy không nóng |

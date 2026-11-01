@@ -1,0 +1,41 @@
+{
+  "_ghi_chu": "Skill harness can ma KHONG nam trong skills/ cua repo. Kiem: python scripts/cai_skill_ngoai.py --kiem. Cai thieu: --cai. Cap nhat: --cap-nhat. Cach tung nguon: memory project_cap_nhat_skill_goc.",
+  "skills_cli": {
+    "phien_ban": "1.7.4",
+    "goi": [
+      {
+        "nguon": "heygen-com/hyperframes",
+        "dung_cho": "dung video bang HTML (HyperFrames): title, chu dong, phu de, overlay, dung lai video mau",
+        "skill": ["hyperframes", "hyperframes-cli", "hyperframes-registry", "media-use", "figma", "slideshow",
+                  "remotion-to-hyperframes", "reverse-any-video"]
+      },
+      {
+        "nguon": "https://github.com/greensock/gsap-skills",
+        "dung_cho": "chuyen dong GSAP (HyperFrames chay GSAP): timeline, SplitText, DrawSVG, easing",
+        "skill": ["gsap-core", "gsap-timeline", "gsap-plugins", "gsap-utils", "gsap-performance",
+                  "gsap-scrolltrigger", "gsap-react", "gsap-frameworks"]
+      }
+    ]
+  },
+  "npm": [
+    {
+      "goi": "@playwright/cli",
+      "phien_ban": "0.1.23",
+      "lenh": "playwright-cli",
+      "dung_cho": "mo trinh duyet that, bam thu, chup man hinh (kiem web/app, GĐ3 /thiet-ke)",
+      "sau_khi_cai": ["playwright-cli", "install", "--skills", "claude", "--global"],
+      "skill": ["playwright-cli"]
+    }
+  ],
+  "lien_ket_repo": {
+    "_ghi_chu": "~/.claude/skills/<ten> la junction ve <repo>/.claude/skills/<ten> (khong chep).",
+    "skill": ["remotion-best-practices", "remotion-captions", "remotion-create", "remotion-docs",
+              "remotion-interactivity", "remotion-maps", "remotion-markup", "remotion-multimedia",
+              "remotion-render", "remotion-saas", "remotion-studio", "remotion-upgrade",
+              "heygen-avatar", "heygen-translate", "heygen-video", "tan-giong-doc-ban-tin"]
+  },
+  "ban_cai_rieng": {
+    "_ghi_chu": "Ban cai rieng co moi truong Python ben trong: KHONG tao junction (sync --force se xoa .venv). Cai tay theo install.md cua skill.",
+    "skill": ["video-use"]
+  }
+}

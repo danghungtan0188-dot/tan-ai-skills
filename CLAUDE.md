@@ -87,7 +87,7 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 skills/             30 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
-scripts/            script dùng chung (sync_skills.py, video_qa.py, check_citations.py, harness_eval.py)
+scripts/            script dùng chung (sync_skills.py, video_qa.py, check_citations.py, harness_eval.py, cai_skill_ngoai.py)
 tan_studio/         CLI script→giọng→phụ đề→MP4 (python -m tan_studio), gọi lại code trong skills/
 do-hoa/             Remotion: intro, số liệu, lower-third, chữ chạy — tan_studio gọi qua `do-hoa` / mục "do_hoa"
 remotion-studio/    Engine Remotion React nhận audio/SRT/media qua props JSON; chạy song song HyperFrames
@@ -146,6 +146,7 @@ Bài học nào đã thành chốt chặn, bài nào còn để người phán �
 python -m unittest discover -s tests   # test kiến trúc + hook + contract
 python scripts/sync_skills.py --check  # 3 bản skill đã khớp chưa
 python scripts/video_qa.py <file> --strict --audio   # QA video đầy đủ
+python scripts/cai_skill_ngoai.py --kiem   # đủ skill ngoài repo chưa (HyperFrames, GSAP, Playwright CLI, junction) — máy mới: --cai
 python evaluations/bai_thi.py          # bài thi video chuẩn (~10 giây) — chạy sau khi sửa tan_studio/skill video
 python scripts/harness_eval.py         # thử hook với AI thật (claude -p Haiku, tốn lượt) — chạy sau khi sửa hook
 ```
