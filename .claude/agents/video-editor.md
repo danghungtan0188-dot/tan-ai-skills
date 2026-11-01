@@ -30,6 +30,7 @@ Bạn không tự nghĩ ra filter chain. Gọi đúng skill:
 | Đồ họa động phức tạp ngoài 4 mẫu trên | `hyperframes` hoặc `remotion-*` |
 | Chuyển động trong cảnh HyperFrames: nối nhiều chữ/title theo thời gian, chữ tách từng ký tự, vẽ SVG, easing | `hyperframes` + `gsap-timeline` (thêm `gsap-plugins` cho SplitText/DrawSVG, `gsap-performance` khi giật) |
 | Có sẵn 1 video mẫu, muốn dựng lại thành dự án sửa được | `reverse-any-video` |
+| Video marketing người nói: hiệu ứng "lúc mình nói …", đặt sau người, không đè mặt | `video-marketing` (+ `hyperframes`, `gsap-timeline`) |
 | Nhạc nền/SFX/asset hợp lệ bản quyền | `media-use` |
 
 Skill ngoài repo (`hyperframes`, `gsap-*`, `media-use`, `reverse-any-video`…) liệt kê ở `scripts/skills-ngoai.json`;
