@@ -70,8 +70,15 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
     đã `gh repo sync` (REA: script `D:\GitHub\dong-bo-rea.ps1` chạy 8h sáng, đã mới nhất). Remotion 4.0.505 → 4.0.539 (+`remotion-studio`,
     giữ sửa link `../remotion-x/`); `video-use` lên `43cfc56` (bản repo = gốc `92c2b34`, pyproject không đổi); HeyGen, humanizer
     đã giống gốc. Ngoài repo: HyperFrames `npx skills@1.7.4 update -g` (4 skill) + thay `figma`/`slideshow`/`remotion-to-hyperframes`;
-    sao lưu `~/.claude/skills_cu_truoc_update_20261101/`. Còn chờ quyết: 9 skill HyperFrames gốc đã bỏ (21/10) vẫn nằm trên máy;
-    skill mới `reverse-any-video` chưa cài; test riêng của video-use NOT RUN (bị chặn).
+    sao lưu `~/.claude/skills_cu_truoc_update_20261101/`. Đã gỡ 14 skill HyperFrames gốc đã bỏ (`RETIRED_SKILLS` trong CLI
+    HyperFrames) và cài `reverse-any-video` → bộ trên máy = đúng 8 skill của gốc; Haiku thật chọn đúng `hyperframes`.
+    Test riêng của video-use NOT RUN (bị chặn). PR #7 (skill Remotion + video-use) chờ merge.
+    Cài thêm (ngoài repo): 8 skill `gsap-*` (greensock/gsap-skills, qua `npx skills`) và Playwright CLI 0.1.23
+    (`@playwright/cli`, skill `~/.claude/skills/playwright-cli`). Thử thật: Haiku chọn đúng `gsap-timeline`; playwright-cli
+    mở demo todomvc, gõ, chụp màn hình được. Dự án web nên thêm `.playwright-cli/` vào .gitignore.
+    **Skill ngoài repo** (01/11, nhánh `feat/skill-ngoai` tách từ nhánh PR #7, đã commit, chưa push): `scripts/skills-ngoai.json` (35 mục:
+    HyperFrames 8, GSAP 8, Playwright CLI, 16 junction, video-use) + `scripts/cai_skill_ngoai.py --kiem|--cai|--cap-nhat`;
+    máy này 35/35 đạt. `video-editor` định tuyến GSAP (`gsap-timeline`…) và `reverse-any-video`.
     Khác: GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật).
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.

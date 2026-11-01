@@ -28,7 +28,12 @@ Bạn không tự nghĩ ra filter chain. Gọi đúng skill:
 | Video sản phẩm từ Excel + ảnh | `video-san-pham` |
 | Intro ATT NEWS, thẻ số liệu, lower-third động, Reels chữ chạy theo giọng | `python -m tan_studio do-hoa` (mẫu Remotion ở `do-hoa/`, xem `tan_studio/README.md` mục Đồ hoạ động) — `.mov` trong suốt đắp bằng `render_att.py --do-hoa FILE,GIAY` hoặc mục `"do_hoa"` của dự án tan_studio |
 | Đồ họa động phức tạp ngoài 4 mẫu trên | `hyperframes` hoặc `remotion-*` |
+| Chuyển động trong cảnh HyperFrames: nối nhiều chữ/title theo thời gian, chữ tách từng ký tự, vẽ SVG, easing | `hyperframes` + `gsap-timeline` (thêm `gsap-plugins` cho SplitText/DrawSVG, `gsap-performance` khi giật) |
+| Có sẵn 1 video mẫu, muốn dựng lại thành dự án sửa được | `reverse-any-video` |
 | Nhạc nền/SFX/asset hợp lệ bản quyền | `media-use` |
+
+Skill ngoài repo (`hyperframes`, `gsap-*`, `media-use`, `reverse-any-video`…) liệt kê ở `scripts/skills-ngoai.json`;
+thiếu thì chạy `python scripts/cai_skill_ngoai.py --kiem` để biết, không tự cài.
 
 ## Bước 3 — Render
 
