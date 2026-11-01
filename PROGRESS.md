@@ -44,7 +44,11 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
 0b. **Harness phần mềm GĐ1** (30/10, nhánh `feat/guard-app` tách từ nhánh GĐ4, đã commit, chưa push): hook `guard_app`
     hỏi trước khi cài thư viện mới / chạy migration / `DROP TABLE`; chặn secret mang tiền tố công khai và
     Stripe `sk_live_`. Đã gắn cả `~/.claude/settings.json` (bản lưu `settings.json.bak-20261030-guard-app`).
-    Thử `claude -p`: `npm install left-pad` bị hỏi. Kế tiếp GĐ2–5: cổng "xong" đọc lệnh thật từ CLAUDE.md dự án,
+    Thử `claude -p`: `npm install left-pad` bị hỏi.
+    **GĐ2** (30/10, cùng nhánh, đã commit, chưa push): `nhac_test` thành cổng "xong" — đọc mục `## Lệnh kiểm tra`
+    trong CLAUDE.md dự án (không có thì script `package.json`), đòi chạy thành công đủ từng lệnh sau lần sửa
+    cuối; `/khoi-tao-du-an` ghi mục này. Thử `claude -p` ở dự án mẫu: Haiku sửa code → bị chặn → chạy test → PASS.
+    Kế tiếp GĐ3–5: cổng "xong" đọc lệnh thật từ CLAUDE.md dự án,
     `/thiet-ke` chụp màn hình nhỏ/lớn, bộ thử `tests/harness_eval/`, nhật ký hook.
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.

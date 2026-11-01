@@ -131,7 +131,7 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 | `guard_app.py` | trước Bash/PowerShell và Write/Edit | **hỏi người dùng** trước khi cài thư viện mới, chạy migration, `DROP TABLE`/`DROP COLUMN`/`TRUNCATE`; chặn secret trong biến công khai (`NEXT_PUBLIC_*SECRET*`, `VITE_*SERVICE_ROLE*`…) và Stripe `sk_live_` |
 | `check_render.py` | sau Bash có `ffmpeg` | tự probe file đầu ra, chặn nếu render hỏng |
 | `session_start.py` | đầu phiên, `/clear`, sau tóm tắt | nạp phần đầu `PROGRESS.md` (hoặc `docs/PROGRESS.md`) vào ngữ cảnh |
-| `nhac_test.py` | cuối lượt | đã sửa file code mà chưa chạy test/lint/build sau lần sửa cuối → nhắc một lần (chạy test hoặc ghi NOT RUN) |
+| `nhac_test.py` | cuối lượt | cổng "xong": đã sửa file code thì phải chạy **thành công đủ** lệnh trong mục `## Lệnh kiểm tra` của `CLAUDE.md` dự án (không có thì script lint/typecheck/test/build trong `package.json`, không có nữa thì một lệnh test bất kỳ) → thiếu thì chặn một lần, nêu đúng lệnh còn thiếu |
 
 Bài học nào đã thành chốt chặn, bài nào còn để người phán đoán: [docs/bai-hoc-va-chot-chan.md](docs/bai-hoc-va-chot-chan.md).
 

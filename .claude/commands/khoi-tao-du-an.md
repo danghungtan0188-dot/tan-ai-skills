@@ -16,6 +16,7 @@ Khuôn chuẩn của người dùng nằm ở `C:\Users\DANG HUNG TAN\Documents\
    - đọc `package.json` / `pyproject.toml` / `requirements.txt` / cấu trúc thư mục → điền ngôn ngữ, framework, lệnh **cài / chạy / lint / typecheck / test / build thật** vào `CLAUDE.md` và `docs/02-ky-thuat/architecture.md`;
    - dự án có sẵn nhiều code → gọi lệnh `/quet-kien-truc` cho tài liệu kiến trúc có dẫn nguồn `file:dòng`;
    - chưa có code → ghi mô tả trong `$ARGUMENTS` vào `docs/03-san-pham/requirements.md`, phần chưa biết để **"(cần người dùng bổ sung)"**.
+   - thêm mục **`## Lệnh kiểm tra`** vào `CLAUDE.md` (nếu chưa có): một khối code, mỗi dòng một lệnh lint / typecheck / test / build **thật** của dự án. Hook `nhac_test` đọc đúng mục này làm cổng "xong": sửa code mà chưa chạy thành công đủ các lệnh đó thì chưa được dừng. Chỉ ghi lệnh đã chạy được ở bước 5.
 4. **Thêm mục "Khi người dùng gõ ngắn"** vào cuối `CLAUDE.md` của dự án (nếu chưa có):
    ```markdown
    ## Khi người dùng gõ ngắn

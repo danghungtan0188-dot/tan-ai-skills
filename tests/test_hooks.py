@@ -582,6 +582,61 @@ class TestNhacTest(unittest.TestCase):
         du_an_khac = run_hook("nhac_test.py", {**payload, "cwd": self.tmp.name}, "--toan-cuc")
         self.assertEqual(json.loads(du_an_khac.stdout)["decision"], "block")
 
+    def du_an(self, claude_md=None, package_json=None):
+        goc = Path(self.tmp.name) / "du-an"
+        (goc / ".git").mkdir(parents=True, exist_ok=True)
+        if claude_md is not None:
+            (goc / "CLAUDE.md").write_text(claude_md, encoding="utf-8")
+        if package_json is not None:
+            (goc / "package.json").write_text(json.dumps(package_json), encoding="utf-8")
+        return goc
+
+    def chay_o(self, goc, entries):
+        transcript = Path(self.tmp.name) / "phien.jsonl"
+        transcript.write_text("\n".join(json.dumps(e) for e in entries), encoding="utf-8")
+        result = run_hook("nhac_test.py", {"hook_event_name": "Stop", "cwd": str(goc),
+                                           "transcript_path": str(transcript)})
+        self.assertEqual(result.returncode, 0)
+        return json.loads(result.stdout)["reason"] if result.stdout.strip() else ""
+
+    def test_cong_xong_doi_du_lenh_trong_claude_md(self):
+        goc = self.du_an(claude_md=(
+            "# Du an\n\n## Lệnh kiểm tra\n\n```bash\nnpm run lint\nnpx tsc --noEmit\n"
+            "# dong ghi chu\nnpm test\nnpx playwright test <file>\n```\n"))
+        sua = [_loi_nguoi_dung("them nut"), _goi_cong_cu("Edit", file_path="src/Nut.vue"),
+               _ket_qua_cong_cu()]
+        ly_do = self.chay_o(goc, sua + [_goi_cong_cu("Bash", command="npm run lint"),
+                                        _ket_qua_cong_cu()])
+        self.assertIn("npx tsc --noEmit; npm test", ly_do)
+        self.assertNotIn("npm run lint", ly_do)
+        self.assertNotIn("playwright", ly_do)
+        du = sua + [_goi_cong_cu("Bash", command="cd web && npm run lint && npx tsc --noEmit"),
+                    _ket_qua_cong_cu(),
+                    _goi_cong_cu("PowerShell", command="npm test"), _ket_qua_cong_cu()]
+        self.assertEqual(self.chay_o(goc, du), "")
+
+    def test_cong_xong_lenh_loi_tinh_nhu_chua_chay(self):
+        goc = self.du_an(claude_md="## Lệnh kiểm tra\n```\npytest -q\n```\n")
+        loi = {"type": "user", "message": {"role": "user", "content": [
+            {"type": "tool_result", "tool_use_id": "t", "content": "1 failed", "is_error": True}]}}
+        ly_do = self.chay_o(goc, [_loi_nguoi_dung("sua"), _goi_cong_cu("Edit", file_path="a.py"),
+                                  _ket_qua_cong_cu(), _goi_cong_cu("Bash", command="pytest -q"), loi])
+        self.assertIn("pytest -q", ly_do)
+
+    def test_cong_xong_doc_script_package_json(self):
+        goc = self.du_an(package_json={"scripts": {
+            "dev": "next dev", "lint": "next lint", "build": "next build",
+            "test": "echo \"Error: no test specified\" && exit 1"}})
+        sua = [_loi_nguoi_dung("sua"), _goi_cong_cu("Write", file_path="app/page.tsx"),
+               _ket_qua_cong_cu()]
+        ly_do = self.chay_o(goc, sua + [_goi_cong_cu("Bash", command="pnpm lint"),
+                                        _ket_qua_cong_cu()])
+        self.assertIn("npm run build", ly_do)
+        self.assertNotIn("npm run lint", ly_do)
+        self.assertNotIn("npm run test", ly_do)
+        self.assertEqual(self.chay_o(goc, sua + [
+            _goi_cong_cu("Bash", command="pnpm lint && pnpm run build"), _ket_qua_cong_cu()]), "")
+
     def test_cho_qua_khi_transcript_hong_hoac_khong_co(self):
         transcript = Path(self.tmp.name) / "phien.jsonl"
         transcript.write_text("khong phai json\n{", encoding="utf-8")

@@ -13,7 +13,7 @@ Có bài học mới: thêm một dòng vào đây. Nếu là loại "máy" thì
 |---|---|---|---|
 | Không ghi đè video gốc; nén bản Zalo ra file mới | máy | `guard_bash` chặn ffmpeg xuất ra chính file đầu vào | `hook:guard_bash.py` `test:TestGuardBash` |
 | Commit chỉ file mình sửa | máy | `guard_bash` hỏi trước `git add -A`, `git add .`, `git commit -a` | `hook:guard_bash.py` `test:TestGuardBash` |
-| Không báo đã xong khi chưa kiểm đúng | máy | `nhac_test` nhắc khi sửa code mà chưa chạy test sau lần sửa cuối | `hook:nhac_test.py` `test:TestNhacTest` |
+| Không báo đã xong khi chưa kiểm đúng | máy | `nhac_test` (cổng "xong") chặn khi sửa code mà chưa chạy thành công đủ lệnh `## Lệnh kiểm tra` của dự án (hoặc script trong `package.json`) sau lần sửa cuối | `hook:nhac_test.py` `test:TestNhacTest` |
 | Đầu phiên phải đọc tiến độ | máy | `session_start` nạp `PROGRESS.md` vào ngữ cảnh | `hook:session_start.py` `test:TestSessionStart` |
 | Xử lý âm thanh không bóp dải động | máy | `guard_video` chặn `loudnorm` một lượt thiếu `linear=true` | `hook:guard_video.py` `test:TestGuardVideo` |
 | Chạy nhẹ, đừng làm nóng máy | máy | `guard_video` chặn x264/x265 thiếu `-preset faster` hoặc nhanh hơn; `tan_studio` mặc định `faster` | `hook:guard_video.py` `test:TestGuardVideo` `code:tan_studio/video.py` |
