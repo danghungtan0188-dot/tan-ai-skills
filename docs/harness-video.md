@@ -49,7 +49,7 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | Quan sát: nhật ký hook / skill / agent / lệnh | `observability/nhat_ky.py` (mọi hook ghi khi chặn/hỏi/nhắc), `.claude/hooks/ghi_su_dung.py`, xem bằng `observability/xem.py`; dữ liệu ở ~/.tan-harness/nhat-ky/ (ngoài repo) | có (01/11) — render đã có hồ sơ riêng (run.json, phiếu điểm) |
 | Bộ nhớ, bài học | `skills/bien-tap-video-thong-minh-song-ngu-tan/references/nhat-ky-ban-tin.md`, memory của Claude | có |
 | Tự cải tiến có duyệt | `.claude/commands/rut-kinh-nghiem.md`, `tan_studio/rules.py` (đề xuất → duyệt → áp dụng, có phiên bản, hoàn tác) | có |
-| Một cửa vào bán tự động | lệnh /dung-video (sẽ tạo): nhận tư liệu + gợi ý, định tuyến sang 3 cửa vào đang có | **thiếu** |
+| Một cửa vào bán tự động | `.claude/commands/dung-video.md`: gợi ý → bản yêu cầu `VideoBrief` (kiểm bằng `scripts/kiem_brief.py`) → định tuyến sang 4 cửa vào đang có → 2 cổng duyệt → `/rut-kinh-nghiem` | có (01/11) |
 
 ## 3. Lộ trình (mỗi bước người dùng duyệt rồi mới làm bước sau)
 
@@ -58,7 +58,7 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | 1 ✓ | Tài liệu này + test đường dẫn | `tests/test_harness_video_doc.py` |
 | 2 ✓ | Bài thi chuẩn `evaluations/bai_thi.py`: đầu vào tự sinh → phiếu điểm → so mốc chuẩn | `--hong khung` / `thieu-media` / `chuan-hoa` đều báo HỒI QUY; `tests/test_bai_thi.py` |
 | 3 ✓ | Nhật ký `observability/`: hook chặn/hỏi/nhắc + skill/agent/lệnh được dùng; không ghi nội dung lệnh | `tests/test_nhat_ky.py`; phiên Haiku thật để lại dòng nhật ký đúng |
-| 4 | Lệnh /dung-video: gợi ý → bản yêu cầu → định tuyến → 2 cổng duyệt → tự gọi /rut-kinh-nghiem | chạy bài thi qua lệnh này |
+| 4 ✓ | Lệnh `/dung-video`: gợi ý → `VideoBrief` → định tuyến → 2 cổng duyệt → `/rut-kinh-nghiem` | ca `dung-video-cong-1` trong `scripts/harness_eval.py` (Haiku thật dừng ở cổng 1, chưa render); `tests/test_kiem_brief.py` |
 | 5 | Gọn skill (`docs/kiem-ke-skill.md` đề xuất 2–6) + test chọn skill | test kích hoạt đạt |
 | 6 | Phong cách theo loại video (bản tin, tài liệu, mạng xã hội, sự kiện) | bài thi đổi loại → phiếu điểm đúng loại |
 | 7 | Thống nhất EditPlan và run.json thành một Editing Manifest | ngắt giữa chừng, chạy lại tiếp được |

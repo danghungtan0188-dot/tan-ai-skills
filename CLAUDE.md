@@ -82,7 +82,7 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ```text
 .claude/agents/     9 agent   — Claude Code chỉ đọc agent ở đây
-.claude/commands/  13 command — slash command
+.claude/commands/  14 command — slash command
 .claude/hooks/      9 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
 skills/             29 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
@@ -102,6 +102,7 @@ tests/              python -m unittest discover -s tests
 |---|---|---|
 | code, API, database, UI, bug, test | **APP** | `app-planner → app-builder → code-reviewer → app-tester → security-reviewer` |
 | video, dựng, phụ đề, hiệu ứng, bản tin | **VIDEO** | `video-analyzer → video-editor → video-reviewer` |
+| tư liệu + vài gợi ý, muốn bán tự động | **VIDEO** | `/dung-video` → tự chọn một trong các chuỗi dưới, dừng ở 2 cổng duyệt |
 | nhiều clip thô → một bản tin | **VIDEO** | `find_clips → survey_rushes → chọn cảnh → build_edit_plan → DUYỆT → assemble → qa --plan` |
 | script → giọng đọc → video có phụ đề, chạy một lệnh | **STUDIO** | `python -m tan_studio chay <du-an.json>` — xem `tan_studio/README.md` |
 | skill, agent, command, hook, tài liệu | **REPO** | tự làm + `python scripts/sync_skills.py --check` |
@@ -114,6 +115,7 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 `/video-news` `/edit-video` `/review-video` `/sync-skills`
 `/dung-tu-kho` (nhiều clip thô → một bản tin) `/rut-kinh-nghiem` (sau mỗi video)
 `/quet-kien-truc` (quét code dự án app → tài liệu kiến trúc có dẫn nguồn `file:dòng`)
+`/dung-video` (tư liệu + gợi ý → tự định tuyến, 2 cổng duyệt, tự kiểm/sửa, rút kinh nghiệm — cửa vào chung của nhánh VIDEO)
 
 ## Rule bắt buộc đọc
 

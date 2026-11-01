@@ -51,7 +51,7 @@ class TestSchemas(unittest.TestCase):
              "ReviewReport", "TestReport"])
         self.assertEqual(
             sorted(schemas["video.schema.json"]["$defs"]),
-            ["EditPlan", "RenderResult", "VideoAnalysis", "VideoInput",
+            ["EditPlan", "RenderResult", "VideoAnalysis", "VideoBrief", "VideoInput",
              "VideoQAReport"])
 
 

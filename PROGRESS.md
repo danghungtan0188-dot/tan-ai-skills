@@ -62,7 +62,10 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
     Bước 3 ✓ (đã commit, chưa push): `observability/` — mọi hook ghi khi chặn/hỏi/nhắc, hook mới `ghi_su_dung` (skill/agent/lệnh),
     xem `python observability/xem.py`; dữ liệu `~/.tan-harness/nhat-ky/` (ngoài repo, chỉ nhãn). Gắn cả
     `~/.claude/settings.json` (bản lưu `settings.json.bak-20261101-nhat-ky`). Phiên Haiku thật để lại 3 dòng đúng.
-    Kế tiếp bước 4: lệnh `/dung-video` (gợi ý → định tuyến → 2 cổng duyệt). Sau ~2 tuần nhật ký: đề xuất 2–7 `docs/kiem-ke-skill.md`.
+    Bước 4 ✓ (đã commit, chưa push): lệnh `/dung-video` — gợi ý → `edit/brief.json` (hợp đồng `VideoBrief`, kiểm bằng
+    `scripts/kiem_brief.py`) → định tuyến sang `dung-tu-kho` / `video-news` / `edit-video` / `tan_studio` → 2 cổng duyệt →
+    `/rut-kinh-nghiem`. Ca thật `harness_eval --ca dung-video-cong-1`: lần đầu Haiku tự đặt tên trường → thêm khuôn JSON
+    trong lệnh + script kiểm bắt buộc. Kế tiếp bước 5–7 `docs/harness-video.md`. Sau ~2 tuần nhật ký: đề xuất 2–7 `docs/kiem-ke-skill.md`.
     Khác: GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật).
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
