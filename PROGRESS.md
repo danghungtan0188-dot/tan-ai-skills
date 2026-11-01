@@ -66,6 +66,12 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
     `scripts/kiem_brief.py`) → định tuyến sang `dung-tu-kho` / `video-news` / `edit-video` / `tan_studio` → 2 cổng duyệt →
     `/rut-kinh-nghiem`. Ca thật `harness_eval --ca dung-video-cong-1`: lần đầu Haiku tự đặt tên trường → thêm khuôn JSON
     trong lệnh + script kiểm bắt buộc. Kế tiếp bước 5–7 `docs/harness-video.md`. Sau ~2 tuần nhật ký: đề xuất 2–7 `docs/kiem-ke-skill.md`.
+    **Cập nhật skill gốc** (01/11, nhánh `chore/cap-nhat-skill-goc`, đã commit, chưa push): fork `remotion`/`hyperframes`/`humanizer`
+    đã `gh repo sync` (REA: script `D:\GitHub\dong-bo-rea.ps1` chạy 8h sáng, đã mới nhất). Remotion 4.0.505 → 4.0.539 (+`remotion-studio`,
+    giữ sửa link `../remotion-x/`); `video-use` lên `43cfc56` (bản repo = gốc `92c2b34`, pyproject không đổi); HeyGen, humanizer
+    đã giống gốc. Ngoài repo: HyperFrames `npx skills@1.7.4 update -g` (4 skill) + thay `figma`/`slideshow`/`remotion-to-hyperframes`;
+    sao lưu `~/.claude/skills_cu_truoc_update_20261101/`. Còn chờ quyết: 9 skill HyperFrames gốc đã bỏ (21/10) vẫn nằm trên máy;
+    skill mới `reverse-any-video` chưa cài; test riêng của video-use NOT RUN (bị chặn).
     Khác: GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật).
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.

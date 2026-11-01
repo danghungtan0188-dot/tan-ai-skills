@@ -1,5 +1,7 @@
 # Kiểm kê 29 skill (01/11/2026)
 
+> Sau kiểm kê (01/11): Remotion cập nhật 4.0.505 → 4.0.539, thêm skill `remotion-studio` → repo có 30 skill.
+
 Chỉ đọc, chưa sửa gì. Mỗi đề xuất ở cuối cần người dùng duyệt từng mục.
 
 **Cách đo:** đọc frontmatter `skills/*/SKILL.md`; đếm commit bằng `git rev-list --count HEAD -- skills/<ten>`;
