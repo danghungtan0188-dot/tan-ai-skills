@@ -83,7 +83,7 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 ```text
 .claude/agents/     9 agent   — Claude Code chỉ đọc agent ở đây
 .claude/commands/  13 command — slash command
-.claude/hooks/      8 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
+.claude/hooks/      9 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
 skills/             29 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
@@ -92,6 +92,7 @@ tan_studio/         CLI script→giọng→phụ đề→MP4 (python -m tan_stud
 do-hoa/             Remotion: intro, số liệu, lower-third, chữ chạy — tan_studio gọi qua `do-hoa` / mục "do_hoa"
 remotion-studio/    Engine Remotion React nhận audio/SRT/media qua props JSON; chạy song song HyperFrames
 evaluations/        bài thi video chuẩn (bai_thi.py) + mốc chuẩn — kiến trúc: docs/harness-video.md
+observability/      nhật ký hook/skill/agent (dữ liệu ở ~/.tan-harness/nhat-ky/, ngoài repo) — xem: python observability/xem.py
 tests/              python -m unittest discover -s tests
 ```
 
@@ -130,6 +131,7 @@ Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 | `guard_video.py` | trước Bash/PowerShell chạy `ffmpeg` | chặn `loudnorm` một lượt thiếu `linear=true`, x264/x265 thiếu `-preset faster`, ffmpeg mới khi đang có ffmpeg khác chạy |
 | `guard_tra_phi.py` | trước Bash/PowerShell/Skill/MCP HeyGen | **hỏi người dùng** mỗi lần gọi dịch vụ trả phí HeyGen |
 | `guard_app.py` | trước Bash/PowerShell và Write/Edit | **hỏi người dùng** trước khi cài thư viện mới, chạy migration, `DROP TABLE`/`DROP COLUMN`/`TRUNCATE`; chặn secret trong biến công khai (`NEXT_PUBLIC_*SECRET*`, `VITE_*SERVICE_ROLE*`…) và Stripe `sk_live_` |
+| `ghi_su_dung.py` | trước Skill/Agent và khi gõ lệnh `/...` | ghi nhật ký skill/agent/lệnh được dùng, **không bao giờ chặn**; mọi hook khác cũng ghi mỗi lần chặn/hỏi/nhắc (chỉ nhãn lý do, không ghi nội dung lệnh) |
 | `check_render.py` | sau Bash có `ffmpeg` | tự probe file đầu ra, chặn nếu render hỏng |
 | `session_start.py` | đầu phiên, `/clear`, sau tóm tắt | nạp phần đầu `PROGRESS.md` (hoặc `docs/PROGRESS.md`) vào ngữ cảnh |
 | `nhac_test.py` | cuối lượt | cổng "xong": đã sửa file code thì phải chạy **thành công đủ** lệnh trong mục `## Lệnh kiểm tra` của `CLAUDE.md` dự án (không có thì script lint/typecheck/test/build trong `package.json`, không có nữa thì một lệnh test bất kỳ) → thiếu thì chặn một lần, nêu đúng lệnh còn thiếu |

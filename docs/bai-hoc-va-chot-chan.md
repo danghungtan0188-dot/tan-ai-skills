@@ -14,6 +14,7 @@ Có bài học mới: thêm một dòng vào đây. Nếu là loại "máy" thì
 | Không ghi đè video gốc; nén bản Zalo ra file mới | máy | `guard_bash` chặn ffmpeg xuất ra chính file đầu vào | `hook:guard_bash.py` `test:TestGuardBash` |
 | Commit chỉ file mình sửa | máy | `guard_bash` hỏi trước `git add -A`, `git add .`, `git commit -a` | `hook:guard_bash.py` `test:TestGuardBash` |
 | Không báo đã xong khi chưa kiểm đúng | máy | `nhac_test` (cổng "xong") chặn khi sửa code mà chưa chạy thành công đủ lệnh `## Lệnh kiểm tra` của dự án (hoặc script trong `package.json`) sau lần sửa cuối | `hook:nhac_test.py` `test:TestNhacTest` |
+| Biết chốt chặn / skill nào thật sự có tác dụng (không đoán) | máy | Mọi hook ghi nhật ký khi chặn/hỏi/nhắc; `ghi_su_dung` ghi skill/agent/lệnh; `observability/xem.py` tóm tắt | `hook:ghi_su_dung.py` `test:TestNhatKy` |
 | Skill chỉ một nguồn, không chép tay ra `~/.claude/skills` | máy | `sync_skills.py --check` báo bản chép riêng đã lệch repo; 15 skill dùng junction về `.claude/skills/` | `code:scripts/sync_skills.py` `test:TestBanChepRieng` |
 | Đầu phiên phải đọc tiến độ | máy | `session_start` nạp `PROGRESS.md` vào ngữ cảnh | `hook:session_start.py` `test:TestSessionStart` |
 | Xử lý âm thanh không bóp dải động | máy | `guard_video` chặn `loudnorm` một lượt thiếu `linear=true` | `hook:guard_video.py` `test:TestGuardVideo` |

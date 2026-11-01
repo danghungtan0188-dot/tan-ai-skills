@@ -46,7 +46,7 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | Chốt chặn | `.claude/hooks/` (8 hook), `docs/bai-hoc-va-chot-chan.md` | có |
 | Thử hệ thống với AI thật | `scripts/harness_eval.py` | có |
 | Bài thi chuẩn, hồi quy chất lượng video | `evaluations/bai_thi.py` (đầu vào tự sinh → `tan_studio` → phiếu điểm 10 tiêu chí), mốc `evaluations/moc-chuan.json` | có (01/11) — mới phủ đường "kịch bản → video" |
-| Quan sát: nhật ký hook / skill / render | observability/ (sẽ tạo) | **thiếu** |
+| Quan sát: nhật ký hook / skill / agent / lệnh | `observability/nhat_ky.py` (mọi hook ghi khi chặn/hỏi/nhắc), `.claude/hooks/ghi_su_dung.py`, xem bằng `observability/xem.py`; dữ liệu ở ~/.tan-harness/nhat-ky/ (ngoài repo) | có (01/11) — render đã có hồ sơ riêng (run.json, phiếu điểm) |
 | Bộ nhớ, bài học | `skills/bien-tap-video-thong-minh-song-ngu-tan/references/nhat-ky-ban-tin.md`, memory của Claude | có |
 | Tự cải tiến có duyệt | `.claude/commands/rut-kinh-nghiem.md`, `tan_studio/rules.py` (đề xuất → duyệt → áp dụng, có phiên bản, hoàn tác) | có |
 | Một cửa vào bán tự động | lệnh /dung-video (sẽ tạo): nhận tư liệu + gợi ý, định tuyến sang 3 cửa vào đang có | **thiếu** |
@@ -57,7 +57,7 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 |---|---|---|
 | 1 ✓ | Tài liệu này + test đường dẫn | `tests/test_harness_video_doc.py` |
 | 2 ✓ | Bài thi chuẩn `evaluations/bai_thi.py`: đầu vào tự sinh → phiếu điểm → so mốc chuẩn | `--hong khung` / `thieu-media` / `chuan-hoa` đều báo HỒI QUY; `tests/test_bai_thi.py` |
-| 3 | Nhật ký ở observability/ | có dòng nhật ký thật sau một phiên |
+| 3 ✓ | Nhật ký `observability/`: hook chặn/hỏi/nhắc + skill/agent/lệnh được dùng; không ghi nội dung lệnh | `tests/test_nhat_ky.py`; phiên Haiku thật để lại dòng nhật ký đúng |
 | 4 | Lệnh /dung-video: gợi ý → bản yêu cầu → định tuyến → 2 cổng duyệt → tự gọi /rut-kinh-nghiem | chạy bài thi qua lệnh này |
 | 5 | Gọn skill (`docs/kiem-ke-skill.md` đề xuất 2–6) + test chọn skill | test kích hoạt đạt |
 | 6 | Phong cách theo loại video (bản tin, tài liệu, mạng xã hội, sự kiện) | bài thi đổi loại → phiếu điểm đúng loại |
@@ -71,4 +71,5 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | Q2 | **Hai cổng duyệt là bắt buộc**, không có chế độ tự động 100% | Máy đo được kỹ thuật, không đo được "đúng ý"; `tan_studio` đã tách `status` (kỹ thuật) khỏi `noi_dung` (người đánh giá) |
 | Q3 | **AI chỉ đề xuất bài học**, người duyệt mới thành luật | Tránh lỗi tự nhân lên; giống `tan_studio/rules.py` |
 | Q4 | Cửa vào mới **gọi lại** 3 lệnh đang có, không viết lại | Giữ thứ đang chạy; mỗi lệnh đã có QA 3 vòng |
+| Q6 | Nhật ký **ngoài repo** và **chỉ ghi nhãn**, không ghi nội dung lệnh | Repo công khai; lệnh có thể chứa secret hoặc đường dẫn riêng tư (luật "không ghi dữ liệu nhạy cảm vào log") |
 | Q5 | Đầu vào bài thi **tự sinh bằng code** | Repo công khai: không bản quyền, không ảnh cá nhân, file nhỏ, máy không nóng |

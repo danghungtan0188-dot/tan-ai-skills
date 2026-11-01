@@ -152,6 +152,15 @@ def lenh_con_thieu(goc: Path, lenh_dat: list[str]) -> tuple[list[str], str]:
     return ["lenh test/lint/build cua du an"], ""
 
 
+try:
+    from pathlib import Path as _P
+    sys.path.insert(0, str(_P(__file__).resolve().parents[2]))
+    from observability.nhat_ky import ghi_hook
+except Exception:  # nhat ky la phu: loi o day khong duoc lam hong hook
+    def ghi_hook(*_a, **_k):
+        pass
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -173,6 +182,7 @@ def main() -> int:
     if not thieu:
         return 0
 
+    ghi_hook("nhac_test", "nhac", f"thieu {len(thieu)} lenh kiem" + (f" ({nguon})" if nguon else ""), payload)
     ds = ", ".join(Path(p).name for p in da_sua[:5])
     if len(da_sua) > 5:
         ds += f" (+{len(da_sua) - 5} file)"

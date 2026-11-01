@@ -136,6 +136,15 @@ def noi_dung_ghi(tool_input: dict) -> tuple[str, str]:
     return path, "\n".join(p for p in parts if isinstance(p, str))
 
 
+try:
+    from pathlib import Path as _P
+    sys.path.insert(0, str(_P(__file__).resolve().parents[2]))
+    from observability.nhat_ky import ghi_hook
+except Exception:  # nhat ky la phu: loi o day khong duoc lam hong hook
+    def ghi_hook(*_a, **_k):
+        pass
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -148,6 +157,7 @@ def main() -> int:
         command = tool_input.get("command")
         ly_do = ly_do_hoi(command) if isinstance(command, str) else None
         if ly_do:
+            ghi_hook("guard_app", "hoi", ly_do.split(" (")[0].split(".")[0], payload)
             print(json.dumps({
                 "hookSpecificOutput": {
                     "hookEventName": "PreToolUse",
@@ -159,6 +169,7 @@ def main() -> int:
 
     loi = loi_ghi(*noi_dung_ghi(tool_input))
     if loi:
+        ghi_hook("guard_app", "chan", "secret phia client", payload)
         print("CHAN BOI HOOK guard_app (rules/security.md):", file=sys.stderr)
         for item in loi:
             print(f"  - {item}", file=sys.stderr)

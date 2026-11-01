@@ -156,6 +156,15 @@ def ffmpeg_ghi_de_nguon(command: str) -> str | None:
     return None
 
 
+try:
+    from pathlib import Path as _P
+    sys.path.insert(0, str(_P(__file__).resolve().parents[2]))
+    from observability.nhat_ky import ghi_hook
+except Exception:  # nhat ky la phu: loi o day khong duoc lam hong hook
+    def ghi_hook(*_a, **_k):
+        pass
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -170,6 +179,7 @@ def main() -> int:
 
     for pattern, label in DENY:
         if any(pattern.search(lenh) for lenh in ung_vien):
+            ghi_hook("guard_bash", "chan", label, payload)
             print(
                 f"CHAN BOI HOOK guard_bash (rules/security.md): {label}.\n"
                 "Lenh nay pha du lieu hoac vo hieu hoa bao mat. "
@@ -180,6 +190,7 @@ def main() -> int:
 
     bi_de = next(filter(None, map(ffmpeg_ghi_de_nguon, ung_vien)), None)
     if bi_de:
+        ghi_hook("guard_bash", "chan", "ffmpeg ghi de file goc", payload)
         print(
             f"CHAN BOI HOOK guard_bash (rules/video.md): ffmpeg ghi de file goc {bi_de}.\n"
             "Khong ghi de video goc; xuat ra file moi ten khac.",
@@ -189,6 +200,7 @@ def main() -> int:
 
     for pattern, label in ASK:
         if any(pattern.search(lenh) for lenh in ung_vien):
+            ghi_hook("guard_bash", "hoi", label, payload)
             print(json.dumps({
                 "hookSpecificOutput": {
                     "hookEventName": "PreToolUse",

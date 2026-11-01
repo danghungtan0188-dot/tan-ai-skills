@@ -67,6 +67,15 @@ def ly_do_chan(doan: str) -> str | None:
     return None
 
 
+try:
+    from pathlib import Path as _P
+    sys.path.insert(0, str(_P(__file__).resolve().parents[2]))
+    from observability.nhat_ky import ghi_hook
+except Exception:  # nhat ky la phu: loi o day khong duoc lam hong hook
+    def ghi_hook(*_a, **_k):
+        pass
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -84,6 +93,7 @@ def main() -> int:
         ly_do = ("dang co ffmpeg khac chay; may hay sap khi chay hai viec nang cung luc. "
                  "Cho viec truoc xong (hoac kiem tra tien trinh ffmpeg treo) roi moi chay.")
     if ly_do:
+        ghi_hook("guard_video", "chan", ly_do.split(";")[0], payload)
         print(f"CHAN BOI HOOK guard_video (rules/video.md): {ly_do}", file=sys.stderr)
         return 2
     return 0

@@ -19,6 +19,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 AGENTS = REPO_ROOT / ".claude" / "agents"
 COMMANDS = REPO_ROOT / ".claude" / "commands"
 HOOKS = REPO_ROOT / ".claude" / "hooks"
+# Hook ghi nhat ky (observability/): test khong duoc ghi vao nhat ky that cua nguoi dung.
+os.environ.setdefault("TAN_NHAT_KY_DIR", str(Path(__import__("tempfile").mkdtemp(prefix="nhat-ky-test-"))))
 SETTINGS = REPO_ROOT / ".claude" / "settings.json"
 RULES = REPO_ROOT / "rules"
 

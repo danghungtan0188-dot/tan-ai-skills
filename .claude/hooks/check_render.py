@@ -48,6 +48,15 @@ def output_files(command: str) -> list[Path]:
     return outputs
 
 
+try:
+    from pathlib import Path as _P
+    sys.path.insert(0, str(_P(__file__).resolve().parents[2]))
+    from observability.nhat_ky import ghi_hook
+except Exception:  # nhat ky la phu: loi o day khong duoc lam hong hook
+    def ghi_hook(*_a, **_k):
+        pass
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -80,6 +89,7 @@ def main() -> int:
             summaries.append(line)
 
     if failures:
+        ghi_hook("check_render", "chan", f"{len(failures)} file render khong dat", payload)
         print("HOOK check_render — file render KHONG dat (rules/video.md):",
               file=sys.stderr)
         for item in failures:
