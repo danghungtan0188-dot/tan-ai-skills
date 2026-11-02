@@ -102,8 +102,12 @@ def main() -> int:
                                 str(mp4)], capture_output=True, text=True).stdout.strip() or 0)
     soi = a.ra / f"{a.ten}.soi.png"
     subprocess.run(lenh_soi(mp4, soi, 30, giay), check=True)
+    # Anh cat sat the o do phan giai goc de soi chu: anh thu nho khong lo loi sai font.
+    chu = a.ra / f"{a.ten}.chu.png"
+    subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-ss", f"{giay * 0.6:.2f}", "-i", str(mp4),
+                    "-frames:v", "1", "-vf", "crop=800:1000:140:170", str(chu)], check=True)
     dung = abs(dai - giay) < 0.1
-    print(f"render: {mp4} ({dai:.2f}s / mong {giay}s {'DUNG' if dung else 'LECH'}); anh 4 khung: {soi}")
+    print(f"render: {mp4} ({dai:.2f}s / mong {giay}s {'DUNG' if dung else 'LECH'}); anh 4 khung: {soi}; soi chu: {chu}")
     return 0 if dung else 1
 
 
