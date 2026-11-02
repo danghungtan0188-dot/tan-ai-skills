@@ -2,6 +2,37 @@
 
 Kho lưu trữ AI Skills phục vụ công việc, học tập và nghiên cứu, được tổ chức theo từng lĩnh vực để tái sử dụng trên nhiều nền tảng AI như Claude Code, Codex và các công cụ hỗ trợ Agent Skills khác.
 
+## Dựng video bán tự động: /dung-video
+
+Đưa tư liệu và vài gợi ý bằng lời, gõ `/dung-video` trong Claude Code. Repo tự làm các bước đo và kiểm; người dùng chỉ quyết ở 2 cổng duyệt:
+
+```text
+TƯ LIỆU + GỢI Ý
+     │
+Hiểu yêu cầu → Phân tích → Lập kế hoạch
+     │
+■ CỔNG DUYỆT 1: xem kế hoạch
+     │
+Dựng (tan_studio/ffmpeg, HyperFrames hoặc Remotion, tùy loại video)
+     │
+Tự kiểm → FAIL thì tự sửa, tối đa 3 vòng
+     │
+■ CỔNG DUYỆT 2: xem video, góp ý thì quay lại lập kế hoạch
+     │
+Giao video → Rút kinh nghiệm
+```
+
+**Tình trạng (11/2026):** chưa chạy trọn quy trình này trên một video thật; các bước sau cổng duyệt 1 mới được kiểm bằng test và bài thi tự sinh.
+
+| Muốn tìm hiểu | Xem ở |
+|---|---|
+| Kiến trúc harness, lộ trình | [docs/harness-video.md](docs/harness-video.md) |
+| 20 phong cách motion graphics | [skills/motion-graphics-tan/SKILL.md](skills/motion-graphics-tan/SKILL.md) |
+| Hiệu ứng theo câu nói, đặt sau người (9:16) | [skills/video-marketing/SKILL.md](skills/video-marketing/SKILL.md) |
+| Bài thi video chuẩn | `python evaluations/bai_thi.py` |
+| Nhật ký hook, skill, agent | `python observability/xem.py` |
+| Bài học đã thành chốt chặn | [docs/bai-hoc-va-chot-chan.md](docs/bai-hoc-va-chot-chan.md) |
+
 ## Skill hiện có
 
 | Skill | Trạng thái | Mô tả ngắn |
@@ -15,6 +46,8 @@ Kho lưu trữ AI Skills phục vụ công việc, học tập và nghiên cứu
 | [video-san-pham](skills/video-san-pham/SKILL.md) | Hoàn thiện | Dựng **từng video sản phẩm** khi được yêu cầu, từ 1 dòng Excel/CSV sản phẩm + ảnh: AI viết kịch bản đúng dữ liệu thật → `tan-giong-doc-ban-tin` tạo giọng đọc → ASR cấp từ đồng bộ phụ đề (vai trò Whisper) → dựng cảnh có chuyển động qua Remotion/HyperFrames → ghép và xuất đúng định dạng TikTok/Facebook qua `video-use` (vai trò FFmpeg). Có "nguyên tắc cứng" (không bịa dữ liệu, phụ đề burn cuối cùng, kiểm rủi ro nội dung trước khi xuất) và bước tự kiểm tra đầu ra bằng `ffprobe` (script `kiem_tra_dau_ra.py`), tối đa 3 lần tự sửa trước khi báo người dùng. Không tự động quét/xuất hàng loạt cả file Excel — chỉ xử lý sản phẩm được chỉ định trong từng yêu cầu. |
 | [chuyen-gia-edit-video-tan](skills/chuyen-gia-edit-video-tan/SKILL.md) | Hoàn thiện | Phân tích video mẫu và dựng video chuyên nghiệp bằng code với bộ chức năng tương đương CapCut: Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment. Dùng cho bản tin, sự kiện, MC, phóng sự, Facebook, Zalo, Reels, Shorts. Có `references/effect-catalog.md` liệt kê preset và cách tái tạo bằng ffmpeg. |
 | [bien-tap-video-thong-minh-song-ngu-tan](skills/bien-tap-video-thong-minh-song-ngu-tan/SKILL.md) | Hoàn thiện | Phân tích nội dung/hình ảnh/lời nói/nhịp để tự chọn chiến lược biên tập, kèm phụ đề song ngữ tiếng Anh dòng trên và tiếng Việt dòng dưới. Có mục "Bảy lớp dựng" mô tả đầy đủ Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment kèm ràng buộc an toàn từng lớp. Mặc định `cut_authorized=false` — không tự cắt khi chưa được phép. |
+| [motion-graphics-tan](skills/motion-graphics-tan/SKILL.md) | Có thẻ mẫu đã render, chưa ghép lên video thật | 20 phong cách motion graphics cho thẻ, title, số liệu: bảng màu, font hỗ trợ tiếng Việt, chữ ký chuyển động GSAP và thẻ mẫu HyperFrames. |
+| [video-marketing](skills/video-marketing/SKILL.md) | Có nền móng, chưa thử trên clip thật | Đặt hiệu ứng đúng lúc người nói một câu trong video 9:16, nằm sau người và không đè mặt. |
 | [phat-trien-app](skills/phat-trien-app/SKILL.md) | Hoàn thiện | Quy trình phát triển app/website: dò kiến trúc dự án trước khi sửa, quy ước frontend/backend/Supabase, và chuỗi validation thật (lint → typecheck → test → build → security). Là bộ quy ước dùng chung cho các agent app-planner, app-builder, code-reviewer, app-tester, security-reviewer. |
 | [xay-ai-agent](skills/xay-ai-agent/SKILL.md) | Hoàn thiện | Thiết kế và xây AI agent chạy thật: agent tự động theo lịch và agent gắn trong webapp/phần mềm. Dựa trên 6 thành phần + 6 quy tắc trong bài "Building effective agent automations" của Anthropic, bổ sung dry-run, bộ eval, khóa chống trùng, nhật ký lượt chạy, phân cấp quyền ghi. Phần code webapp thông thường dùng `phat-trien-app`. |
 | [heygen-avatar](skills/heygen-avatar/SKILL.md), [heygen-video](skills/heygen-video/SKILL.md), [heygen-translate](skills/heygen-translate/SKILL.md) | Hoàn thiện (gói skill nhập từ HeyGen) | Tạo avatar, tạo video có người dẫn (avatar), và dịch/lồng tiếng video qua HeyGen. |
@@ -22,7 +55,7 @@ Kho lưu trữ AI Skills phục vụ công việc, học tập và nghiên cứu
 | [video-use](skills/video-use/SKILL.md) | Hoàn thiện (gói skill nhập ngoài) | Chỉnh sửa video qua hội thoại: cắt, ghép, chèn phụ đề, chỉnh màu. |
 | [humanizer](skills/humanizer/SKILL.md) | Hoàn thiện (gói skill nhập từ blader/humanizer, MIT) | Viết lại câu chữ bớt "giọng AI" mà không đổi nội dung. Dùng soát kịch bản video tiếng Anh và kịch bản bản tin tiếng Việt trước khi đọc giọng. |
 
-`marketing`, `tan-giong-doc-ban-tin`, `dung-video-su-kien`, `bien-tap-video`, `video-thuyet-minh`, `video-san-pham`, `hieu-ung-video`, `chuyen-gia-edit-video-tan`, `bien-tap-video-thong-minh-song-ngu-tan`, `phat-trien-app` và `xay-ai-agent` là mười một skill được xây dựng riêng cho repo này (nguồn chuẩn nằm trong `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`). Các skill còn lại (heygen-*, remotion-*, video-use, humanizer) là gói skill nhập từ bên ngoài, giữ nguyên theo bản gốc — không tự ý sửa mã nguồn bên trong các thư mục đó.
+`marketing`, `tan-giong-doc-ban-tin`, `dung-video-su-kien`, `bien-tap-video`, `video-thuyet-minh`, `video-san-pham`, `hieu-ung-video`, `chuyen-gia-edit-video-tan`, `bien-tap-video-thong-minh-song-ngu-tan`, `motion-graphics-tan`, `video-marketing`, `phat-trien-app` và `xay-ai-agent` là mười ba skill được xây dựng riêng cho repo này (nguồn chuẩn nằm trong `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`). Các skill còn lại (heygen-*, remotion-*, video-use, humanizer) là gói skill nhập từ bên ngoài, giữ nguyên theo bản gốc — không tự ý sửa mã nguồn bên trong các thư mục đó.
 
 ## Kiến trúc hệ thống
 
@@ -35,19 +68,19 @@ COMMAND → AGENT → SKILL → RULES → IMPLEMENTATION → HOOK → TEST/REVIE
 | Thành phần | Vị trí | Số lượng |
 |---|---|---|
 | Agents | `.claude/agents/` | 9 |
-| Commands | `.claude/commands/` | 9 |
-| Hooks | `.claude/hooks/` + `.claude/settings.json` | 3 |
-| Skills | `skills/` (nguồn chuẩn) | 25 |
+| Commands | `.claude/commands/` | 14 |
+| Hooks | `.claude/hooks/` + `.claude/settings.json` | 9 |
+| Skills | `skills/` (nguồn chuẩn) | 32 |
 | Rules | `rules/` | 4 |
 | Data contracts | `data-contracts/` | 3 schema |
-| Tests | `tests/` | 66 test |
+| Tests | `tests/` | hơn 400 test |
 
 **Command gọi được:**
 
 ```text
-APP:   /build-feature   /fix   /review   /test   /security-check
-VIDEO: /video-news      /edit-video      /review-video
-REPO:  /sync-skills
+APP:   /build-feature   /fix   /review   /test   /security-check   /quet-kien-truc
+VIDEO: /dung-video      /dung-tu-kho     /video-news   /edit-video   /review-video   /rut-kinh-nghiem
+REPO:  /sync-skills     /khoi-tao-du-an
 ```
 
 Chi tiết đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md). Bản đồ ngắn cho phiên Claude Code: [CLAUDE.md](CLAUDE.md).
@@ -75,7 +108,7 @@ python -m tan_studio chay tan_studio/vi-du/du-an.json
 
 ## Gọi đúng skill video (bảng định tuyến)
 
-5 skill video trong repo này chia lớp rõ ràng: **skill điều phối** (người dùng gọi trực tiếp) → tự động gọi **skill module/thực thi** bên dưới. Dùng bảng sau để không gọi nhầm:
+Chưa biết chọn skill nào thì dùng `/dung-video`. Các skill video trong repo này chia lớp rõ ràng: **skill điều phối** (người dùng gọi trực tiếp) → tự động gọi **skill module/thực thi** bên dưới. Dùng bảng sau để không gọi nhầm:
 
 | Tình huống của bạn | Gọi skill này | KHÔNG gọi skill này |
 |---|---|---|
@@ -85,6 +118,8 @@ python -m tan_studio chay tan_studio/vi-du/du-an.json
 | Có kịch bản/bản tin văn bản tự do, muốn đọc thành giọng rồi ghép vào video (có sẵn hoặc cần dựng) | `video-thuyet-minh` | `video-san-pham` (không phải sản phẩm thương mại theo khung HOOK→GIÁ→CTA) |
 | Chỉ cần file giọng đọc, không ghép vào video nào | `tan-giong-doc-ban-tin` | `video-thuyet-minh` (thừa bước, không cần) |
 | Cần 1 hiệu ứng cụ thể (chuyển cảnh, chữ động, filter, zoom/pan, sticker...) trên 1 clip, hoặc muốn tái tạo hiệu ứng thấy trong video tham khảo | `hieu-ung-video` | Không cần gọi tay nếu đang dùng `bien-tap-video`/`video-thuyet-minh`/`video-san-pham` — các skill đó tự gọi khi cần |
+| Cần thẻ, title, số liệu theo một phong cách (Swiss, kính mờ, neon...) | `motion-graphics-tan` | `hieu-ung-video` (công thức ffmpeg trên clip, không phải thẻ đồ họa) |
+| Video người nói 9:16, muốn hiệu ứng hiện đúng lúc nói một câu, đặt sau người | `video-marketing` | `bien-tap-video-thong-minh-song-ngu-tan` (bản tin, phong cách nghiêm túc) |
 | Cần avatar/người dẫn AI xuất hiện nói chuyện trong video | `heygen-avatar` rồi `heygen-video` | — |
 | Cần dịch/lồng tiếng 1 video đã có sang ngôn ngữ khác | `heygen-translate` | — |
 
