@@ -22,9 +22,10 @@ MUC_CONG_THUC = ("Trông thế nào", "Dùng khi", "Màu", "Font", "Chữ ký ch
 
 
 class TestThuVien(unittest.TestCase):
-    def test_du_10_phong_cach(self):
+    def test_du_15_phong_cach(self):
         self.assertEqual({p.name for p in MAU}, {"swiss", "kinetic-type", "pop-art", "glassmorphism", "editorial", "flat-2d",
-                                                  "bauhaus", "neo-brutalism", "minimal-sang", "synthwave"})
+                                                  "bauhaus", "neo-brutalism", "minimal-sang", "synthwave", "clay-3d", "pixel-8bit",
+                                                  "doodle", "paper-cut", "neon-glow"})
 
     def test_moi_mau_co_cong_thuc_du_muc_va_duoc_skill_nhac(self):
         skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
@@ -71,7 +72,7 @@ class TestTheMau(unittest.TestCase):
             with self.subTest(p.name):
                 html = (p / "index.html").read_text(encoding="utf-8")
                 for bien in re.findall(r"--font[a-z-]*:\s*([^;]+);", html):
-                    self.assertRegex(bien, r"^'(Montserrat|Inter|Playfair) VN'", bien)
+                    self.assertRegex(bien, r"^'(Montserrat|Inter|Playfair|Nunito|VT323|Patrick Hand|Tilt Neon) VN'", bien)
                 for ho in re.findall(r"--font[a-z-]*:\s*'([^']+)'", html):
                     self.assertIn(f"font-family: '{ho}'", html, "dung font ma thieu @font-face")
                 for tep in re.findall(r"url\('assets/fonts/([^']+)'\)", html):
@@ -90,7 +91,8 @@ class TestFontDuTiengViet(unittest.TestCase):
         from fontTools.ttLib import TTFont
         chu = set("aăâbcdđeêghiklmnoôơpqrstuưvxy" "àáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ")
         chu |= {c.upper() for c in chu}
-        for ho in ("montserrat-vn-normal", "montserrat-vn-italic", "inter-vn-normal", "playfair-vn-normal", "playfair-vn-italic"):
+        for ho in ("montserrat-vn-normal", "montserrat-vn-italic", "inter-vn-normal", "playfair-vn-normal", "playfair-vn-italic",
+                   "nunito-vn-normal", "vt323-vn-normal", "patrick-hand-vn-normal", "tilt-neon-vn-normal"):
             with self.subTest(ho):
                 cmap = set()
                 for tep in FONT.glob(f"{ho}-*.woff2"):

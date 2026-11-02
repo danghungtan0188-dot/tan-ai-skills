@@ -83,10 +83,10 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
     khớp < 60% thì dừng), `tach_nguoi.py` (cắt đúng đoạn + `npx hyperframes@0.8.226 remove-background` + YuNet → tren_dau),
     `ghep_lop.py` (nền → hiệu ứng → người; .webm phải giải mã libvpx-vp9 để giữ alpha). Test thật ghép lớp đạt.
     CHƯA chạy whisper/tách nền trên video người nói thật — cần người dùng chỉ một clip 9:16. Kế tiếp: GĐ B tra catalog, GĐ C mẫu Bar Chart Race + Checklist.
-    **Motion graphics** (đợt 1 PR #10 đã merge; đợt 2 02/11, nhánh `feat/motion-graphics-dot-2`, đã commit, chưa push): skill `motion-graphics-tan`,
-    10/20 phong cách (thêm Flat 2D, Bauhaus, Neo-brutalism, Minimal sang trọng, Synthwave). Sửa lỗi đợt 1: ư ơ ự sai font → font riêng
-    `assets/fonts/` (Montserrat VN, Inter VN, Playfair VN, OFL). `render_mau.py`: `--trong-suot` ra .webm alpha. Còn 10 phong cách trong SKILL.md.
-    Chưa ghép thẻ lên video người nói thật.
+    **Motion graphics** (đợt 1–2 PR #10, #11 đã merge; đợt 3 02/11, nhánh `feat/motion-graphics-dot-3`, đã commit, chưa push): skill `motion-graphics-tan`,
+    15/20 phong cách (đợt 3: Clay 3D, Pixel 8-bit, Doodle, Paper cut, Neon glow, đều CSS/SVG, không WebGL). Font tiếng Việt riêng ở `assets/fonts/`.
+    `render_mau.py`: check → render trên máy → ảnh 4 khung + ảnh cắt sát `.chu.png`; `--trong-suot` ra .webm alpha. Còn Space/Orbit, Globe 3D, Chrome,
+    Gradient UI, Isometric 3D. Chưa ghép thẻ lên video người nói thật.
     Khác: GĐ3 `/thiet-ke` (Playwright chụp màn nhỏ/lớn + axe, cần một dự án web thật).
 1. Soát ảnh VNeID trên repo công khai.
 2. Thêm `/khoi-tao-du-an` vào danh sách "Command gọi được" trong `CLAUDE.md`.
