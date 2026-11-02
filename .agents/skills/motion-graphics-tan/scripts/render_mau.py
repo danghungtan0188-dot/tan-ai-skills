@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -20,6 +21,7 @@ from pathlib import Path
 
 HYPERFRAMES = "hyperframes@0.8.226"
 MAU = Path(__file__).resolve().parents[1] / "assets" / "mau"
+FONT = MAU.parent / "fonts"  # font co bo chu tieng Viet, xem SKILL.md
 CAU_HINH = {"$schema": "https://hyperframes.heygen.com/schema/hyperframes.json",
             "registry": "https://raw.githubusercontent.com/heygen-com/hyperframes/main/registry",
             "paths": {"blocks": "compositions", "components": "compositions/components", "assets": "assets"}}
@@ -73,6 +75,7 @@ def main() -> int:
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tam:
         du_an = Path(tam).resolve()
         (du_an / "index.html").write_text(html, encoding="utf-8")
+        shutil.copytree(FONT, du_an / "assets" / "fonts", ignore=shutil.ignore_patterns("*.json"))
         (du_an / "hyperframes.json").write_text(json.dumps(CAU_HINH), encoding="utf-8")
         kiem = _npx("check", "--json", cwd=du_an)
         try:

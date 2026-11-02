@@ -4,7 +4,7 @@
 
 **Dùng khi:** giới thiệu app, công nghệ, số liệu dạng giao diện. **Tránh:** nền video sáng nhiều chi tiết (thẻ có nền tối riêng nên vẫn đọc được, nhưng trông nặng).
 
-**Màu:** nền `#12122b`, đốm `#7c3aed`, `#06b6d4`, `#ec4899`, kính `rgba(255,255,255,0.14)`, viền `rgba(255,255,255,0.4)`. **Font:** Inter 900 (số), 700 (tên), 400 (dòng phụ).
+**Màu:** nền `#12122b`, đốm `#7c3aed`, `#06b6d4`, `#ec4899`, kính `rgba(255,255,255,0.14)`, viền `rgba(255,255,255,0.4)`. **Font:** Inter VN 900 (số), 700 (tên), 400 (dòng phụ).
 
 **Chữ ký chuyển động:** mềm và chậm bằng `power3.out`, kính trượt lên, chữ hiện so le (`stagger`). Đốm màu trôi liên tục phía sau để thấy rõ độ mờ của kính. Thanh tiến độ chạy bằng `scaleX`.
 

@@ -4,7 +4,7 @@
 
 **Dùng khi:** đánh số mục, mở chương, trình bày thông tin rõ ràng. **Tránh:** nội dung vui nhộn, trẻ em.
 
-**Màu:** giấy `#f4f2ee`, mực `#111111`, nhấn `#e30613`. **Font:** Inter 900 (số, tiêu đề), 700 (dòng phụ, in hoa).
+**Màu:** giấy `#f4f2ee`, mực `#111111`, nhấn `#e30613`. **Font:** Inter VN 900 (số, tiêu đề), 700 (dòng phụ, in hoa).
 
 **Chữ ký chuyển động:** vào nhanh bằng `expo.out`, không nảy, không xoay. Đường kẻ vẽ trước (`expo.inOut`), chữ bám theo lưới. Hình tròn trôi rất chậm để cảnh không đứng hẳn.
 

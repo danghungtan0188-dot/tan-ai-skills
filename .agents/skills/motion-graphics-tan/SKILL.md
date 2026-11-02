@@ -1,6 +1,6 @@
 ---
 name: motion-graphics-tan
-description: Thư viện phong cách motion graphics cho thẻ, title, số liệu trong video — mỗi phong cách có bảng màu, font hỗ trợ tiếng Việt, chữ ký chuyển động GSAP và thẻ mẫu HyperFrames đã render thật. Hiện có Swiss, Kinetic Type, Pop Art, Glassmorphism, Editorial. Kích hoạt khi người dùng muốn thẻ/title/motion graphic theo một phong cách ("kiểu Swiss", "chữ động", "pop art", "kính mờ", "kiểu báo chí"), hỏi nên chọn phong cách nào, hoặc muốn video chuyển động đẹp hơn. Không dùng để cắt ghép hay thêm phụ đề (video-use, bien-tap-video-thong-minh-song-ngu-tan); hiệu ứng theo câu nói đặt sau người thì kết hợp với video-marketing.
+description: Thư viện phong cách motion graphics cho thẻ, title, số liệu trong video — mỗi phong cách có bảng màu, font hỗ trợ tiếng Việt, chữ ký chuyển động GSAP và thẻ mẫu HyperFrames đã render thật. Hiện có Swiss, Kinetic Type, Pop Art, Glassmorphism, Editorial, Flat 2D, Bauhaus, Neo-brutalism, Minimal sang trọng, Synthwave. Kích hoạt khi người dùng muốn thẻ/title/motion graphic theo một phong cách ("kiểu Swiss", "chữ động", "pop art", "kính mờ", "kiểu báo chí", "phẳng", "bauhaus", "brutalism", "sang trọng", "retro"), hỏi nên chọn phong cách nào, hoặc muốn video chuyển động đẹp hơn. Không dùng để cắt ghép hay thêm phụ đề (video-use, bien-tap-video-thong-minh-song-ngu-tan); hiệu ứng theo câu nói đặt sau người thì kết hợp với video-marketing.
 ---
 
 # Motion graphics theo phong cách
@@ -16,8 +16,13 @@ Một skill, nhiều công thức: mỗi phong cách là một file trong `refer
 | Câu khẩu hiệu, mở đầu video ngắn | Kinetic Type | [kinetic-type.md](references/phong-cach/kinetic-type.md) |
 | Khuyến mãi, tin vui, video bán hàng | Pop Art | [pop-art.md](references/phong-cach/pop-art.md) |
 | App, công nghệ, số liệu trên giao diện | Glassmorphism | [glassmorphism.md](references/phong-cach/glassmorphism.md) |
+| Giới thiệu dịch vụ, hướng dẫn thân thiện | Flat 2D | [flat-2d.md](references/phong-cach/flat-2d.md) |
+| Thương hiệu, thiết kế, giáo dục | Bauhaus | [bauhaus.md](references/phong-cach/bauhaus.md) |
+| Mạng xã hội cho người trẻ, kêu gọi bấm | Neo-brutalism | [neo-brutalism.md](references/phong-cach/neo-brutalism.md) |
+| Sản phẩm cao cấp, lễ kỷ niệm, thư mời | Minimal sang trọng | [minimal-sang.md](references/phong-cach/minimal-sang.md) |
+| Âm nhạc, sự kiện đêm, giải trí | Synthwave | [synthwave.md](references/phong-cach/synthwave.md) |
 
-Không rõ thì chọn theo độ nghiêm túc của chủ đề. **Pop Art và Kinetic Type không hợp tin buồn, phim tài liệu.**
+Không rõ thì chọn theo độ nghiêm túc của chủ đề. **Pop Art, Kinetic Type, Neo-brutalism, Synthwave không hợp tin buồn, phim tài liệu.**
 
 ## Quy trình
 
@@ -28,7 +33,9 @@ Không rõ thì chọn theo độ nghiêm túc của chủ đề. **Pop Art và 
 ## Luật khi viết thẻ
 
 - **Tên biến nội dung không được trùng tên biến CSS.** Biến `nhan` đè lên `--nhan` làm mất màu mà render vẫn chạy (lỗi thật ở thẻ Editorial).
-- Chỉ dùng font có bộ chữ tiếng Việt và kiểm bằng mắt: Inter, Montserrat, Playfair Display đã kiểm. Archivo Black không có tiếng Việt.
+- **Chỉ dùng font `Montserrat VN`, `Inter VN`, `Playfair VN`** trong `assets/fonts/` (chép khối `@font-face` từ `font-face.json`). Tên gốc `Montserrat`, `Inter`… bị thay bằng bộ font đi kèm chỉ có chữ Latin: **ư, ơ, ự hiện bằng font khác**. Font khác phải có bộ chữ `vietnamese` (Archivo Black không có).
+- **Soi chữ ở độ phân giải cao**, cắt sát thẻ. Ảnh 4 khung thu nhỏ không đủ để thấy sai font (đợt 1 từng lọt lỗi này).
+- Không tween `letterSpacing`, `left`, `top`, `width`; không dùng `background-clip: text`.
 - Thẻ đặt nửa trên khung (`top: 170px`, cao 1000px), là vị trí "trên đầu người nói".
 - Thẻ mẫu dài 3 giây để xem nhanh. Dùng thật thì chỉnh thời lượng theo câu nói, dòng chữ cuối giữ ít nhất 2 giây (cảnh báo `line_unread`).
 - Cảnh báo `first_frame_empty` và `nested_structure_needs_subcomposition` được chấp nhận ở thẻ phủ lên video.
@@ -37,6 +44,6 @@ Không rõ thì chọn theo độ nghiêm túc của chủ đề. **Pop Art và 
 
 ## Lộ trình 20 phong cách
 
-- **Đợt 1 (đã có, đã render):** Swiss, Kinetic Type, Pop Art, Glassmorphism, Editorial.
-- **Thấy trong reel, chưa làm:** Flat 2D, Clay 3D, Space/Orbit, Pixel 8-bit, Globe 3D, Chrome, Synthwave, Bauhaus, Gradient UI.
-- **Đề xuất thêm, chưa làm:** Neo-brutalism, Doodle vẽ tay, Paper cut/collage, Neon glow, Minimal sang trọng, Isometric 3D.
+- **Đã có, đã render (10):** Swiss, Kinetic Type, Pop Art, Glassmorphism, Editorial, Flat 2D, Bauhaus, Neo-brutalism, Minimal sang trọng, Synthwave.
+- **Thấy trong reel, chưa làm:** Clay 3D, Space/Orbit, Pixel 8-bit, Globe 3D, Chrome, Gradient UI.
+- **Đề xuất thêm, chưa làm:** Doodle vẽ tay, Paper cut/collage, Neon glow, Isometric 3D.
