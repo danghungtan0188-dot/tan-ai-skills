@@ -22,10 +22,11 @@ MUC_CONG_THUC = ("Trông thế nào", "Dùng khi", "Màu", "Font", "Chữ ký ch
 
 
 class TestThuVien(unittest.TestCase):
-    def test_du_15_phong_cach(self):
+    def test_du_20_phong_cach(self):
         self.assertEqual({p.name for p in MAU}, {"swiss", "kinetic-type", "pop-art", "glassmorphism", "editorial", "flat-2d",
                                                   "bauhaus", "neo-brutalism", "minimal-sang", "synthwave", "clay-3d", "pixel-8bit",
-                                                  "doodle", "paper-cut", "neon-glow"})
+                                                  "doodle", "paper-cut", "neon-glow", "space-orbit", "globe-3d", "chrome",
+                                                  "gradient-ui", "isometric"})
 
     def test_moi_mau_co_cong_thuc_du_muc_va_duoc_skill_nhac(self):
         skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")

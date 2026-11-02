@@ -40,7 +40,7 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | Skills | `skills/` (32 skill) — kiểm kê ở `docs/kiem-ke-skill.md` | có, còn chồng chéo |
 | Engines | `tan_studio/` (ffmpeg, TTS, phụ đề), `do-hoa/` (Remotion), `remotion-studio/`, HyperFrames (ngoài repo) | có |
 | Thư viện hiệu ứng, mẫu | `skills/hieu-ung-video/`, `do-hoa/src/mau/`; ngoài repo: HyperFrames + 8 skill GSAP (chuyển động), danh sách ở `scripts/skills-ngoai.json` | có |
-| Phong cách motion graphics | `skills/motion-graphics-tan/` — 15/20 phong cách có thẻ mẫu đã render, font tiếng Việt đi kèm, xuất trong suốt được | có (đợt 1–3) |
+| Phong cách motion graphics | `skills/motion-graphics-tan/` — 20 phong cách có thẻ mẫu đã render, font tiếng Việt đi kèm, xuất trong suốt được; chưa ghép lên video thật | có |
 | Hiệu ứng marketing (người nói 9:16) | `skills/video-marketing/` — neo theo câu nói, tách người đúng đoạn, ghép nền → hiệu ứng → người; 10 hiệu ứng chưa có mẫu | nền móng có (01/11) |
 | Phong cách đã chốt | `skills/bien-tap-video-thong-minh-song-ngu-tan/references/phong-cach-att-news.md` | có (ATT NEWS); loại khác chưa |
 | Trạng thái, chạy lại | run.json ghi sau mỗi bước + `python -m tan_studio chay-lai` | có, chỉ trong `tan_studio` |
