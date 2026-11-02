@@ -4,7 +4,7 @@
 
 **Dùng khi:** bản tin, phóng sự, chủ đề nghiêm túc. **Tránh:** video khuyến mãi ồn ào. Khi làm bản tin ATT NEWS, bộ thông số đã chốt trong `phong-cach-att-news.md` được ưu tiên hơn thẻ này.
 
-**Màu:** giấy `#f6f1e7`, mực `#1a1714`, nhấn `#b3261e`. **Font:** Playfair Display 700 (tiêu đề), Inter 700 và 400 (nhãn, dòng phụ).
+**Màu:** giấy `#f6f1e7`, mực `#1a1714`, nhấn `#b3261e`. **Font:** Playfair VN 700 (tiêu đề), Inter VN 700 và 400 (nhãn, dòng phụ).
 
 **Chữ ký chuyển động:** trang trọng, không nảy. Đường kẻ chạy ngang trước (`power3.inOut`), từng dòng trôi lên từ sau mặt nạ (`yPercent`, `power3.out`, `stagger`).
 

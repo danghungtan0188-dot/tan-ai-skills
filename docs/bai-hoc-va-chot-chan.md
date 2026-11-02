@@ -15,6 +15,7 @@ Có bài học mới: thêm một dòng vào đây. Nếu là loại "máy" thì
 | Commit chỉ file mình sửa | máy | `guard_bash` hỏi trước `git add -A`, `git add .`, `git commit -a` | `hook:guard_bash.py` `test:TestGuardBash` |
 | Không báo đã xong khi chưa kiểm đúng | máy | `nhac_test` (cổng "xong") chặn khi sửa code mà chưa chạy thành công đủ lệnh `## Lệnh kiểm tra` của dự án (hoặc script trong `package.json`) sau lần sửa cuối | `hook:nhac_test.py` `test:TestNhacTest` |
 | Biết chốt chặn / skill nào thật sự có tác dụng (không đoán) | máy | Mọi hook ghi nhật ký khi chặn/hỏi/nhắc; `ghi_su_dung` ghi skill/agent/lệnh; `observability/xem.py` tóm tắt | `hook:ghi_su_dung.py` `test:TestNhatKy` |
+| HyperFrames: tên font gốc bị thay bằng bộ chỉ có chữ Latin, ư ơ ự hiện sai font | máy | Font riêng có bộ chữ Việt trong skill; test ép chỉ dùng font đó và kiểm file font đủ chữ cái | `code:skills/motion-graphics-tan/assets/fonts/font-face.json` `test:TestFontDuTiengViet` |
 | HyperFrames: tên biến nội dung trùng biến CSS làm mất màu mà render vẫn chạy | máy | Test ép biến không trùng CSS; `render_mau.py` đọc mọi mục của `check` | `code:skills/motion-graphics-tan/scripts/render_mau.py` `test:TestTheMau` |
 | Skill chỉ một nguồn, không chép tay ra `~/.claude/skills` | máy | `sync_skills.py --check` báo bản chép riêng đã lệch repo; 15 skill dùng junction về `.claude/skills/` | `code:scripts/sync_skills.py` `test:TestBanChepRieng` |
 | Đầu phiên phải đọc tiến độ | máy | `session_start` nạp `PROGRESS.md` vào ngữ cảnh | `hook:session_start.py` `test:TestSessionStart` |

@@ -4,7 +4,7 @@
 
 **Dùng khi:** khuyến mãi, tin vui, video bán hàng. **Tránh:** tin buồn, phóng sự, phim tài liệu.
 
-**Màu:** vàng `#ffd60a`, cam `#ffb800`, đỏ `#e5202a`, xanh `#1457d9`, đen `#111111`. **Font:** Montserrat 900 nghiêng, viền bằng `-webkit-text-stroke` kèm `paint-order: stroke fill`.
+**Màu:** vàng `#ffd60a`, cam `#ffb800`, đỏ `#e5202a`, xanh `#1457d9`, đen `#111111`. **Font:** Montserrat VN 900 nghiêng, viền bằng `-webkit-text-stroke` kèm `paint-order: stroke fill`.
 
 **Chữ ký chuyển động:** bật vào quá đà bằng `back.out`, ngôi sao trước, chữ sau. Tia nắng xoay chậm (`ease: none`), ngôi sao đập nhẹ theo nhịp (`yoyo`, `repeat` có số lần cố định, không dùng `repeat: -1`).
 

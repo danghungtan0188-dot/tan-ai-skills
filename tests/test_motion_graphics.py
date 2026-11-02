@@ -3,6 +3,7 @@
 Khong render -- render that bang `python scripts/render_mau.py <ten>`.
 """
 
+import importlib.util
 import json
 import re
 import sys
@@ -16,12 +17,14 @@ sys.path.insert(0, str(SKILL / "scripts"))
 import render_mau  # noqa: E402
 
 MAU = sorted(p for p in (SKILL / "assets" / "mau").iterdir() if p.is_dir())
+FONT = SKILL / "assets" / "fonts"
 MUC_CONG_THUC = ("Trông thế nào", "Dùng khi", "Màu", "Font", "Chữ ký chuyển động", "Thẻ mẫu", "Biến", "Câu lệnh mẫu", "Kiểm")
 
 
 class TestThuVien(unittest.TestCase):
-    def test_du_5_phong_cach_dot_1(self):
-        self.assertEqual({p.name for p in MAU}, {"swiss", "kinetic-type", "pop-art", "glassmorphism", "editorial"})
+    def test_du_10_phong_cach(self):
+        self.assertEqual({p.name for p in MAU}, {"swiss", "kinetic-type", "pop-art", "glassmorphism", "editorial", "flat-2d",
+                                                  "bauhaus", "neo-brutalism", "minimal-sang", "synthwave"})
 
     def test_moi_mau_co_cong_thuc_du_muc_va_duoc_skill_nhac(self):
         skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
@@ -62,11 +65,37 @@ class TestTheMau(unittest.TestCase):
                 self.assertIn("--nen: transparent", html)
                 self.assertNotIn("#8a8f96", html)
 
-    def test_font_co_tieng_viet(self):
-        """Archivo Black khong co bo chu tieng Viet: dau hien bang font khac, nhin lech."""
+    def test_chi_dung_font_co_tieng_viet_cua_skill(self):
+        """Loi that: ten 'Montserrat' bi thay bang bo font di kem chi co chu Latin -> u, o hien bang font co chan."""
         for p in MAU:
             with self.subTest(p.name):
-                self.assertNotIn("Archivo Black", (p / "index.html").read_text(encoding="utf-8"))
+                html = (p / "index.html").read_text(encoding="utf-8")
+                for bien in re.findall(r"--font[a-z-]*:\s*([^;]+);", html):
+                    self.assertRegex(bien, r"^'(Montserrat|Inter|Playfair) VN'", bien)
+                for ho in re.findall(r"--font[a-z-]*:\s*'([^']+)'", html):
+                    self.assertIn(f"font-family: '{ho}'", html, "dung font ma thieu @font-face")
+                for tep in re.findall(r"url\('assets/fonts/([^']+)'\)", html):
+                    self.assertTrue((FONT / tep).is_file(), tep)
+                self.assertNotIn("background-clip", html)
+
+    def test_khong_tween_thuoc_tinh_lam_giat(self):
+        for p in MAU:
+            with self.subTest(p.name):
+                self.assertNotRegex((p / "index.html").read_text(encoding="utf-8"), r"letterSpacing\s*:")
+
+
+@unittest.skipUnless(importlib.util.find_spec("fontTools") and importlib.util.find_spec("brotli"), "can fonttools + brotli")
+class TestFontDuTiengViet(unittest.TestCase):
+    def test_moi_ho_font_phu_du_chu_cai_tieng_viet(self):
+        from fontTools.ttLib import TTFont
+        chu = set("aăâbcdđeêghiklmnoôơpqrstuưvxy" "àáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ")
+        chu |= {c.upper() for c in chu}
+        for ho in ("montserrat-vn-normal", "montserrat-vn-italic", "inter-vn-normal", "playfair-vn-normal", "playfair-vn-italic"):
+            with self.subTest(ho):
+                cmap = set()
+                for tep in FONT.glob(f"{ho}-*.woff2"):
+                    cmap |= set(TTFont(tep).getBestCmap())
+                self.assertEqual({c for c in chu if ord(c) not in cmap}, set())
 
 
 class TestAnhBonKhung(unittest.TestCase):
