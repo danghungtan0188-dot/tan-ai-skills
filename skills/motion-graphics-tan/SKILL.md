@@ -1,6 +1,6 @@
 ---
 name: motion-graphics-tan
-description: Thư viện phong cách motion graphics cho thẻ, title, số liệu trong video — mỗi phong cách có bảng màu, font hỗ trợ tiếng Việt, chữ ký chuyển động GSAP và thẻ mẫu HyperFrames đã render thật. Hiện có Swiss, Kinetic Type, Pop Art, Glassmorphism, Editorial, Flat 2D, Bauhaus, Neo-brutalism, Minimal sang trọng, Synthwave, Clay 3D, Pixel 8-bit, Doodle, Paper cut, Neon. Kích hoạt khi người dùng muốn thẻ/title/motion graphic theo một phong cách ("kiểu Swiss", "chữ động", "pop art", "kính mờ", "kiểu báo chí", "phẳng", "bauhaus", "brutalism", "sang trọng", "retro", "đất nặn", "pixel", "vẽ tay", "giấy cắt", "neon"), hỏi nên chọn phong cách nào, hoặc muốn video chuyển động đẹp hơn. Không dùng để cắt ghép hay thêm phụ đề (video-use, bien-tap-video-thong-minh-song-ngu-tan); hiệu ứng theo câu nói đặt sau người thì kết hợp với video-marketing.
+description: Thư viện phong cách motion graphics cho thẻ, title, số liệu trong video — mỗi phong cách có bảng màu, font hỗ trợ tiếng Việt, chữ ký chuyển động GSAP và thẻ mẫu HyperFrames đã render thật. Hiện có Swiss, Kinetic Type, Pop Art, Glassmorphism, Editorial, Flat 2D, Bauhaus, Neo-brutalism, Minimal sang trọng, Synthwave, Clay 3D, Pixel 8-bit, Doodle, Paper cut, Neon, Space/Orbit, Globe 3D, Chrome, Gradient UI, Isometric. Kích hoạt khi người dùng muốn thẻ/title/motion graphic theo một phong cách ("kiểu Swiss", "chữ động", "pop art", "kính mờ", "kiểu báo chí", "phẳng", "bauhaus", "brutalism", "sang trọng", "retro", "đất nặn", "pixel", "vẽ tay", "giấy cắt", "neon", "vũ trụ", "địa cầu", "kim loại", "gradient", "isometric"), hỏi nên chọn phong cách nào, hoặc muốn video chuyển động đẹp hơn. Không dùng để cắt ghép hay thêm phụ đề (video-use, bien-tap-video-thong-minh-song-ngu-tan); hiệu ứng theo câu nói đặt sau người thì kết hợp với video-marketing.
 ---
 
 # Motion graphics theo phong cách
@@ -26,6 +26,11 @@ Một skill, nhiều công thức: mỗi phong cách là một file trong `refer
 | Hướng dẫn các bước, checklist, vlog | Doodle vẽ tay | [doodle.md](references/phong-cach/doodle.md) |
 | Kể chuyện, quê hương, thiên nhiên | Paper cut | [paper-cut.md](references/phong-cach/paper-cut.md) |
 | Quán, sự kiện tối, thông báo giờ mở cửa | Neon glow | [neon-glow.md](references/phong-cach/neon-glow.md) |
+| Tầm nhìn, khởi đầu mới, ra mắt | Space/Orbit | [space-orbit.md](references/phong-cach/space-orbit.md) |
+| Thị trường, mạng lưới, số quốc gia | Globe 3D | [globe-3d.md](references/phong-cach/globe-3d.md) |
+| Sản phẩm công nghệ, xe, bản cao cấp | Chrome | [chrome.md](references/phong-cach/chrome.md) |
+| Báo cáo số liệu, tăng trưởng, phần mềm | Gradient UI | [gradient-ui.md](references/phong-cach/gradient-ui.md) |
+| Giải thích cấu trúc, các lớp, quy trình | Isometric 3D | [isometric.md](references/phong-cach/isometric.md) |
 
 Không rõ thì chọn theo độ nghiêm túc của chủ đề. **Pop Art, Kinetic Type, Neo-brutalism, Synthwave không hợp tin buồn, phim tài liệu.**
 
@@ -48,8 +53,8 @@ Không rõ thì chọn theo độ nghiêm túc của chủ đề. **Pop Art, Kin
 - **Chỉ render trên máy.** Không dùng `hyperframes cloud render` (dịch vụ trả phí) khi người dùng chưa đồng ý.
 - Học phong cách và kỹ thuật, không chép thiết kế, hình, chữ của người khác.
 
-## Lộ trình 20 phong cách
+## Đủ 20 phong cách
 
-- **Đã có, đã render (15):** Swiss, Kinetic Type, Pop Art, Glassmorphism, Editorial, Flat 2D, Bauhaus, Neo-brutalism, Minimal sang trọng, Synthwave, Clay 3D, Pixel 8-bit, Doodle, Paper cut, Neon glow.
-- **Thấy trong reel, chưa làm:** Space/Orbit, Globe 3D, Chrome, Gradient UI.
-- **Đề xuất thêm, chưa làm:** Isometric 3D.
+Tất cả có thẻ mẫu đã render và dựng bằng CSS/SVG, không WebGL (máy hay sập khi chạy nặng). Thêm phong cách mới: thẻ trong `assets/mau/`, công thức trong `references/phong-cach/`, một dòng ở bảng trên.
+
+**Chưa kiểm:** chưa có thẻ nào được ghép lên video người nói thật.
