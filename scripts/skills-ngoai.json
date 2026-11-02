@@ -32,7 +32,8 @@
     "skill": ["remotion-best-practices", "remotion-captions", "remotion-create", "remotion-docs",
               "remotion-interactivity", "remotion-maps", "remotion-markup", "remotion-multimedia",
               "remotion-render", "remotion-saas", "remotion-studio", "remotion-upgrade",
-              "heygen-avatar", "heygen-translate", "heygen-video", "tan-giong-doc-ban-tin"]
+              "heygen-avatar", "heygen-translate", "heygen-video", "tan-giong-doc-ban-tin",
+              "video-marketing", "motion-graphics-tan"]
   },
   "ban_cai_rieng": {
     "_ghi_chu": "Ban cai rieng co moi truong Python ben trong: KHONG tao junction (sync --force se xoa .venv). Cai tay theo install.md cua skill.",

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait"
+  data-composition-variables='[{"id":"tieu-muc","type":"string","label":"Nhãn","default":"TIN NỔI BẬT"},{"id":"dong1","type":"string","label":"Dòng 1","default":"Một câu chuyện"},{"id":"dong2","type":"string","label":"Dòng 2","default":"đáng kể về"},{"id":"dong3","type":"string","label":"Dòng 3","default":"quê hương"},{"id":"phu","type":"string","label":"Dòng phụ","default":"Phóng sự · Thứ Hai, 2 tháng 11"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      /* Editorial: trang bao -- giay nga, chu co chan lon, nhan do, duong ke kep. Dang tin, nghiem tuc, hop ban tin va phong su. */
+      :root { --nen: #8a8f96; --giay: #f6f1e7; --muc: #1a1714; --nhan: #b3261e; --font-chan: "Playfair Display", serif;
+        --font-phu: "Inter", sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; }
+      #ed-the { position: absolute; left: 140px; top: 170px; width: 800px; height: 1000px; overflow: hidden;
+        background: var(--giay); border-radius: 4px; color: var(--muc); }
+      .ed-ke { position: absolute; left: 64px; right: 64px; background: var(--muc); transform-origin: left center; }
+      #ed-ke1 { top: 72px; height: 8px; } #ed-ke2 { top: 90px; height: 2px; } #ed-ke3 { top: 836px; height: 2px; }
+      #ed-nhan { position: absolute; left: 64px; top: 130px; padding: 10px 22px; background: var(--nhan); color: #fff;
+        font-family: var(--font-phu); font-size: 30px; font-weight: 700; letter-spacing: 0.1em; }
+      .ed-mat-na { position: absolute; left: 64px; right: 40px; height: 142px; overflow: hidden; }
+      #ed-m1 { top: 250px; } #ed-m2 { top: 396px; } #ed-m3 { top: 542px; }
+      .ed-dong { font-family: var(--font-chan); font-size: 104px; line-height: 1.3; font-weight: 700; letter-spacing: -0.015em; }
+      #ed-d3 { font-style: italic; color: var(--nhan); }
+      #ed-phu { position: absolute; left: 64px; top: 866px; font-family: var(--font-phu); font-size: 30px; font-weight: 400; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3" data-width="1080" data-height="1920">
+      <div id="ed-the" class="clip" data-start="0" data-duration="3" data-track-index="1">
+        <div id="ed-ke1" class="ed-ke"></div>
+        <div id="ed-ke2" class="ed-ke"></div>
+        <div id="ed-nhan" data-var-text="tieu-muc">TIN NỔI BẬT</div>
+        <div id="ed-m1" class="ed-mat-na" data-layout-allow-overflow><div id="ed-d1" class="ed-dong" data-var-text="dong1">Một câu chuyện</div></div>
+        <div id="ed-m2" class="ed-mat-na" data-layout-allow-overflow><div id="ed-d2" class="ed-dong" data-var-text="dong2">đáng kể về</div></div>
+        <div id="ed-m3" class="ed-mat-na" data-layout-allow-overflow><div id="ed-d3" class="ed-dong" data-var-text="dong3">quê hương</div></div>
+        <div id="ed-ke3" class="ed-ke"></div>
+        <div id="ed-phu" data-var-text="phu">Phóng sự · Thứ Hai, 2 tháng 11</div>
+      </div>
+    </div>
+    <script>
+      // Chu ky chuyen dong: trang trong (power3.inOut), ke chay ngang truoc, chu tung dong troi len tu sau mat na. Khong nay.
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#ed-the", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, 0)
+        .fromTo("#ed-ke1, #ed-ke2", { scaleX: 0 }, { scaleX: 1, duration: 0.6, stagger: 0.08, ease: "power3.inOut" }, 0.1)
+        .fromTo("#ed-nhan", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 0.45)
+        .fromTo(".ed-dong", { yPercent: 110 }, { yPercent: 0, duration: 0.7, stagger: 0.14, ease: "power3.out" }, 0.55)
+        .fromTo("#ed-ke3", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.inOut" }, 1.1)
+        .fromTo("#ed-phu", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "none" }, 1.4)
+        .to("#ed-the", { opacity: 0, duration: 0.3, ease: "none" }, 2.65);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

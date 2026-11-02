@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait"
+  data-composition-variables='[{"id":"ten","type":"string","label":"Tên thẻ","default":"Tiến độ dựng video"},{"id":"so","type":"string","label":"Con số","default":"84%"},{"id":"phu","type":"string","label":"Dòng phụ","default":"Còn 2 cảnh nữa là xong"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      /* Glassmorphism: tam kinh mo tren dom mau sang, vien sang mong, chu sach. Hop giao dien app, so lieu, cong nghe. */
+      :root { --nen: #8a8f96; --dem: #12122b; --tim: #7c3aed; --xanh: #06b6d4; --hong: #ec4899; --trang: #ffffff;
+        --font: "Inter", sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #gl-the { position: absolute; left: 140px; top: 170px; width: 800px; height: 1000px; overflow: hidden;
+        background: var(--dem); border-radius: 36px; }
+      .gl-dom { position: absolute; border-radius: 50%; filter: blur(50px); }
+      #gl-d1 { width: 460px; height: 460px; left: -60px; top: 120px; background: var(--tim); }
+      #gl-d2 { width: 400px; height: 400px; right: -40px; top: 420px; background: var(--xanh); }
+      #gl-d3 { width: 340px; height: 340px; left: 170px; bottom: 40px; background: var(--hong); }
+      #gl-kinh { position: absolute; left: 70px; top: 230px; width: 660px; height: 540px; padding: 56px;
+        background: rgba(255, 255, 255, 0.14); border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 40px;
+        backdrop-filter: blur(28px); color: var(--trang); }
+      #gl-ten { font-size: 40px; font-weight: 700; letter-spacing: -0.01em; }
+      #gl-so { margin-top: 44px; font-size: 180px; font-weight: 900; line-height: 1; letter-spacing: -0.05em; }
+      #gl-ray { margin-top: 44px; height: 18px; border-radius: 9px; background: rgba(255, 255, 255, 0.22); overflow: hidden; }
+      #gl-day { width: 84%; height: 100%; border-radius: 9px; background: var(--trang); transform-origin: left center; }
+      #gl-phu { margin-top: 30px; font-size: 32px; font-weight: 400; opacity: 0.9; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3" data-width="1080" data-height="1920">
+      <div id="gl-the" class="clip" data-start="0" data-duration="3" data-track-index="1">
+        <div id="gl-d1" class="gl-dom"></div>
+        <div id="gl-d2" class="gl-dom"></div>
+        <div id="gl-d3" class="gl-dom"></div>
+        <div id="gl-kinh">
+          <div id="gl-ten" data-var-text="ten">Tiến độ dựng video</div>
+          <div id="gl-so" data-var-text="so">84%</div>
+          <div id="gl-ray"><div id="gl-day"></div></div>
+          <div id="gl-phu" data-var-text="phu">Còn 2 cảnh nữa là xong</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Chu ky chuyen dong: mem va cham (power3.out), kinh truot len, dom mau troi lien tuc phia sau de thay do mo cua kinh.
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#gl-the", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 0)
+        .fromTo("#gl-d1", { x: 0, y: 0 }, { x: 170, y: 90, duration: 3, ease: "sine.inOut" }, 0)
+        .fromTo("#gl-d2", { x: 0, y: 0 }, { x: -190, y: -70, duration: 3, ease: "sine.inOut" }, 0)
+        .fromTo("#gl-d3", { x: 0, y: 0 }, { x: 110, y: -130, duration: 3, ease: "sine.inOut" }, 0)
+        .fromTo("#gl-kinh", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.15)
+        .fromTo("#gl-ten, #gl-so, #gl-ray, #gl-phu", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, stagger: 0.09, ease: "power3.out" }, 0.35)
+        .fromTo("#gl-day", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power2.inOut" }, 0.7)
+        .to("#gl-the", { opacity: 0, y: -30, duration: 0.3, ease: "power2.in" }, 2.65);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

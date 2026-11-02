@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait"
+  data-composition-variables='[{"id":"chot","type":"string","label":"Chữ chốt","default":"NHANH HƠN"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      /* Kinetic Type: chu la hinh anh. Cac hang chu lap, dac xen rong ruot, troi nguoc chieu, roi mot chu chot dap vao. */
+      :root { --nen: #8a8f96; --den: #0a0a0a; --trang: #f5f5f0; --nhan: #ff3b30; --font: "Montserrat", sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #kt-the { position: absolute; left: 140px; top: 170px; width: 800px; height: 1000px; background: var(--den);
+        overflow: hidden; border-radius: 6px; }
+      .kt-hang { position: absolute; left: -400px; white-space: nowrap; font-size: 120px; font-weight: 900;
+        letter-spacing: -0.03em; line-height: 1; }
+      .kt-dac { color: var(--trang); }
+      .kt-rong { color: transparent; -webkit-text-stroke: 3px var(--trang); }
+      #kt-h1 { top: 60px; } #kt-h2 { top: 190px; } #kt-h3 { top: 320px; } #kt-h4 { top: 580px; }
+      #kt-h5 { top: 710px; } #kt-h6 { top: 840px; }
+      #kt-chot { position: absolute; left: 0; right: 0; top: 440px; text-align: center; font-size: 118px; font-weight: 900;
+        letter-spacing: -0.04em; line-height: 1; color: var(--nhan); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3" data-width="1080" data-height="1920">
+      <div id="kt-the" class="clip" data-start="0" data-duration="3" data-track-index="1">
+        <div id="kt-h1" class="kt-hang kt-dac">DỰNG VIDEO DỰNG VIDEO DỰNG VIDEO</div>
+        <div id="kt-h2" class="kt-hang kt-rong">DỰNG VIDEO DỰNG VIDEO DỰNG VIDEO</div>
+        <div id="kt-h3" class="kt-hang kt-dac">DỰNG VIDEO DỰNG VIDEO DỰNG VIDEO</div>
+        <div id="kt-chot" data-var-text="chot">NHANH HƠN</div>
+        <div id="kt-h4" class="kt-hang kt-dac">DỰNG VIDEO DỰNG VIDEO DỰNG VIDEO</div>
+        <div id="kt-h5" class="kt-hang kt-rong">DỰNG VIDEO DỰNG VIDEO DỰNG VIDEO</div>
+        <div id="kt-h6" class="kt-hang kt-dac">DỰNG VIDEO DỰNG VIDEO DỰNG VIDEO</div>
+      </div>
+    </div>
+    <script>
+      // Chu ky chuyen dong: hang chu troi deu (ease none) nguoc chieu nhau; chu chot dap vao (scale tu to ve vua, expo.out).
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#kt-the", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, 0)
+        .fromTo("#kt-h1, #kt-h3, #kt-h5", { x: -260 }, { x: 60, duration: 3, ease: "none" }, 0)
+        .fromTo("#kt-h2, #kt-h4, #kt-h6", { x: 60 }, { x: -260, duration: 3, ease: "none" }, 0)
+        .fromTo(".kt-hang", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.05, ease: "none" }, 0.05)
+        .fromTo("#kt-chot", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "expo.out" }, 0.75)
+        .to(".kt-hang", { opacity: 0.28, duration: 0.2, ease: "none" }, 0.75)
+        .to("#kt-the", { opacity: 0, duration: 0.2, ease: "none" }, 2.75);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
