@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait"
+  data-composition-variables='[{"id":"so","type":"string","label":"Số lớn","default":"01"},{"id":"tieu-de","type":"string","label":"Tiêu đề","default":"Dựng video chuyên nghiệp"},{"id":"phu","type":"string","label":"Dòng phụ","default":"Bản tin · Sự kiện · Quảng bá"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      /* Swiss Style: luoi chat, chu sans dam, mot mau nhan do, nhieu khoang trang, chuyen dong chinh xac khong nay. */
+      :root { --nen: #8a8f96; --giay: #f4f2ee; --muc: #111111; --nhan: #e30613; --font: "Inter", sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #sw-the { position: absolute; left: 140px; top: 170px; width: 800px; height: 1000px; background: var(--giay);
+        overflow: hidden; border-radius: 6px; }
+      .sw-ke { position: absolute; background: var(--muc); }
+      #sw-ke-ngang { left: 64px; right: 64px; top: 600px; height: 6px; transform-origin: left center; }
+      #sw-ke-doc { left: 64px; top: 64px; width: 6px; height: 872px; transform-origin: center top; }
+      #sw-tron { position: absolute; width: 340px; height: 340px; right: 56px; top: 70px; border-radius: 50%;
+        background: var(--nhan); }
+      #sw-so { position: absolute; left: 96px; top: 210px; font-size: 360px; line-height: 0.8; font-weight: 900;
+        letter-spacing: -0.06em; color: var(--muc); }
+      #sw-tieu-de { position: absolute; left: 96px; right: 64px; top: 640px; font-size: 76px; line-height: 1.02;
+        font-weight: 900; letter-spacing: -0.03em; color: var(--muc); }
+      #sw-phu { position: absolute; left: 96px; top: 880px; font-size: 30px; font-weight: 700; letter-spacing: 0.04em;
+        text-transform: uppercase; color: var(--nhan); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3" data-width="1080" data-height="1920">
+      <div id="sw-the" class="clip" data-start="0" data-duration="3" data-track-index="1">
+        <div id="sw-ke-ngang" class="sw-ke"></div>
+        <div id="sw-ke-doc" class="sw-ke"></div>
+        <div id="sw-tron"></div>
+        <div id="sw-so" data-var-text="so">01</div>
+        <div id="sw-tieu-de" data-var-text="tieu-de">Dựng video chuyên nghiệp</div>
+        <div id="sw-phu" data-var-text="phu">Bản tin · Sự kiện · Quảng bá</div>
+      </div>
+    </div>
+    <script>
+      // Chu ky chuyen dong Swiss: vao nhanh (expo.out), khong nay, khong xoay; ke ve truoc, chu theo luoi.
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#sw-the", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "expo.out" }, 0)
+        .fromTo("#sw-ke-doc", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "expo.inOut" }, 0.15)
+        .fromTo("#sw-ke-ngang", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.inOut" }, 0.3)
+        .fromTo("#sw-tron", { scale: 0 }, { scale: 1, duration: 0.55, ease: "expo.out" }, 0.35)
+        .fromTo("#sw-so", { yPercent: 40, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 0.45)
+        .fromTo("#sw-tieu-de", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "expo.out" }, 0.65)
+        .fromTo("#sw-phu", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, 0.8)
+        .to("#sw-tron", { x: -18, duration: 1.6, ease: "none" }, 1.0)
+        .to("#sw-the", { y: -60, opacity: 0, duration: 0.3, ease: "expo.in" }, 2.62);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

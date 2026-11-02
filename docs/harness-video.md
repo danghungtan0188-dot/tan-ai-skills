@@ -37,9 +37,10 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | Điều phối (orchestrator) | `.claude/agents/orchestrator.md` → `.claude/agents/video-analyzer.md` → `.claude/agents/video-editor.md` → `.claude/agents/video-reviewer.md` | có |
 | Chọn skill (routing) | bảng "Chọn skill thực thi" trong `.claude/agents/video-editor.md`; bảng trong `.claude/commands/edit-video.md` | có, **hai bảng** — xem `docs/kiem-ke-skill.md` đề xuất 4 |
 | Workflow theo loại | `.claude/commands/dung-tu-kho.md` (kho clip → bản tin), `.claude/commands/video-news.md` (bản tin), `.claude/commands/edit-video.md` (tự do), `tan_studio/workflow.py` (kịch bản → video) | có, **ba cửa vào** |
-| Skills | `skills/` (31 skill) — kiểm kê ở `docs/kiem-ke-skill.md` | có, còn chồng chéo |
+| Skills | `skills/` (32 skill) — kiểm kê ở `docs/kiem-ke-skill.md` | có, còn chồng chéo |
 | Engines | `tan_studio/` (ffmpeg, TTS, phụ đề), `do-hoa/` (Remotion), `remotion-studio/`, HyperFrames (ngoài repo) | có |
 | Thư viện hiệu ứng, mẫu | `skills/hieu-ung-video/`, `do-hoa/src/mau/`; ngoài repo: HyperFrames + 8 skill GSAP (chuyển động), danh sách ở `scripts/skills-ngoai.json` | có |
+| Phong cách motion graphics | `skills/motion-graphics-tan/` — 5/20 phong cách có thẻ mẫu đã render, xuất trong suốt được | có (đợt 1) |
 | Hiệu ứng marketing (người nói 9:16) | `skills/video-marketing/` — neo theo câu nói, tách người đúng đoạn, ghép nền → hiệu ứng → người; 10 hiệu ứng chưa có mẫu | nền móng có (01/11) |
 | Phong cách đã chốt | `skills/bien-tap-video-thong-minh-song-ngu-tan/references/phong-cach-att-news.md` | có (ATT NEWS); loại khác chưa |
 | Trạng thái, chạy lại | run.json ghi sau mỗi bước + `python -m tan_studio chay-lai` | có, chỉ trong `tan_studio` |
