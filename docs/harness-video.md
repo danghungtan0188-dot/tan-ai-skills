@@ -39,12 +39,12 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | Workflow theo loại | `.claude/commands/dung-tu-kho.md` (kho clip → bản tin), `.claude/commands/video-news.md` (bản tin), `.claude/commands/edit-video.md` (tự do), `tan_studio/workflow.py` (kịch bản → video) | có, **ba cửa vào** |
 | Skills | `skills/` (32 skill) — kiểm kê ở `docs/kiem-ke-skill.md` | có, còn chồng chéo |
 | Engines | `tan_studio/` (ffmpeg, TTS, phụ đề), `do-hoa/` (Remotion), `remotion-studio/`, HyperFrames (ngoài repo) | có |
-| Thư viện hiệu ứng, mẫu | `skills/hieu-ung-video/`, `do-hoa/src/mau/`; ngoài repo: HyperFrames + 8 skill GSAP (chuyển động), danh sách ở `scripts/skills-ngoai.json` | có |
+| Thư viện hiệu ứng, mẫu | `skills/hieu-ung-video/`, `do-hoa/src/mau/`; ngoài repo: HyperFrames + 8 skill GSAP (chuyển động), danh sách ở `scripts/skills-ngoai.json`; thư viện tham khảo editonny ở ổ D, xem `skills/motion-graphics-tan/references/canh-theo-muc-dich.md` | có |
 | Phong cách motion graphics | `skills/motion-graphics-tan/` — 20 phong cách có thẻ mẫu đã render, font tiếng Việt đi kèm, xuất trong suốt được; chưa ghép lên video thật | có |
 | Hiệu ứng marketing (người nói 9:16) | `skills/video-marketing/` — neo theo câu nói, tách người đúng đoạn, ghép nền → hiệu ứng → người; 10 hiệu ứng chưa có mẫu | nền móng có (01/11) |
 | Phong cách đã chốt | `skills/bien-tap-video-thong-minh-song-ngu-tan/references/phong-cach-att-news.md` | có (ATT NEWS); loại khác chưa |
 | Trạng thái, chạy lại | run.json ghi sau mỗi bước + `python -m tan_studio chay-lai` | có, chỉ trong `tan_studio` |
-| Kiểm định kỹ thuật | `scripts/video_qa.py`, `.claude/hooks/check_render.py`, `tan_studio/nghiem_thu.py` | có |
+| Kiểm định kỹ thuật | `scripts/video_qa.py`, `.claude/hooks/check_render.py`, `tan_studio/nghiem_thu.py`, `scripts/kiem_diem_cat.py` (điểm cắt theo sóng âm), `scripts/kiem_phu_de_ocr.py` (đọc lại phụ đề, cần Tesseract tiếng Việt; chưa chạy thật) | có |
 | Chốt chặn | `.claude/hooks/` (8 hook), `docs/bai-hoc-va-chot-chan.md` | có |
 | Thử hệ thống với AI thật | `scripts/harness_eval.py` | có |
 | Bài thi chuẩn, hồi quy chất lượng video | `evaluations/bai_thi.py` (đầu vào tự sinh → `tan_studio` → phiếu điểm 10 tiêu chí), mốc `evaluations/moc-chuan.json` | có (01/11) — mới phủ đường "kịch bản → video" |

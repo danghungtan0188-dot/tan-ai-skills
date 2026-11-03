@@ -34,6 +34,8 @@ Một skill, nhiều công thức: mỗi phong cách là một file trong `refer
 
 Không rõ thì chọn theo độ nghiêm túc của chủ đề. **Pop Art, Kinetic Type, Neo-brutalism, Synthwave không hợp tin buồn, phim tài liệu.**
 
+Chọn thẻ theo ý của từng câu nói: [canh-theo-muc-dich.md](references/canh-theo-muc-dich.md).
+
 ## Quy trình
 
 1. Đọc công thức của phong cách, chép thẻ mẫu sang dự án, đổi nội dung qua biến (`data-var-text`).
