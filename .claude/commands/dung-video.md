@@ -68,6 +68,10 @@ chuyển động máy, đổi khung hình. Câu chung như "làm cho hay / sinh 
 Có thẻ đồ hoạ → chọn theo câu nói bằng
 [canh-theo-muc-dich.md](skills/motion-graphics-tan/references/canh-theo-muc-dich.md), chỉ đọc đúng một file phong cách đã chọn.
 
+Video người nói → lấy nhịp từ
+[nhip-dung-nguoi-noi.md](skills/video-marketing/references/nhip-dung-nguoi-noi.md), các mục trong đó cũng mặc định tắt.
+Video tạo bằng AI → viết prompt theo skill `viet-prompt-video-ai`; bước tạo video là dịch vụ trả phí, phải hỏi trước.
+
 ## ■ CỔNG DUYỆT 1 — dừng ở đây
 
 Đưa người dùng **Thẻ cài đặt** đọc trong vài giây, không để trong khối code. Mỗi mục ghi nguồn:
@@ -109,6 +113,14 @@ Chỉ dời điểm cắt theo gợi ý của script, không tự cắt thêm l�
 python "C:/Users/DANG HUNG TAN/Documents/GitHub/tan-ai-skills/scripts/kiem_diem_cat.py" <nguồn> <kế hoạch.json> [--ra <video đã cắt>]
 ```
 
+Cắt xong → nghe lại bản đã cắt và **đọc cả file lời** (script chỉ nêu cụm nghi lặp, cách nói lặp có chủ ý thì giữ).
+Có đồ hoạ hoặc hình chèn → kiểm chỗ lộ chớp hình:
+
+```bash
+python "C:/Users/DANG HUNG TAN/Documents/GitHub/tan-ai-skills/scripts/nghe_lai_sau_cat.py" <video đã cắt> --ra edit/nghe_lai.txt
+python "C:/Users/DANG HUNG TAN/Documents/GitHub/tan-ai-skills/scripts/kiem_chop_hinh.py" edit/moc.json
+```
+
 Làm tiếp các bước còn lại của cửa vào (ghép → màu → đồ hoạ → âm thanh → phụ đề → render) rồi:
 
 ```bash
@@ -146,6 +158,8 @@ BẢN YÊU CẦU:  edit/brief.json — <loại>, <cửa vào>, <độ dài>s, <t
 CỔNG 1:       đồng ý <lúc> | sửa <n> lần
 MẪU:          PASS | FAIL | NOT RUN
 ĐIỂM CẮT:     PASS | FAIL | NOT RUN
+NGHE LẠI:     PASS | FAIL | NOT RUN
+CHỚP HÌNH:    PASS | FAIL | NOT RUN
 VIDEO QA:     PASS | FAIL (vòng <n>/3)
 OCR PHỤ ĐỀ:   PASS | FAIL | NOT RUN
 KIỂM HÌNH:    PASS | FAIL | NOT RUN
