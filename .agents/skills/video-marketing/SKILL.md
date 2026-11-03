@@ -46,6 +46,10 @@ Câu nói là **neo thời gian** (không ghi giây tay). Mỗi mốc phụ ("s�
 Trước khi tự viết: tra kho HyperFrames bằng tiếng Anh — `npx hyperframes catalog --query "<mô tả chuyển động>"`
 (skill `hyperframes-registry`). Chuyển động dùng `gsap-timeline` / `gsap-plugins`.
 
+## Nhịp dựng
+
+Punch-in, hình chèn, mức âm thanh và cách cắt lời lặp: [nhip-dung-nguoi-noi.md](references/nhip-dung-nguoi-noi.md).
+
 ## Không được
 
 - Không lấy hiệu ứng từ gói trả phí của người khác; chỉ dùng khối nguồn mở (HyperFrames, GSAP) hoặc tự viết.

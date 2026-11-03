@@ -47,6 +47,7 @@ Giao video → Rút kinh nghiệm
 | [chuyen-gia-edit-video-tan](skills/chuyen-gia-edit-video-tan/SKILL.md) | Hoàn thiện | Phân tích video mẫu và dựng video chuyên nghiệp bằng code với bộ chức năng tương đương CapCut: Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment. Dùng cho bản tin, sự kiện, MC, phóng sự, Facebook, Zalo, Reels, Shorts. Có `references/effect-catalog.md` liệt kê preset và cách tái tạo bằng ffmpeg. |
 | [bien-tap-video-thong-minh-song-ngu-tan](skills/bien-tap-video-thong-minh-song-ngu-tan/SKILL.md) | Hoàn thiện | Phân tích nội dung/hình ảnh/lời nói/nhịp để tự chọn chiến lược biên tập, kèm phụ đề song ngữ tiếng Anh dòng trên và tiếng Việt dòng dưới. Có mục "Bảy lớp dựng" mô tả đầy đủ Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment kèm ràng buộc an toàn từng lớp. Mặc định `cut_authorized=false` — không tự cắt khi chưa được phép. |
 | [motion-graphics-tan](skills/motion-graphics-tan/SKILL.md) | Có thẻ mẫu đã render, chưa ghép lên video thật | 20 phong cách motion graphics cho thẻ, title, số liệu: bảng màu, font hỗ trợ tiếng Việt, chữ ký chuyển động GSAP và thẻ mẫu HyperFrames. |
+| [viet-prompt-video-ai](skills/viet-prompt-video-ai/SKILL.md) | Chỉ viết prompt, chưa thử tạo video | Viết prompt video AI (Seedance, Dreamina), giữ nhân vật nhất quán, mẫu bảng 6 góc mặt và trang phục. Không tự chạy dịch vụ trả phí. |
 | [video-marketing](skills/video-marketing/SKILL.md) | Có nền móng, chưa thử trên clip thật | Đặt hiệu ứng đúng lúc người nói một câu trong video 9:16, nằm sau người và không đè mặt. |
 | [phat-trien-app](skills/phat-trien-app/SKILL.md) | Hoàn thiện | Quy trình phát triển app/website: dò kiến trúc dự án trước khi sửa, quy ước frontend/backend/Supabase, và chuỗi validation thật (lint → typecheck → test → build → security). Là bộ quy ước dùng chung cho các agent app-planner, app-builder, code-reviewer, app-tester, security-reviewer. |
 | [xay-ai-agent](skills/xay-ai-agent/SKILL.md) | Hoàn thiện | Thiết kế và xây AI agent chạy thật: agent tự động theo lịch và agent gắn trong webapp/phần mềm. Dựa trên 6 thành phần + 6 quy tắc trong bài "Building effective agent automations" của Anthropic, bổ sung dry-run, bộ eval, khóa chống trùng, nhật ký lượt chạy, phân cấp quyền ghi. Phần code webapp thông thường dùng `phat-trien-app`. |
@@ -55,7 +56,7 @@ Giao video → Rút kinh nghiệm
 | [video-use](skills/video-use/SKILL.md) | Hoàn thiện (gói skill nhập ngoài) | Chỉnh sửa video qua hội thoại: cắt, ghép, chèn phụ đề, chỉnh màu. |
 | [humanizer](skills/humanizer/SKILL.md) | Hoàn thiện (gói skill nhập từ blader/humanizer, MIT) | Viết lại câu chữ bớt "giọng AI" mà không đổi nội dung. Dùng soát kịch bản video tiếng Anh và kịch bản bản tin tiếng Việt trước khi đọc giọng. |
 
-`marketing`, `tan-giong-doc-ban-tin`, `dung-video-su-kien`, `bien-tap-video`, `video-thuyet-minh`, `video-san-pham`, `hieu-ung-video`, `chuyen-gia-edit-video-tan`, `bien-tap-video-thong-minh-song-ngu-tan`, `motion-graphics-tan`, `video-marketing`, `phat-trien-app` và `xay-ai-agent` là mười ba skill được xây dựng riêng cho repo này (nguồn chuẩn nằm trong `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`). Các skill còn lại (heygen-*, remotion-*, video-use, humanizer) là gói skill nhập từ bên ngoài, giữ nguyên theo bản gốc — không tự ý sửa mã nguồn bên trong các thư mục đó.
+`marketing`, `tan-giong-doc-ban-tin`, `dung-video-su-kien`, `bien-tap-video`, `video-thuyet-minh`, `video-san-pham`, `hieu-ung-video`, `chuyen-gia-edit-video-tan`, `bien-tap-video-thong-minh-song-ngu-tan`, `motion-graphics-tan`, `video-marketing`, `viet-prompt-video-ai`, `phat-trien-app` và `xay-ai-agent` là mười bốn skill được xây dựng riêng cho repo này (nguồn chuẩn nằm trong `skills/`, đồng bộ sang `.claude/skills/` và `.agents/skills/`). Các skill còn lại (heygen-*, remotion-*, video-use, humanizer) là gói skill nhập từ bên ngoài, giữ nguyên theo bản gốc — không tự ý sửa mã nguồn bên trong các thư mục đó.
 
 ## Kiến trúc hệ thống
 
@@ -70,7 +71,7 @@ COMMAND → AGENT → SKILL → RULES → IMPLEMENTATION → HOOK → TEST/REVIE
 | Agents | `.claude/agents/` | 9 |
 | Commands | `.claude/commands/` | 14 |
 | Hooks | `.claude/hooks/` + `.claude/settings.json` | 9 |
-| Skills | `skills/` (nguồn chuẩn) | 32 |
+| Skills | `skills/` (nguồn chuẩn) | 33 |
 | Rules | `rules/` | 4 |
 | Data contracts | `data-contracts/` | 3 schema |
 | Tests | `tests/` | hơn 400 test |
