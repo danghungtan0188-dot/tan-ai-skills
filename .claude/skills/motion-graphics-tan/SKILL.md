@@ -36,6 +36,17 @@ Không rõ thì chọn theo độ nghiêm túc của chủ đề. **Pop Art, Kin
 
 Chọn thẻ theo ý của từng câu nói: [canh-theo-muc-dich.md](references/canh-theo-muc-dich.md).
 
+## Kỹ thuật dựng video marketing (12 thẻ)
+
+Ngoài phong cách, có 12 thẻ kỹ thuật học từ 86 video marketing, nằm trong `assets/ky-thuat/`:
+
+- phụ đề tô từ khóa, tiêu đề mở đầu, số mục to;
+- khung điện thoại, ô "?" lật dần, chia đôi màn hình;
+- thẻ kiến thức "Giai đoạn", mốc giờ, khoanh đỏ vẽ tay;
+- chữ mờ phía sau, con trỏ chuột giả, số đếm chạy.
+
+Kèm theo là nhịp chuẩn đo được (mỗi cảnh 1,5–2,5 s, chuyển mềm dưới 0,4 s). Xem [ky-thuat.md](references/ky-thuat.md). Render giống thẻ phong cách: `python scripts/render_mau.py <ten-ky-thuat>`.
+
 ## Quy trình
 
 1. Đọc công thức của phong cách, chép thẻ mẫu sang dự án, đổi nội dung qua biến (`data-var-text`).
