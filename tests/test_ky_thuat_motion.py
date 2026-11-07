@@ -1,6 +1,6 @@
-"""skills/motion-graphics-tan/assets/ky-thuat: 12 the ky thuat hoc tu 86 video marketing.
+"""skills/motion-graphics-tan/assets/ky-thuat: 12 the hoc tu 86 video marketing + 3 the hoc tu prompt Opus 5.5.
 
-Cung hop dong voi the phong cach (tests/test_motion_graphics.py), nhung thoi luong 3-6 s theo tung ky thuat.
+Cung hop dong voi the phong cach (tests/test_motion_graphics.py), nhung thoi luong 3-8 s theo tung ky thuat (giai-thich-5-canh dai 8 s vi co 5 canh).
 Khong render -- render that bang `python scripts/render_mau.py <ten>`.
 """
 
@@ -19,11 +19,12 @@ import render_mau  # noqa: E402
 KY_THUAT = sorted(p for p in (SKILL / "assets" / "ky-thuat").iterdir() if p.is_dir())
 FONT = SKILL / "assets" / "fonts"
 TEN = {"phu-de-to-tu", "tieu-de-mo-dau", "so-muc-to", "khung-dien-thoai", "o-hoi-lat", "chia-doi",
-       "the-kien-thuc", "moc-gio", "khoanh-tay", "chu-ma-nen", "con-tro-gia", "so-dem-chay"}
+       "the-kien-thuc", "moc-gio", "khoanh-tay", "chu-ma-nen", "con-tro-gia", "so-dem-chay",
+       "giai-thich-5-canh", "cong-thuc-tung-buoc", "hinh-bien-giao-dien"}
 
 
 class TestThuVienKyThuat(unittest.TestCase):
-    def test_du_12_ky_thuat_va_co_trong_huong_dan(self):
+    def test_du_15_ky_thuat_va_co_trong_huong_dan(self):
         self.assertEqual({p.name for p in KY_THUAT}, TEN)
         huong_dan = (SKILL / "references" / "ky-thuat.md").read_text(encoding="utf-8")
         for ten in TEN:
@@ -42,7 +43,7 @@ class TestTheKyThuat(unittest.TestCase):
         for p in KY_THUAT:
             with self.subTest(p.name):
                 html = (p / "index.html").read_text(encoding="utf-8")
-                self.assertTrue(3.0 <= render_mau.thoi_luong_goc(html) <= 6.0)
+                self.assertTrue(3.0 <= render_mau.thoi_luong_goc(html) <= 8.0)
                 self.assertIn('window.__timelines["main"] = tl', html)
                 self.assertNotRegex(html, r"repeat:\s*-1|Math\.random|Date\.now")
                 self.assertEqual(html.count('class="clip"'), 1)

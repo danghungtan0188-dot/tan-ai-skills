@@ -20,8 +20,13 @@ Nguồn: 81 reel Facebook (Quizzy Social Media, Hong Phuong) + 5 video YouTube N
 | Chữ mờ phía sau | `chu-ma-nen` | Mở chương: chữ viền rất to trôi chậm sau số chương + tiêu đề | 3,5 s | `chu-ma` `so-chuong` `tieu-de` |
 | Con trỏ chuột giả | `con-tro-gia` | Dựng lại giao diện bằng thẻ (không lộ thông tin riêng): gõ chữ → di chuột → bấm → kết quả | 4,5 s | `cau-hoi` `go` `nut` `ket-qua` |
 | Số đếm chạy | `so-dem-chay` | Một con số ấn tượng: chạy 0 → số cuối, dấu chấm hàng nghìn kiểu Việt | 3,5 s, đếm 1,4 s | `nhan` `so-cuoi` `don-vi` |
+| Giải thích 5 cảnh | `giai-thich-5-canh` | Giới thiệu dịch vụ trọn gói: vấn đề → mình làm gì → 3 bước → một bằng chứng → tên. Thanh cam chạy qua mọi cảnh, chữ cũ ra xong chữ mới mới vào | 8 s, cảnh ở 0 / 1,3 / 2,5 / 4,6 / 6 s | `van-de` `minh-lam` `buoc-1..3` `bang-chung` `ten` |
+| Công thức từng bước | `cong-thuc-tung-buoc` | Món ăn, mỹ phẩm, quy trình "bỏ vào → ra kết quả": ly đầy dần từng lớp, nhãn định lượng ngang lớp | 5 s, lớp vào ở 0,5 / 1,2 / 1,9 s | `tieu-de` `tp-1..3` `ket-qua` |
+| Hình biến giao diện | `hinh-bien-giao-dien` | Một khối duy nhất đổi hình nút → vòng tải → dấu tích → thẻ kết quả, không cắt cảnh. Hợp quảng cáo app, đặt lịch, đặt hàng | 5 s, đổi ở 1,1 / 2 / 2,8 s | `nut` `ket-qua` `chi-tiet` |
 
 **Không làm thành thẻ:** nhân vật hoạt hình 3D hóa thân chủ kênh (Ngô Bằng). Việc này cần dịch vụ tạo hình AI trả phí, nên phải hỏi người dùng trước. Dùng skill `viet-prompt-video-ai` để viết prompt, cuối prompt luôn có dòng "không chữ, không phụ đề".
+
+Ba thẻ cuối học từ 703 prompt video Opus 5.5, xem [hoc-tu-prompt-opus.md](hoc-tu-prompt-opus.md).
 
 ## Nhịp chuẩn đo từ 86 video (đặt thẻ cho khớp)
 
@@ -38,7 +43,9 @@ Nguồn: 81 reel Facebook (Quizzy Social Media, Hong Phuong) + 5 video YouTube N
 - **Nét SVG vẽ dần dùng đầu tròn thì còn để lại một chấm** trước khi vẽ. Ẩn nét (`opacity: 0`) tới đúng lúc bắt đầu vẽ (`khoanh-tay`).
 - **Số đếm:** con số nằm trong biến ẩn `so-cuoi`, chữ số hiển thị cập nhật bằng `onUpdate`. Số dài phải vừa thẻ, nếu không bộ kiểm báo `text_box_overflow`.
 - Chữ gõ dần và con trỏ nháy: dùng `clipPath: inset(...)` với `ease: "steps(n)"`. Nháy một số lần cố định, không `repeat: -1`.
-- Thẻ toàn khung (`khung-dien-thoai`, `chia-doi`, `the-kien-thuc`, `chu-ma-nen`) tự có nền. Xuất `--trong-suot` vẫn chạy được nhưng nền thẻ vẫn còn.
+- **Đổi hình một khối bằng `clipPath: inset(... round R)`**, không tween `width`/`height` (`hinh-bien-giao-dien`). Dấu tích vẽ bằng hai cạnh viền xoay 45°, không dùng ký tự ✓ (dễ rơi sang font khác).
+- **Chữ cam sáng trên nền kem chỉ đạt 2,3:1**, dùng cam đậm `#b94a10` (`giai-thich-5-canh`).
+- Thẻ toàn khung (`khung-dien-thoai`, `chia-doi`, `the-kien-thuc`, `chu-ma-nen`, `giai-thich-5-canh`) tự có nền. Xuất `--trong-suot` vẫn chạy được nhưng nền thẻ vẫn còn.
 
 ## Kiểm
 
