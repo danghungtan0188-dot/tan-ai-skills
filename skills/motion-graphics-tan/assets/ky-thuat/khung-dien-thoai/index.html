@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait"
+  data-composition-variables='[{"id":"trong-khung","type":"string","label":"Chữ tạm trong khung (thay bằng clip ví dụ)","default":"Clip ví dụ"},{"id":"nhan","type":"string","label":"Nhãn dưới khung","default":"mở bằng cảnh rót cà phê"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Patrick Hand VN'; font-style: normal; font-weight: 400; src: url('assets/fonts/patrick-hand-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Patrick Hand VN'; font-style: normal; font-weight: 400; src: url('assets/fonts/patrick-hand-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Patrick Hand VN'; font-style: normal; font-weight: 400; src: url('assets/fonts/patrick-hand-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* Khung dien thoai: dat clip vi du vao khung dien thoai tren nen hoa tiet nhat, nhan viet tay ben duoi.
+         Hoc cach lam (Quizzy), mau va hoa tiet la cua minh: nen kem cham cam, vien xanh ngoc. */
+      :root { --nen: #8a8f96; --kem: #fff4e3; --cham: #f3c79a; --vien-may: #1f9e8f; --muc: #2b2118; --sao: #ff7a59;
+        --font: 'Montserrat VN', sans-serif; --font-tay: 'Patrick Hand VN', cursive; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #kd-nen { position: absolute; inset: 0; background-color: var(--kem);
+        background-image: radial-gradient(var(--cham) 7px, transparent 8px); background-size: 64px 64px; }
+      #kd-may { position: absolute; left: 280px; top: 200px; width: 520px; height: 960px; border-radius: 72px;
+        border: 16px solid var(--vien-may); background: #20262b; overflow: hidden; }
+      #kd-tai { position: absolute; left: 50%; top: 14px; width: 150px; height: 34px; margin-left: -75px; border-radius: 17px; background: var(--vien-may); }
+      #kd-clip { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+        background: linear-gradient(160deg, #3b4a52, #1b2226); color: #e9eef0; font-size: 44px; font-weight: 700; }
+      .kd-sao { position: absolute; width: 90px; height: 90px; background: var(--sao);
+        clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%); }
+      #kd-sao-1 { left: 170px; top: 1040px; }
+      #kd-sao-2 { left: 830px; top: 260px; width: 60px; height: 60px; }
+      #kd-nhan { position: absolute; left: 80px; right: 80px; top: 1200px; text-align: center; font-family: var(--font-tay);
+        font-size: 72px; color: var(--muc); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.5" data-width="1080" data-height="1920">
+      <div id="kd-nen" class="clip" data-start="0" data-duration="3.5" data-track-index="1">
+        <div id="kd-may"><div id="kd-clip" data-var-text="trong-khung">Clip ví dụ</div><div id="kd-tai"></div></div>
+        <div id="kd-sao-1" class="kd-sao"></div>
+        <div id="kd-sao-2" class="kd-sao"></div>
+        <div id="kd-nhan" data-var-text="nhan">mở bằng cảnh rót cà phê</div>
+      </div>
+    </div>
+    <script>
+      // Dien thoai truot len (0,35 s), sao bat ra, nhan viet tay hien sau cung. Sao xoay cham suot the de canh khong dung im.
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#kd-may", { y: 260, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(1.4)" }, 0)
+        .fromTo(".kd-sao", { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(3)", stagger: 0.1 }, 0.3)
+        .to(".kd-sao", { rotation: 90, duration: 3, ease: "none" }, 0.5)
+        .fromTo("#kd-nhan", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 0.55);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
