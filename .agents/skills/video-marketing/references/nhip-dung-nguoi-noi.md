@@ -9,6 +9,7 @@ Mức khởi điểm, chỉnh theo góp ý sau mỗi video. Các mục đều **
 | **Đồ họa và cú cắt** | Không để lộ người nói dưới 0,5 giây giữa đồ họa và cú cắt; kiểm bằng `scripts/kiem_chop_hinh.py`. |
 | **Âm thanh** | Giữ nguyên mức giọng, chỉ tăng khi đỉnh còn dư. Nhạc thấp hơn giọng khoảng 15 dB, tiếng động khoảng 6,5 dB. Quay màn hình và đồ họa tắt tiếng. |
 | **Nhạc** | Mỗi phần một bản, đổi ngay trước ý lớn, chồng 0,6 giây mỗi bên. Giữ khoảng 2 giây sau chữ cuối để nhạc ngân hết. |
+| **Chuyển cảnh** | Chỉ ở chỗ đổi ý lớn. Muốn kiểu CapCut thì tra `skills/hieu-ung-video/references/chuyen-canh-gpufx.md` (154 chuyển cảnh, chưa chạy thử trên máy này). |
 | **Màu** | Lớp chỉnh màu nằm ngay trên hình người nói, để hình chèn và đồ họa giữ màu thật. |
 
 ## Khi được phép cắt

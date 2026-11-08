@@ -16,6 +16,7 @@ Không làm: không tự bịa hiệu ứng không có thật trong CapCut/công
 | Nhóm (kiểu CapCut) | File tham khảo | Ví dụ |
 |---|---|---|
 | **Transitions** — chuyển cảnh | [references/chuyen-canh.md](references/chuyen-canh.md) | fade, dissolve, wipe, slide, circle open/close, zoom |
+| **Transitions GPU kiểu CapCut** (chưa chạy trên máy này) | [references/chuyen-canh-gpufx.md](references/chuyen-canh-gpufx.md) | 154 chuyển cảnh cùng tên CapCut: Film Wipe, TV Glitch, Snap Zoom, Heart Wipe… cần bản FFmpeg có `gpufx` |
 | **Text** — chữ & hoạt hình chữ | [references/chu-va-hoat-hinh.md](references/chu-va-hoat-hinh.md) | tiêu đề tĩnh, banner/lower-third, typewriter, pop-in, fade-in chữ |
 | **Filters** — bộ lọc màu | [references/bo-loc-mau.md](references/bo-loc-mau.md) | vintage/retro, đen-trắng, ấm/lạnh, teal-orange điện ảnh, vignette |
 | **Effects/chuyển động camera** | [references/chuyen-dong-camera.md](references/chuyen-dong-camera.md) | Ken Burns (zoom/pan ảnh tĩnh), speed ramp, freeze frame, slow-motion |
