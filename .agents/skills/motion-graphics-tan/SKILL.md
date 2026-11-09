@@ -42,6 +42,8 @@ Chọn thẻ theo ý của từng câu nói: [canh-theo-muc-dich.md](references/
 2. Kiểm và xem: `python scripts/render_mau.py <ten>` (chạy từ thư mục skill) → `check` phải 0 lỗi, rồi xem ảnh 4 khung (chuyển động) và **ảnh `<ten>.chu.png`** cắt sát ở độ phân giải gốc (đúng font, đúng màu, không chồng chữ).
 3. Đặt lên video người nói: `python scripts/render_mau.py <ten> --trong-suot` ra `.webm` nền trong suốt, rồi `ghep_lop.py` của skill `video-marketing`.
 
+Muốn khối, thẻ, con số bật ra kiểu lò xo: [chuyen-dong-lo-xo.md](references/chuyen-dong-lo-xo.md).
+
 ## Luật khi viết thẻ
 
 - **Tên biến nội dung không được trùng tên biến CSS.** Biến `nhan` đè lên `--nhan` làm mất màu mà render vẫn chạy (lỗi thật ở thẻ Editorial).
