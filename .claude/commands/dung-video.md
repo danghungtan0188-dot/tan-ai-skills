@@ -113,6 +113,13 @@ Chỉ dời điểm cắt theo gợi ý của script, không tự cắt thêm l�
 python "C:/Users/DANG HUNG TAN/Documents/GitHub/tan-ai-skills/scripts/kiem_diem_cat.py" <nguồn> <kế hoạch.json> [--ra <video đã cắt>]
 ```
 
+Có nhạc (người dùng yêu cầu) → tìm nhịp và dời chuyển cảnh, điểm vào của đồ hoạ vào nhịp gần nhất; điểm cắt lời nói
+vẫn theo câu nói:
+
+```bash
+python "C:/Users/DANG HUNG TAN/Documents/GitHub/tan-ai-skills/scripts/tim_nhip_nhac.py" <nhạc> --bat-dau <giây nhạc vào> --moc edit/moc_chuyen_canh.json
+```
+
 Cắt xong → nghe lại bản đã cắt và **đọc cả file lời** (script chỉ nêu cụm nghi lặp, cách nói lặp có chủ ý thì giữ).
 Có đồ hoạ hoặc hình chèn → kiểm chỗ lộ chớp hình:
 
@@ -136,7 +143,8 @@ FAIL → sửa → render lại → kiểm lại, **tối đa 3 vòng**; vẫn F
 
 ## ■ CỔNG DUYỆT 2
 
-Đưa đường dẫn video + kết quả QA. Hỏi: chấp nhận hay góp ý.
+Đưa đường dẫn video + kết quả QA + [phiếu thẩm mỹ](evaluations/phieu-tham-my.md) (AI tự xem, không có điểm tổng,
+chỉ để người dùng duyệt nhanh hơn). Hỏi: chấp nhận hay góp ý.
 Góp ý → thêm vào `must_have` / `must_avoid`, `gate_final: "gop_y"`, quay lại bước 3 (kế hoạch mới lại qua cổng 1
 nếu đổi độ dài, cắt bỏ đoạn dài hoặc đổi cửa vào). Chấp nhận → `gate_final: "chap_nhan"`.
 

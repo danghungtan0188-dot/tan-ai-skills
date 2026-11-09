@@ -44,7 +44,7 @@ Máy tự làm mọi bước **đo và kiểm**. Người giữ 2 việc **quy�
 | Hiệu ứng marketing (người nói 9:16) | `skills/video-marketing/` — neo theo câu nói, tách người đúng đoạn, ghép nền → hiệu ứng → người; 10 hiệu ứng chưa có mẫu | nền móng có (01/11) |
 | Phong cách đã chốt | `skills/bien-tap-video-thong-minh-song-ngu-tan/references/phong-cach-att-news.md` | có (ATT NEWS); loại khác chưa |
 | Trạng thái, chạy lại | run.json ghi sau mỗi bước + `python -m tan_studio chay-lai` | có, chỉ trong `tan_studio` |
-| Kiểm định kỹ thuật | `scripts/video_qa.py`, `.claude/hooks/check_render.py`, `tan_studio/nghiem_thu.py`, `scripts/kiem_diem_cat.py` (điểm cắt theo sóng âm), `scripts/nghe_lai_sau_cat.py` (đọc lại lời sau khi cắt), `scripts/kiem_chop_hinh.py` (chớp hình giữa đồ họa và cú cắt), `scripts/kiem_phu_de_ocr.py` (đọc lại phụ đề, cần Tesseract tiếng Việt; chưa chạy thật) | có |
+| Kiểm định kỹ thuật | `scripts/video_qa.py`, `.claude/hooks/check_render.py`, `tan_studio/nghiem_thu.py`, `scripts/kiem_diem_cat.py` (điểm cắt theo sóng âm), `scripts/nghe_lai_sau_cat.py` (đọc lại lời sau khi cắt), `scripts/kiem_chop_hinh.py` (chớp hình giữa đồ họa và cú cắt), `scripts/tim_nhip_nhac.py` (khớp chuyển cảnh vào nhịp nhạc), `evaluations/phieu-tham-my.md` (phiếu thẩm mỹ ở cổng 2, không điểm tổng), `scripts/kiem_phu_de_ocr.py` (đọc lại phụ đề, cần Tesseract tiếng Việt; chưa chạy thật) | có |
 | Chốt chặn | `.claude/hooks/` (8 hook), `docs/bai-hoc-va-chot-chan.md` | có |
 | Thử hệ thống với AI thật | `scripts/harness_eval.py` | có |
 | Bài thi chuẩn, hồi quy chất lượng video | `evaluations/bai_thi.py` (đầu vào tự sinh → `tan_studio` → phiếu điểm 10 tiêu chí), mốc `evaluations/moc-chuan.json` | có (01/11) — mới phủ đường "kịch bản → video" |
