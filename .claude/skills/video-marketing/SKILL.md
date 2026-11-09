@@ -46,6 +46,10 @@ Câu nói là **neo thời gian** (không ghi giây tay). Mỗi mốc phụ ("s�
 Trước khi tự viết: tra kho HyperFrames bằng tiếng Anh — `npx hyperframes catalog --query "<mô tả chuyển động>"`
 (skill `hyperframes-registry`). Chuyển động dùng `gsap-timeline` / `gsap-plugins`.
 
+## Video quảng cáo mở bằng nỗi đau
+
+Khung 5 nhịp (nỗi đau → kết quả thật → lợi ích → dễ dùng → mời dùng thử), kèm cách làm video vị trí nhà đất: [quang-cao-noi-dau.md](references/quang-cao-noi-dau.md).
+
 ## Nhịp dựng
 
 Punch-in, hình chèn, mức âm thanh và cách cắt lời lặp: [nhip-dung-nguoi-noi.md](references/nhip-dung-nguoi-noi.md).
