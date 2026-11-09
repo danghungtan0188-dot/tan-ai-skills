@@ -20,7 +20,7 @@ KY_THUAT = sorted(p for p in (SKILL / "assets" / "ky-thuat").iterdir() if p.is_d
 FONT = SKILL / "assets" / "fonts"
 TEN = {"phu-de-to-tu", "tieu-de-mo-dau", "so-muc-to", "khung-dien-thoai", "o-hoi-lat", "chia-doi",
        "the-kien-thuc", "moc-gio", "khoanh-tay", "chu-ma-nen", "con-tro-gia", "so-dem-chay",
-       "giai-thich-5-canh", "cong-thuc-tung-buoc", "hinh-bien-giao-dien"}
+       "giai-thich-5-canh", "cong-thuc-tung-buoc", "hinh-bien-giao-dien", "o-binh-luan"}
 
 
 class TestThuVienKyThuat(unittest.TestCase):

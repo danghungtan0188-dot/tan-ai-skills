@@ -20,6 +20,7 @@ Nguồn: 81 reel Facebook (Quizzy Social Media, Hong Phuong) + 5 video YouTube N
 | Chữ mờ phía sau | `chu-ma-nen` | Mở chương: chữ viền rất to trôi chậm sau số chương + tiêu đề | 3,5 s | `chu-ma` `so-chuong` `tieu-de` |
 | Con trỏ chuột giả | `con-tro-gia` | Dựng lại giao diện bằng thẻ (không lộ thông tin riêng): gõ chữ → di chuột → bấm → kết quả | 4,5 s | `cau-hoi` `go` `nut` `ket-qua` |
 | Số đếm chạy | `so-dem-chay` | Một con số ấn tượng: chạy 0 → số cuối, dấu chấm hàng nghìn kiểu Việt | 3,5 s, đếm 1,4 s | `nhan` `so-cuoi` `don-vi` |
+| Ô bình luận gõ từ khóa | `o-binh-luan` | Lời mời comment nhận quà: ô bình luận giả hiện dưới mặt, từ khóa gõ từng ký tự nên người xem thấy đúng phải gõ gì (Hong Phuong 2132119387418154: 190 bình luận) | 4 s, gõ từ 1,1 s, 0,12 s/ký tự | `dong-tren` `chu-goi` `tu-khoa` `go` |
 | Giải thích 5 cảnh | `giai-thich-5-canh` | Giới thiệu dịch vụ trọn gói: vấn đề → mình làm gì → 3 bước → một bằng chứng → tên. Thanh cam chạy qua mọi cảnh, chữ cũ ra xong chữ mới mới vào | 8 s, cảnh ở 0 / 1,3 / 2,5 / 4,6 / 6 s | `van-de` `minh-lam` `buoc-1..3` `bang-chung` `ten` |
 | Công thức từng bước | `cong-thuc-tung-buoc` | Món ăn, mỹ phẩm, quy trình "bỏ vào → ra kết quả": ly đầy dần từng lớp, nhãn định lượng ngang lớp | 5 s, lớp vào ở 0,5 / 1,2 / 1,9 s | `tieu-de` `tp-1..3` `ket-qua` |
 | Hình biến giao diện | `hinh-bien-giao-dien` | Một khối duy nhất đổi hình nút → vòng tải → dấu tích → thẻ kết quả, không cắt cảnh. Hợp quảng cáo app, đặt lịch, đặt hàng | 5 s, đổi ở 1,1 / 2 / 2,8 s | `nut` `ket-qua` `chi-tiet` |
