@@ -47,11 +47,20 @@ Trả 200 kèm `{error: ...}` là sai. Trả 500 cho input sai cũng sai.
 
 Nhiều thao tác ghi phải cùng thành công hoặc cùng thất bại → dùng transaction. Không tự chạy migration/xóa dữ liệu ngoài phạm vi yêu cầu.
 
+## Thanh toán (Stripe)
+
+- Chỉ làm ở **chế độ thử**: khóa `sk_test_…` trong `.env` phía server, thẻ thử `4242 4242 4242 4242`. Khóa `sk_live_` và bật thanh toán thật là việc người dùng tự làm (hook `guard_app` chặn `sk_live_`).
+- Số tiền do **server** tính từ giá trong database rồi mới tạo phiên Checkout. Không nhận giá/tổng tiền từ client.
+- Trang "thanh toán thành công" **không** phải bằng chứng đã trả tiền. Chỉ đánh dấu "đã trả" khi nhận **webhook** từ Stripe (ví dụ `checkout.session.completed`), sau khi kiểm chữ ký bằng signing secret của webhook.
+- Webhook có thể gửi lặp → xử lý idempotent: lưu id sự kiện, gặp lại thì bỏ qua.
+- Thử webhook ở máy bằng Stripe CLI (`stripe listen --forward-to …`, `stripe trigger …`).
+
 ## Kiểm trước khi báo xong
 
 ```text
 [ ] mỗi endpoint mới/sửa: đã kiểm authn + authz trên đúng bản ghi
 [ ] input sai → trả đúng 400, không 500
 [ ] không có secret trong code, log, hay response
+[ ] có thanh toán: chỉ webhook đã kiểm chữ ký mới đánh dấu "đã trả"; thử bằng thẻ 4242
 [ ] typecheck + test + build sạch
 ```

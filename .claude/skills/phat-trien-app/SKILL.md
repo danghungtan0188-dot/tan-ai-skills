@@ -49,7 +49,7 @@ Ghi ra danh sách lệnh lấy được từ bước 1. Không suy đoán. Bư�
 ### 4. Viết code theo lớp
 
 - Frontend → [references/frontend.md](references/frontend.md)
-- Backend / API → [references/backend.md](references/backend.md)
+- Backend / API, thanh toán Stripe → [references/backend.md](references/backend.md)
 - Database / Supabase → [references/supabase.md](references/supabase.md)
 
 ### 5. Kiểm thử

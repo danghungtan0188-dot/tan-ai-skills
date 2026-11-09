@@ -27,6 +27,7 @@
 - Không đổi design system, palette, font, spacing scale khi chưa được yêu cầu.
 - Không format lại file ngoài phần mình sửa.
 - Không thêm animation/hiệu ứng không ai yêu cầu.
+- Dự án mới chưa có design system → tránh các dấu hiệu "nhìn là biết AI làm": tiêu đề tô chữ gradient, icon emoji trong ô màu ở mỗi mục, một font (thường là Inter) cho mọi chỗ, nền tím–xanh gradient, mọi thẻ bo tròn đổ bóng giống hệt nhau.
 - Không hardcode URL API — đọc từ cấu hình/biến môi trường của dự án.
 
 ## Kiểm trước khi báo xong
