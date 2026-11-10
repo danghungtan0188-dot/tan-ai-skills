@@ -14,6 +14,8 @@ description: Hiệu ứng video marketing kiểu người nói 9:16 (TikTok, Ree
 3. tach_nguoi.py   video --tu --den           → người trong suốt + .mat.json (hop_mat, tren_dau)
 4. ghep_lop.py     video --hieu-ung --nguoi   → MP4: nền → hiệu ứng → người, chỉ trong [tu, den]
 5. QA              video_qa.py --strict --audio + xem khung giữa cửa sổ: hiệu ứng có, mặt không bị che
+6. Cả video xong   /review-video                → thêm phần giám khảo 6 câu: 2–3 giây đầu có giữ người xem không,
+                                                 cảnh kết có lời kêu gọi rõ không, tối đa 3 việc nên sửa trước
 ```
 
 Chạy từ thư mục skill (`scripts/`). Mỗi lần chỉ tách MỘT đoạn ngắn — máy hay sập khi chạy nặng.
