@@ -5,6 +5,7 @@ Kiem: giu giay phep goc, sfx tao WAV dung luat (chay that, ~1 s, khong can ffmpe
 
 import importlib
 import json
+import re
 import struct
 import subprocess
 import sys
@@ -25,6 +26,18 @@ class TestGiayPhep(unittest.TestCase):
         ref = SCRIPTS.parent / "references"
         self.assertIn("whaleyxbt/claude-motion", (ref / "tieng-dong.md").read_text(encoding="utf-8"))
         self.assertIn("Tejashmakwana/motionmaxxing", (ref / "kiem-re-tien.md").read_text(encoding="utf-8"))
+        self.assertIn("MIT License", (SCRIPTS / "giay-phep" / "motion-prompt-LICENSE.txt").read_text(encoding="utf-8"))
+        tu_dien = (ref / "tu-dien-chuyen-dong.md").read_text(encoding="utf-8")
+        self.assertIn("showheyohtaki/motion-prompt", tu_dien)
+        # Du 48 ten (#001-#048); the "san co" ghi trong tu dien phai ton tai that.
+        self.assertEqual(len(re.findall(r"^\| 0\d\d \|", tu_dien, re.M)), 48)
+        co = {p.name for p in (SCRIPTS.parent / "assets" / "ky-thuat").iterdir()} | {p.name for p in (SCRIPTS.parent / "assets" / "mau").iterdir()}
+        dong = re.findall(r"^\| 0\d\d \|.*", tu_dien, re.M)
+        for d in dong:
+            o_cuoi = d.rstrip(" |").split("|")[-1]  # cot "The san" (bang motion) hoac cau lenh mau (bang camera)
+            for the in re.findall(r"`([a-z0-9-]+)`", o_cuoi):
+                if not the.endswith("md"):
+                    self.assertIn(the, co)
 
     def test_look_py_chi_them_threads_va_ghi_ro(self):
         """Apache 2.0 muc 4(b): file sua phai ghi ro da sua. May hay sap -> moi ffmpeg chay 2 luong."""
