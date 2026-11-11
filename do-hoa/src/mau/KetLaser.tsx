@@ -16,6 +16,7 @@ export const ketLaserSchema = coBan.extend({
   loiMoi: z.string().default("Theo dõi ATT NEWS để nhận bản tin của xã mỗi ngày"),
   qrTrai: z.string().default(""), // ảnh QR trong public dir; trống = không hiện
   qrPhai: z.string().default(""),
+  nen: z.enum(["navy", "xanh-la"]).default("navy"), // xanh-la: nen xanh la sang + chum sang cheo troi ngang (kieu ket dai truyen hinh)
 });
 
 const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -33,7 +34,7 @@ const useFont = (file: string) => {
 };
 
 // Lưới điểm nối (plexus) trôi chậm
-const LuoiDiem: React.FC<{ W: number; H: number; t: number }> = ({ W, H, t }) => {
+const LuoiDiem: React.FC<{ W: number; H: number; t: number; mau?: string }> = ({ W, H, t, mau = NEON }) => {
   const diem = Array.from({ length: 34 }, (_, i) => ({
     x: random(`px${i}`) * W + Math.sin(t * 0.6 + i) * 30,
     y: random(`py${i}`) * H + Math.cos(t * 0.5 + i * 1.3) * 24,
@@ -41,23 +42,43 @@ const LuoiDiem: React.FC<{ W: number; H: number; t: number }> = ({ W, H, t }) =>
   const day: React.ReactNode[] = [];
   diem.forEach((a, i) => diem.slice(i + 1).forEach((b, j) => {
     const d = Math.hypot(a.x - b.x, a.y - b.y);
-    if (d < W * 0.16) day.push(<line key={`${i}-${j}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={NEON} strokeOpacity={0.4 * (1 - d / (W * 0.16))} strokeWidth={1.5} />);
+    if (d < W * 0.16) day.push(<line key={`${i}-${j}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={mau} strokeOpacity={0.4 * (1 - d / (W * 0.16))} strokeWidth={1.5} />);
   }));
   return (
     <svg width={W} height={H} style={{ position: "absolute" }}>
       {day}
-      {diem.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={3.5} fill={NEON} opacity={0.75} />)}
+      {diem.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={3.5} fill={mau} opacity={0.75} />)}
     </svg>
   );
 };
 
-export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi, loiMoi, qrTrai, qrPhai }) => {
+// Chum sang cheo rong, mo, troi cham tu trai sang phai (nen xanh la)
+const ChumSang: React.FC<{ W: number; H: number; t: number }> = ({ W, H, t }) => (
+  <svg width={W} height={H} style={{ position: "absolute", mixBlendMode: "screen" }}>
+    <defs>
+      <linearGradient id="chum" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#FFFFFF" stopOpacity="0" />
+        <stop offset="0.5" stopColor="#E8FFF0" stopOpacity="0.55" />
+        <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
+      </linearGradient>
+    </defs>
+    {Array.from({ length: 7 }, (_, k) => {
+      const x = ((random(`cx${k}`) * 1.4 - 0.2 + t * (0.05 + random(`cv${k}`) * 0.05)) % 1.4) * W;
+      const rong = (18 + random(`cw${k}`) * 46) * (W / 1920);
+      return <line key={k} x1={x - H * 0.9} y1={H * 1.1} x2={x + H * 0.2} y2={-H * 0.1} stroke="url(#chum)" strokeWidth={rong}
+        style={{ filter: `blur(${rong * 0.35}px)` }} opacity={0.5 + 0.5 * Math.sin(t * 2.2 + k)} />;
+    })}
+  </svg>
+);
+
+export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi, loiMoi, qrTrai, qrPhai, nen }) => {
   const frame = useCurrentFrame();
   const { width: W, height: H, durationInFrames } = useVideoConfig();
   const t = frame / FPS;
   const het = durationInFrames / FPS;
   const s = W / 1920;
   const ff = useFont(font);
+  const neon = nen === "xanh-la" ? "#F4FFF6" : NEON; // vien neon tren nen xanh la: trang cho ro
 
   // logo ATT NEWS vẽ lại bằng vector theo tỉ lệ file gốc 268×78 (ô ATT nền sáng + ô NEWS navy)
   const lw = 1000 * s, lh = lw * 78 / 268;
@@ -76,23 +97,33 @@ export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi
   const dau = lx + ve * lw; // đầu bút vẽ
   const chuViSo = 2 * (lw + lh) * 1.1;
   const vien = (x: number, w: number, key: string) => (
-    <rect key={key} x={x} y={ly} width={w} height={lh} rx={10 * s} fill="none" stroke={NEON} strokeWidth={5 * s}
+    <rect key={key} x={x} y={ly} width={w} height={lh} rx={10 * s} fill="none" stroke={neon} strokeWidth={5 * s}
       strokeDasharray={chuViSo} strokeDashoffset={chuViSo * (1 - ve)} />
   );
 
   return (
     <AbsoluteFill style={{ fontFamily: ff, opacity: tat, backgroundColor: "#000" }}>
-      <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 38%, ${MAU.navyDuoi} 0%, ${MAU.navyTren} 62%, #000818 100%)` }} />
-      <LuoiDiem W={W} H={H} t={t} />
+      {nen === "xanh-la" ? (
+        <>
+          <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 40%, #8AF59A 0%, #34C95A 45%, #0E7A32 78%, #04381A 100%)" }} />
+          <ChumSang W={W} H={H} t={t} />
+          <LuoiDiem W={W} H={H} t={t} mau="#E6FFE9" />
+        </>
+      ) : (
+        <>
+          <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 38%, ${MAU.navyDuoi} 0%, ${MAU.navyTren} 62%, #000818 100%)` }} />
+          <LuoiDiem W={W} H={H} t={t} />
+        </>
+      )}
 
       {/* viền neon + logo */}
-      <svg width={W} height={H} style={{ position: "absolute", filter: `drop-shadow(0 0 ${12 * s}px ${NEON})`, opacity: 1 - mau * 0.85 }}>
+      <svg width={W} height={H} style={{ position: "absolute", filter: `drop-shadow(0 0 ${12 * s}px ${neon})`, opacity: 1 - mau * 0.85 }}>
         {vien(lx, w1, "a")}
         {vien(lx + w1 + gap, lw - w1 - gap, "b")}
         <text x={lx + w1 / 2} y={ly + lh * 0.74} textAnchor="middle" fontSize={lh * 0.66} fontWeight={900} fontFamily={ff}
-          fill="none" stroke={NEON} strokeWidth={3 * s} strokeDasharray={3000 * s} strokeDashoffset={3000 * s * (1 - ve)}>ATT</text>
+          fill="none" stroke={neon} strokeWidth={3 * s} strokeDasharray={3000 * s} strokeDashoffset={3000 * s * (1 - ve)}>ATT</text>
         <text x={lx + w1 + gap + (lw - w1 - gap) / 2} y={ly + lh * 0.74} textAnchor="middle" fontSize={lh * 0.62} fontWeight={900} fontFamily={ff}
-          fill="none" stroke={NEON} strokeWidth={3 * s} strokeDasharray={3000 * s} strokeDashoffset={3000 * s * (1 - ve)}>NEWS</text>
+          fill="none" stroke={neon} strokeWidth={3 * s} strokeDasharray={3000 * s} strokeDashoffset={3000 * s * (1 - ve)}>NEWS</text>
       </svg>
       <svg width={W} height={H} style={{ position: "absolute", opacity: mau, filter: `drop-shadow(0 ${10 * s}px ${26 * s}px rgba(0,0,0,0.55))` }}>
         <rect x={lx} y={ly} width={w1} height={lh} rx={10 * s} fill={MAU.nenAtt} />
@@ -108,8 +139,8 @@ export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi
         <svg width={W} height={H} style={{ position: "absolute", mixBlendMode: "screen", opacity: tia }}>
           <defs>
             <linearGradient id="tiaL" x1="1" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor={NEON} stopOpacity="0" />
-              <stop offset="0.75" stopColor={NEON} stopOpacity="0.7" />
+              <stop offset="0" stopColor={neon} stopOpacity="0" />
+              <stop offset="0.75" stopColor={neon} stopOpacity="0.7" />
               <stop offset="1" stopColor="#FFFFFF" stopOpacity="1" />
             </linearGradient>
           </defs>
