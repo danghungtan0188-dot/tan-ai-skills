@@ -274,3 +274,13 @@ mở đầu dựng nhanh 5 s → intro ATT NEWS 3 s → phóng sự → kết `K
 | Nối cảnh ảnh `zoompan` với cảnh clip bằng concat demuxer (`-c copy` hay mã hoá lại đều hỏng): khối 19,5 s qua `xfade` còn 4,5 s rồi 14,97 s, không báo lỗi | concat FILTER, mỗi cảnh một đầu vào (`fps=30,setsar=1,settb=1/30,setpts=PTS-STARTPTS`); so độ dài khối với tổng cảnh và độ dài sau mỗi lượt `xfade` (lệch > 0,1 s thì dừng) |
 | Giọng Nữ VNeID: "Ủy ban" giữa câu ra "Quý ban" 12/12 bản; từ dẫn "Đồng thời," chỉ cứu được 2/18 | ghép đúng 2 chữ "Ủy ban" từ bản whisper medium nghe đúng (nối 25 ms, cân RMS), nghe kiểm bản ghép bằng medium |
 | Ảnh dán khung chat chỉ rộng ~780 px, phóng toàn khung bị mờ | lấy ảnh gốc trong file Word người dùng gửi (`word/media/`, ~2.500 px), kèm chú thích để gắn tên đúng người |
+
+## 9. Bổ sung bản 3 (2026-11-12)
+
+- Intro khi đã có mở đầu dựng nhanh: `KetLaser` `nen: "xanh-la"` + `tieuDe: "dòng 1
+dòng 2"` (tia laser vẽ logo 0,15–1,45 s rồi vẽ
+  viền tiêu đề lớn 1,25–2,35 s, chữ hiện trắng), `loiMoi` vàng là dòng phụ, `donVi: ""`, dài 3,5 s.
+- Người dùng chê phát âm mà whisper medium nghe đúng: lỗi giọng (thường "tr/ch" của giọng miền Nam), đọc thêm bản không chữa được.
+  Làm một file nghe thử nhiều giọng cùng một đoạn khó, người dùng chọn bằng tai.
+- Đọc lại giọng sau khi đã dựng xong hình: giữ mốc bắt đầu từng câu, `atempo` ≤ 1,08 cho câu dài hơn chỗ trống,
+  dựng lại chỉ lượt đắp đồ họa + tiếng (phần cảnh, chuyển cảnh lấy lại từ cache).

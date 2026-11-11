@@ -16,6 +16,7 @@ export const ketLaserSchema = coBan.extend({
   loiMoi: z.string().default("Theo dõi ATT NEWS để nhận bản tin của xã mỗi ngày"),
   qrTrai: z.string().default(""), // ảnh QR trong public dir; trống = không hiện
   qrPhai: z.string().default(""),
+  tieuDe: z.string().default(""), // "dong 1|dong 2" (xuong dong bang ky tu xuong dong): tieu de lon tia laser ve sau logo (dung lam intro); trong = outro thuong
   nen: z.enum(["navy", "xanh-la"]).default("navy"), // xanh-la: nen xanh la sang + chum sang cheo troi ngang (kieu ket dai truyen hinh)
 });
 
@@ -71,7 +72,7 @@ const ChumSang: React.FC<{ W: number; H: number; t: number }> = ({ W, H, t }) =>
   </svg>
 );
 
-export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi, loiMoi, qrTrai, qrPhai, nen }) => {
+export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi, loiMoi, qrTrai, qrPhai, nen, tieuDe }) => {
   const frame = useCurrentFrame();
   const { width: W, height: H, durationInFrames } = useVideoConfig();
   const t = frame / FPS;
@@ -81,16 +82,26 @@ export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi
   const neon = nen === "xanh-la" ? "#F4FFF6" : NEON; // vien neon tren nen xanh la: trang cho ro
 
   // logo ATT NEWS vẽ lại bằng vector theo tỉ lệ file gốc 268×78 (ô ATT nền sáng + ô NEWS navy)
-  const lw = 1000 * s, lh = lw * 78 / 268;
-  const lx = (W - lw) / 2, ly = H * 0.3;
+  const coTD = tieuDe.trim() !== "";
+  const lw = (coTD ? 640 : 1000) * s, lh = lw * 78 / 268;
+  const lx = (W - lw) / 2, ly = H * (coTD ? 0.13 : 0.3);
+  // tieu de lon: laser ve vien chu (1,25-2,35 s) roi chu hien trang
+  const dongTD = coTD ? tieuDe.split(String.fromCharCode(10)) : [];
+  const fsTD = 104 * s, cachTD = 124 * s, yTD = ly + lh + 150 * s;
+  const rongTD = Math.max(1, ...dongTD.map((d) => d.length)) * fsTD * 0.52;
+  const veChu = interpolate(t, [1.25, 2.35], [0, 1], { ...kep, easing: Easing.inOut(Easing.cubic) });
+  const chuMau = interpolate(t, [2.15, 2.5], [0, 1], kep);
+  const tia2 = coTD ? interpolate(t, [1.15, 1.3, 2.35, 2.55], [0, 1, 1, 0], kep) : 0;
+  const dau2 = (W - rongTD) / 2 + veChu * rongTD, yDau2 = yTD - fsTD * 0.35 + cachTD * (dongTD.length - 1) * 0.5;
+  const yChu = coTD ? yTD + (dongTD.length - 1) * cachTD + 70 * s : ly + lh + 44 * s;
   const w1 = lw * 0.41, gap = lw * 0.008;
 
   const ve = interpolate(t, [0.15, 1.45], [0, 1], { ...kep, easing: Easing.inOut(Easing.cubic) }); // tiến độ vẽ viền
   const loe = interpolate(t, [1.4, 1.55, 2.0], [0, 1, 0], kep); // loé sáng
   const mau = interpolate(t, [1.5, 1.9], [0, 1], kep); // logo hiện màu thật
   const tia = interpolate(t, [0, 0.15, 1.45, 1.7], [0, 1, 1, 0], kep);
-  const dong = interpolate(t, [1.8, 2.3], [0, 1], { ...kep, easing: muot });
-  const moi = interpolate(t, [2.2, 3.0], [0, 1], { ...kep, easing: Easing.inOut(Easing.quad) });
+  const dong = interpolate(t, coTD ? [2.4, 2.8] : [1.8, 2.3], [0, 1], { ...kep, easing: muot });
+  const moi = interpolate(t, coTD ? [2.5, 3.0] : [2.2, 3.0], [0, 1], { ...kep, easing: Easing.inOut(Easing.quad) });
   const qr = interpolate(t, [0.3, 0.8], [0, 1], { ...kep, easing: muot });
   const tat = interpolate(t, [het - 0.6, het], [1, 0], kep);
 
@@ -165,17 +176,42 @@ export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi
         </svg>
       ) : null}
 
+      {/* tieu de lon do laser ve */}
+      {coTD ? (
+        <svg width={W} height={H} style={{ position: "absolute", filter: `drop-shadow(0 0 ${8 * s}px ${neon}) drop-shadow(0 ${5 * s}px ${12 * s}px rgba(0,40,12,0.85))` }}>
+          {dongTD.map((d, i) => (
+            <text key={i} x={W / 2} y={yTD + i * cachTD} textAnchor="middle" fontSize={fsTD} fontWeight={900} fontFamily={ff}
+              fill="#FFFFFF" fillOpacity={chuMau} stroke={neon} strokeWidth={3 * s} strokeOpacity={1 - chuMau * 0.7}
+              strokeDasharray={6000 * s} strokeDashoffset={6000 * s * (1 - veChu)}>{d}</text>
+          ))}
+        </svg>
+      ) : null}
+      {tia2 > 0 ? (
+        <svg width={W} height={H} style={{ position: "absolute", mixBlendMode: "screen", opacity: tia2 }}>
+          {Array.from({ length: 5 }, (_, k) => {
+            const x2 = dau2 - k * 60 * s, y2 = yDau2 + (k % 2 ? 1 : -1) * cachTD * 0.4;
+            return (
+              <g key={k}>
+                <line x1={x2 + 1200 * s} y1={y2 - 1200 * s} x2={x2} y2={y2} stroke={neon} strokeOpacity={0.6} strokeWidth={9 * s} strokeLinecap="round" style={{ filter: `blur(${3 * s}px)` }} />
+                <line x1={x2 + 1200 * s} y1={y2 - 1200 * s} x2={x2} y2={y2} stroke="#FFFFFF" strokeOpacity={0.85} strokeWidth={2.5 * s} />
+                <circle cx={x2} cy={y2} r={9 * s} fill="#FFFFFF" style={{ filter: `blur(${2 * s}px)` }} />
+              </g>
+            );
+          })}
+        </svg>
+      ) : null}
+
       {/* loé sáng khi logo hiện màu */}
       <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% ${(ly + lh / 2) / H * 100}%, rgba(220,250,255,0.9) 0%, rgba(143,243,255,0.25) 30%, transparent 60%)`, opacity: loe }} />
 
       {/* dòng đơn vị + câu mời */}
       <div style={{
-        position: "absolute", left: 0, right: 0, top: ly + lh + 44 * s, textAlign: "center",
+        position: "absolute", left: 0, right: 0, top: yChu, textAlign: "center",
         fontSize: 54 * s, fontWeight: 700, color: "#FFFFFF", letterSpacing: 0.5 * s, opacity: dong,
         translate: `0px ${(1 - dong) * 24 * s}px`, textShadow: `0 0 ${18 * s}px rgba(143,243,255,0.7), 0 ${3 * s}px ${8 * s}px rgba(0,0,0,0.6)`,
       }}>{donVi}</div>
       <div style={{
-        position: "absolute", left: 0, right: 0, top: ly + lh + 134 * s, textAlign: "center",
+        position: "absolute", left: 0, right: 0, top: yChu + (coTD && !donVi ? 0 : 90 * s), textAlign: "center",
         fontSize: 68 * s, fontWeight: 800, fontStyle: "italic", color: MAU.vang,
         clipPath: `inset(0 ${(1 - moi) * 100}% 0 0)`, textShadow: `0 ${3 * s}px ${10 * s}px rgba(0,0,0,0.65)`,
       }}>{loiMoi}</div>
