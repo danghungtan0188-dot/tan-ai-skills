@@ -360,7 +360,7 @@ export const RemotionRoot: React.FC = () => (
       component={KetLaser}
       schema={ketLaserSchema}
       calculateMetadata={metadata(false)}
-      defaultProps={{ tiLe: "16:9", thoiLuong: 4, font: "", donVi: "Trung tâm Cung ứng dịch vụ công xã An Thạnh Thủy", loiMoi: "Theo dõi ATT NEWS để nhận bản tin của xã mỗi ngày", qrTrai: "", qrPhai: "" }}
+      defaultProps={{ tiLe: "16:9", thoiLuong: 4, font: "", donVi: "Trung tâm Cung ứng dịch vụ công xã An Thạnh Thủy", loiMoi: "Theo dõi ATT NEWS để nhận bản tin của xã mỗi ngày", qrTrai: "", qrPhai: "", nen: "navy", tieuDe: "" }}
       {...chung}
     />
     <Composition

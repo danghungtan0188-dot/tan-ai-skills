@@ -42,3 +42,11 @@ Lưu ý:
 Phụ đề lời bình hội nghị cỡ 58, có câu xuống 2 dòng. Banner đặt ở vị trí gốc (77–87,5 % cao) đè lên
 dòng trên của phụ đề. Đã chốt: `BannerPhongSu` `dichLen: 90`, `AnhTuLieu` `dichLen: 80`
 (px trên khung 1080p). Ảnh tư liệu có chú thích mà phụ đề đã nói đủ ý thì bỏ chú thích (video6).
+
+## Tông nâu đồng trên phụ đề song ngữ ATT NEWS (2026-11-11)
+
+Người dùng gửi mẫu banner phóng sự đài tỉnh và duyệt bản này:
+`nhan: "PHÓNG SỰ"`, `mauDam: "#4B3122"`, `mauHuyHieu: "#9A6A36"`, `mauNhat: "#D8C2A2"`, `dichLen: 150`
+(banner nằm trọn trên dòng phụ đề tiếng Anh). Tên **viết thường hoa đầu từ** ("Ông Đỗ Văn Chẩn – Hộ nhận nhà Đại đoàn kết"):
+chữ in hoa có dấu chồng bị mép thanh cắt, "ĐỖ" trông như "ĐỔ". Dòng dưới ≤ 46 ký tự, dài hơn thì xuống 2 dòng tràn khỏi thanh.
+Soi dấu bằng ảnh 1080p cắt sát vùng chữ, không soi bằng ảnh thu nhỏ.
