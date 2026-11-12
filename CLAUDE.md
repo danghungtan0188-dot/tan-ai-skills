@@ -84,7 +84,7 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 .claude/agents/     9 agent   — Claude Code chỉ đọc agent ở đây
 .claude/commands/  14 command — slash command
 .claude/hooks/      9 hook    — wiring trong .claude/settings.json (và ~/.claude/settings.json cho mọi dự án)
-skills/             33 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
+skills/             34 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
 scripts/            script dùng chung (sync_skills.py, video_qa.py, check_citations.py, harness_eval.py, cai_skill_ngoai.py)
