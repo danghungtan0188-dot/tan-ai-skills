@@ -36,6 +36,24 @@ Không rõ thì chọn theo độ nghiêm túc của chủ đề. **Pop Art, Kin
 
 Chọn thẻ theo ý của từng câu nói: [canh-theo-muc-dich.md](references/canh-theo-muc-dich.md).
 
+## Kỹ thuật dựng video marketing (16 thẻ)
+
+Ngoài phong cách, có 12 thẻ kỹ thuật học từ 86 video marketing, nằm trong `assets/ky-thuat/`:
+
+- phụ đề tô từ khóa, tiêu đề mở đầu, số mục to;
+- khung điện thoại, ô "?" lật dần, chia đôi màn hình;
+- thẻ kiến thức "Giai đoạn", mốc giờ, khoanh đỏ vẽ tay;
+- chữ mờ phía sau, con trỏ chuột giả, số đếm chạy, ô bình luận gõ từ khóa;
+- thêm 3 thẻ học từ 703 prompt video Opus 5.5: giải thích 5 cảnh, công thức từng bước, hình biến giao diện. Khung viết prompt motion: [hoc-tu-prompt-opus.md](references/hoc-tu-prompt-opus.md).
+
+Kèm theo là nhịp chuẩn đo được (mỗi cảnh 1,5–2,5 s, chuyển mềm dưới 0,4 s). Xem [ky-thuat.md](references/ky-thuat.md). Render giống thẻ phong cách: `python scripts/render_mau.py <ten-ky-thuat>`.
+
+## Tiếng động và kiểm chất lượng
+
+- **Tiếng động tự tổng hợp:** dùng `scripts/sfx`, lấy từ claude-motion (giấy phép MIT). Có click, pop, whoosh, riser, chime, pad, làm bằng Python có sẵn, không lo bản quyền, tự master về −14 LUFS. Hình nào đi với tiếng nào, mức to ra sao: [tieng-dong.md](references/tieng-dong.md).
+- **Gọi đúng tên chuyển động:** dùng [tu-dien-chuyen-dong.md](references/tu-dien-chuyen-dong.md), chuyển thể từ motion-prompt (giấy phép MIT). Có 48 tên chuyển động đồ họa và máy quay, mỗi tên có nghĩa tiếng Việt, câu ra lệnh mẫu (bao lâu, mạnh cỡ nào, cái gì chuyển động) và thẻ có sẵn tương ứng.
+- **Kiểm video nhìn rẻ tiền:** dùng `scripts/look.py`, lấy từ motionmaxxing (giấy phép Apache 2.0). Script ra bảng khung hình, liệt kê cú cắt, đoạn đứng im, cổng G0/G2/G3 và đo âm thanh. Xem các dấu hiệu rẻ tiền và khi nào không cần theo: [kiem-re-tien.md](references/kiem-re-tien.md).
+
 ## Quy trình
 
 1. Đọc công thức của phong cách, chép thẻ mẫu sang dự án, đổi nội dung qua biến (`data-var-text`).

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait"
+  data-composition-variables='[{"id":"giai-doan","type":"string","label":"Tên giai đoạn","default":"GIAI ĐOẠN 1"},{"id":"moc","type":"string","label":"Mốc thời gian","default":"Trước thu hoạch 3–4 tuần"},{"id":"muc-tieu","type":"string","label":"Mục tiêu","default":"Mục tiêu: cho khách biết vườn sắp vào mùa"},{"id":"y-1","type":"string","label":"Ý 1","default":"• Quay vườn, trái đang lớn"},{"id":"y-2","type":"string","label":"Ý 2","default":"• Kể chuyện người trồng"},{"id":"y-3","type":"string","label":"Ý 3","default":"• Hỏi: ai muốn đặt trước?"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* The kien thuc: nen tron sang, tieu de giai doan + moc thoi gian, muc tieu va y goi y; dung du lau de nguoi xem chup man hinh.
+         Hoc tu Hong Phuong ("5 giai doan marketing"). */
+      :root { --nen: #8a8f96; --giay: #e4ebe6; --muc: #1b2420; --nhan-nen: #ffd43b; --do: #c62828; --font: 'Montserrat VN', sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #tk-nen { position: absolute; inset: 0; background: var(--giay); }
+      #tk-giai-doan { position: absolute; left: 90px; top: 260px; padding: 10px 30px; border-radius: 16px; background: var(--nhan-nen);
+        font-size: 84px; font-weight: 900; color: var(--muc); }
+      #tk-moc { position: absolute; left: 90px; top: 410px; font-size: 56px; font-weight: 800; color: var(--do); }
+      #tk-muc-tieu { position: absolute; left: 90px; right: 90px; top: 540px; font-size: 48px; line-height: 1.3; font-weight: 700; color: var(--muc); }
+      .tk-y { position: absolute; left: 90px; right: 90px; font-size: 50px; font-weight: 600; color: var(--muc); }
+      #tk-y-1 { top: 760px; } #tk-y-2 { top: 860px; } #tk-y-3 { top: 960px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-width="1080" data-height="1920">
+      <div id="tk-nen" class="clip" data-start="0" data-duration="5" data-track-index="1">
+        <div id="tk-giai-doan" data-var-text="giai-doan">GIAI ĐOẠN 1</div>
+        <div id="tk-moc" data-var-text="moc">Trước thu hoạch 3–4 tuần</div>
+        <div id="tk-muc-tieu" data-var-text="muc-tieu">Mục tiêu: cho khách biết vườn sắp vào mùa</div>
+        <div id="tk-y-1" class="tk-y" data-var-text="y-1">• Quay vườn, trái đang lớn</div>
+        <div id="tk-y-2" class="tk-y" data-var-text="y-2">• Kể chuyện người trồng</div>
+        <div id="tk-y-3" class="tk-y" data-var-text="y-3">• Hỏi: ai muốn đặt trước?</div>
+      </div>
+    </div>
+    <script>
+      // Vao nhanh trong 1 s roi DUNG YEN: the de doc va chup man hinh, khong chuyen dong lam roi mat.
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#tk-giai-doan", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "power3.out" }, 0)
+        .fromTo("#tk-moc", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "power3.out" }, 0.12)
+        .fromTo("#tk-muc-tieu", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, 0.3)
+        .fromTo(".tk-y", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.22, ease: "power2.out", stagger: 0.15 }, 0.5);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
