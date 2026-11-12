@@ -1,6 +1,6 @@
 ---
 name: ban-do-video
-description: Làm video bản đồ giải thích theo lời đọc cho xã/tỉnh — lấy ranh giới, sông/kênh, đường, cầu từ OpenStreetMap, ghép ảnh vệ tinh Esri làm nền, đổi toạ độ sang pixel rồi dựng bằng mẫu Remotion `BanDoVeTinh` (bản đồ vệ tinh, máy quay trượt/phóng, nhãn tự tránh đè) hoặc `BanDoNoi` (bản đồ xã nổi khối, nét chạy viền). Làm cả video vị trí nhà đất 9:16 từ một toạ độ hoặc link Google Maps — tự quét trường, chợ, bệnh viện, đường lớn, vẽ đường đi thật có số km, thẻ giá và số liên hệ (mẫu `ViTriNha`). Kích hoạt khi người dùng muốn video bản đồ, "map", ranh giới xã, tuyến kênh/đường/sông, quy hoạch, hành trình qua nhiều điểm, video vị trí căn nhà/lô đất/dự án bất động sản, hoặc đưa video mẫu kiểu "Góc nhìn quy hoạch — Sông Đáy", "KOYO Follow the Red Line", phóng sự xã có bản đồ nổi khối, Vị Trí Studio.
+description: Video bản đồ giải thích theo lời đọc — ranh giới xã/tỉnh, sông/kênh/đường, quy hoạch, hành trình nhiều điểm; dữ liệu OpenStreetMap + nền vệ tinh, dựng bằng mẫu Remotion BanDoVeTinh hoặc BanDoNoi (bản đồ nổi khối). Video vị trí nhà đất/bất động sản 9:16 từ toạ độ hoặc link Google Maps — tiện ích quanh, đường đi có số km, thẻ giá, liên hệ (mẫu ViTriNha). Dùng khi người dùng muốn video bản đồ/map, video vị trí căn nhà/lô đất/dự án, hoặc đưa video mẫu có bản đồ. Không dùng cho câu hỏi API bản đồ Remotion chung (remotion-maps).
 ---
 
 # Video bản đồ theo lời đọc

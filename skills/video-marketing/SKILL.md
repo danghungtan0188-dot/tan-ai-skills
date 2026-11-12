@@ -1,6 +1,6 @@
 ---
 name: video-marketing
-description: Hiệu ứng video marketing kiểu người nói 9:16 (TikTok, Reels, Facebook) — đặt hiệu ứng ĐÚNG LÚC người nói một câu, nằm SAU người (tách nền) và KHÔNG đè mặt. Nền móng có sẵn — tim_cau_noi (câu nói → giây), tach_nguoi (tách người đúng đoạn + vùng mặt), ghep_lop (nền → hiệu ứng → người). Kích hoạt khi người dùng muốn thêm hiệu ứng "lúc mình nói …", đặt biểu đồ / carousel ảnh / checklist / sơ đồ nhánh / tường tiêu đề / nét vẽ tay phía sau người, hoặc làm video quảng bá dịch vụ, sản phẩm. Không dùng cho bản tin ATT NEWS hay phim tài liệu (phong cách nghiêm túc — xem bien-tap-video-thong-minh-song-ngu-tan).
+description: Hiệu ứng đặt SAU người nói, hiện đúng lúc nói một câu, không đè mặt — video người nói 9:16 TikTok/Reels/Facebook quảng bá dịch vụ, sản phẩm (biểu đồ, carousel ảnh, checklist, sơ đồ nhánh, tường tiêu đề, nét vẽ tay). Dùng khi người dùng nói "lúc mình nói … thì hiện …" hoặc muốn hiệu ứng phía sau người. Không dùng cho bản tin ATT NEWS/phim tài liệu (bien-tap-video-thong-minh-song-ngu-tan) hay chỉ cắt lời, phụ đề (video-use).
 ---
 
 # Video marketing: hiệu ứng theo câu nói, sau người

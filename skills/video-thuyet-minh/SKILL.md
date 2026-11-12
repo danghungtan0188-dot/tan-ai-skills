@@ -1,6 +1,6 @@
 ---
 name: video-thuyet-minh
-description: Quy trình sản xuất video có lời thuyết minh/bản tin tiếng Việt từ đầu đến cuối — đọc script bằng MC Đài An Thạnh Thủy hoặc Giọng Hùng Tân chân thật, rồi đồng bộ và ghép voice-over vào MP4/clip video. Kết nối tan-giong-doc-ban-tin với bien-tap-video/dung-video-su-kien và video-use. Kích hoạt khi người dùng muốn đọc kịch bản cho video, lồng giọng vào clip, làm video bản tin hoặc video thuyết minh hoàn chỉnh.
+description: Lồng giọng đọc vào video — kịch bản tiếng Việt → giọng (tan-giong-doc-ban-tin) → khớp cảnh theo thời lượng lời → trộn âm → MP4 (video-use). Dùng khi có kịch bản + clip/MP4 cần lồng tiếng, video thuyết minh hoặc bản tin có lời đọc. Không dùng khi chỉ cần file giọng (tan-giong-doc-ban-tin) hay cần MC HeyGen (tro-ly-video-ban-tin-tan).
 ---
 
 # Video thuyết minh (kịch bản → giọng đọc → video hoàn chỉnh)
