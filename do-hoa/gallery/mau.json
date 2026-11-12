@@ -1,0 +1,200 @@
+{
+  "HaTang": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 5,
+    "trongSuot": true
+  },
+  "GiamNgheo": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 8,
+    "trongSuot": true
+  },
+  "TieuChi": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 10,
+    "trongSuot": false
+  },
+  "MocThoiGian": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 6,
+    "trongSuot": false
+  },
+  "HaoGiaoThong": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 6,
+    "trongSuot": false
+  },
+  "AnhKet": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 6,
+    "trongSuot": false
+  },
+  "TriAn": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 8,
+    "trongSuot": false
+  },
+  "SoLieuTran": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 5,
+    "trongSuot": true
+  },
+  "TuyenVanChuyen": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 6,
+    "trongSuot": false
+  },
+  "AnhTuLieu": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 6,
+    "trongSuot": false
+  },
+  "HopThongTin": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 4,
+    "trongSuot": true
+  },
+  "BannerPhongSu": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 5,
+    "trongSuot": true
+  },
+  "VetSang": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 0.9,
+    "trongSuot": true
+  },
+  "TieuDeLon": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 3,
+    "trongSuot": true
+  },
+  "TheKet": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 4,
+    "trongSuot": false
+  },
+  "BanDoXa": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 4,
+    "trongSuot": false
+  },
+  "Intro": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 4,
+    "trongSuot": true
+  },
+  "SoLieu": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 5,
+    "trongSuot": true
+  },
+  "LowerThird": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 5,
+    "trongSuot": true
+  },
+  "ChuDong": {
+    "rong": 1080,
+    "cao": 1920,
+    "giay": 6,
+    "trongSuot": false
+  },
+  "TranhGiay": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 6,
+    "trongSuot": true
+  },
+  "TranhGiayPhuNu": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 14,
+    "trongSuot": false
+  },
+  "SoDeFlycam": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 4,
+    "trongSuot": true
+  },
+  "BanDoNoi": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 6,
+    "trongSuot": false
+  },
+  "SoLan": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 3,
+    "trongSuot": true
+  },
+  "HudDemSo": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 5,
+    "trongSuot": true
+  },
+  "GhepCanh": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 5,
+    "trongSuot": false
+  },
+  "BanDoVeTinh": {
+    "rong": 1080,
+    "cao": 1920,
+    "giay": 4,
+    "trongSuot": false
+  },
+  "KetLaser": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 4,
+    "trongSuot": false
+  },
+  "PhuNu96": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 20,
+    "trongSuot": false
+  },
+  "AnhBayVao": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 7,
+    "trongSuot": false
+  },
+  "NguoiNoiPip": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 8,
+    "trongSuot": false
+  },
+  "TieuDeNhan": {
+    "rong": 1920,
+    "cao": 1080,
+    "giay": 4,
+    "trongSuot": false
+  }
+}

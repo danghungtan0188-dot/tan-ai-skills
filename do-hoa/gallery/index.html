@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mẫu đồ hoạ do-hoa</title>
+<style>
+  :root { --nen: #10141c; --the: #1a202c; --chu: #e8ecf2; --mo: #94a0b4; --vang: #ffcd2d; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 48px; background: var(--nen); color: var(--chu); font: 15px/1.5 "Segoe UI", Arial, sans-serif; }
+  header, main, section { max-width: 1400px; margin: 0 auto; }
+  h1 { margin: 0 0 4px; font-size: 24px; }
+  header p { margin: 0 0 20px; color: var(--mo); }
+  main { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .the { background: var(--the); border-radius: 10px; overflow: hidden; }
+  .khung { aspect-ratio: 16 / 9; background: #000; display: flex; align-items: center; justify-content: center; }
+  .trong-suot .khung { background: repeating-conic-gradient(#3a4150 0 25%, #2a303c 0 50%) 0 0 / 20px 20px; }
+  .khung img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .chu { padding: 10px 12px 12px; }
+  .ten { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  code { color: var(--vang); font-size: 16px; font-weight: 600; }
+  button { background: #2b3446; color: var(--chu); border: 1px solid #3d4860; border-radius: 6px; padding: 3px 10px; cursor: pointer; font: inherit; font-size: 13px; }
+  button:hover { border-color: var(--vang); }
+  .chu p { margin: 6px 0 4px; }
+  small { color: var(--mo); }
+  section { margin-top: 32px; }
+  section li { color: var(--mo); margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mẫu đồ hoạ (do-hoa) — 27 mẫu</h1>
+  <p>Ảnh là khung giữa (vài mẫu lấy khung khác cho dễ nhận); rê chuột (hoặc chạm) vào ảnh để xem đoạn chuyển động 2.5 giây. Ô bàn cờ = nền trong suốt, đắp lên video. Tạo lại: <code>node scripts/lam_gallery.mjs</code></p>
+</header>
+<main>
+    <article class="the trong-suot">
+      <div class="khung"><img src="HaTang.png" alt="HaTang" loading="lazy" data-gif="HaTang.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>HaTang</code><button type="button" data-ten="HaTang">Chép tên</button></div>
+        <p>Nhắc tới các lĩnh vực hạ tầng (giao thông, trường học, y tế) — biểu tượng sáng theo lời.</p>
+        <small>5 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="GiamNgheo.png" alt="GiamNgheo" loading="lazy" data-gif="GiamNgheo.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>GiamNgheo</code><button type="button" data-ten="GiamNgheo">Chép tên</button></div>
+        <p>So sánh hai con số trước/nay bằng hai cột (vd. tỷ lệ hộ nghèo), đè lên cảnh quay.</p>
+        <small>8 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="TieuChi.png" alt="TieuChi" loading="lazy" data-gif="TieuChi.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>TieuChi</code><button type="button" data-ten="TieuChi">Chép tên</button></div>
+        <p>Nông thôn mới: các thẻ &quot;TIÊU CHÍ n&quot; sáng lên theo lời, rồi dòng kết luận.</p>
+        <small>10 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="MocThoiGian.png" alt="MocThoiGian" loading="lazy" data-gif="MocThoiGian.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>MocThoiGian</code><button type="button" data-ten="MocThoiGian">Chép tên</button></div>
+        <p>Kể lịch sử theo năm: trục mốc thời gian, mốc đang nói sáng lên.</p>
+        <small>6 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="HaoGiaoThong.png" alt="HaoGiaoThong" loading="lazy" data-gif="HaoGiaoThong.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>HaoGiaoThong</code><button type="button" data-ten="HaoGiaoThong">Chép tên</button></div>
+        <p>Sơ đồ minh họa hào giao thông / rào làng chiến đấu, số km đếm lên.</p>
+        <small>6 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="TriAn.png" alt="TriAn" loading="lazy" data-gif="TriAn.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>TriAn</code><button type="button" data-ten="TriAn">Chép tên</button></div>
+        <p>Đoạn tri ân liệt sĩ, thương binh, gia đình có công — số hiện chậm, trang nghiêm.</p>
+        <small>8 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="SoLieuTran.png" alt="SoLieuTran" loading="lazy" data-gif="SoLieuTran.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>SoLieuTran</code><button type="button" data-ten="SoLieuTran">Chép tên</button></div>
+        <p>Vài con số trận đánh / thành tích trên dải tối, đắp lên tư liệu.</p>
+        <small>5 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="TuyenVanChuyen.png" alt="TuyenVanChuyen" loading="lazy" data-gif="TuyenVanChuyen.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>TuyenVanChuyen</code><button type="button" data-ten="TuyenVanChuyen">Chép tên</button></div>
+        <p>Sơ đồ minh họa tuyến vận chuyển: đường nét đứt vẽ dần qua các điểm.</p>
+        <small>6 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="HopThongTin.png" alt="HopThongTin" loading="lazy" data-gif="HopThongTin.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>HopThongTin</code><button type="button" data-ten="HopThongTin">Chép tên</button></div>
+        <p>Hộp chữ góc trái dưới kiểu phóng sự: mốc thời gian + vài dòng thông tin ngắn.</p>
+        <small>4 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="BannerPhongSu.png" alt="BannerPhongSu" loading="lazy" data-gif="BannerPhongSu.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>BannerPhongSu</code><button type="button" data-ten="BannerPhongSu">Chép tên</button></div>
+        <p>Banner tên phóng sự + địa danh kiểu truyền hình, đắp lên cảnh mở đầu.</p>
+        <small>5 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="VetSang.png" alt="VetSang" loading="lazy" data-gif="VetSang.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>VetSang</code><button type="button" data-ten="VetSang">Chép tên</button></div>
+        <p>Chuyển cảnh bằng vệt sáng quét chéo, đắp đúng điểm cắt.</p>
+        <small>0.9 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="TieuDeLon.png" alt="TieuDeLon" loading="lazy" data-gif="TieuDeLon.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>TieuDeLon</code><button type="button" data-ten="TieuDeLon">Chép tên</button></div>
+        <p>Chữ lớn tên địa danh đè trên flycam (kiểu &quot;XÃ VĨNH HỰU&quot;).</p>
+        <small>3 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="TheKet.png" alt="TheKet" loading="lazy" data-gif="TheKet.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>TheKet</code><button type="button" data-ten="TheKet">Chép tên</button></div>
+        <p>Thẻ kết phim tài liệu: chữ vàng đồng nổi khối trên nền nâu trầm.</p>
+        <small>4 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="BanDoXa.png" alt="BanDoXa" loading="lazy" data-gif="BanDoXa.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>BanDoXa</code><button type="button" data-ten="BanDoXa">Chép tên</button></div>
+        <p>Clip &quot;ranh giới xã&quot;: ảnh định vị rồi bản đồ ranh giới, gõ tên từng xã cũ.</p>
+        <small>4 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="Intro.png" alt="Intro" loading="lazy" data-gif="Intro.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>Intro</code><button type="button" data-ten="Intro">Chép tên</button></div>
+        <p>Mở đầu bản tin ATT NEWS: logo, vạch vàng, tiêu đề rồi mờ lộ video.</p>
+        <small>4 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="SoLieu.png" alt="SoLieu" loading="lazy" data-gif="SoLieu.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>SoLieu</code><button type="button" data-ten="SoLieu">Chép tên</button></div>
+        <p>Thẻ số liệu: con số lớn đếm lên, kèm biểu đồ cột ngang tuỳ chọn.</p>
+        <small>5 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="LowerThird.png" alt="LowerThird" loading="lazy" data-gif="LowerThird.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>LowerThird</code><button type="button" data-ten="LowerThird">Chép tên</button></div>
+        <p>Ghi tên / chức vụ người phát biểu ở góc dưới trái.</p>
+        <small>5 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="ChuDong.png" alt="ChuDong" loading="lazy" data-gif="ChuDong.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>ChuDong</code><button type="button" data-ten="ChuDong">Chép tên</button></div>
+        <p>Reels/TikTok chữ là nội dung: chữ bật theo giọng đọc, từ đang đọc tô vàng.</p>
+        <small>6 s · 1080×1920 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="TranhGiay.png" alt="TranhGiay" loading="lazy" data-gif="TranhGiay.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>TranhGiay</code><button type="button" data-ten="TranhGiay">Chép tên</button></div>
+        <p>Intro lễ hội (Trung thu) kiểu tranh giấy nhiều lớp, tách đôi lộ video.</p>
+        <small>6 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="TranhGiayPhuNu.png" alt="TranhGiayPhuNu" loading="lazy" data-gif="TranhGiayPhuNu.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>TranhGiayPhuNu</code><button type="button" data-ten="TranhGiayPhuNu">Chép tên</button></div>
+        <p>Intro mừng ngày Phụ nữ 20/10 kiểu tranh giấy pop-up, sen nở.</p>
+        <small>14 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="SoDeFlycam.png" alt="SoDeFlycam" loading="lazy" data-gif="SoDeFlycam.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>SoDeFlycam</code><button type="button" data-ten="SoDeFlycam">Chép tên</button></div>
+        <p>Đè số liệu thẳng lên flycam, không hộp nền, trượt vào đúng lúc đọc số.</p>
+        <small>4 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="BanDoNoi.png" alt="BanDoNoi" loading="lazy" data-gif="BanDoNoi.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>BanDoNoi</code><button type="button" data-ten="BanDoNoi">Chép tên</button></div>
+        <p>Giới thiệu một xã: viền xã sáng, khối nổi lên, gõ tên xã, loé trắng nối sang flycam.</p>
+        <small>6 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="SoLan.png" alt="SoLan" loading="lazy" data-gif="SoLan.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>SoLan</code><button type="button" data-ten="SoLan">Chép tên</button></div>
+        <p>Số lăn như đồng hồ (vd. 2025 → 2026) — chuyển năm, đổi mốc.</p>
+        <small>3 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the trong-suot">
+      <div class="khung"><img src="HudDemSo.png" alt="HudDemSo" loading="lazy" data-gif="HudDemSo.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>HudDemSo</code><button type="button" data-ten="HudDemSo">Chép tên</button></div>
+        <p>Promo/khoe một con số lớn: vòng HUD đếm số rồi vỡ ra lộ logo ATT.</p>
+        <small>5 s · 1920×1080 · nền trong suốt</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="KetLaser.png" alt="KetLaser" loading="lazy" data-gif="KetLaser.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>KetLaser</code><button type="button" data-ten="KetLaser">Chép tên</button></div>
+        <p>Kết bản tin ATT NEWS: tia laser vẽ logo, câu mời theo dõi.</p>
+        <small>4 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="PhuNu96.png" alt="PhuNu96" loading="lazy" data-gif="PhuNu96.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>PhuNu96</code><button type="button" data-ten="PhuNu96">Chép tên</button></div>
+        <p>Video ghép riêng dịp 96 năm Hội LHPN (intro tranh giấy + các cảnh ảnh).</p>
+        <small>20 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+    <article class="the">
+      <div class="khung"><img src="TieuDeNhan.png" alt="TieuDeNhan" loading="lazy" data-gif="TieuDeNhan.gif"></div>
+      <div class="chu">
+        <div class="ten"><code>TieuDeNhan</code><button type="button" data-ten="TieuDeNhan">Chép tên</button></div>
+        <p>Tiêu đề reel có một cụm từ nhấn nghiêng màu vàng, khung tự vẽ quanh chữ.</p>
+        <small>4 s · 1920×1080 · toàn khung</small>
+      </div>
+    </article>
+</main>
+<section>
+  <h2>Mẫu chưa có ảnh xem trước</h2>
+  <ul>
+      <li><code>AnhKet</code> — Error: Error loading image with src: http://localhost:3000/public/anh.png</li>
+      <li><code>AnhTuLieu</code> — Error: Error loading image with src: http://localhost:3000/public/anh.png</li>
+      <li><code>GhepCanh</code> — Error: Error loading image with src: http://localhost:3000/public/anh2.jpg</li>
+      <li><code>BanDoVeTinh</code> — Error: Error loading image with src: http://localhost:3000/public/nen.jpg</li>
+      <li><code>AnhBayVao</code> — Error: Error loading image with src: http://localhost:3000/public/anh3.jpg</li>
+      <li><code>NguoiNoiPip</code> — Received a status code of 404 while downloading file http://localhost:3000/public/nguoi_noi.mp4.</li>
+  </ul>
+</section>
+<script>
+  for (const img of document.querySelectorAll("img[data-gif]")) {
+    const tinh = img.src, gif = img.dataset.gif;
+    const bat = () => { img.src = gif; }, tat = () => { img.src = tinh; };
+    img.parentElement.addEventListener("mouseenter", bat);
+    img.parentElement.addEventListener("mouseleave", tat);
+    img.parentElement.addEventListener("click", () => (img.src.endsWith(".gif") ? tat() : bat()));
+  }
+  for (const nut of document.querySelectorAll("button[data-ten]")) {
+    nut.addEventListener("click", async () => {
+      const ten = nut.dataset.ten;
+      try { await navigator.clipboard.writeText(ten); }
+      catch { const o = document.createElement("textarea"); o.value = ten; document.body.append(o); o.select(); document.execCommand("copy"); o.remove(); }
+      nut.textContent = "Đã chép"; setTimeout(() => (nut.textContent = "Chép tên"), 1200);
+    });
+  }
+</script>
+</body>
+</html>
