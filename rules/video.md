@@ -61,6 +61,7 @@ Lệch quá 0.1 giây mà chưa được phép cắt = FAIL. Khi đã được p
 - Không được mất tiếng. Nếu video gốc có tiếng, video ra phải có tiếng.
 - Nhạc nền phải ducking xuống dưới giọng đọc, không đè lời.
 - Chuẩn hóa mức âm trước khi giao.
+- Nhạc nền, hiệu ứng âm thanh không phải tự làm: ghi vào `nguon-am-thanh.md` cạnh video giao — mỗi file một dòng: tên file, nguồn (link), tác giả, giấy phép, có phải ghi tên tác giả không. Không rõ giấy phép thì không dùng. Bị khiếu nại bản quyền trên Facebook/TikTok thì file này là bằng chứng.
 
 ## 6. Nội dung
 
