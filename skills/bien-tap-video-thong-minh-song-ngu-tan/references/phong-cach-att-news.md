@@ -307,3 +307,11 @@ KHÔNG áp dụng cho bản tin một tin địa phương thường.
 - **Giọng:** máy nghe (whisper small) báo giọng "Nữ Phường Duyên Hải AI" đọc "Thị"→"Thiện", "Văn"→"Phan" 14/14 bản, nhưng
   người dùng nghe tận tai nói đúng. Lỗi máy nghe lặp đều chưa chắc là lỗi giọng: **gửi đoạn nghe 10–20 s trước khi đổi giọng
   hay đọc lại cả bài** (bản này mất ~3 giờ đổi giọng qua lại).
+- **Sửa một chỗ sau khi đã giao (vd. đổi một con số): chỉ dựng lại đoạn giữa hai khung chìa khóa** của bản cuối
+  (`ffprobe -skip_frame nokey`), giữ nguyên phần còn lại bằng `-c copy` (đoạn đầu cắt bằng `-frames:v` đúng số khung —
+  `-to` lấy thừa khung chìa khóa của đoạn sau), làm lại cả dải tiếng từ các phần có sẵn (chỉ âm thanh, < 1 phút).
+  Bản tin 13/11: 13,7 s thay thế, ~5 phút thay vì ~35 phút dựng lại tin 2 + bản cuối; số khung bằng đúng bản cũ (7059).
+- **Nhạc nền dưới lời đọc phải nghe ra được:** đặt ≈ −33 LUFS (nhỏ hơn giọng 17 dB) thì người dùng nói "sao nhạc không đổi".
+  Mức đã duyệt: ≈ −29 LUFS (Blue Skies `volume=-17.6dB`, giọng −16 LUFS), bản cuối −12,9 LUFS. Đổi nhạc thì đổi CẢ đoạn mở đầu
+  (chỗ nhạc nghe rõ nhất), không chỉ phần nền. Nhạc lấy từ reel của đài khác: tách bằng Demucs được nhưng có rủi ro bản quyền —
+  báo trước; người dùng cuối cùng chọn lại Blue Skies (CC0) của bản v5.
