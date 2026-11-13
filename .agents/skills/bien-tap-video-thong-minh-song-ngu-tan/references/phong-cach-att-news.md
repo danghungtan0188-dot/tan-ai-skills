@@ -284,3 +284,26 @@ dòng 2"` (tia laser vẽ logo 0,15–1,45 s rồi vẽ
   Làm một file nghe thử nhiều giọng cùng một đoạn khó, người dùng chọn bằng tai.
 - Đọc lại giọng sau khi đã dựng xong hình: giữ mốc bắt đầu từng câu, `atempo` ≤ 1,08 cho câu dài hơn chỗ trống,
   dựng lại chỉ lượt đắp đồ họa + tiếng (phần cảnh, chuyển cảnh lấy lại từ cache).
+
+## 10. Bản tin nhiều tin có lãnh đạo Trung ương (2026-11-13, bản v6 đã duyệt)
+
+Phạm vi: bản tin xã có từ 2 tin trở lên, trong đó một tin có lãnh đạo Trung ương (đương chức hoặc nguyên chức).
+KHÔNG áp dụng cho bản tin một tin địa phương thường.
+
+- **Thứ tự:** mở đầu 25 s → intro tia laser → **tin lãnh đạo Trung ương trước** → tin địa phương → kết tia laser.
+- **Intro tia laser nêu đủ các tin**, mỗi ý một dòng (vd. "Đoàn nguyên Phó Chủ tịch nước / Đặng Thị Ngọc Thịnh thăm, tặng quà /
+  Bàn giao 2 căn nhà Đại đoàn kết"), `loiMoi` "Bản tin xã An Thạnh Thủy". Dòng ≤ 34 ký tự với `coTieuDe: 70`
+  (dòng 49 ký tự tràn mép 1920 px). Dài 5,5 s (3,5 s không kịp đọc 3 dòng). Logo/icon bắt đầu từ giây 25 + 5,5 = 30,5.
+- **Tin dựng từ ảnh nhỏ (< 1000 px) → bố cục 65/35:** khung ảnh 16:9 1216×684 tại (60,150) (hoặc bên phải tại x = 644),
+  viền vàng 8 px, zoom chậm tối đa 12 %, đổi bên trái/phải theo từng mục; khung chữ 534 px, chữ bắt đầu y ≥ 240 để tránh
+  logo ATT góc phải; nền men gốm xanh ngọc đậm (#16683F → #04261A, vệt bóng mềm). Tên người không bao giờ ngắt dòng
+  lẻ một chữ: vừa một dòng thì thu cỡ, quá nhỏ (< 50 px) thì chia 2 dòng cân đối. Chức danh viết đủ (Hội đồng nhân dân,
+  Ủy ban nhân dân), không viết tắt. Mục "01/02/03" + số đếm chạy 1,3 s + chip vàng nhà tài trợ.
+- **Tin có video quay thật → toàn màn hình như cũ** (người dùng chọn), không ép vào 65/35.
+- **Nhạc:** mở đầu groove ~129 BPM (sôi động); tin lãnh đạo piano trang trọng `volume=-14dB` (≈ −31 LUFS dưới giọng −16);
+  tin địa phương piano rất nhẹ `-9dB`. Kết quả cuối −13,8 LUFS, −2,7 dBTP sau chặn đỉnh `alimiter=limit=0.70`.
+- **Ghép bản cuối:** dựng từng đoạn riêng (mở đầu, intro, tin 1, tin 2) rồi mới nối; mỗi file chỉ `-i` một lần
+  (đọc một file hai lần thì ffmpeg treo — hook `guard_video` chặn). Theo dõi CPU của ffmpeg; đứng yên > 1 phút là treo.
+- **Giọng:** máy nghe (whisper small) báo giọng "Nữ Phường Duyên Hải AI" đọc "Thị"→"Thiện", "Văn"→"Phan" 14/14 bản, nhưng
+  người dùng nghe tận tai nói đúng. Lỗi máy nghe lặp đều chưa chắc là lỗi giọng: **gửi đoạn nghe 10–20 s trước khi đổi giọng
+  hay đọc lại cả bài** (bản này mất ~3 giờ đổi giọng qua lại).

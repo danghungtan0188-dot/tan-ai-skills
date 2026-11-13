@@ -17,6 +17,7 @@ export const ketLaserSchema = coBan.extend({
   qrTrai: z.string().default(""), // ảnh QR trong public dir; trống = không hiện
   qrPhai: z.string().default(""),
   tieuDe: z.string().default(""), // "dong 1|dong 2" (xuong dong bang ky tu xuong dong): tieu de lon tia laser ve sau logo (dung lam intro); trong = outro thuong
+  coTieuDe: z.number().default(104), // co chu tieu de (px o 1080p); tieu de dai nhieu dong thi ha xuong ~70
   nen: z.enum(["navy", "xanh-la"]).default("navy"), // xanh-la: nen xanh la sang + chum sang cheo troi ngang (kieu ket dai truyen hinh)
 });
 
@@ -72,7 +73,7 @@ const ChumSang: React.FC<{ W: number; H: number; t: number }> = ({ W, H, t }) =>
   </svg>
 );
 
-export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi, loiMoi, qrTrai, qrPhai, nen, tieuDe }) => {
+export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi, loiMoi, qrTrai, qrPhai, nen, tieuDe, coTieuDe }) => {
   const frame = useCurrentFrame();
   const { width: W, height: H, durationInFrames } = useVideoConfig();
   const t = frame / FPS;
@@ -87,7 +88,7 @@ export const KetLaser: React.FC<z.infer<typeof ketLaserSchema>> = ({ font, donVi
   const lx = (W - lw) / 2, ly = H * (coTD ? 0.13 : 0.3);
   // tieu de lon: laser ve vien chu (1,25-2,35 s) roi chu hien trang
   const dongTD = coTD ? tieuDe.split(String.fromCharCode(10)) : [];
-  const fsTD = 104 * s, cachTD = 124 * s, yTD = ly + lh + 150 * s;
+  const fsTD = coTieuDe * s, cachTD = coTieuDe * 1.19 * s, yTD = ly + lh + (50 + coTieuDe) * s;
   const rongTD = Math.max(1, ...dongTD.map((d) => d.length)) * fsTD * 0.52;
   const veChu = interpolate(t, [1.25, 2.35], [0, 1], { ...kep, easing: Easing.inOut(Easing.cubic) });
   const chuMau = interpolate(t, [2.15, 2.5], [0, 1], kep);

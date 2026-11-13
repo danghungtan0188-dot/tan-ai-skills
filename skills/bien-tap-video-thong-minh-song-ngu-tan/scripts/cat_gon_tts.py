@@ -17,7 +17,8 @@ F = 0.02  # giay / khung do RMS
 def cat_gon(a: np.ndarray, sr: int, lang: float = 0.35, ngan: float = 0.6, nen: float = 0.02):
     """Tra ve (am thanh da cat, so giay duoi la da bo)."""
     k = np.where(np.abs(a) > 0.01)[0]
-    x = a[max(0, k[0] - int(0.04 * sr)): k[-1] + int(0.04 * sr)]
+    # dau cau giu 0,15 s: am "Th/Ph/Kh" hoi gio nho hon nguong 0,01 — giu 0,04 s thi "Tham du" thanh "am du" (13/11/2026)
+    x = a[max(0, k[0] - int(0.15 * sr)): k[-1] + int(0.04 * sr)]
     n = int(F * sr)
     env = np.array([np.sqrt(np.mean(x[i:i + n] ** 2)) for i in range(0, len(x) - n + 1, n)])
     bo = 0.0
@@ -39,9 +40,9 @@ def cat_gon(a: np.ndarray, sr: int, lang: float = 0.35, ngan: float = 0.6, nen: 
             x = x[:len(env) * n]
         else:
             break
-    f = int(0.01 * sr)
+    f = int(0.01 * sr); f0 = int(0.002 * sr)   # dau cau chi lam mem 2 ms: 10 ms nuot tieng bat "T" -> "Tham" thanh "am"
     x = x.copy()
-    x[:f] *= np.linspace(0, 1, f)
+    x[:f0] *= np.linspace(0, 1, f0)
     x[-f:] *= np.linspace(1, 0, f)
     return x, bo
 
