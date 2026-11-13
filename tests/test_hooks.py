@@ -377,6 +377,21 @@ class TestGuardVideo(unittest.TestCase):
         self.assert_allowed("ffmpeg -i a.mp4 -c copy b.mp4", ffmpeg_dang_chay=0)
 
 
+class TestGuardVideoMotFileHaiLan(TestGuardVideo):
+    """Bai hoc 13/11/2026: lenh noi ban tin doc rough.mp4 hai lan -> ffmpeg treo, CPU dung yen hon 3 gio."""
+
+    def test_chan_cung_file_vao_hai_lan(self):
+        for command in ('ffmpeg -i mo.mp4 -i rough.mp4 -i tin1.mp4 -i rough.mp4 -filter_complex "[1:a]atrim=0:3.5[a]" '
+                        "-c:v libx264 -preset faster out.mp4",
+                        'ffmpeg -i "C:\\a b\\x.mp4" -i "C:/a b/X.mp4" -c copy y.mp4'):
+            self.assert_denied(command)
+
+    def test_cho_qua_moi_file_mot_lan(self):
+        for command in ("ffmpeg -i mo.mp4 -i intro.mp4 -i tin1.mp4 -i tin2.mp4 -c:v libx264 -preset faster out.mp4",
+                        "ffmpeg -framerate 30 -i k_%05d.jpg -i giong.wav -c:v libx264 -preset faster out.mp4"):
+            self.assert_allowed(command)
+
+
 class TestGuardTraPhi(unittest.TestCase):
     """Bai hoc: khong tu y dung dich vu tra phi (HeyGen)."""
 
