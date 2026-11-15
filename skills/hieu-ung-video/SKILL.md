@@ -15,6 +15,7 @@ Không làm: không tự bịa hiệu ứng không có thật trong CapCut/công
 
 | Nhóm (kiểu CapCut) | File tham khảo | Ví dụ |
 |---|---|---|
+| **Bảng 8 mục CapCut** — tra nhanh đã có gì, lấy thêm ở đâu | [references/lam-nhu-capcut.md](references/lam-nhu-capcut.md) | Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment, Templates; 248 chuyển cảnh gl-transitions; khi nào phải dựng trong CapCut |
 | **Transitions** — chuyển cảnh | [references/chuyen-canh.md](references/chuyen-canh.md) | fade, dissolve, wipe, slide, circle open/close, zoom |
 | **Transitions GPU kiểu CapCut** (chưa chạy trên máy này) | [references/chuyen-canh-gpufx.md](references/chuyen-canh-gpufx.md) | 154 chuyển cảnh cùng tên CapCut: Film Wipe, TV Glitch, Snap Zoom, Heart Wipe… cần bản FFmpeg có `gpufx` |
 | **Text** — chữ & hoạt hình chữ | [references/chu-va-hoat-hinh.md](references/chu-va-hoat-hinh.md) | tiêu đề tĩnh, banner/lower-third, typewriter, pop-in, fade-in chữ |
