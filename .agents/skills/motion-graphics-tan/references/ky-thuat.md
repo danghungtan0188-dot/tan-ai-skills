@@ -37,6 +37,25 @@ Ba thẻ cuối học từ 703 prompt video Opus 5.5, xem [hoc-tu-prompt-opus.md
 - Không đặt tiếng "vút" ở mọi thẻ. Chỉ dùng ở chỗ đổi phần hoặc khi hiện số.
 - **Cắt nhanh hơn không làm tăng lượt xem** (10 video nhiều lượt xem nhất: 1,8 s/cảnh, bằng nhóm còn lại). Nội dung quyết định.
 
+## Học thêm khi xem kỹ 50 video (15/11/2026, chưa có thẻ)
+
+Mỗi video được xem trọn từng khung (20 video nhiều lượt xem nhất và 30 video còn lại). Đây là các kỹ thuật chưa có thẻ. Khi cần, làm thẻ mới theo luật ở dưới.
+
+| Kỹ thuật | Dùng khi | Gần với thẻ |
+|---|---|---|
+| Chữ khổng lồ quét ngang khung rồi thu nhỏ thành một dòng danh sách | Nhấn một con số hoặc từ khóa ("20 TRIỆU/THÁNG", "TUỔI DÊ") | `so-dem-chay` |
+| Lóe sáng (light leak) cam/vàng 0,3–0,5 s | **Chỉ ở chỗ đổi phần**, 1–2 lần mỗi video, không đặt giữa câu | — |
+| Xé giấy mở sang nền họa tiết có khung điện thoại, ra lại bằng lỗ giấy rách | Vào phần ví dụ hoặc demo | `khung-dien-thoai` |
+| Khung ngắm 4 góc vuông bao quanh ảnh mẫu | "Nhìn vào đây" trước khi so sánh trước/sau | `khoanh-tay` |
+| Chữ cong theo vòng cung trên đầu người nói | Câu đánh giá ngắn ("khá là phèn") | — |
+| Nhãn tên cột bay ra quanh một bảng, cộng dồn tới khi kín | Giải thích bảng tính, lịch đăng bài | `o-hoi-lat` |
+| Chữ nhân bản bay kín khung đúng **một** lần | Con số tiền, câu kết | — |
+| Lưới storyboard 9–12 ô xen kẽ với cảnh thành phẩm | Khoe quy trình: bản vẽ khớp thành phẩm | `chia-doi` |
+
+- **Kém lượt xem thường do thân video dài và đơn điệu, không do thiếu hiệu ứng.** Ví dụ: 90 s quay màn hình tài liệu, không phóng to, không nhãn bước. Quay màn hình phải phóng vào dòng đang nói, có nhãn bước, mỗi đoạn ≤ 5 s.
+- Mỗi kênh có **một chữ ký lặp ở mọi video** (chữ rơi kín khung ở cuối; cua pixel + xé giấy). Chọn một chữ ký cho kênh mình và giữ nguyên.
+- Ghi chú đầy đủ ở repo riêng `hoc-marketing` (`docs/xem-ky-20-video.md`, `docs/xem-ky-30-video.md`).
+
 ## Luật riêng của nhóm thẻ này (học từ lúc làm)
 
 - **Chữ vàng không đặt trực tiếp trên nền xám hoặc video sáng.** Bộ kiểm báo tương phản 2,3:1. Đặt chữ vàng trên băng hoặc khối đen (`tieu-de-mo-dau`, `so-muc-to`).
