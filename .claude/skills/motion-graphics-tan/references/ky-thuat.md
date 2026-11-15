@@ -56,6 +56,24 @@ Mỗi video được xem trọn từng khung (20 video nhiều lượt xem nhấ
 - Mỗi kênh có **một chữ ký lặp ở mọi video** (chữ rơi kín khung ở cuối; cua pixel + xé giấy). Chọn một chữ ký cho kênh mình và giữ nguyên.
 - Ghi chú đầy đủ ở repo riêng `hoc-marketing` (`docs/xem-ky-20-video.md`, `docs/xem-ky-30-video.md`).
 
+## Bộ đồ họa đài (khung ngang 1920×1080, 15/11/2026)
+
+Học từ trailer, phóng sự và ident của Truyền hình Đồng Tháp (`hieu-ung-video/references/intro-truyen-hinh.md`). Dùng màu ATT có sẵn trong `do-hoa/src/chung.tsx`: navy, vàng, chữ ATT đỏ – xanh lá – xanh dương. Thẻ có `data-resolution="landscape"`; `render_mau.py` tự đổi ảnh soi sang khung ngang.
+
+| Thẻ | Dùng khi | Thời lượng | Biến |
+|---|---|---|---|
+| `dai-lower-third` | Tên + chức vụ người phát biểu, đặt ở 65,5% chiều cao như luật ATT | 5 s, vào xong 0,8 s | `ten` `chuc-vu` |
+| `dai-chu-chay` | Băng chữ chạy dưới màn hình, nhãn đỏ cố định, chữ chạy đều 300 px/giây | 6 s | `nhan` `noi-dung` |
+| `dai-logo-goc` | Logo ATT NEWS góc trên phải + tên bản tin + giờ, vệt sáng lướt qua ở 1,6 s | 4 s | `ten-ban-tin` `gio` |
+| `dai-gio-phat-song` | Thẻ lịch phát sóng: tên chương trình, tập, giờ rất to, ngày; đứng yên 4,5 s cho kịp đọc | 6 s | `ten-chuong-trinh` `tap` `gio-phat` `ngay` |
+| `dai-ident` | Ident kênh gắn cuối mọi video: nét sáng vẽ chữ → khối chữ trượt chéo → lóe → logo 3 màu → icon mạng xã hội → tên kênh gõ dần | 8 s | `ten-kenh` `mxh-1..4` |
+| `dai-tai-tro` | Hàng nhà tài trợ: mỗi ô vào một kiểu (lật, phóng, trượt), vệt sáng lướt qua từng ô | 6 s | `tieu-de` `tai-tro-1..3` |
+
+- **Không thay bản ATT đang dùng.** Bản tin ATT NEWS vẫn dùng lower-third Remotion và kết tia laser (`tan_studio do-hoa`). Theo luật phong cách ATT phải "áp dụng y nguyên". Bộ thẻ này dùng cho khách khác, chương trình mới, hoặc khi Tân muốn đổi.
+- `dai-tai-tro` đang dùng chữ thay logo. Có logo thật thì đặt ảnh vào ô, giữ hiệu ứng.
+- Xuất `--trong-suot` để đắp lên video bằng ffmpeg (lower-third, chữ chạy, logo góc). Thẻ toàn khung (giờ phát sóng, ident, tài trợ) tự có nền.
+- **Ô chữ phải rộng hơn chữ ở cỡ lớn nhất.** `dai-ident` lần đầu bị lỗi `text_occluded`: chữ "NEWS" 104 px rộng 345 px trong ô 290 px, lấn sang ô ATT. Đã hạ cỡ chữ xuống 86 px, nới ô lên 340 px. Lớp lóe trắng và khối trượt che chữ là cố ý: đánh dấu `data-layout-allow-occlusion` ngay trên lớp che.
+
 ## Luật riêng của nhóm thẻ này (học từ lúc làm)
 
 - **Chữ vàng không đặt trực tiếp trên nền xám hoặc video sáng.** Bộ kiểm báo tương phản 2,3:1. Đặt chữ vàng trên băng hoặc khối đen (`tieu-de-mo-dau`, `so-muc-to`).
