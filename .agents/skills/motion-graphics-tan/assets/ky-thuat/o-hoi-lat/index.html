@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait"
+  data-composition-variables='[{"id":"tieu-de","type":"string","label":"Tiêu đề","default":"3 cảnh nên quay"},{"id":"muc-1","type":"string","label":"Mục 1","default":"1. Cận sản phẩm"},{"id":"muc-2","type":"string","label":"Mục 2","default":"2. Người làm ra"},{"id":"muc-3","type":"string","label":"Mục 3","default":"3. Khách dùng thử"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* O dau hoi lat dan: dung san 3 o "?", noi toi muc nao lat o do. Nguoi xem muon biet het nen o lai toi cuoi (hoc tu Quizzy). */
+      :root { --nen: #8a8f96; --o: #ffffff; --o-vien: #1f9e8f; --muc: #1d2327; --hoi: #5f6d73; --vien: #111111; --font: 'Montserrat VN', sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #oh-khoi { position: absolute; left: 150px; top: 200px; width: 780px; height: 860px; perspective: 1400px; }
+      #oh-tieu-de { position: absolute; left: 0; right: 0; top: 0; text-align: center; font-size: 76px; font-weight: 900; color: #fff;
+        text-shadow: 0 0 8px var(--vien), 4px 4px 0 var(--vien), -3px 3px 0 var(--vien); }
+      .oh-o { position: absolute; left: 40px; width: 700px; height: 150px; }
+      #oh-o-1 { top: 200px; } #oh-o-2 { top: 400px; } #oh-o-3 { top: 600px; }
+      .oh-mat { position: absolute; inset: 0; border-radius: 75px; border: 6px solid var(--o-vien); background: var(--o);
+        display: flex; align-items: center; justify-content: center; font-size: 58px; font-weight: 800; color: var(--muc);
+        backface-visibility: hidden; }
+      .oh-hoi { color: var(--hoi); font-size: 72px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.5" data-width="1080" data-height="1920">
+      <div id="oh-khoi" class="clip" data-start="0" data-duration="4.5" data-track-index="1">
+        <div id="oh-tieu-de" data-var-text="tieu-de">3 cảnh nên quay</div>
+        <div id="oh-o-1" class="oh-o"><div id="oh-truoc-1" class="oh-mat oh-hoi">?</div><div id="oh-sau-1" class="oh-mat" data-var-text="muc-1">1. Cận sản phẩm</div></div>
+        <div id="oh-o-2" class="oh-o"><div id="oh-truoc-2" class="oh-mat oh-hoi">?</div><div id="oh-sau-2" class="oh-mat" data-var-text="muc-2">2. Người làm ra</div></div>
+        <div id="oh-o-3" class="oh-o"><div id="oh-truoc-3" class="oh-mat oh-hoi">?</div><div id="oh-sau-3" class="oh-mat" data-var-text="muc-3">3. Khách dùng thử</div></div>
+      </div>
+    </div>
+    <script>
+      // O hien cung luc voi tieu de; moi o lat ngang (rotationX) dung luc noi toi muc do: 1,2 s / 2,2 s / 3,2 s.
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#oh-tieu-de", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 0)
+        .fromTo(".oh-o", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out", stagger: 0.1 }, 0.15)
+        .set(["#oh-sau-1", "#oh-sau-2", "#oh-sau-3"], { rotationX: -90 }, 0);
+      [1, 2, 3].forEach((i) => {
+        const t = 0.2 + i;
+        tl.to(`#oh-truoc-${i}`, { rotationX: 90, duration: 0.18, ease: "power2.in" }, t)
+          .to(`#oh-sau-${i}`, { rotationX: 0, duration: 0.22, ease: "back.out(2)" }, t + 0.18);
+      });
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

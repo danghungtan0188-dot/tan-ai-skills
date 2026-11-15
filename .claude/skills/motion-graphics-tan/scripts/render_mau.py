@@ -22,6 +22,15 @@ from pathlib import Path
 HYPERFRAMES = "hyperframes@0.8.226"
 MAU = Path(__file__).resolve().parents[1] / "assets" / "mau"
 FONT = MAU.parent / "fonts"  # font co bo chu tieng Viet, xem SKILL.md
+KY_THUAT = MAU.parent / "ky-thuat"  # the ky thuat hoc tu 86 video (references/ky-thuat.md)
+
+
+def tim_the(ten: str) -> Path:
+    """Tim the theo ten: phong cach (assets/mau/) truoc, roi ky thuat (assets/ky-thuat/)."""
+    for goc in (MAU, KY_THUAT):
+        if (goc / ten / "index.html").is_file():
+            return goc / ten / "index.html"
+    raise SystemExit(f"khong co the '{ten}' trong assets/mau/ hay assets/ky-thuat/")
 CAU_HINH = {"$schema": "https://hyperframes.heygen.com/schema/hyperframes.json",
             "registry": "https://raw.githubusercontent.com/heygen-com/hyperframes/main/registry",
             "paths": {"blocks": "compositions", "components": "compositions/components", "assets": "assets"}}
@@ -61,11 +70,11 @@ def main() -> int:
         except (AttributeError, ValueError):
             pass
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("ten", help="ten thu muc trong assets/mau/")
+    ap.add_argument("ten", help="ten thu muc trong assets/mau/ hoac assets/ky-thuat/")
     ap.add_argument("--ra", type=Path, default=Path(tempfile.gettempdir()) / "motion-graphics-tan")
     ap.add_argument("--trong-suot", action="store_true", help="xuat .webm VP9 alpha thay vi .mp4 nen xam")
     a = ap.parse_args()
-    nguon = MAU / a.ten / "index.html"
+    nguon = tim_the(a.ten)
     html = nguon.read_text(encoding="utf-8")
     giay = thoi_luong_goc(html)
     if a.trong_suot:

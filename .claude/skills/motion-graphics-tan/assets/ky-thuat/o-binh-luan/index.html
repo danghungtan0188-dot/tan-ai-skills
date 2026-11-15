@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait"
+  data-composition-variables='[{"id":"dong-tren","type":"string","label":"Dòng trên (lý do comment)","default":"muốn nhận 5 mẫu kịch bản"},{"id":"chu-goi","type":"string","label":"Chữ gọi hành động","default":"comment"},{"id":"tu-khoa","type":"string","label":"Từ khóa (in to, trong ngoặc)","default":"“MẪU”"},{"id":"go","type":"string","label":"Chữ được gõ vào ô bình luận","default":"mẫu"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Playfair VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/playfair-vn-italic-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Playfair VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/playfair-vn-italic-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Playfair VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/playfair-vn-italic-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* O binh luan go tu khoa: luc moi comment, mot o binh luan gia hien duoi mat va tu khoa duoc go tung ky tu,
+         nguoi xem thay dung phai go gi. Hoc tu Hong Phuong (2132119387418154: 190 binh luan). Mau la cua minh. */
+      :root { --nen: #8a8f96; --trang: #ffffff; --vien: #111111; --o-vien: #1f9e8f; --chu-o: #14191c; --tro: #14191c;
+        --font: 'Montserrat VN', sans-serif; --font-nghieng: 'Playfair VN', serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #bl-khoi { position: absolute; left: 0; right: 0; top: 190px; height: 1100px; }
+      .bl-vien-chu { text-shadow: 0 0 8px var(--vien), 3px 3px 0 var(--vien), -3px 3px 0 var(--vien), 3px -3px 0 var(--vien), -3px -3px 0 var(--vien); }
+      #bl-tren { position: absolute; left: 60px; right: 60px; top: 0; text-align: center; font-size: 46px; font-weight: 700; color: var(--trang); }
+      #bl-goi { position: absolute; left: 60px; right: 60px; top: 66px; text-align: center; font-family: var(--font-nghieng); font-style: italic;
+        font-size: 104px; line-height: 1.05; color: var(--trang); }
+      #bl-tu { position: absolute; left: 60px; right: 60px; top: 190px; text-align: center; font-size: 76px; font-weight: 900; color: var(--trang); }
+      #bl-o { position: absolute; left: 190px; top: 860px; width: 700px; height: 130px; border-radius: 34px; background: #fff;
+        border: 7px solid var(--o-vien); box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28); }
+      #bl-duoi { position: absolute; left: 70px; bottom: -30px; width: 46px; height: 46px; background: #fff;
+        border-right: 7px solid var(--o-vien); border-bottom: 7px solid var(--o-vien); transform: rotate(45deg); }
+      #bl-go { position: absolute; left: 40px; top: 30px; font-size: 56px; font-weight: 700; color: var(--chu-o); white-space: nowrap; }
+      #bl-tro { position: absolute; top: 32px; width: 5px; height: 62px; background: var(--tro); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4" data-width="1080" data-height="1920">
+      <div id="bl-khoi" class="clip" data-start="0" data-duration="4" data-track-index="1">
+        <div id="bl-tren" class="bl-vien-chu" data-var-text="dong-tren">muốn nhận 5 mẫu kịch bản</div>
+        <div id="bl-goi" class="bl-vien-chu" data-var-text="chu-goi">comment</div>
+        <div id="bl-tu" class="bl-vien-chu" data-var-text="tu-khoa">“MẪU”</div>
+        <div id="bl-o"><div id="bl-duoi"></div><span id="bl-go" data-var-text="go">mẫu</span><div id="bl-tro"></div></div>
+      </div>
+    </div>
+    <script>
+      // Chu goi vao nhanh (0,25 s); o binh luan bat len o 0,7 s; tu khoa go tung ky tu (steps, nhip deu 0,12 s/ky tu);
+      // con tro chay theo chu va nhay 3 lan (co dinh, khong lap vo han); xong thi o nay nhe mot lan nhu vua bam gui.
+      const tl = gsap.timeline({ paused: true });
+      const go = document.querySelector("#bl-go");
+      const n = Math.max(1, [...go.textContent].length);
+      const rong = go.getBoundingClientRect().width;
+      tl.fromTo("#bl-tren", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "power2.out" }, 0)
+        .fromTo("#bl-goi", { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power3.out" }, 0.12)
+        .fromTo("#bl-tu", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "power3.out" }, 0.3)
+        .fromTo("#bl-o", { y: 80, scale: 0.9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.8)" }, 0.7)
+        .set("#bl-tro", { x: 40 }, 0)
+        .fromTo(go, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.12 * n, ease: `steps(${n})` }, 1.1)
+        .fromTo("#bl-tro", { x: 40 }, { x: 46 + rong, duration: 0.12 * n, ease: `steps(${n})` }, 1.1);
+      const xong = 1.1 + 0.12 * n;
+      [0.25, 0.85, 1.45].forEach((t) => tl.to("#bl-tro", { opacity: 0, duration: 0.01 }, xong + t).to("#bl-tro", { opacity: 1, duration: 0.01 }, xong + t + 0.3));
+      tl.to("#bl-o", { scale: 1.05, duration: 0.12, ease: "power1.out", yoyo: true, repeat: 1 }, xong + 0.15);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait"
+  data-composition-variables='[{"id":"chu-ma","type":"string","label":"Chữ mờ phía sau (1-2 từ)","default":"mùa vụ"},{"id":"so-chuong","type":"string","label":"Số chương","default":"02"},{"id":"tieu-de","type":"string","label":"Tiêu đề chương","default":"ĐĂNG TRƯỚC MÙA THU HOẠCH"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-italic-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Playfair VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/playfair-vn-italic-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Playfair VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/playfair-vn-italic-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Playfair VN'; font-style: italic; font-weight: 400 900; src: url('assets/fonts/playfair-vn-italic-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* Chu ma nen: moi chuong co mot chu viet nghieng rat to, mo, troi cham phia sau; so chuong + tieu de ro phia truoc.
+         Hoc cach lam (Ngo Bang AI); mau la cua minh: nen nau dat dam, nhan cam. */
+      :root { --nen: #8a8f96; --dat: #1c1712; --ma: #5a4836; --trang: #f7f1e8; --cam: #ffb347; --font: 'Montserrat VN', sans-serif;
+        --font-nghieng: 'Playfair VN', serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #cm-nen { position: absolute; inset: 0; background: var(--dat); overflow: hidden; }
+      #cm-ma { position: absolute; left: -40px; top: 300px; white-space: nowrap; font-family: var(--font-nghieng); font-style: italic;
+        font-size: 300px; line-height: 1; color: transparent; -webkit-text-stroke: 3px var(--ma); }
+      #cm-so { position: absolute; left: 90px; top: 560px; font-size: 150px; line-height: 1; font-weight: 900; color: var(--cam); }
+      #cm-tieu-de { position: absolute; left: 90px; right: 90px; top: 740px; font-size: 84px; line-height: 1.08; font-weight: 900; color: var(--trang); }
+      #cm-gach { position: absolute; left: 92px; top: 1000px; width: 220px; height: 10px; border-radius: 5px; background: var(--cam);
+        transform-origin: left center; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="3.5" data-width="1080" data-height="1920">
+      <div id="cm-nen" class="clip" data-start="0" data-duration="3.5" data-track-index="1">
+        <div id="cm-ma" aria-hidden="true" data-layout-allow-overlap data-var-text="chu-ma">mùa vụ</div>
+        <div id="cm-so" data-var-text="so-chuong">02</div>
+        <div id="cm-tieu-de" data-var-text="tieu-de">ĐĂNG TRƯỚC MÙA THU HOẠCH</div>
+        <div id="cm-gach"></div>
+      </div>
+    </div>
+    <script>
+      // Chu ma hien mo dan va troi ngang rat cham suot the (tao chieu sau, khong gianh mat); chu chinh vao nhanh.
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#cm-ma", { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0)
+        .to("#cm-ma", { x: -90, duration: 2.9, ease: "none" }, 0.6)
+        .fromTo("#cm-so", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 0.2)
+        .fromTo("#cm-tieu-de", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 0.32)
+        .fromTo("#cm-gach", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, 0.5);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
