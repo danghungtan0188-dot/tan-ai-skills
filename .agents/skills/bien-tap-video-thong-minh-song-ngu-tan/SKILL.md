@@ -35,6 +35,7 @@ Phân tích trước, chọn phong cách sau. Không áp một preset cho mọi 
 - **Dựng từ video thô:** [references/dung-tu-video-tho.md](references/dung-tu-video-tho.md) — `survey_rushes.py` → `build_edit_plan.py` → `assemble.py`; luật cỡ cảnh, độ dài cảnh, chống nhảy hình, khớp đúng thời lượng yêu cầu.
 - **Tìm kho clip:** [references/kho-clip.md](references/kho-clip.md) — thứ tự Desktop → Documents → Google Drive, quy tắc lọc video liên quan và cách đưa file Drive về vùng làm việc trước khi khảo sát.
 - **Song ngữ Việt–Anh:** [references/quy-trinh-song-ngu.md](references/quy-trinh-song-ngu.md) — lời Việt theo kịch bản (ASR chỉ lấy mốc), glossary, `check_translation.py`, 4 chế độ xuất (`export_subtitles.py`), kiểm SRT/VTT (`check_subtitles.py`).
+- **Tin dựng từ ảnh nhỏ (< 1000 px):** `scripts/khung6535.py` — bố cục 65/35 (khung ảnh viền vàng + khung chữ, nền men gốm), kịch bản mẫu `scripts/mau_tin_65_35.json`; xem trước bằng `--xem`.
 - **ATT NEWS một lượt:** `detect_scenes.py` → `make_tv_card.py` → `make_outro.py` → `render_att.py` → `qa.py --tail`; banner kiểm tràn cảnh bằng `make_lower_thirds_ass.py --scenes`.
 - **MC AI / lip-sync:** [skills/chuyen-gia-edit-video-tan/references/mc-ai-lip-sync.md](skills/chuyen-gia-edit-video-tan/references/mc-ai-lip-sync.md)
 - **Chức năng kiểu CapCut:** [skills/chuyen-gia-edit-video-tan/references/capcut-catalog.md](skills/chuyen-gia-edit-video-tan/references/capcut-catalog.md)

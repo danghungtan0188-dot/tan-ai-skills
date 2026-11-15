@@ -1,0 +1,25 @@
+{
+ "_ghi_chu": "Mẫu dữ liệu GIẢ cho khung6535.py. Đổi ảnh, tên, chức danh, số liệu theo kịch bản thật đã soát. Ảnh đặt trong thư mục anh/ cạnh file này.",
+ "ra": "khung_tin_mau",
+ "moc_file": "mau_tin_65_35_moc.json",
+ "canh": [
+  {"bd": 0, "kt": "c2_01-0.3", "ben": "T", "anh": ["anh/anh_01.jpg", "anh/anh_02.jpg"],
+   "muc": [
+    {"loai": "nhan", "t": 0.5, "text": "Đoàn công tác"},
+    {"loai": "ten", "t": "c1_01+1.2", "chuc": "Phó Chủ tịch Ủy ban nhân dân tỉnh Mẫu", "ten": "Nguyễn Văn Mẫu", "co": 56, "phu": "Trưởng đoàn"},
+    {"loai": "dia_diem", "t": "c1_01+2.4", "text": "Ngày 1/1, tại xã Thử Nghiệm"}
+   ]},
+  {"bd": "c2_01-0.3", "kt": "c3_01-0.3", "ben": "P", "anh": ["anh/anh_03.jpg"],
+   "muc": [
+    {"loai": "so_muc", "t": "c2_01-0.1", "so": "01"},
+    {"loai": "tieu_de", "t": "c2_01+0.3", "text": "Trao quà cho hộ khó khăn", "co": 46},
+    {"loai": "so", "t": "c2_01+1.5", "so": 120, "don_vi": "phần quà", "nhan": "cho hộ có hoàn cảnh khó khăn", "tren": "Khoảng", "co": 88},
+    {"loai": "chip", "t": "c2_01$-0.5", "text": "Công ty Mẫu tài trợ"}
+   ]},
+  {"bd": "c3_01-0.3", "kt": "c3_01$+1.0", "ben": "T", "chu_mo": "NGHĨA TÌNH", "anh": ["anh/anh_04.jpg"],
+   "muc": [
+    {"loai": "nguoi", "t": "c3_01", "ten": "Trần Thị Thử", "chuc": "Chủ tịch Ủy ban Mặt trận Tổ quốc Việt Nam xã Thử Nghiệm"},
+    {"loai": "trich", "t": "c3_01+1.5", "text": "Chung tay chăm lo cho người dân khó khăn"}
+   ]}
+ ]
+}
