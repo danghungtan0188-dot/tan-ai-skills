@@ -15,6 +15,7 @@ Không làm: không tự bịa hiệu ứng không có thật trong CapCut/công
 
 | Nhóm (kiểu CapCut) | File tham khảo | Ví dụ |
 |---|---|---|
+| **Intro, kết, chuyển cảnh zoom kiểu truyền hình** | [references/intro-truyen-hinh.md](references/intro-truyen-hinh.md) | công thức intro trailer 18 s (con số → tường ảnh → bộ đếm → đỉnh), intro ẩn dụ phóng sự, logo tài trợ + ident đài 8 s, bố cục vuông 1:1, 6 kiểu chuyển cảnh zoom + công thức ffmpeg zoom xuyên đã chạy thử |
 | **Bảng 8 mục CapCut** — tra nhanh đã có gì, lấy thêm ở đâu | [references/lam-nhu-capcut.md](references/lam-nhu-capcut.md) | Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment, Templates; 248 chuyển cảnh gl-transitions; khi nào phải dựng trong CapCut |
 | **Transitions** — chuyển cảnh | [references/chuyen-canh.md](references/chuyen-canh.md) | fade, dissolve, wipe, slide, circle open/close, zoom |
 | **Transitions GPU kiểu CapCut** (chưa chạy trên máy này) | [references/chuyen-canh-gpufx.md](references/chuyen-canh-gpufx.md) | 154 chuyển cảnh cùng tên CapCut: Film Wipe, TV Glitch, Snap Zoom, Heart Wipe… cần bản FFmpeg có `gpufx` |
