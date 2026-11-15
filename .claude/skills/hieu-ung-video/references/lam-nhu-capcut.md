@@ -19,6 +19,30 @@ Cập nhật 15/11/2026. Ba repo ngoài đã tải bản nông về `D:\GitHub\n
 | **Adjustment** (sáng, tương phản, nét) | [hieu-chinh.md](hieu-chinh.md). Âm thanh: luật loudnorm 2 lượt `linear=true` | — | Đo trước và sau khi chỉnh. Không ép limiter quá 3 dB |
 | **Templates** (mẫu dựng sẵn) | 20 mẫu phong cách và 16 thẻ trong `motion-graphics-tan` (render bằng `render_mau.py`). Mẫu Remotion trong `do-hoa/` (intro, số liệu, lower-third). Bộ tiếng động `sfx` (MIT) | Mixkit: mẫu Premiere/After Effects/DaVinci miễn phí, không cần đăng ký (không dùng được trực tiếp trong repo, chỉ tham khảo) | Dựng video mới: chọn phong cách trước, dùng lại thẻ, chỉ đổi chữ và màu |
 
+## Hiệu ứng trend (glitch, VHS, rung, zoom giật)
+
+Đã có sẵn: tách RGB + vạch glitch, vệt sáng, lóe trắng (preset `glitch_rgb`, `light_leak`, `flash_white` trong [ky-thuat-tu-video-mau.md](ky-thuat-tu-video-mau.md)); mẫu HyperFrames `chromatic-glitch`, `camera-shake`, `whip-pan` ([hoc-tu-hyperframes.md](hoc-tu-hyperframes.md)).
+
+Ba công thức ffmpeg thêm dưới đây đã **chạy thử ngày 15/11** trên clip thử 540×960, 2 giây: ra đúng 60 khung, đúng kích thước, đã soát ảnh từng khung. Đổi `540:960` cho đúng khung của video thật.
+
+| Hiệu ứng | Bộ lọc (`-vf`) | Ghi chú |
+|---|---|---|
+| **VHS** (băng từ cũ) | `rgbashift=rh=4:bh=-4,gblur=sigma=0.8,noise=alls=12:allf=t,eq=saturation=0.85:contrast=1.05,drawgrid=w=iw:h=4:t=1:c=black@0.25` | Lệch màu nhẹ, mờ nhẹ, nhiễu hạt, vạch quét ngang. Dùng cho cảnh hồi tưởng. Không dùng cho tư liệu bản tin |
+| **Rung máy** | `scale=iw*1.06:-2,crop=540:960:x='(iw-540)/2+12*sin(t*47)':y='(ih-960)/2+10*sin(t*61)'` | Phóng 6% rồi xê dịch. Chỉ áp cho **đoạn 0,3–0,6 giây** lúc có tiếng động mạnh, không áp cả clip (gây chóng mặt) |
+| **Zoom giật** (punch-in) | `scale=w='iw*if(between(t,1,1.5),1.15,1)':h=-2:eval=frame,crop=540:960` | Phóng 15% đúng lúc nhấn chữ hoặc theo nhịp nhạc. Đổi `1,1.5` thành giây cần nhấn |
+
+Luôn kèm `-threads 2`, x264 `-preset faster`. Mỗi file chỉ `-i` một lần (hook `guard_video` chặn đọc một file hai lần).
+
+**Repo ngoài đã soát (15/11), không lấy:**
+
+| Repo | Sao | Lý do không lấy |
+|---|---|---|
+| ntsc-rs (VHS rất thật, app + plugin After Effects/Premiere) | 2.721 | Giấy phép không rõ. Chỉ dùng như một app riêng nếu cần VHS thật |
+| video-fx (Python, 150 hiệu ứng) | 0 | Repo mới, chưa ai dùng. Công thức ffmpeg ở trên đủ cho việc hay gặp |
+| reactvideoeditor/remotion-templates | 292 | Không ghi giấy phép. Chỉ đọc tham khảo |
+| remotion-open-fx (npm) | — | Repo gốc trên GitHub đã bị xóa |
+| remotion-glitch-effect, pyeffects | 4 / 3 | Quá nhỏ, công thức sẵn có đã làm được |
+
 ## Âm thanh (CapCut để trong mục Audio)
 
 - Tiếng động tự tạo: `motion-graphics-tan/scripts/sfx` (MIT), cách dùng trong [tieng-dong.md](../../motion-graphics-tan/references/tieng-dong.md). Đã master −14 LUFS, đỉnh ≤ −2 dBFS.
