@@ -50,12 +50,17 @@ def bo_nen(html: str) -> str:
     return html.replace("--nen: #8a8f96", "--nen: transparent", 1)
 
 
-def lenh_soi(mp4: Path, ra: Path, fps: int, giay: float) -> list[str]:
+def la_khung_ngang(html: str) -> bool:
+    """The 1920x1080 (do hoa dai, data-resolution="landscape") thay vi 1080x1920."""
+    return 'data-resolution="landscape"' in html
+
+
+def lenh_soi(mp4: Path, ra: Path, fps: int, giay: float, ngang: bool = False) -> list[str]:
     """4 khung o 10%, 30%, 60%, 93% thoi luong, ghep ngang."""
     n = [round(fps * giay * k) for k in (0.1, 0.3, 0.6, 0.93)]
     chon = "+".join(f"eq(n\\,{i})" for i in n)
     return ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(mp4), "-vf",
-            f"select='{chon}',scale=270:480,tile=4x1", "-frames:v", "1", "-fps_mode", "vfr", str(ra)]
+            f"select='{chon}',scale={'480:270' if ngang else '270:480'},tile=4x1", "-frames:v", "1", "-fps_mode", "vfr", str(ra)]
 
 
 def _npx(*a: str, cwd: Path) -> subprocess.CompletedProcess:
@@ -110,11 +115,12 @@ def main() -> int:
     dai = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
                                 str(mp4)], capture_output=True, text=True).stdout.strip() or 0)
     soi = a.ra / f"{a.ten}.soi.png"
-    subprocess.run(lenh_soi(mp4, soi, 30, giay), check=True)
+    ngang = la_khung_ngang(html)
+    subprocess.run(lenh_soi(mp4, soi, 30, giay, ngang), check=True)
     # Anh cat sat the o do phan giai goc de soi chu: anh thu nho khong lo loi sai font.
     chu = a.ra / f"{a.ten}.chu.png"
     subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-ss", f"{giay * 0.6:.2f}", "-i", str(mp4),
-                    "-frames:v", "1", "-vf", "crop=800:1000:140:170", str(chu)], check=True)
+                    "-frames:v", "1", "-vf", "crop=1100:620:410:230" if ngang else "crop=800:1000:140:170", str(chu)], check=True)
     dung = abs(dai - giay) < 0.1
     print(f"render: {mp4} ({dai:.2f}s / mong {giay}s {'DUNG' if dung else 'LECH'}); anh 4 khung: {soi}; soi chu: {chu}")
     return 0 if dung else 1

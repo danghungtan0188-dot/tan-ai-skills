@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi" data-resolution="landscape"
+  data-composition-variables='[{"id": "tieu-de", "type": "string", "label": "Tiêu đề", "default": "THỜI TIẾT NGÀY MAI"}, {"id": "vung-1", "type": "string", "label": "Vùng 1", "default": "Bắc"}, {"id": "nhiet-1", "type": "string", "label": "Nhiệt độ 1", "default": "18 - 24°C"}, {"id": "vung-2", "type": "string", "label": "Vùng 2", "default": "Trung"}, {"id": "nhiet-2", "type": "string", "label": "Nhiệt độ 2", "default": "22 - 28°C"}, {"id": "vung-3", "type": "string", "label": "Vùng 3", "default": "Tây Nguyên"}, {"id": "nhiet-3", "type": "string", "label": "Nhiệt độ 3", "default": "19 - 27°C"}, {"id": "vung-4", "type": "string", "label": "Vùng 4", "default": "Nam Bộ"}, {"id": "nhiet-4", "type": "string", "label": "Nhiệt độ 4", "default": "25 - 33°C"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* Thoi tiet 4 vung: o vao lan luot, bieu tuong nang (mat troi) / mua (may + giot) ve bang CSS, doi theo du bao that. */
+      :root { --nen: #8a8f96; --navy: #00164E; --navy2: #0A3C92; --vang: #FFCD2D; --trang: #ffffff; --den: #0b0f1a; --do: #CE2027; --xanh: #007A3D; --lam: #1A3CAA; --font: 'Montserrat VN', sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #tt3 { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: linear-gradient(180deg, #2F7FCB 0%, #0F4592 100%); }
+      #tt3-tieu { position: absolute; left: 0; right: 0; top: 130px; text-align: center; font-size: 66px; font-weight: 900; color: var(--trang); }
+      .tt3-o { position: absolute; top: 300px; width: 380px; height: 560px; border-radius: 24px; background: rgba(0,22,78,0.82); }
+      #tt3-1 { left: 120px; } #tt3-2 { left: 560px; } #tt3-3 { left: 1000px; } #tt3-4 { left: 1440px; }
+      .tt3-bieu { position: absolute; left: 90px; top: 50px; width: 200px; height: 200px; }
+      .tt3-nang { position: absolute; left: 30px; top: 30px; width: 140px; height: 140px; border-radius: 70px; background: var(--vang); box-shadow: 0 0 40px 10px rgba(255,205,45,0.6); }
+      .tt3-may { position: absolute; left: 10px; top: 40px; width: 180px; height: 80px; border-radius: 40px; background: var(--trang); }
+      .tt3-giot { position: absolute; top: 140px; width: 10px; height: 40px; border-radius: 5px; background: #9FD3FF; }
+      .g1 { left: 50px; } .g2 { left: 95px; } .g3 { left: 140px; }
+      .tt3-vung { position: absolute; left: 0; right: 0; top: 300px; text-align: center; font-size: 46px; font-weight: 800; color: var(--trang); }
+      .tt3-nhiet { position: absolute; left: 0; right: 0; top: 390px; text-align: center; font-size: 52px; font-weight: 900; color: var(--vang); white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="7" data-width="1920" data-height="1080">
+      <div id="tt3" class="clip" data-start="0" data-track-index="1" data-duration="7">
+        <div id="tt3-tieu" data-var-text="tieu-de">THỜI TIẾT NGÀY MAI</div>
+        <div class="tt3-o" id="tt3-1"><div class="tt3-bieu"><div class="tt3-may"></div><div class="tt3-giot g1"></div><div class="tt3-giot g2"></div><div class="tt3-giot g3"></div></div><div class="tt3-vung" data-var-text="vung-1">Bắc</div><div class="tt3-nhiet" data-var-text="nhiet-1">18 - 24°C</div></div>
+        <div class="tt3-o" id="tt3-2"><div class="tt3-bieu"><div class="tt3-may"></div><div class="tt3-giot g1"></div><div class="tt3-giot g2"></div><div class="tt3-giot g3"></div></div><div class="tt3-vung" data-var-text="vung-2">Trung</div><div class="tt3-nhiet" data-var-text="nhiet-2">22 - 28°C</div></div>
+        <div class="tt3-o" id="tt3-3"><div class="tt3-bieu"><div class="tt3-nang"></div></div><div class="tt3-vung" data-var-text="vung-3">Tây Nguyên</div><div class="tt3-nhiet" data-var-text="nhiet-3">19 - 27°C</div></div>
+        <div class="tt3-o" id="tt3-4"><div class="tt3-bieu"><div class="tt3-nang"></div></div><div class="tt3-vung" data-var-text="vung-4">Nam Bộ</div><div class="tt3-nhiet" data-var-text="nhiet-4">25 - 33°C</div></div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#tt3", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0)
+        .fromTo("#tt3-tieu", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 }, 0.15)
+        .fromTo(".tt3-o", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out", stagger: 0.25 }, 0.5)
+        .fromTo(".tt3-nang", { scale: 0.85 }, { scale: 1.05, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 7 }, 1.5)
+        .fromTo(".tt3-giot", { y: -10, opacity: 0.3 }, { y: 20, opacity: 1, duration: 0.5, ease: "none", repeat: 9, stagger: 0.15 }, 1.5)
+        .to("#tt3", { opacity: 0, duration: 0.35 }, 6.65);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

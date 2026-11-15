@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi" data-resolution="landscape"
+  data-composition-variables='[{"id": "ten-kenh", "type": "string", "label": "Tên kênh", "default": "ATT NEWS - TIN TỨC NÔNG THÔN"}, {"id": "mxh-1", "type": "string", "label": "Mạng xã hội 1", "default": "Facebook"}, {"id": "mxh-2", "type": "string", "label": "Mạng xã hội 2", "default": "YouTube"}, {"id": "mxh-3", "type": "string", "label": "Mạng xã hội 3", "default": "TikTok"}, {"id": "mxh-4", "type": "string", "label": "Mạng xã hội 4", "default": "Zalo"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* Ident kenh 8 s: gan cuoi moi video, giong het nhau moi lan. Khong chu ngau nhien, khong lap vo han. */
+      :root { --nen: #8a8f96; --navy: #00164E; --navy2: #0A3C92; --vang: #FFCD2D; --trang: #ffffff; --den: #0b0f1a; --do: #CE2027; --xanh: #007A3D; --lam: #1A3CAA; --font: 'Montserrat VN', sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #id { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden;
+        background: radial-gradient(ellipse at 50% 40%, #2fae55 0%, #0E7A32 55%, #04381A 100%); }
+      #id-vien { position: absolute; left: 0; top: 0; }
+      #id-vien text { font-family: var(--font); font-size: 300px; font-weight: 900; fill: none; stroke: #F4FFF6; stroke-width: 4; }
+      #id-khoi { position: absolute; left: 260px; top: 330px; width: 1400px; height: 420px; border-radius: 30px;
+        background: linear-gradient(135deg, #7CF08E 0%, #2fae55 100%); display: flex; align-items: center; justify-content: center;
+        font-size: 300px; font-weight: 900; color: #1f8f42; }
+      #id-loe { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: var(--trang); }
+      #id-logo { position: absolute; left: 585px; top: 300px; width: 750px; height: 220px; display: flex; overflow: hidden; border-radius: 22px; }
+      #id-att { width: 410px; background: var(--trang); display: flex; align-items: center; justify-content: center; gap: 6px; }
+      .id-c { font-size: 150px; font-weight: 900; line-height: 1; }
+      #id-a { color: var(--do); } #id-t1 { color: var(--xanh); } #id-t2 { color: var(--lam); }
+      #id-news { width: 340px; background: var(--navy); display: flex; align-items: center; justify-content: center;
+        font-size: 86px; font-weight: 900; color: var(--trang); }
+      #id-mxh { position: absolute; left: 0; right: 0; top: 590px; display: flex; justify-content: center; gap: 22px; }
+      .id-o { height: 64px; padding: 0 26px; border-radius: 32px; background: rgba(0,0,0,0.35); display: flex; align-items: center;
+        font-size: 30px; font-weight: 800; color: var(--trang); }
+      #id-ten-khung { position: absolute; left: 0; right: 0; top: 700px; display: flex; justify-content: center; }
+      #id-ten { font-size: 50px; font-weight: 800; color: var(--trang); white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1920" data-height="1080">
+      <div id="id" class="clip" data-start="0" data-duration="8" data-track-index="1" data-layout-allow-overlap data-layout-allow-occlusion>
+        <svg id="id-vien" data-layout-allow-occlusion width="1920" height="1080" viewBox="0 0 1920 1080"><text x="960" y="650" text-anchor="middle">ATT</text></svg>
+        <div id="id-khoi" data-layout-allow-occlusion>ATT</div>
+        <div id="id-loe" data-layout-allow-occlusion></div>
+        <div id="id-logo" data-layout-allow-overflow>
+          <div id="id-att"><span class="id-c" id="id-a">A</span><span class="id-c" id="id-t1">T</span><span class="id-c" id="id-t2">T</span></div>
+          <div id="id-news">NEWS</div>
+        </div>
+        <div id="id-mxh">
+          <div class="id-o" data-var-text="mxh-1">Facebook</div><div class="id-o" data-var-text="mxh-2">YouTube</div>
+          <div class="id-o" data-var-text="mxh-3">TikTok</div><div class="id-o" data-var-text="mxh-4">Zalo</div>
+        </div>
+        <div id="id-ten-khung"><div id="id-ten" data-var-text="ten-kenh">ATT NEWS - TIN TỨC NÔNG THÔN</div></div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // 0-1,6 s: vien chu ve dan (net dut chay); an net tu dau de khong lo cham.
+      tl.fromTo("#id-vien text", { strokeDasharray: 2600, strokeDashoffset: 2600, opacity: 0 },
+                { strokeDashoffset: 0, opacity: 1, duration: 1.5, ease: "power1.inOut" }, 0.1)
+        // 1,6-2,5 s: khoi chu 3D truot cheo sat may.
+        .fromTo("#id-khoi", { x: -900, y: 260, rotation: -14, scale: 1.8, opacity: 0 },
+                { x: 120, y: -40, rotation: -8, scale: 1.5, opacity: 1, duration: 0.9, ease: "power2.inOut" }, 1.6)
+        .to("#id-vien", { opacity: 0, duration: 0.3 }, 1.7)
+        // 2,5-2,9 s: loe trang che chuyen.
+        .fromTo("#id-loe", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.in" }, 2.45)
+        .set("#id-khoi", { opacity: 0 }, 2.6)
+        .to("#id-loe", { opacity: 0, duration: 0.35, ease: "power2.out" }, 2.6)
+        // 2,6-3,4 s: logo thu ve, chu do mau lan luot.
+        .fromTo("#id-logo", { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, 2.6)
+        .fromTo(".id-c", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.25, ease: "back.out(2)", stagger: 0.1 }, 2.9)
+        // 3,6-4,8 s: icon mang xa hoi bat lan luot.
+        .fromTo(".id-o", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.2)", stagger: 0.25 }, 3.6)
+        // 5-6,5 s: ten kenh go dan (cat chu theo buoc).
+        .fromTo("#id-ten", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: "steps(28)" }, 5.0);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

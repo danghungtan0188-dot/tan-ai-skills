@@ -1,4 +1,5 @@
-"""skills/motion-graphics-tan/assets/ky-thuat: 12 the hoc tu 86 video marketing + 3 the hoc tu prompt Opus 5.5.
+"""skills/motion-graphics-tan/assets/ky-thuat: 12 the hoc tu 86 video marketing + 3 the hoc tu prompt Opus 5.5
++ 20 the do hoa dai khung ngang (dai-*, hoc tu Truyen hinh Dong Thap, vung an toan EBU R95).
 
 Cung hop dong voi the phong cach (tests/test_motion_graphics.py), nhung thoi luong 3-8 s theo tung ky thuat (giai-thich-5-canh dai 8 s vi co 5 canh).
 Khong render -- render that bang `python scripts/render_mau.py <ten>`.
@@ -20,7 +21,11 @@ KY_THUAT = sorted(p for p in (SKILL / "assets" / "ky-thuat").iterdir() if p.is_d
 FONT = SKILL / "assets" / "fonts"
 TEN = {"phu-de-to-tu", "tieu-de-mo-dau", "so-muc-to", "khung-dien-thoai", "o-hoi-lat", "chia-doi",
        "the-kien-thuc", "moc-gio", "khoanh-tay", "chu-ma-nen", "con-tro-gia", "so-dem-chay",
-       "giai-thich-5-canh", "cong-thuc-tung-buoc", "hinh-bien-giao-dien", "o-binh-luan"}
+       "giai-thich-5-canh", "cong-thuc-tung-buoc", "hinh-bien-giao-dien", "o-binh-luan",
+       "dai-lower-third", "dai-chu-chay", "dai-logo-goc", "dai-gio-phat-song", "dai-ident", "dai-tai-tro",
+       "dai-diem-tin", "dai-chuyen-muc", "dai-dinh-vi", "dai-trich-dan", "dai-e-kip", "dai-tiep-theo",
+       "dai-gia-nong-san", "dai-dem-nguoc", "dai-tin-nong", "dai-hai-khung", "dai-dien-thoai", "dai-thoi-tiet",
+       "dai-nhan-nguon", "dai-truc-tiep"}
 
 
 class TestThuVienKyThuat(unittest.TestCase):
@@ -75,6 +80,29 @@ class TestTheKyThuat(unittest.TestCase):
                 self.assertNotIn("background-clip", html)
                 self.assertNotRegex(html, r"letterSpacing\s*:")
 
+    def test_the_dai_khung_ngang(self):
+        """The dai 1920x1080: render_mau doi anh soi sang khung ngang; the khac van khung doc."""
+        for p in KY_THUAT:
+            with self.subTest(p.name):
+                html = (p / "index.html").read_text(encoding="utf-8")
+                ngang = p.name.startswith("dai-")
+                self.assertEqual(render_mau.la_khung_ngang(html), ngang)
+                self.assertIn('data-width="1920" data-height="1080"' if ngang else 'data-width="1080"', html)
+        cmd = render_mau.lenh_soi(Path("a.mp4"), Path("a.png"), 30, 3.0, ngang=True)
+        self.assertIn("scale=480:270", cmd[cmd.index("-vf") + 1])
+
+    def test_the_dai_trong_vung_an_toan(self):
+        """EBU R95: chu/logo cach mep trai-phai >= 96 px, tren-duoi >= 54 px (khung 1920x1080).
+        Loi that 15/11: logo goc cach mep phai 70 px, dinh vi 70 px, bang chu chay day 1046 px, hai khung 80 px."""
+        doc = lambda ten: (SKILL / "assets" / "ky-thuat" / ten / "index.html").read_text(encoding="utf-8")
+        self.assertIn("#lg { position: absolute; right: 100px; top: 60px;", doc("dai-logo-goc"))
+        self.assertIn("#dv { position: absolute; left: 100px; top: 60px;", doc("dai-dinh-vi"))
+        self.assertIn("#hk-1 { left: 100px; } #hk-2 { left: 970px; }", doc("dai-hai-khung"))
+        cc = doc("dai-chu-chay")
+        top, cao = map(int, re.search(r"#cc \{ position: absolute; left: 0; right: 0; top: (\d+)px; height: (\d+)px", cc).groups())
+        self.assertLessEqual(top + cao, 1080 - 54)
+        self.assertIn("padding-left: 100px", cc)
+
     def test_loi_that_khi_lam(self):
         """Loi that 06/11: chu ma to dac bi bao tuong phan 1,37:1; net SVG dau tron lo cham truoc khi ve."""
         ma = (SKILL / "assets" / "ky-thuat" / "chu-ma-nen" / "index.html").read_text(encoding="utf-8")
@@ -82,6 +110,9 @@ class TestTheKyThuat(unittest.TestCase):
         self.assertIn("data-layout-allow-overlap", ma)
         khoanh = (SKILL / "assets" / "ky-thuat" / "khoanh-tay" / "index.html").read_text(encoding="utf-8")
         self.assertRegex(khoanh, r"strokeDasharray: dv, opacity: 0")
+        # Loi that 15/11: chu NEWS 104 px tran o 290 px -> text_occluded. Giu co chu 86 px trong o 340 px.
+        ident = (SKILL / "assets" / "ky-thuat" / "dai-ident" / "index.html").read_text(encoding="utf-8")
+        self.assertRegex(ident, r"#id-news \{ width: 340px;[^}]*font-size: 86px")
 
 
 if __name__ == "__main__":
