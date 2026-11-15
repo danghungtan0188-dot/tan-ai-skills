@@ -6,6 +6,7 @@ Chan (exit 2) khi:
     (luot do co print_format + -f null thi cho qua).
   - nen libx264/libx265 thieu -preset hoac preset cham hon "faster" -> nong may.
   - dang co ffmpeg.exe khac chay -> may hay sap khi chay hai viec nang.
+  - cung mot file dua vao -i hai lan -> ffmpeg treo vinh vien (ban tin 13/11/2026).
 
 Bien TAN_HOOK_GIA_LAP_FFMPEG=<so> thay cho tasklist, chi dung trong test.
 Xem rules/video.md va docs/bai-hoc-va-chot-chan.md.
@@ -54,7 +55,15 @@ def so_ffmpeg_dang_chay() -> int:
     return sum(1 for dong in out.splitlines() if dong.lower().startswith('"ffmpeg.exe"'))
 
 
+_DAU_VAO = re.compile(r"(?:^|\s)-i\s+(\"[^\"]+\"|'[^']+'|\S+)")
+
+
 def ly_do_chan(doan: str) -> str | None:
+    vao = [v.strip("\"'").replace("\\", "/").lower() for v in _DAU_VAO.findall(doan)]
+    lap = sorted({v for v in vao if v not in ("-", "pipe:0") and vao.count(v) > 1})
+    if lap:   # 13/11/2026: ban tin v6 treo 2 lan (CPU dung yen > 3 gio) vi mot lenh doc rough.mp4 hai lan
+        return (f"lenh ffmpeg doc cung mot file hai lan ({lap[0]}) de treo vinh vien. Dung tung doan rieng "
+                "(tach tieng ra file rieng, cat doan hinh rieng) roi moi noi; moi file chi la -i mot lan.")
     if "loudnorm" in doan and "linear=true" not in doan and not (
             "print_format" in doan and re.search(r"-f\s+null\b", doan)):
         return ("loudnorm mot luot se bop dai dong (LRA). Do luot 1 voi print_format=json -f null -, "

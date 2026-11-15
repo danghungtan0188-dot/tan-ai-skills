@@ -47,6 +47,24 @@ class TestCatGonTTS(unittest.TestCase):
         self.assertGreater(len(x) / SR, 2.7)
 
 
+class TestCatGonGiuAmDauNho(unittest.TestCase):
+    """Bai hoc 13/11/2026: cat lang dau cau lem mat am "Th" (nho hon nguong 0,01) -> "Tham du" nghe thanh "am du"."""
+
+    def test_giu_am_hoi_gio_truoc_tieng_to(self):
+        hoi = tieng(0.10, bien_do=0.006)   # "Th": hoi gio, bien do < 0,01
+        a = np.concatenate([lang(0.3), hoi, tieng(1.0), lang(0.3)])
+        x, _ = cat_gon(a, SR)
+        self.assertGreaterEqual(len(x) / SR, 1.0 + 0.10, "phai giu lai 0,10 s am nho o dau cau")
+
+    def test_khong_nuot_tieng_bat_ngay_dau_file(self):
+        # ban doc bat dau bang tieng bat "T" o mau dau tien: lam mem 10 ms nuot mat no ("Tham du" -> "am du")
+        bat = tieng(0.006, bien_do=0.5)
+        a = np.concatenate([bat, tieng(1.0, bien_do=0.1), lang(0.2)])
+        x, _ = cat_gon(a, SR)
+        n = len(bat)
+        self.assertGreater(np.sum(x[:n] ** 2) / np.sum(a[:n] ** 2), 0.6, "tieng bat dau cau bi lam mem mat")
+
+
 @unittest.skipUnless(shutil.which("ffmpeg"), "can ffmpeg")
 class TestVideoQaHinhLechTieng(unittest.TestCase):
     def tao(self, hinh: float, tieng_: float) -> Path:
