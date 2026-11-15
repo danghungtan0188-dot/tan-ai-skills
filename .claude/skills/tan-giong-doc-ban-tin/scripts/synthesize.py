@@ -112,6 +112,11 @@ def _main() -> int:
         action="store_true",
         help="Bỏ qua bước mở rộng viết tắt và đổi số/ngày thành chữ (để VieNeu-TTS tự đọc — hay sai)",
     )
+    parser.add_argument(
+        "--sua-tr",
+        action="store_true",
+        help='Sửa âm "tr" bị đọc thành "ch" (vá phiên âm sea-g2p: tʃ → tɹ ở từ bắt đầu bằng "tr")',
+    )
     args = parser.parse_args()
 
     input_path = Path(args.input)
@@ -141,8 +146,15 @@ def _main() -> int:
 
     print("Đang khởi tạo VieNeu-TTS (lần đầu sẽ tải model, có thể mất vài phút)...")
     t_init = time.time()
+    if args.sua_tr:
+        import sua_am_tr
+
+        sua_am_tr.va_phien_am()
     vieneu = Vieneu()
     print(f"Sẵn sàng sau {time.time() - t_init:.1f}s — backend: {getattr(vieneu, 'backend', '?')}")
+    if args.sua_tr:
+        sua_am_tr.va_phien_am()  # engine nạp module lúc khởi tạo → vá lại
+        print(f'Đã sửa âm "tr", phiên âm mẫu: {sua_am_tr.kiem_engine(vieneu)}')
 
     voices_store.load_custom_voices(vieneu)
 
