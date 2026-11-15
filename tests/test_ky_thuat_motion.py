@@ -1,5 +1,5 @@
 """skills/motion-graphics-tan/assets/ky-thuat: 12 the hoc tu 86 video marketing + 3 the hoc tu prompt Opus 5.5
-+ 18 the do hoa dai khung ngang (dai-*, hoc tu Truyen hinh Dong Thap, vung an toan EBU R95).
++ 20 the do hoa dai khung ngang (dai-*, hoc tu Truyen hinh Dong Thap, vung an toan EBU R95).
 
 Cung hop dong voi the phong cach (tests/test_motion_graphics.py), nhung thoi luong 3-8 s theo tung ky thuat (giai-thich-5-canh dai 8 s vi co 5 canh).
 Khong render -- render that bang `python scripts/render_mau.py <ten>`.
@@ -24,7 +24,8 @@ TEN = {"phu-de-to-tu", "tieu-de-mo-dau", "so-muc-to", "khung-dien-thoai", "o-hoi
        "giai-thich-5-canh", "cong-thuc-tung-buoc", "hinh-bien-giao-dien", "o-binh-luan",
        "dai-lower-third", "dai-chu-chay", "dai-logo-goc", "dai-gio-phat-song", "dai-ident", "dai-tai-tro",
        "dai-diem-tin", "dai-chuyen-muc", "dai-dinh-vi", "dai-trich-dan", "dai-e-kip", "dai-tiep-theo",
-       "dai-gia-nong-san", "dai-dem-nguoc", "dai-tin-nong", "dai-hai-khung", "dai-dien-thoai", "dai-thoi-tiet"}
+       "dai-gia-nong-san", "dai-dem-nguoc", "dai-tin-nong", "dai-hai-khung", "dai-dien-thoai", "dai-thoi-tiet",
+       "dai-nhan-nguon", "dai-truc-tiep"}
 
 
 class TestThuVienKyThuat(unittest.TestCase):

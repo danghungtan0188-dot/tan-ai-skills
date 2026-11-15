@@ -80,6 +80,8 @@ Học từ trailer, phóng sự và ident của Truyền hình Đồng Tháp (`h
 | `dai-hai-khung` | Kết nối trường quay + hiện trường. Lòng khung để trống: xuất `--trong-suot`, đặt 2 video vào ô x 100/970, y 200, 850×480 | 6 s | `nhan-1` `ten-1` `nhan-2` `ten-2` |
 | `dai-dien-thoai` | Phỏng vấn qua điện thoại: ô ảnh tròn, biểu tượng máy rung, sóng âm 7 cột | 6 s | `nhan` `ten` `chuc-danh` |
 | `dai-thoi-tiet` | Thời tiết 4 vùng: biểu tượng nắng / mưa vẽ bằng CSS, nhiệt độ | 7 s | `tieu-de` `vung-1..4` `nhiet-1..4` |
+| `dai-nhan-nguon` | **Nhãn nghề báo** góc dưới phải: "ẢNH TƯ LIỆU" / "CLIP DO NGƯỜI DÂN CUNG CẤP" + dòng nguồn. **Bắt buộc** khi dùng hình không tự quay | 5 s | `nhan` `nguon` |
+| `dai-truc-tiep` | Nhãn **TRỰC TIẾP** góc trên trái, chấm đỏ nhấp nháy + nơi phát; phát lại thì đổi chữ thành "PHÁT LẠI" | 6 s | `nhan` `noi` |
 
 **Chuẩn quốc tế đã áp (EBU R95, ITU-R BT.1848):** ở khung 1920×1080, mọi chữ và logo nằm trong **vùng an toàn đồ họa 90%**, tức cách mép trái/phải ≥ 96 px, trên/dưới ≥ 54 px. Nền và băng màu được tràn ra mép (vùng an toàn hành động 93%: 67/38 px). Ngày 15/11 đã kéo 4 thẻ vào trong vùng này: logo góc, định vị, băng chữ chạy, hai khung. Âm thanh phát sóng: châu Âu EBU R128 −23 LUFS, đỉnh −1 dBTP; Mỹ ATSC A/85 −24 LKFS. Chuẩn ở Việt Nam chưa xác minh: hỏi đài nhận bài.
 
