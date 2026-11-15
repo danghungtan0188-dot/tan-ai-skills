@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi" data-resolution="landscape"
+  data-composition-variables='[{"id": "tieu-de", "type": "string", "label": "Tiêu đề", "default": "ĐIỂM TIN NỔI BẬT"}, {"id": "tin-1", "type": "string", "label": "Tin 1", "default": "Hợp tác xã Rau sạch An Thạnh xuất bán 12 tấn rau"}, {"id": "tin-2", "type": "string", "label": "Tin 2", "default": "Khai trương chợ nông sản cuối tuần tại xã"}, {"id": "tin-3", "type": "string", "label": "Tin 3", "default": "Trao 50 suất học bổng cho học sinh vượt khó"}, {"id": "tin-4", "type": "string", "label": "Tin 4", "default": "Giá lúa tăng nhẹ, nông dân phấn khởi"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* Diem tin dau ban tin: tieu de, roi 4 tit vao cach nhau 0,6 s, dung yen cho doc. */
+      :root { --nen: #8a8f96; --navy: #00164E; --navy2: #0A3C92; --vang: #FFCD2D; --trang: #ffffff; --den: #0b0f1a; --do: #CE2027; --xanh: #007A3D; --lam: #1A3CAA; --font: 'Montserrat VN', sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #dt { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+        background: radial-gradient(ellipse at 30% 30%, var(--navy2) 0%, var(--navy) 70%, #000818 100%); }
+      #dt-tieu { position: absolute; left: 180px; top: 150px; font-size: 64px; font-weight: 900; color: var(--vang); }
+      #dt-gach { position: absolute; left: 180px; top: 245px; width: 260px; height: 8px; border-radius: 4px; background: var(--do); }
+      .dt-dong { position: absolute; left: 180px; width: 1560px; height: 120px; display: flex; align-items: center; gap: 36px;
+        background: rgba(255,255,255,0.06); border-left: 8px solid var(--vang); padding-left: 30px; }
+      #dt-1 { top: 320px; } #dt-2 { top: 465px; } #dt-3 { top: 610px; } #dt-4 { top: 755px; }
+      .dt-so { font-size: 60px; font-weight: 900; color: var(--vang); width: 90px; }
+      .dt-chu { font-size: 46px; font-weight: 700; color: var(--trang); white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1920" data-height="1080">
+      <div id="dt" class="clip" data-start="0" data-track-index="1" data-duration="8">
+        <div id="dt-tieu" data-var-text="tieu-de">ĐIỂM TIN NỔI BẬT</div>
+        <div id="dt-gach"></div>
+        <div class="dt-dong" id="dt-1"><div class="dt-so">01</div><div class="dt-chu" data-var-text="tin-1">Hợp tác xã Rau sạch An Thạnh xuất bán 12 tấn rau</div></div>
+        <div class="dt-dong" id="dt-2"><div class="dt-so">02</div><div class="dt-chu" data-var-text="tin-2">Khai trương chợ nông sản cuối tuần tại xã</div></div>
+        <div class="dt-dong" id="dt-3"><div class="dt-so">03</div><div class="dt-chu" data-var-text="tin-3">Trao 50 suất học bổng cho học sinh vượt khó</div></div>
+        <div class="dt-dong" id="dt-4"><div class="dt-so">04</div><div class="dt-chu" data-var-text="tin-4">Giá lúa tăng nhẹ, nông dân phấn khởi</div></div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#dt", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0)
+        .fromTo("#dt-tieu", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 0.15)
+        .fromTo("#dt-gach", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, 0.35)
+        .fromTo(".dt-dong", { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power3.out", stagger: 0.6 }, 0.7)
+        .to("#dt", { opacity: 0, duration: 0.35, ease: "power1.in" }, 7.65);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -14,12 +14,12 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--nen); }
       #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
-      #cc { position: absolute; left: 0; right: 0; top: 968px; height: 78px; }
+      #cc { position: absolute; left: 0; right: 0; top: 944px; height: 78px; }
       #cc-nen { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background: var(--navy); border-top: 4px solid var(--vang); }
-      #cc-khung { position: absolute; left: 330px; right: 0; top: 4px; bottom: 0; overflow: hidden; }
+      #cc-khung { position: absolute; left: 420px; right: 96px; top: 4px; bottom: 0; overflow: hidden; }
       #cc-chu { position: absolute; left: 0; top: 0; height: 74px; display: flex; align-items: center; white-space: nowrap;
         font-size: 36px; font-weight: 700; color: var(--trang); }
-      #cc-nhan-hop { position: absolute; left: 0; top: -14px; width: 310px; height: 92px; display: flex; align-items: center; justify-content: center;
+      #cc-nhan-hop { position: absolute; left: 0; top: -14px; width: 400px; height: 92px; display: flex; align-items: center; padding-left: 100px;
         background: var(--do); clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%); }
       #cc-nhan { font-size: 38px; font-weight: 900; color: var(--trang); }
     </style>
@@ -35,9 +35,9 @@
     <script>
       const tl = gsap.timeline({ paused: true });
       tl.fromTo("#cc-nen", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0)
-        .fromTo("#cc-nhan-hop", { x: -330 }, { x: 0, duration: 0.35, ease: "power3.out" }, 0.1)
-        // Chay deu 300 px/giay: tu mep phai khung (1590 px) sang trai.
-        .fromTo("#cc-chu", { x: 1590 }, { x: 1590 - 300 * 5.3, duration: 5.3, ease: "none" }, 0.4)
+        .fromTo("#cc-nhan-hop", { x: -420 }, { x: 0, duration: 0.35, ease: "power3.out" }, 0.1)
+        // Chay deu 300 px/giay: tu mep phai khung (1404 px) sang trai.
+        .fromTo("#cc-chu", { x: 1404 }, { x: 1404 - 300 * 5.3, duration: 5.3, ease: "none" }, 0.4)
         .to("#cc", { y: 120, duration: 0.3, ease: "power2.in" }, 5.7);
       window.__timelines["main"] = tl;
       tl.seek(0);

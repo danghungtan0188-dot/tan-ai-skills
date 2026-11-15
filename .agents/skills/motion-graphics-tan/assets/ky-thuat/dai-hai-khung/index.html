@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi" data-resolution="landscape"
+  data-composition-variables='[{"id": "nhan-1", "type": "string", "label": "Nhãn khung 1", "default": "TRƯỜNG QUAY"}, {"id": "ten-1", "type": "string", "label": "Tên khung 1", "default": "BTV Minh Thư"}, {"id": "nhan-2", "type": "string", "label": "Nhãn khung 2", "default": "TRỰC TIẾP TỪ HIỆN TRƯỜNG"}, {"id": "ten-2", "type": "string", "label": "Tên khung 2", "default": "PV Hoàng Nam - Xã An Thạnh Thủy"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* Hai khung ket noi: vien vang + nhan, long khung trong; xuat --trong-suot roi dat 2 video vao dung o (x 100/970, y 200, 850x480). */
+      :root { --nen: #8a8f96; --navy: #00164E; --navy2: #0A3C92; --vang: #FFCD2D; --trang: #ffffff; --den: #0b0f1a; --do: #CE2027; --xanh: #007A3D; --lam: #1A3CAA; --font: 'Montserrat VN', sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      .hk-o { position: absolute; top: 200px; width: 850px; height: 480px; border: 6px solid var(--vang); border-radius: 14px; }
+      #hk-1 { left: 100px; } #hk-2 { left: 970px; }
+      .hk-nhan { position: absolute; left: -6px; top: -60px; height: 54px; padding: 0 20px; display: flex; align-items: center; background: var(--do);
+        font-size: 28px; font-weight: 900; color: var(--trang); white-space: nowrap; border-radius: 8px 8px 0 0; }
+      .hk-ten { position: absolute; left: -6px; top: 480px; height: 64px; padding: 0 24px; display: flex; align-items: center; background: var(--navy);
+        font-size: 32px; font-weight: 800; color: var(--trang); white-space: nowrap; border-radius: 0 0 8px 8px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+      <div id="hk" class="clip" data-start="0" data-track-index="1" data-duration="6" style="position:absolute;left:0;top:0;width:1920px;height:1080px">
+        <div class="hk-o" id="hk-1"><div class="hk-nhan" data-var-text="nhan-1">TRƯỜNG QUAY</div><div class="hk-ten" data-var-text="ten-1">BTV Minh Thư</div></div>
+        <div class="hk-o" id="hk-2"><div class="hk-nhan" data-var-text="nhan-2">TRỰC TIẾP TỪ HIỆN TRƯỜNG</div><div class="hk-ten" data-var-text="ten-2">PV Hoàng Nam - Xã An Thạnh Thủy</div></div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#hk-1", { x: -900, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.05)
+        .fromTo("#hk-2", { x: 900, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.15)
+        .fromTo(".hk-nhan", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, stagger: 0.1 }, 0.55)
+        .fromTo(".hk-ten", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, stagger: 0.1 }, 0.7)
+        .to("#hk", { opacity: 0, duration: 0.3 }, 5.7);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

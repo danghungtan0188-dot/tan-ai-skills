@@ -68,11 +68,27 @@ Học từ trailer, phóng sự và ident của Truyền hình Đồng Tháp (`h
 | `dai-gio-phat-song` | Thẻ lịch phát sóng: tên chương trình, tập, giờ rất to, ngày; đứng yên 4,5 s cho kịp đọc | 6 s | `ten-chuong-trinh` `tap` `gio-phat` `ngay` |
 | `dai-ident` | Ident kênh gắn cuối mọi video: nét sáng vẽ chữ → khối chữ trượt chéo → lóe → logo 3 màu → icon mạng xã hội → tên kênh gõ dần | 8 s | `ten-kenh` `mxh-1..4` |
 | `dai-tai-tro` | Hàng nhà tài trợ: mỗi ô vào một kiểu (lật, phóng, trượt), vệt sáng lướt qua từng ô | 6 s | `tieu-de` `tai-tro-1..3` |
+| `dai-diem-tin` | Đầu bản tin: tiêu đề + 4 tít nổi bật có số thứ tự, vào cách nhau 0,6 s | 8 s | `tieu-de` `tin-1..4` |
+| `dai-chuyen-muc` | Bumper 3 s giữa các mục ("NÔNG NGHIỆP"…); khối màu quét chéo, tên mục đập vào | 3 s | `ten-muc` `phu` |
+| `dai-dinh-vi` | Góc trên trái lúc vào phóng sự: ghim + địa điểm + ngày | 4 s | `dia-diem` `thoi-gian` |
+| `dai-trich-dan` | Trích lời phát biểu toàn khung: ô ảnh người nói, ngoặc kép vàng, lời hiện dần, tên + chức danh | 6 s | `loi` `nguoi` `chuc-danh` |
+| `dai-e-kip` | Cuối phóng sự: "THỰC HIỆN" + 3 dòng ê-kíp | 6 s | `tieu-de` `dong-1..3` |
+| `dai-tiep-theo` | Trước giờ nghỉ / cuối chương trình: "TIẾP THEO" + nội dung + lời hẹn gõ dần | 5 s | `nhan` `noi-dung` `hen` |
+| `dai-gia-nong-san` | Bảng giá 4 mặt hàng, mũi tên tăng (xanh) / giảm (đỏ) vẽ bằng CSS; đổi class `tang`/`giam` theo giá thật | 8 s | `tieu-de` `ngay` `mat-hang-1..4` `gia-1..4` |
+| `dai-dem-nguoc` | Màn chờ: vòng tròn rút dần, số đếm lùi 7 → 0 theo thời gian timeline (tua được) | 8 s | `nhan` `ten-ct` |
+| `dai-tin-nong` | Tin khẩn: nền đỏ, nhãn nhấp nháy 2 lần, tít lớn, băng vàng | 5 s | `nhan` `tit` `bang` |
+| `dai-hai-khung` | Kết nối trường quay + hiện trường. Lòng khung để trống: xuất `--trong-suot`, đặt 2 video vào ô x 100/970, y 200, 850×480 | 6 s | `nhan-1` `ten-1` `nhan-2` `ten-2` |
+| `dai-dien-thoai` | Phỏng vấn qua điện thoại: ô ảnh tròn, biểu tượng máy rung, sóng âm 7 cột | 6 s | `nhan` `ten` `chuc-danh` |
+| `dai-thoi-tiet` | Thời tiết 4 vùng: biểu tượng nắng / mưa vẽ bằng CSS, nhiệt độ | 7 s | `tieu-de` `vung-1..4` `nhiet-1..4` |
+
+**Chuẩn quốc tế đã áp (EBU R95, ITU-R BT.1848):** ở khung 1920×1080, mọi chữ và logo nằm trong **vùng an toàn đồ họa 90%**, tức cách mép trái/phải ≥ 96 px, trên/dưới ≥ 54 px. Nền và băng màu được tràn ra mép (vùng an toàn hành động 93%: 67/38 px). Ngày 15/11 đã kéo 4 thẻ vào trong vùng này: logo góc, định vị, băng chữ chạy, hai khung. Âm thanh phát sóng: châu Âu EBU R128 −23 LUFS, đỉnh −1 dBTP; Mỹ ATSC A/85 −24 LKFS. Chuẩn ở Việt Nam chưa xác minh: hỏi đài nhận bài.
 
 - **Không thay bản ATT đang dùng.** Bản tin ATT NEWS vẫn dùng lower-third Remotion và kết tia laser (`tan_studio do-hoa`). Theo luật phong cách ATT phải "áp dụng y nguyên". Bộ thẻ này dùng cho khách khác, chương trình mới, hoặc khi Tân muốn đổi.
 - `dai-tai-tro` đang dùng chữ thay logo. Có logo thật thì đặt ảnh vào ô, giữ hiệu ứng.
 - Xuất `--trong-suot` để đắp lên video bằng ffmpeg (lower-third, chữ chạy, logo góc). Thẻ toàn khung (giờ phát sóng, ident, tài trợ) tự có nền.
 - **Ô chữ phải rộng hơn chữ ở cỡ lớn nhất.** `dai-ident` lần đầu bị lỗi `text_occluded`: chữ "NEWS" 104 px rộng 345 px trong ô 290 px, lấn sang ô ATT. Đã hạ cỡ chữ xuống 86 px, nới ô lên 340 px. Lớp lóe trắng và khối trượt che chữ là cố ý: đánh dấu `data-layout-allow-occlusion` ngay trên lớp che.
+  Cùng lỗi với số đếm: "00:03" cỡ 200 px rộng ~560 px trong vòng tròn chỉ có lòng 440 px, nên đè lên vòng. Bộ kiểm không bắt được lỗi này, phải soi ảnh mới thấy. Đã hạ xuống 130 px.
+- **Chữ trên ô trong suốt đặt trên nền sáng dễ trượt chuẩn tương phản.** `dai-thoi-tiet` lần đầu chỉ đạt 2,91:1 (chuẩn tối thiểu 3:1). Đã làm ô đậm hơn (độ đục 0,82) và nền tối hơn.
 
 ## Luật riêng của nhóm thẻ này (học từ lúc làm)
 

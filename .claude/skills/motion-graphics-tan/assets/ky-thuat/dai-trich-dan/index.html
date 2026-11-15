@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi" data-resolution="landscape"
+  data-composition-variables='[{"id": "loi", "type": "string", "label": "Lời trích", "default": "Có đầu ra ổn định, bà con yên tâm mở rộng diện tích trồng rau sạch."}, {"id": "nguoi", "type": "string", "label": "Người nói", "default": "Ông Nguyễn Văn An"}, {"id": "chuc-danh", "type": "string", "label": "Chức danh", "default": "Giám đốc HTX Rau sạch An Thạnh"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-vietnamese.woff2') format('woff2'); unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Montserrat VN'; font-style: normal; font-weight: 400 900; src: url('assets/fonts/montserrat-vn-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      /* Trich dan: o anh trai (dat anh that khi dung), dau ngoac kep vang, loi hien tung dong, ten ben duoi. */
+      :root { --nen: #8a8f96; --navy: #00164E; --navy2: #0A3C92; --vang: #FFCD2D; --trang: #ffffff; --den: #0b0f1a; --do: #CE2027; --xanh: #007A3D; --lam: #1A3CAA; --font: 'Montserrat VN', sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); }
+      #td { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: linear-gradient(120deg, var(--navy) 0%, var(--navy2) 100%); }
+      #td-anh { position: absolute; left: 140px; top: 200px; width: 520px; height: 680px; border-radius: 20px; background: rgba(255,255,255,0.12);
+        border: 6px solid var(--vang); display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 700; color: rgba(255,255,255,0.75); }
+      #td-ngoac { position: absolute; left: 760px; top: 150px; font-size: 260px; line-height: 1; font-weight: 900; color: var(--vang); }
+      #td-loi { position: absolute; left: 780px; top: 360px; width: 1000px; font-size: 58px; line-height: 1.3; font-weight: 800; color: var(--trang); }
+      #td-gach { position: absolute; left: 780px; top: 730px; width: 140px; height: 8px; border-radius: 4px; background: var(--do); }
+      #td-nguoi { position: absolute; left: 780px; top: 765px; font-size: 44px; font-weight: 900; color: var(--vang); }
+      #td-cd { position: absolute; left: 780px; top: 830px; font-size: 34px; font-weight: 600; color: var(--trang); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+      <div id="td" class="clip" data-start="0" data-track-index="1" data-duration="6">
+        <div id="td-anh">Ảnh người nói</div>
+        <div id="td-ngoac">“</div>
+        <div id="td-loi" data-var-text="loi">Có đầu ra ổn định, bà con yên tâm mở rộng diện tích trồng rau sạch.</div>
+        <div id="td-gach"></div>
+        <div id="td-nguoi" data-var-text="nguoi">Ông Nguyễn Văn An</div>
+        <div id="td-cd" data-var-text="chuc-danh">Giám đốc HTX Rau sạch An Thạnh</div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#td", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0)
+        .fromTo("#td-anh", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 0.1)
+        .fromTo("#td-ngoac", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2)" }, 0.35)
+        .fromTo("#td-loi", { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 1.0, ease: "power2.out" }, 0.6)
+        .fromTo("#td-gach", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.3 }, 1.6)
+        .fromTo(["#td-nguoi", "#td-cd"], { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, stagger: 0.15 }, 1.7)
+        .to("#td", { opacity: 0, duration: 0.35 }, 5.65);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
