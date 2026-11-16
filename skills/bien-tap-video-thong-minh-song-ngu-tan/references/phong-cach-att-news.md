@@ -250,6 +250,17 @@ Hai điều phải nhớ:
 | Giọng "Nữ VNeID Sổ sức khỏe": "vun đắp" ra "vùng đắp" 24/24 bản (cả câu dài lẫn cụm tách); whisper `small` không nghe ra "vẻ vang" ở bản nào, `medium` tìm được 1/12 bản đúng; "Dịu dàng" đúng 4/12 | cụm ngắn khó: đọc ≥ 12 bản, nghe lại bằng `medium`; chữ sai ở MỌI bản là đặc điểm giọng — báo người dùng, đề xuất đổi chữ, đừng đọc thêm |
 | PowerShell: `Start-Process npx` lỗi "not a valid Win32 application"; `python -c "...{...}..."` bị hiểu là scriptblock; `--props` JSON có BOM thì Remotion từ chối | gọi `npx.cmd`; logic Python có `{}` viết ra file `.py`; ghi props bằng Python `encoding="utf-8"` (không BOM) |
 | Trộn lớp ánh sáng (light leak HyperFrames nền đen) bằng `blend=screen` trên YUV làm lệch màu | đổi `format=gbrp` cả hai đầu vào trước `blend=all_mode=screen:all_opacity=0.55`, rồi `format=yuv420p`. Ước thời gian trên máy này: Remotion 2.745 khung `--concurrency=2` 999 s; HyperFrames 2 worker 194 s |
+| Bộ chọn bản TTS (CER + độ biến thiên cao độ) chọn bản dài gấp đôi có tiếng lạ sau lời — tiếng lạ làm F0 dao động nên được tính là "truyền cảm" | loại bản dài > 1,5 lần trung vị của cùng câu TRƯỚC khi so điểm |
+| Cắt câu theo mốc chữ đầu của whisper làm mất chữ đầu câu ("Vê nê ai đi" còn "ai đi") | chỉ cắt đuôi (chữ cuối + 0,25 s, nhỏ dần cosin 80 ms); không cắt đầu |
+| "Ủy ban nhân dân" đứng đầu câu: giọng nữ đọc "Quý/Quỹ/Bởi ban" ở mọi cách viết | đọc kèm từ dẫn "Đồng thời, Ủy ban nhân dân…" (đúng 3/3) rồi cắt bỏ từ dẫn theo mốc chữ; dùng lại bản đã duyệt cho mọi chỗ cùng cụm |
+| Giọng mẫu miền Nam đọc "tr" thành "ch" ("tri ân", "trân trọng"); viết hoa, gạch nối, dấu phẩy không chữa được | đọc ≥ 10 bản, giữ bản whisper medium nghe đúng 2/2; nếu không có thì ghép đúng 2 chữ từ bản đúng (nối mềm 25 ms, cân độ to); nghe kiểm lại trên FILE CUỐI vì âm sát nhau, xử lý âm thanh xong máy có thể nghe lệch |
+| whisper ghi số bằng chữ số ("7 tháng 11 năm 2026", "10h30") nên CER so với kịch bản viết chữ bị tính sai hàng loạt | đổi số trong bản nghe ra chữ (`doc_so`) trước khi tính CER |
+| Remotion: chữ tô dải màu `background-clip:text` hiện đúng ở `remotion still` nhưng render cả phim ra KHỐI MÀU ĐẶC | không dùng clip-text; soát bằng `remotion render --frames=A-B` (đoạn 1 s) rồi trích khung từ mp4, không chỉ dùng `still` |
+| Remotion ra `yuvj420p` dù đặt `--pixel-format=yuv420p`; lượt render chết ở bước trộn tiếng (`remotion-audio-mixing\0.wav: No such file`) | render `--muted`, ghép tiếng riêng bằng ffmpeg; đổi `scale=in_range=full:out_range=tv,format=yuv420p` |
+| Nhạc nền tự soạn thấp hơn giọng ~11 dB lúc nghỉ, ~20 dB dưới lời: người dùng hỏi "nhạc nền đâu" | nhạc lúc nghỉ thấp hơn giọng ≤ 6 dB, dưới lời chỉ hạ 7 dB; gửi 20 s nghe thử trước khi ghép |
+| Khung tin trên màn hình TV: video trong khung `fade=in` từ đen lộ ô đen; khung hiện mờ lộ ảnh phông gốc | khung + video có ngay từ khung hình đầu (không fade), video bắt đầu ở chỗ đã thấy rõ chủ thể |
+| Logo ATT NEWS đặt theo toạ độ chuẩn trong khi phim đã có logo ở đầu trang → hai logo lệch nhau | dò toạ độ logo có sẵn (so mẫu) rồi đè đúng chỗ; cụm Facebook·Zalo thu nhỏ (cao 44) để không chạm phụ đề dài |
+| Ảnh dán vào khung chat không tự lưu xuống máy (ảnh có đường dẫn `images/*.webp` thì có) | tìm file trong Desktop/Downloads mới nhất; không có thì nhờ người dùng lưu vào thư mục dự án |
 ` cuối dòng: tên composition sai, render không chạy | đọc qua `tr -d '
 '` hoặc ghi file bằng `newline="
 "` |

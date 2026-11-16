@@ -17,3 +17,6 @@ __pycache__/
 # Kết quả chạy thử của tan_studio
 /tan_studio/vi-du/ket-qua/
 /tan_studio/vi-du/hoc/
+
+# file rac cua trinh duyet Playwright MCP
+.playwright-mcp/
