@@ -14,6 +14,13 @@
         "dung_cho": "chuyen dong GSAP (HyperFrames chay GSAP): timeline, SplitText, DrawSVG, easing",
         "skill": ["gsap-core", "gsap-timeline", "gsap-plugins", "gsap-utils", "gsap-performance",
                   "gsap-scrolltrigger", "gsap-react", "gsap-frameworks"]
+      },
+      {
+        "nguon": "CloudAI-X/threejs-skills",
+        "dung_cho": "do hoa 3D three.js (canh, anh sang, vat lieu, shader, hau ky) - danh cho may co card do hoa, may hien tai de nong",
+        "skill": ["threejs-fundamentals", "threejs-geometry", "threejs-materials", "threejs-lighting", "threejs-textures",
+                  "threejs-animation", "threejs-loaders", "threejs-shaders", "threejs-postprocessing", "threejs-interaction",
+                  "threejs-performance", "threejs-asset-pipeline", "threejs-react-three-fiber"]
       }
     ]
   },
