@@ -2,6 +2,8 @@
 // các xã lân cận mờ; một nét trắng sáng chạy hết viền xã, phủ màu ngọc, rồi khối nổi lên (nhiều lớp lệch xuống, mép
 // sáng); máy quay phóng chậm; tên xã gõ từng chữ ở góc dưới trái; cuối lóe trắng để nối sang flycam.
 // `vong` / `langGieng` là toạ độ pixel bất kỳ (ví dụ lấy từ ban_do.json của BanDoVeTinh) — tự co vừa khung.
+// `nhip12`: chuyển động giật 12 hình/giây kiểu bản đồ Vox — ra chất đồ hoạ thay vì quay phim
+// (ý tưởng từ iart-ai/map-animation-skills, MIT; viết lại, không chép mã). Video vẫn 30 hình/giây.
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
@@ -14,13 +16,15 @@ export const banDoNoiSchema = coBan.extend({
   vong,
   langGieng: z.array(vong).default([]),
   loeCuoi: z.boolean().default(true),
+  nhip12: z.boolean().default(false),
 });
 
 const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const NGOC = "#2FB8C4", MEP = "#C8F7FF";
 
-export const BanDoNoi: React.FC<z.infer<typeof banDoNoiSchema>> = ({ font, ten, vong: v, langGieng, loeCuoi }) => {
-  const frame = useCurrentFrame();
+export const BanDoNoi: React.FC<z.infer<typeof banDoNoiSchema>> = ({ font, ten, vong: v, langGieng, loeCuoi, nhip12 }) => {
+  const f = useCurrentFrame();
+  const frame = nhip12 ? Math.floor(f / (FPS / 12)) * (FPS / 12) : f; // giữ mỗi hình 2,5 khung
   const { width: W, height: H, durationInFrames } = useVideoConfig();
   const t = frame / FPS, het = durationInFrames / FPS, s = H / 1080;
 

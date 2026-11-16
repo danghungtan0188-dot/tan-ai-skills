@@ -56,6 +56,29 @@ node scripts/lam_gallery.mjs
 - Mẫu lỗi ghi vào `gallery/loi.json` và hiện ở cuối trang, không dừng cả loạt. Mẫu cần ảnh/video trong `public/`
   (vd. `anh.png`) sẽ lỗi khi `public/` trống.
 
+## Xuất đồ họa nền trong suốt
+
+Mẫu nền trong suốt (`LowerThird`, `ChuChay`, `SoLieuChienCong`…) mặc định ra **ProRes 4444** `.mov` — dùng cho Premiere, Resolve, Shotcut:
+
+```console
+npx remotion render src/index.ts ChuChay out/chu-chay.mov --props=props.json
+```
+
+Cần **WebM có kênh trong suốt** cho OBS / trình duyệt (phát trực tiếp): chuyển từ bản `.mov` trên
+(Remotion không cho đổi thẳng sang vp9 vì mẫu đã đặt sẵn ProRes 4444):
+
+```console
+ffmpeg -i out/chu-chay.mov -c:v libvpx-vp9 -pix_fmt yuva420p -b:v 0 -crf 32 -row-mt 1 -threads 2 -an out/chu-chay.webm
+```
+
+Kiểm: `ffprobe` phải thấy `alpha_mode=1`; khi xem lại bằng ffmpeg phải giải mã bằng `-c:v libvpx-vp9` (bộ giải mã mặc định bỏ kênh trong suốt).
+Ý tưởng xuất song song hai định dạng học từ `iart-ai/lower-thirds-skills` (MIT); lệnh viết lại và đã chạy thử (16/11/2026).
+
+## Bản đồ giật 12 hình/giây
+
+`BanDoNoi` có `nhip12: true`: chuyển động giữ mỗi hình 2,5 khung (12 hình/giây trên video 30 hình/giây) cho ra chất đồ họa
+kiểu bản đồ Vox thay vì chuyển động quay phim. Mặc định tắt. Ý tưởng từ `iart-ai/map-animation-skills` (MIT), viết lại.
+
 ## Docs
 
 Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
