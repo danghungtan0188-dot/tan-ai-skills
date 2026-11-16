@@ -44,6 +44,10 @@
       "nhom": "Tên, tiêu đề, chữ",
       "dungKhi": "Ghi tên / chức vụ người phát biểu ở góc dưới trái."
     },
+    "ChuChay": {
+      "nhom": "Tên, tiêu đề, chữ",
+      "dungKhi": "Băng chữ chạy cuối màn hình suốt bản tin: nhãn TIN VẮN + giờ, nhiều tin nối nhau; kieu \"nong\" cho tin khẩn."
+    },
     "BannerPhongSu": {
       "nhom": "Tên, tiêu đề, chữ",
       "dungKhi": "Banner tên phóng sự + địa danh kiểu truyền hình, đắp lên cảnh mở đầu."
