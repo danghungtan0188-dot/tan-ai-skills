@@ -1,6 +1,6 @@
 ---
 name: ban-do-video
-description: Làm video bản đồ giải thích theo lời đọc cho xã/tỉnh — lấy ranh giới, sông/kênh, đường, cầu từ OpenStreetMap, ghép ảnh vệ tinh Esri làm nền, đổi toạ độ sang pixel rồi dựng bằng mẫu Remotion `BanDoVeTinh` (bản đồ vệ tinh, máy quay trượt/phóng, nhãn tự tránh đè) hoặc `BanDoNoi` (bản đồ xã nổi khối, nét chạy viền). Kích hoạt khi người dùng muốn video bản đồ, "map", ranh giới xã, tuyến kênh/đường/sông, quy hoạch, hành trình qua nhiều điểm, hoặc đưa video mẫu kiểu "Góc nhìn quy hoạch — Sông Đáy", "KOYO Follow the Red Line", phóng sự xã có bản đồ nổi khối.
+description: Làm video bản đồ giải thích theo lời đọc cho xã/tỉnh — lấy ranh giới, sông/kênh, đường, cầu từ OpenStreetMap, ghép ảnh vệ tinh Esri làm nền, đổi toạ độ sang pixel rồi dựng bằng mẫu Remotion `BanDoVeTinh` (bản đồ vệ tinh, máy quay trượt/phóng, nhãn tự tránh đè) hoặc `BanDoNoi` (bản đồ xã nổi khối, nét chạy viền). Làm cả video vị trí nhà đất 9:16 từ một toạ độ hoặc link Google Maps — tự quét trường, chợ, bệnh viện, đường lớn, vẽ đường đi thật có số km, thẻ giá và số liên hệ (mẫu `ViTriNha`). Kích hoạt khi người dùng muốn video bản đồ, "map", ranh giới xã, tuyến kênh/đường/sông, quy hoạch, hành trình qua nhiều điểm, video vị trí căn nhà/lô đất/dự án bất động sản, hoặc đưa video mẫu kiểu "Góc nhìn quy hoạch — Sông Đáy", "KOYO Follow the Red Line", phóng sự xã có bản đồ nổi khối, Vị Trí Studio.
 ---
 
 # Video bản đồ theo lời đọc
@@ -25,6 +25,18 @@ Thư mục dựng đặt cạnh video của người dùng (ví dụ `Desktop/vi
 8. **Render nhẹ:** Remotion `--concurrency=1`, ưu tiên thấp; báo trước thời gian (ảnh vệ tinh nặng: 24 giây video ~ 12–25 phút).
 9. **Kiểm:** `python scripts/video_qa.py <file> --strict --audio` (cấp repo) + tự kiểm của video bản đồ dưới đây.
 
+## Video vị trí nhà đất (một toạ độ → video 9:16)
+
+Chạy trong thư mục dựng; giá, thông tin nhà, số điện thoại chỉ lấy từ người dùng, thiếu thì bỏ thẻ.
+
+1. `python scripts/quet_tien_ich.py "<lat,lon hoặc link Google Maps>" --ban-kinh 3 --toi-da 5 --ra tien_ich.json` → **đọc danh sách**: tên trên OSM có thể sai hoặc đã đổi; sai thì sửa/xoá trong file.
+2. `python scripts/duong_di.py tien_ich.json --ra duong_di.json` → số km thật, số phút ước tính, và in lệnh tải ảnh nền.
+3. Chạy đúng lệnh `tai_ve_tinh.py` vừa in.
+4. `python scripts/props_vi_tri.py duong_di.json nen.jpg.json --anh nen.jpg --ten "..." --gia "..." --dong "5x20m" --lien-he "..." --sdt "..." --ra props.json` → props, mốc soi khung tĩnh, lời đọc nháp.
+5. `npx remotion still` ở mọi mốc vừa in (trong `do-hoa/`, thêm `--public-dir=<thư mục dựng>`), sửa tới khi sạch, rồi `npx remotion render ... --concurrency=1 --x264-preset=faster`.
+
+Mẫu `ViTriNha` hiện **chưa có giọng đọc**: chữ chạy theo thời gian cố định. Không đọc số km lấy từ đường chim bay trong `tien_ich.json`.
+
 ## Tự kiểm riêng của video bản đồ (học từ nhóm Sông Đáy)
 
 | Mục | Ngưỡng |
@@ -40,4 +52,5 @@ Thư mục dựng đặt cạnh video của người dùng (ví dụ `Desktop/vi
 - `BanDoVeTinh` — thẻ bản đồ dọc viền xanh ngọc trên nền lưới; tiêu đề, mũi tên Bắc, bản đồ nhỏ định vị, thước tỷ lệ tự đổi, phụ đề sáng theo lời, dòng nguồn, thanh tiến độ; kênh phát sáng vẽ dần có đầu bút, ranh giới xã vẽ dần, tuyến đường, ghim cầu, ô số đếm lên; máy quay theo `canh`, lớp theo `moc`. Ví dụ props: `Desktop/video/_bando_chogao/props.py`.
 - `BanDoNoi` — bản đồ xã nổi khối 16:9 (nét trắng chạy viền → màu ngọc → khối nổi → tên gõ chữ → lóe trắng).
 - `BanDoXa` — ranh giới xã phẳng kiểu clip TikTok (dò theo ảnh bản đồ chính thức).
+- `ViTriNha` — ảnh vệ tinh tràn khung 9:16; ghim nhà + vòng bán kính → đường lớn phát sáng → bay tới từng tiện ích, vẽ đường đi kèm km → thẻ giá → thẻ liên hệ. Props sinh bằng `props_vi_tri.py`.
 - `SoDeFlycam` — số liệu đè flycam theo lời bình (dùng chung với cảnh flycam sau bản đồ).

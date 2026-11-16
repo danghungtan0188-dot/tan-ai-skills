@@ -50,3 +50,18 @@ Thư mục `Desktop/video/_bando_chogao/` — đủ chuỗi script đời đầu
 ## 7. Phụ đề theo mốc từng chữ (10/2026)
 
 Bản thử Chợ Gạo chia đều câu theo thời lượng: ở giây 9,1 phụ đề đã sáng tới "ranh giới" trong khi giọng mới đọc tới "kênh" (lệch tới ~1 giây ở câu dài). `moc_tung_chu.py` lấy mốc thật bằng whisper rồi khớp với văn bản đã biết. **Bẫy:** đưa mảng âm thanh 48 kHz thẳng vào faster-whisper ra chữ vô nghĩa ("Mẹ em chơi vô…") và mốc thành nội suy đều — phải chuyển về 16 kHz; script giờ in tỉ lệ khớp và cảnh báo câu dưới 50 %.
+
+## 8. Vị Trí Studio và video vị trí nhà đất (11/2026)
+
+Xem qua reel quảng cáo, trang vitristudio.com và từ khoá trong `app.js`; chưa dùng thử nên chưa biết chất lượng thật.
+
+- **Chuỗi của họ:** dán toạ độ → quét tiện ích (Overture, OpenStreetMap) → đường đi (OSRM) → nhập giá, ảnh → lời đọc AI (có Vbee) → xuất MP4 ngay trên máy người dùng (mã trang có `VideoEncoder`, `OffscreenCanvas`, không có `remotion`, `ffmpeg`, `maplibre`).
+- **Đã học vào repo:** mẫu `ViTriNha` + 3 script `quet_tien_ich`, `duong_di`, `props_vi_tri`. Giao diện tự làm, không chép.
+- **Chưa học:** app điện thoại, thu tiền theo lượt, trang web từng căn, báo khách qua Telegram. Đây mới là thứ giữ khách của họ, nhưng là một dự án app riêng.
+- **Bẫy lộ ra khi chạy toạ độ thật ở Mỹ Tho** (đã có test `tests/test_vi_tri_nha.py`):
+  - Người vẽ OSM gõ loại vào ô tên ("Street market"); way mang tên nút giao ("Ngã tư ..."); "Ấp Bắc" và "Đường Ấp Bắc" là một đường.
+  - Overpass trả 502 cả hai lần chạy đầu → phải tự thử lại.
+  - Ảnh nền vuông không phủ kín khung dọc ở cảnh toàn → lộ dải đen.
+  - Tiện ích sát nhà (130 m) bị ghim che → tuyến phải vẽ trên ghim.
+  - Nhãn đường xét khoảng cách từ tâm nhãn thì vẫn đè ghim → phải coi ghim là một khung chữ đã đặt.
+- **Chưa giải:** máy chủ OSRM công khai chỉ để dùng ít; số phút tính theo ô tô, chưa theo xe máy. Bán dịch vụ thì kiểm điều khoản Esri và tự dựng OSRM.
