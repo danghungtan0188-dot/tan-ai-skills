@@ -26,6 +26,7 @@ import { TranhGiayPhuNu, tranhGiayPhuNuSchema } from "./mau/TranhGiayPhuNu";
 import { PhuNu96, phuNu96Schema } from "./mau/PhuNu96";
 import { KetLaser, ketLaserSchema } from "./mau/KetLaser";
 import { BanDoVeTinh, banDoVeTinhSchema } from "./mau/BanDoVeTinh";
+import { ViTriNha, viTriNhaSchema } from "./mau/ViTriNha";
 import { SoDeFlycam, soDeFlycamSchema } from "./mau/SoDeFlycam";
 import { BanDoNoi, banDoNoiSchema } from "./mau/BanDoNoi";
 import { SoLan, soLanSchema } from "./mau/SoLan";
@@ -34,6 +35,8 @@ import { GhepCanh, ghepCanhMetadata, ghepCanhSchema } from "./mau/GhepCanh";
 import { AnhBayVao, anhBayVaoSchema } from "./mau/AnhBayVao";
 import { NguoiNoiPip, nguoiNoiPipSchema } from "./mau/NguoiNoiPip";
 import { TieuDeNhan, tieuDeNhanSchema } from "./mau/TieuDeNhan";
+import { SoLieuChienCong, soLieuChienCongSchema } from "./mau/SoLieuChienCong";
+import { MocLichSu, mocLichSuSchema } from "./mau/MocLichSu";
 
 // Kích thước/thời lượng thật tính trong calculateMetadata từ props `tiLe` + `thoiLuong`.
 const chung = { fps: FPS, width: 1920, height: 1080, durationInFrames: 120 } as const;
@@ -356,6 +359,18 @@ export const RemotionRoot: React.FC = () => (
       {...chung}
     />
     <Composition
+      id="ViTriNha"
+      component={ViTriNha}
+      schema={viTriNhaSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{
+        tiLe: "9:16", thoiLuong: 4, font: "", nen: { file: "nen.jpg", w: 1000, h: 1000, mPx: 2.35 }, nha: { xy: [500, 500] },
+        tieuDe: { lon: "Vị trí căn nhà", phu: "" }, banKinhPx: 400, duongLon: [], diem: [], the: null, ket: null,
+        canh: [{ tu: 0, giay: 1, cx: 500, cy: 500, zoom: 1 }], cau_doc: [], nguon: [],
+      }}
+      {...chung}
+    />
+    <Composition
       id="KetLaser"
       component={KetLaser}
       schema={ketLaserSchema}
@@ -393,6 +408,41 @@ export const RemotionRoot: React.FC = () => (
       schema={tieuDeNhanSchema}
       calculateMetadata={metadata(false)}
       defaultProps={{ tiLe: "16:9", thoiLuong: 4, chu: "Mỗi ngày", nhan: "một bước nhỏ", phu: "" }}
+      {...chung}
+    />
+    <Composition
+      id="SoLieuChienCong"
+      component={SoLieuChienCong}
+      schema={soLieuChienCongSchema}
+      calculateMetadata={metadata(true)}
+      defaultProps={{
+        tiLe: "16:9",
+        thoiLuong: 6,
+        tieuDe: "Kết quả trận đánh",
+        cao: 250,
+        muc: [
+          { so: 267, nhan: "tên địch bị loại", tai: 0.4, tienTo: "", donVi: "" },
+          { so: 2, nhan: "xe M113 bị đánh hỏng", tai: 2.2, tienTo: "", donVi: "" },
+          { so: 22, nhan: "khẩu súng thu được", tai: 3.6, tienTo: "", donVi: "" },
+        ],
+      }}
+      {...chung}
+    />
+    <Composition
+      id="MocLichSu"
+      component={MocLichSu}
+      schema={mocLichSuSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{
+        tiLe: "16:9",
+        thoiLuong: 8,
+        nam: "1940",
+        chu: "THÀNH LẬP CÁC CHI BỘ ĐẢNG",
+        phu: "An Thạnh Thủy và Bình Phục Nhứt",
+        taiChu: 1.0,
+        nenTrongSuot: false,
+        tru: [],
+      }}
       {...chung}
     />
   </>
