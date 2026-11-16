@@ -94,7 +94,7 @@ export const TranhGiay: React.FC<z.infer<typeof tranhGiaySchema>> = ({ dongTren,
   const cua = moCua ? interpolate(t, [het - 1.2, het], [0, 1], { ...kep, easing: Easing.in(Easing.cubic) }) : 0;
 
   const chu = (vao: number, co: number, mau: string, dam: boolean) => ({
-    fontFamily: FONT, fontWeight: 900, fontSize: co * s, color: mau, textAlign: "center" as const, lineHeight: 1.15,
+    fontFamily: FONT, fontWeight: 700, fontSize: co * s, color: mau, textAlign: "center" as const, lineHeight: 1.15,
     opacity: interpolate(t, [vao, vao + 0.6], [0, 1], kep),
     filter: `blur(${interpolate(t, [vao, vao + 0.7], [18, 0], kep) * s}px)`,
     scale: interpolate(t, [vao, vao + 0.9], [1.25, 1], { ...kep, easing: muot }),

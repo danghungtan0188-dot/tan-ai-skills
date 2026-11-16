@@ -97,7 +97,7 @@ export const AttNews: React.FC<AttNewsProps> = (props) => {
           backgroundColor: props.accentColor,
           color: "white",
           fontSize: 28,
-          fontWeight: 900,
+          fontWeight: 700,
           letterSpacing: 1.4,
         }}
       >
@@ -114,10 +114,10 @@ export const AttNews: React.FC<AttNewsProps> = (props) => {
           translate: titleTranslate,
         }}
       >
-        <div style={{color: props.accentColor, fontSize: 30, fontWeight: 800, marginBottom: 18}}>
+        <div style={{color: props.accentColor, fontSize: 30, fontWeight: 700, marginBottom: 18}}>
           {props.kicker}
         </div>
-        <div style={{color: "white", fontSize: 76, fontWeight: 900, lineHeight: 1.05}}>
+        <div style={{color: "white", fontSize: 76, fontWeight: 700, lineHeight: 1.05}}>
           {props.title}
         </div>
         <div style={{color: "#d8e8ff", fontSize: 34, lineHeight: 1.35, marginTop: 24}}>

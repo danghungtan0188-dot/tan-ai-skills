@@ -85,7 +85,7 @@ export const BannerPhongSu: React.FC<z.infer<typeof bannerPhongSuSchema>> = (p) 
             justifyContent: "center",
             transform: "skewX(14deg)",
             fontFamily: FONT,
-            fontWeight: 900,
+            fontWeight: 700,
             fontSize: 34 * s,
             color: "white",
             opacity: chuNhan,
@@ -145,8 +145,8 @@ export const BannerPhongSu: React.FC<z.infer<typeof bannerPhongSuSchema>> = (p) 
             clipPath: `inset(0 ${100 - chu}% 0 0)`,
           }}
         >
-          <div style={{ height: "48%", display: "flex", alignItems: "center", fontSize: 44 * s, fontWeight: 800, color: "white" }}>{p.ten}</div>
-          <div style={{ height: "52%", display: "flex", alignItems: "center", fontSize: 40 * s, fontWeight: 800, color: p.mauDam }}>
+          <div style={{ height: "48%", display: "flex", alignItems: "center", fontSize: 44 * s, fontWeight: 700, color: "white" }}>{p.ten}</div>
+          <div style={{ height: "52%", display: "flex", alignItems: "center", fontSize: 40 * s, fontWeight: 700, color: p.mauDam }}>
             {p.diaChi}
           </div>
         </div>

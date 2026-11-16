@@ -34,7 +34,7 @@ export const TieuDeLon: React.FC<z.infer<typeof tieuDeLonSchema>> = ({ chu, co, 
       <div
         style={{
           fontFamily: FONT,
-          fontWeight: 900,
+          fontWeight: 700,
           fontSize: co * s,
           letterSpacing: gian * s,
           color: mauChinh,

@@ -102,7 +102,7 @@ export const HaoGiaoThong: React.FC<z.infer<typeof haoGiaoThongSchema>> = ({ tie
       ) : null}
       <div style={{ position: "absolute", right: 120 * s, bottom: 250 * s, textAlign: "right", opacity: hienKm, fontFamily: FONT, color: NAU }}>
         <span style={{ fontSize: 46 * s }}>{km.tienTo}</span>
-        <span style={{ fontSize: 130 * s, fontWeight: 800 }}>{Math.round(so)}</span>
+        <span style={{ fontSize: 130 * s, fontWeight: 700 }}>{Math.round(so)}</span>
         <span style={{ fontSize: 56 * s, fontWeight: 700 }}> km</span>
         <div style={{ fontFamily: CHU_CHAN, fontStyle: "italic", fontSize: 36 * s }}>giao thông hào</div>
       </div>

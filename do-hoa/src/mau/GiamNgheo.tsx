@@ -37,7 +37,7 @@ export const GiamNgheo: React.FC<z.infer<typeof giamNgheoSchema>> = ({ tieuDe, t
   const Cot = ({ k, x, mau, sang }: { k: number; x: { so: number; nhan: string; tienTo: string; soLe: number }; mau: string; sang: boolean }) => (
     <div style={{ width: 300 * s, textAlign: "center" }}>
       <div style={{ height: (CAO + 120) * s, display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center" }}>
-        <div style={{ fontFamily: FONT, fontWeight: 900, fontSize: 96 * s, color: sang ? "#FFE7B0" : KEM, lineHeight: 1.1, opacity: k > 0 ? 1 : 0,
+        <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 96 * s, color: sang ? "#FFE7B0" : KEM, lineHeight: 1.1, opacity: k > 0 ? 1 : 0,
           textShadow: nenMo ? `0 ${4 * s}px ${14 * s}px rgba(0,0,0,0.7)` : `0 0 ${6 * s}px rgba(0,0,0,0.9), 0 ${3 * s}px ${14 * s}px rgba(0,0,0,0.85)` }}>
           {x.tienTo ? <span style={{ fontSize: 42 * s, fontWeight: 700, marginRight: 8 * s }}>{x.tienTo}</span> : null}
           {soVN(k * 100, x.soLe)}<span style={{ fontSize: 52 * s }}>%</span>

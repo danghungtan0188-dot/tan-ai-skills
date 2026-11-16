@@ -62,7 +62,7 @@ export const SoLan: React.FC<z.infer<typeof soLanSchema>> = (p) => {
           const o = { height: cao, lineHeight: `${cao}px`, textAlign: "center" as const };
           const kieu = {
             color: MAU.vang,
-            fontWeight: 800,
+            fontWeight: 700,
             fontSize: co,
             fontVariantNumeric: "tabular-nums" as const,
             WebkitTextStroke: `${3 * s}px ${MAU.navyNews}`,

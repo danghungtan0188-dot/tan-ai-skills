@@ -127,7 +127,7 @@ const DaiBang: React.FC<{ W: number; H: number; s: number; mo: number; chu: stri
       <div
         style={{
           position: "absolute", left: 0, top: cao * 0.1, width: W, height: cao, display: "flex", alignItems: "center", justifyContent: "center",
-          fontFamily: FONT, fontWeight: 900, fontSize: 92 * s, letterSpacing: 4 * s, color: "#FFD86B",
+          fontFamily: FONT, fontWeight: 700, fontSize: 92 * s, letterSpacing: 4 * s, color: "#FFD86B",
           WebkitTextStroke: `${5 * s}px #5A0712`, paintOrder: "stroke fill", textShadow: `0 ${4 * s}px ${10 * s}px rgba(0,0,0,0.45)`,
           opacity: interpolate(mo, [0.6, 1], [0, 1], kep),
         }}
@@ -166,7 +166,7 @@ export const TranhGiayPhuNu: React.FC<z.infer<typeof tranhGiayPhuNuSchema>> = ({
   const songLech = (toc: number) => Math.sin(t * 0.9 + toc) * W * 0.012;
 
   const chu = (vao: number, ra: number, co: number, mau: string): React.CSSProperties => ({
-    fontFamily: FONT, fontWeight: 900, fontSize: co * s, color: mau, textAlign: "center", lineHeight: 1.2, maxWidth: W * 0.94,
+    fontFamily: FONT, fontWeight: 700, fontSize: co * s, color: mau, textAlign: "center", lineHeight: 1.2, maxWidth: W * 0.94,
     opacity: interpolate(t, [vao, vao + 0.6, ra, ra + 0.5], [0, 1, 1, 0], kep),
     filter: `blur(${interpolate(t, [vao, vao + 0.7], [14, 0], kep) * s}px)`,
     translate: `0px ${interpolate(t, [vao, vao + 0.8, ra, ra + 0.5], [30, 0, 0, -30], { ...kep, easing: muot }) * s}px`,
