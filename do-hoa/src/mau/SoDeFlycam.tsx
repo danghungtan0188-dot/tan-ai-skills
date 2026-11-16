@@ -34,7 +34,7 @@ export const SoDeFlycam: React.FC<z.infer<typeof soDeFlycamSchema>> = ({ font, m
   const gian = 1 + (1 - vao) * 0.6 + ra * 0.4; // giãn ngang giả nhòe chuyển động
   const vien = (mau: string, d: number) => `${d}px ${mau}`;
   const chu = {
-    fontFamily: font, fontStyle: "italic" as const, fontWeight: 900, lineHeight: 1,
+    fontFamily: font, fontStyle: "italic" as const, fontWeight: 700, lineHeight: 1,
     paintOrder: "stroke fill" as const, filter: `blur(${nhoe * s}px) drop-shadow(0 ${4 * s}px ${8 * s}px rgba(0,0,0,0.55))`,
   };
   return (

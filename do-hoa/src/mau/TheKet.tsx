@@ -100,7 +100,7 @@ export const TheKet: React.FC<z.infer<typeof theKetSchema>> = ({ dong1, dong2, c
           justifyContent: "center",
           alignItems: "center",
           fontFamily: FONT,
-          fontWeight: 900,
+          fontWeight: 700,
           textAlign: "center",
           lineHeight: 1.05,
           paddingBottom: 60,

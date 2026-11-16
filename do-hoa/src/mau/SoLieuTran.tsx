@@ -70,7 +70,7 @@ export const SoLieuTran: React.FC<z.infer<typeof soLieuTranSchema>> = ({ tieuDe,
               <div
                 style={{
                   fontFamily: FONT,
-                  fontWeight: 900,
+                  fontWeight: 700,
                   fontSize: 150 * s,
                   lineHeight: 1,
                   color: KEM,

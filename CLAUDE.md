@@ -87,7 +87,7 @@ Giải thích đầy đủ: [ARCHITECTURE.md](ARCHITECTURE.md).
 skills/             34 skill  — NGUỒN CHUẨN, mirror sang .claude/skills/ + .agents/skills/
 rules/              4 rule bắt buộc
 data-contracts/     JSON Schema truyền dữ liệu giữa agent
-scripts/            script dùng chung (sync_skills.py, video_qa.py, check_citations.py, harness_eval.py, cai_skill_ngoai.py,
+scripts/            script dùng chung (sync_skills.py, video_qa.py, kiem_font_viet.py, check_citations.py, harness_eval.py, cai_skill_ngoai.py,
                     kiem_ten_tts.py — kiểm tên trong bản đọc TTS bằng 3 lần nghe, va_doan_video.py — vá một đoạn video đã giao)
 tan_studio/         CLI script→giọng→phụ đề→MP4 (python -m tan_studio), gọi lại code trong skills/
 do-hoa/             Remotion: intro, số liệu, lower-third, chữ chạy — tan_studio gọi qua `do-hoa` / mục "do_hoa"
@@ -147,6 +147,7 @@ Bài học nào đã thành chốt chặn, bài nào còn để người phán �
 python -m unittest discover -s tests   # test kiến trúc + hook + contract
 python scripts/sync_skills.py --check  # 3 bản skill đã khớp chưa
 python scripts/video_qa.py <file> --strict --audio   # QA video đầy đủ
+python scripts/kiem_font_viet.py      # chữ đậm trong mẫu .tsx có font đủ dấu tiếng Việt (Arial ≥800 = thiếu)
 python scripts/kiem_ten_tts.py cau.json   # tên/cụm bắt buộc trong bản TTS: đạt khi ≥ 2/3 lần whisper nghe ra
 python scripts/va_doan_video.py GOC.mp4 --tu A --den B --chi-tim   # vá 1 chỗ video đã giao: chỉ dựng lại đoạn giữa 2 khung chìa khóa
 python scripts/cai_skill_ngoai.py --kiem   # đủ skill ngoài repo chưa (HyperFrames, GSAP, Playwright CLI, junction) — máy mới: --cai

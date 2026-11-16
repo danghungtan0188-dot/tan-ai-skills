@@ -62,7 +62,7 @@ export const BanDoNoi: React.FC<z.infer<typeof banDoNoiSchema>> = ({ font, ten, 
         </svg>
       </AbsoluteFill>
       <div style={{
-        position: "absolute", left: W * 0.06, bottom: H * 0.08, fontFamily: font, fontWeight: 900, fontSize: 40 * s,
+        position: "absolute", left: W * 0.06, bottom: H * 0.08, fontFamily: font, fontWeight: 700, fontSize: 40 * s,
         color: "#FFFFFF", letterSpacing: 3 * s, textShadow: `0 ${2 * s}px ${8 * s}px rgba(0,0,0,0.8)`,
       }}>{ten.slice(0, so)}</div>
       <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 45%, #FFFFFF 0%, rgba(220,245,255,0.9) 45%, rgba(220,245,255,0) 80%)", opacity: loe }} />

@@ -81,7 +81,7 @@ export const AnhBayVao: React.FC<z.infer<typeof anhBayVaoSchema>> = ({ anh, cach
         <AbsoluteFill style={{ justifyContent: "flex-end", alignItems: "center", paddingBottom: 90 * s }}>
           <div
             style={{
-              fontFamily: FONT, fontWeight: 800, fontSize: 64 * s, color: "white", textAlign: "center",
+              fontFamily: FONT, fontWeight: 700, fontSize: 64 * s, color: "white", textAlign: "center",
               textShadow: `0 ${4 * s}px ${14 * s}px rgba(0,0,0,0.8)`,
               opacity: interpolate(t, [tPhong + 1, tPhong + 1.6], [0, 1], kep),
               translate: `0px ${interpolate(t, [tPhong + 1, tPhong + 1.6], [30, 0], kep) * s}px`,

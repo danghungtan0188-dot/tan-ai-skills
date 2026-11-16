@@ -97,7 +97,7 @@ export const SoLieuChienCong: React.FC<z.infer<typeof soLieuChienCongSchema>> = 
                   <span
                     style={{
                       fontSize: 168 * s,
-                      fontWeight: 900,
+                      fontWeight: 700,
                       letterSpacing: -2 * s,
                       backgroundImage: `linear-gradient(105deg, ${KEM} 0%, ${KEM} ${sang * 100 - 12}%, #FFFFFF ${sang * 100}%, ${KEM} ${sang * 100 + 12}%, #E9D4A6 100%)`,
                       WebkitBackgroundClip: "text",

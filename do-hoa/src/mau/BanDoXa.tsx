@@ -26,7 +26,7 @@ const kep = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const muot = Easing.bezier(0.16, 1, 0.3, 1);
 const VANG = "#FFE81A";
 const TIM = "rgba(150, 30, 150, 0.62)";
-const CHU = { fontFamily: FONT, fontWeight: 900, letterSpacing: 1, textTransform: "uppercase" } as const;
+const CHU = { fontFamily: FONT, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" } as const;
 
 const duong = (ds: [number, number][], kin: boolean) =>
   ds.map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`).join(" ") + (kin ? " Z" : "");

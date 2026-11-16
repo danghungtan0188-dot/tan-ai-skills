@@ -147,7 +147,7 @@ export const TieuChi: React.FC<z.infer<typeof tieuChiSchema>> = (p) => {
       ) : null}
       {p.kieu === "rucro" ? (
         <div style={{ position: "absolute", top: 500 * s, left: 0, right: 0, textAlign: "center", whiteSpace: "pre-line",
-          fontFamily: "Arial, 'Segoe UI', sans-serif", fontWeight: 900, fontSize: 112 * s, lineHeight: 1.12, letterSpacing: 2 * s,
+          fontFamily: "Arial, 'Segoe UI', sans-serif", fontWeight: 700, fontSize: 112 * s, lineHeight: 1.12, letterSpacing: 2 * s,
           background: "linear-gradient(180deg, #FFF6D8 0%, #FFD36E 45%, #C8892A 70%, #FFE6A3 100%)", WebkitBackgroundClip: "text",
           backgroundClip: "text", color: "transparent", opacity: ket, scale: 0.9 + 0.1 * ket,
           filter: `drop-shadow(0 ${4 * s}px 0 #7a4a10) drop-shadow(0 0 ${28 * s}px rgba(255,200,100,0.55))` }}>{p.ketLuan}</div>
