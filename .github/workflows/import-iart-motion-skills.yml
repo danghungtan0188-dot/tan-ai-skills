@@ -1,0 +1,43 @@
+name: Import iArt motion skills (19 packs)
+on:
+  push:
+    branches: [import/iart-motion-skills-19-packs]
+    paths: ['.github/workflows/import-iart-motion-skills.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Vendor all 19 source repositories without overwriting existing files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p vendor/iart-motion-skills
+          packs=(tiktok-video-skills text-message-video-skills youtube-video-skills ecommerce-video-skills ad-video-skills data-animation-skills explainer-video-skills map-animation-skills web-animation-skills motion-design-skills kinetic-typography-skills freelance-motion-skills webgl-animation-skills manim-skills generative-illustration-skills javascript-animation-skills lower-thirds-skills b-roll-skills talking-head-skills)
+          for pack in "${packs[@]}"; do
+            target="vendor/iart-motion-skills/$pack"
+            if [ -e "$target" ]; then echo "Existing target: $target; refusing overwrite"; exit 1; fi
+            git clone --depth 1 "https://github.com/iart-ai/$pack.git" "/tmp/$pack"
+            mkdir -p "$target"
+            cp -a "/tmp/$pack/." "$target/"
+            rm -rf "$target/.git"
+          done
+          count=$(find vendor/iart-motion-skills -name SKILL.md -type f | wc -l)
+          echo "SKILL.md count: $count"
+          test "$count" -eq 56
+          cat > vendor/iart-motion-skills/IMPORT-SOURCES.md <<'EOF'
+          # iArt Motion Skills — vendored source
+          Imported 19 iart-ai packs containing 56 SKILL.md files.
+          Source: https://github.com/iart-ai/motion-skills
+          Each pack is copied under its original name, including references, scripts, documentation and LICENSE files.
+          Upstream licensing: MIT; review any third-party assets separately.
+          EOF
+          git add vendor/iart-motion-skills
+          git diff --cached --quiet && exit 0
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Vendor 19 iArt motion skill packs (56 skills)"
+          git push origin HEAD:import/iart-motion-skills-19-packs
