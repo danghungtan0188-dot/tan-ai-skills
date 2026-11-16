@@ -13,6 +13,7 @@ import { MocThoiGian, mocThoiGianSchema } from "./mau/MocThoiGian";
 import { ChuDong, chuDongSchema } from "./mau/ChuDong";
 import { Intro, introSchema } from "./mau/Intro";
 import { LowerThird, lowerThirdSchema } from "./mau/LowerThird";
+import { ChuChay, chuChaySchema } from "./mau/ChuChay";
 import { SoLieu, soLieuSchema } from "./mau/SoLieu";
 import { SoLieuTran, soLieuTranSchema } from "./mau/SoLieuTran";
 import { TheKet, theKetSchema } from "./mau/TheKet";
@@ -258,6 +259,21 @@ export const RemotionRoot: React.FC = () => (
       schema={lowerThirdSchema}
       calculateMetadata={metadata(true)}
       defaultProps={{ tiLe: "16:9", thoiLuong: 5, ten: "Ông Nguyễn Văn A", chucVu: "Chủ tịch UBND xã An Thạnh Thủy" }}
+      {...chung}
+    />
+    <Composition
+      id="ChuChay"
+      component={ChuChay}
+      schema={chuChaySchema}
+      calculateMetadata={metadata(true)}
+      defaultProps={{
+        tiLe: "16:9", thoiLuong: 12, nhan: "TIN VẮN", gio: "10:30", kieu: "thuong", tocDo: 160,
+        tin: [
+          "Xã An Thạnh Thủy bàn giao 5 căn nhà Đại đoàn kết cho hộ khó khăn",
+          "Khám bệnh, tư vấn sức khỏe miễn phí cho 200 người dân vào thứ Bảy",
+          "Trường Tiểu học An Thạnh Thủy nhận tủ sách trị giá 50 triệu đồng",
+        ],
+      }}
       {...chung}
     />
     <Composition
