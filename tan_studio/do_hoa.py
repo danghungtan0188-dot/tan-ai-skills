@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -67,7 +68,8 @@ def render(mau: str, props: dict, out: Path, anh_tai_giay: float | None = None,
     props_file = write_json(out.with_name(out.stem + ".props.json"), {**RONG[comp], **props})
     cmd = [shutil.which("npx"), "remotion", "render" if anh_tai_giay is None else "still", "src/index.ts", comp,
            str(out), f"--props={props_file}", "--log=error"]
-    cmd.append("--concurrency=2" if anh_tai_giay is None else f"--frame={round(anh_tai_giay * 30)}")
+    fps = int(os.environ.get("REMOTION_FPS") or 30)  # cùng nguồn với FPS trong do-hoa/src/chung.tsx
+    cmd.append("--concurrency=2" if anh_tai_giay is None else f"--frame={round(anh_tai_giay * fps)}")
     if public_dir:
         cmd.append(f"--public-dir={Path(public_dir).resolve()}")
     r = subprocess.run(cmd, cwd=DIR, capture_output=True, text=True, encoding="utf-8", errors="replace")
