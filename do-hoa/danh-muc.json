@@ -1,0 +1,160 @@
+{
+  "nhom": [
+    "Mở đầu và kết",
+    "Tên, tiêu đề, chữ",
+    "Số liệu",
+    "Bản đồ, sơ đồ",
+    "Lịch sử, tư liệu",
+    "Ảnh, ghép, chuyển cảnh"
+  ],
+  "mau": {
+    "Intro": {
+      "nhom": "Mở đầu và kết",
+      "dungKhi": "Mở đầu bản tin ATT NEWS: logo, vạch vàng, tiêu đề rồi mờ lộ video."
+    },
+    "MoDauBanTin": {
+      "nhom": "Mở đầu và kết",
+      "dungKhi": "Mở đầu bản tin ATT NEWS 25 s: mảng màu trượt mở ảnh, ảnh bay nhiều lớp, chia khung, tiêu đề lớn theo nhịp nhạc."
+    },
+    "KetLaser": {
+      "nhom": "Mở đầu và kết",
+      "dungKhi": "Kết bản tin ATT NEWS: tia laser vẽ logo, câu mời theo dõi."
+    },
+    "TheKet": {
+      "nhom": "Mở đầu và kết",
+      "dungKhi": "Thẻ kết phim tài liệu: chữ vàng đồng nổi khối trên nền nâu trầm."
+    },
+    "AnhKet": {
+      "nhom": "Mở đầu và kết",
+      "dungKhi": "Kết phim bằng một ảnh toàn khung (cờ, huân chương) có vệt sáng vàng lướt qua."
+    },
+    "TranhGiay": {
+      "nhom": "Mở đầu và kết",
+      "dungKhi": "Intro lễ hội (Trung thu) kiểu tranh giấy nhiều lớp, tách đôi lộ video."
+    },
+    "TranhGiayPhuNu": {
+      "nhom": "Mở đầu và kết",
+      "dungKhi": "Intro mừng ngày Phụ nữ 20/10 kiểu tranh giấy pop-up, sen nở."
+    },
+    "PhuNu96": {
+      "nhom": "Mở đầu và kết",
+      "dungKhi": "Video ghép riêng dịp 96 năm Hội LHPN (intro tranh giấy + các cảnh ảnh)."
+    },
+    "LowerThird": {
+      "nhom": "Tên, tiêu đề, chữ",
+      "dungKhi": "Ghi tên / chức vụ người phát biểu ở góc dưới trái."
+    },
+    "BannerPhongSu": {
+      "nhom": "Tên, tiêu đề, chữ",
+      "dungKhi": "Banner tên phóng sự + địa danh kiểu truyền hình, đắp lên cảnh mở đầu."
+    },
+    "TieuDeLon": {
+      "nhom": "Tên, tiêu đề, chữ",
+      "dungKhi": "Chữ lớn tên địa danh đè trên flycam (kiểu \"XÃ VĨNH HỰU\")."
+    },
+    "TieuDeNhan": {
+      "nhom": "Tên, tiêu đề, chữ",
+      "dungKhi": "Tiêu đề reel có một cụm từ nhấn nghiêng màu vàng, khung tự vẽ quanh chữ."
+    },
+    "HopThongTin": {
+      "nhom": "Tên, tiêu đề, chữ",
+      "dungKhi": "Hộp chữ góc trái dưới kiểu phóng sự: mốc thời gian + vài dòng thông tin ngắn."
+    },
+    "ChuDong": {
+      "nhom": "Tên, tiêu đề, chữ",
+      "dungKhi": "Reels/TikTok chữ là nội dung: chữ bật theo giọng đọc, từ đang đọc tô vàng."
+    },
+    "SoLieu": {
+      "nhom": "Số liệu",
+      "dungKhi": "Thẻ số liệu: con số lớn đếm lên, kèm biểu đồ cột ngang tuỳ chọn."
+    },
+    "SoLieuTran": {
+      "nhom": "Số liệu",
+      "dungKhi": "Vài con số trận đánh / thành tích trên dải tối, đắp lên tư liệu."
+    },
+    "SoLieuChienCong": {
+      "nhom": "Số liệu",
+      "dungKhi": "Số liệu chiến công đắp lên tư liệu đen trắng: số ánh kim đếm lên, vạch vàng, nhãn nhỏ, nền trong suốt."
+    },
+    "SoDeFlycam": {
+      "nhom": "Số liệu",
+      "dungKhi": "Đè số liệu thẳng lên flycam, không hộp nền, trượt vào đúng lúc đọc số."
+    },
+    "SoLan": {
+      "nhom": "Số liệu",
+      "dungKhi": "Số lăn như đồng hồ (vd. 2025 → 2026) — chuyển năm, đổi mốc."
+    },
+    "GiamNgheo": {
+      "nhom": "Số liệu",
+      "dungKhi": "So sánh hai con số trước/nay bằng hai cột (vd. tỷ lệ hộ nghèo), đè lên cảnh quay."
+    },
+    "HudDemSo": {
+      "nhom": "Số liệu",
+      "dungKhi": "Promo/khoe một con số lớn: vòng HUD đếm số rồi vỡ ra lộ logo ATT."
+    },
+    "TieuChi": {
+      "nhom": "Số liệu",
+      "dungKhi": "Nông thôn mới: các thẻ \"TIÊU CHÍ n\" sáng lên theo lời, rồi dòng kết luận."
+    },
+    "HaTang": {
+      "nhom": "Số liệu",
+      "dungKhi": "Nhắc tới các lĩnh vực hạ tầng (giao thông, trường học, y tế) — biểu tượng sáng theo lời."
+    },
+    "BanDoNoi": {
+      "nhom": "Bản đồ, sơ đồ",
+      "dungKhi": "Giới thiệu một xã: viền xã sáng, khối nổi lên, gõ tên xã, loé trắng nối sang flycam."
+    },
+    "BanDoVeTinh": {
+      "nhom": "Bản đồ, sơ đồ",
+      "dungKhi": "Giải thích quy hoạch trên bản đồ vệ tinh theo lời đọc (kênh, ranh giới, nhãn)."
+    },
+    "BanDoXa": {
+      "nhom": "Bản đồ, sơ đồ",
+      "dungKhi": "Clip \"ranh giới xã\": ảnh định vị rồi bản đồ ranh giới, gõ tên từng xã cũ."
+    },
+    "ViTriNha": {
+      "nhom": "Bản đồ, sơ đồ",
+      "dungKhi": "Video vị trí nhà 9:16 từ một toạ độ: ghim nhà, đường lớn, bay tới tiện ích kèm số km, thẻ giá, liên hệ."
+    },
+    "TuyenVanChuyen": {
+      "nhom": "Bản đồ, sơ đồ",
+      "dungKhi": "Sơ đồ minh họa tuyến vận chuyển: đường nét đứt vẽ dần qua các điểm."
+    },
+    "HaoGiaoThong": {
+      "nhom": "Bản đồ, sơ đồ",
+      "dungKhi": "Sơ đồ minh họa hào giao thông / rào làng chiến đấu, số km đếm lên."
+    },
+    "MocThoiGian": {
+      "nhom": "Lịch sử, tư liệu",
+      "dungKhi": "Kể lịch sử theo năm: trục mốc thời gian, mốc đang nói sáng lên."
+    },
+    "MocLichSu": {
+      "nhom": "Lịch sử, tư liệu",
+      "dungKhi": "Thẻ mốc lịch sử toàn khung cho phim tài liệu: năm lớn, đường thời gian vàng, khói và tàn lửa, 2–4 trụ biểu tượng theo lời."
+    },
+    "AnhTuLieu": {
+      "nhom": "Lịch sử, tư liệu",
+      "dungKhi": "Ảnh tư liệu nhỏ / chụp từ sách — đặt như ảnh in trên nền giấy cũ, không lộ mờ."
+    },
+    "TriAn": {
+      "nhom": "Lịch sử, tư liệu",
+      "dungKhi": "Đoạn tri ân liệt sĩ, thương binh, gia đình có công — số hiện chậm, trang nghiêm."
+    },
+    "AnhBayVao": {
+      "nhom": "Ảnh, ghép, chuyển cảnh",
+      "dungKhi": "Đoạn tổng kết: nhiều ảnh bay vào xếp chồng, ảnh cuối phóng phủ kín khung."
+    },
+    "GhepCanh": {
+      "nhom": "Ảnh, ghép, chuyển cảnh",
+      "dungKhi": "Ghép nhiều ảnh/clip liền mạch bằng chuyển cảnh Remotion, có thể thêm vệt sáng."
+    },
+    "VetSang": {
+      "nhom": "Ảnh, ghép, chuyển cảnh",
+      "dungKhi": "Chuyển cảnh bằng vệt sáng quét chéo, đắp đúng điểm cắt."
+    },
+    "NguoiNoiPip": {
+      "nhom": "Ảnh, ghép, chuyển cảnh",
+      "dungKhi": "Người nói thu vào vòng tròn góc khi chèn đồ họa, rồi phóng lại toàn khung."
+    }
+  }
+}

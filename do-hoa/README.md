@@ -37,6 +37,25 @@ npx remotion render
 npx remotion upgrade
 ```
 
+## Danh mục mẫu
+
+`danh-muc.json` ghi **nhóm** và **dùng khi nào** cho từng mẫu trong `src/Root.tsx`. Thêm mẫu mới thì thêm một dòng ở đây —
+`tests/test_danh_muc_do_hoa.py` báo đỏ nếu mẫu chưa có trong danh mục, danh mục còn mẫu đã xoá, hoặc file `src/mau/*.tsx` chưa đăng ký.
+
+## Trang xem trước mẫu (gallery)
+
+Tạo trên máy (không đưa lên git — ảnh/GIF nặng), rồi mở `gallery/index.html`: mẫu xếp theo nhóm, ảnh khung giữa,
+rê chuột xem GIF 2,5 giây, nút **Chép tên** chép Id mẫu.
+
+```console
+node scripts/lam_gallery.mjs
+```
+
+- Bundle một lần, render từng mẫu nối tiếp, `concurrency` 2 (máy hay treo khi chạy nặng). Mỗi mẫu ~20–40 giây.
+- Mẫu đã có đủ `<Id>.png` + `<Id>.gif` thì bỏ qua → chạy lại chỉ làm mẫu mới/mẫu lỗi. Render lại tất cả: thêm `--lam-lai`.
+- Mẫu lỗi ghi vào `gallery/loi.json` và hiện ở cuối trang, không dừng cả loạt. Mẫu cần ảnh/video trong `public/`
+  (vd. `anh.png`) sẽ lỗi khi `public/` trống.
+
 ## Docs
 
 Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).

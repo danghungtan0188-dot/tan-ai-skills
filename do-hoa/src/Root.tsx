@@ -37,6 +37,7 @@ import { NguoiNoiPip, nguoiNoiPipSchema } from "./mau/NguoiNoiPip";
 import { TieuDeNhan, tieuDeNhanSchema } from "./mau/TieuDeNhan";
 import { SoLieuChienCong, soLieuChienCongSchema } from "./mau/SoLieuChienCong";
 import { MocLichSu, mocLichSuSchema } from "./mau/MocLichSu";
+import { MoDauBanTin, moDauBanTinSchema } from "./mau/MoDauBanTin";
 
 // Kích thước/thời lượng thật tính trong calculateMetadata từ props `tiLe` + `thoiLuong`.
 const chung = { fps: FPS, width: 1920, height: 1080, durationInFrames: 120 } as const;
@@ -425,6 +426,23 @@ export const RemotionRoot: React.FC = () => (
           { so: 2, nhan: "xe M113 bị đánh hỏng", tai: 2.2, tienTo: "", donVi: "" },
           { so: 22, nhan: "khẩu súng thu được", tai: 3.6, tienTo: "", donVi: "" },
         ],
+      }}
+      {...chung}
+    />
+    <Composition
+      id="MoDauBanTin"
+      component={MoDauBanTin}
+      schema={moDauBanTinSchema}
+      calculateMetadata={metadata(false)}
+      defaultProps={{
+        tiLe: "16:9", thoiLuong: 25, tieuDe: "BẢN TIN", diaDanh: "AN THẠNH THỦY",
+        chuDe: ["KINH TẾ", "VĂN HÓA", "XÃ HỘI"], ngay: "",
+        moc: [3, 6, 9.5, 13, 16.5, 20],
+        anhMo: "anh1.jpg", anhTieuDe: "anh2.jpg",
+        anhBay: ["anh1.jpg", "anh2.jpg", "anh3.jpg", "anh4.jpg", "anh5.jpg", "anh6.jpg"],
+        khung1: [{ anh: "anh1.jpg", nhan: "KINH TẾ" }, { anh: "anh2.jpg", nhan: "VĂN HÓA" }, { anh: "anh3.jpg", nhan: "XÃ HỘI" }],
+        khung2: [{ anh: "anh4.jpg", nhan: "NÔNG NGHIỆP" }, { anh: "anh5.jpg", nhan: "GIÁO DỤC" }, { anh: "anh6.jpg", nhan: "Y TẾ" }],
+        anhTin: "anh1.jpg", tinChay: "Bản tin ATT NEWS", anhKet: "anh2.jpg",
       }}
       {...chung}
     />
