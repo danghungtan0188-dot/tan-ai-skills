@@ -315,6 +315,7 @@ KHÔNG áp dụng cho bản tin một tin địa phương thường.
   tin địa phương piano rất nhẹ `-9dB`. Kết quả cuối −13,8 LUFS, −2,7 dBTP sau chặn đỉnh `alimiter=limit=0.70`.
 - **Ghép bản cuối:** dựng từng đoạn riêng (mở đầu, intro, tin 1, tin 2) rồi mới nối; mỗi file chỉ `-i` một lần
   (đọc một file hai lần thì ffmpeg treo — hook `guard_video` chặn). Theo dõi CPU của ffmpeg; đứng yên > 1 phút là treo.
+- **Lệnh ghép dài chạy qua chó canh:** `python scripts/canh_treo.py --file RA.mp4 -- ffmpeg ...` — CPU và file đầu ra đứng yên > 3 phút thì tự dừng, báo TREO (13/11 treo hơn 3 giờ không ai biết).
 - **Giọng:** máy nghe (whisper small) báo giọng "Nữ Phường Duyên Hải AI" đọc "Thị"→"Thiện", "Văn"→"Phan" 14/14 bản, nhưng
   người dùng nghe tận tai nói đúng. Lỗi máy nghe lặp đều chưa chắc là lỗi giọng: **gửi đoạn nghe 10–20 s trước khi đổi giọng
   hay đọc lại cả bài** (bản này mất ~3 giờ đổi giọng qua lại).
