@@ -140,7 +140,6 @@ def check_audio(tts_result: dict | None, audio: Path, t: dict) -> list[dict]:
                                "bỏ qua", key=str(s["index"]), doan=s["index"]))
             continue
         a = _analyse(x, sr, t)
-        dur = len(x) / sr
         key = _key(s["text"] or s["wav"])
         if a["rms_db"] < t["im_lang_dbfs"]:
             out.append(finding("im_lang", "loi", "giong_doc", f"đoạn gần như im lặng ({a['rms_db']:.0f} dBFS)",

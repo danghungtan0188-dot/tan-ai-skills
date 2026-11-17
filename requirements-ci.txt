@@ -7,3 +7,4 @@ jsonschema==4.26.0
 defusedxml==0.7.1
 fonttools==4.64.0
 brotli==1.2.0
+ruff==0.17.5

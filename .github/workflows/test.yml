@@ -34,6 +34,9 @@ jobs:
       - name: Cài thư viện Python mà test dùng
         run: pip install -r requirements-ci.txt
 
+      - name: Soát lỗi Python (ruff — chỉ lỗi thật, không ép định dạng)
+        run: python -m ruff check .
+
       - name: Chạy test
         run: python -m unittest discover -s tests
 

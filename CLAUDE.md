@@ -145,6 +145,7 @@ Bài học nào đã thành chốt chặn, bài nào còn để người phán �
 
 ```bash
 python -m unittest discover -s tests   # test kiến trúc + hook + contract
+python -m ruff check .                 # soát lỗi Python thật (tên chưa định nghĩa, import thừa) — cấu hình ruff.toml
 python scripts/sync_skills.py --check  # 3 bản skill đã khớp chưa
 python scripts/video_qa.py <file> --strict --audio   # QA video đầy đủ
 python scripts/kiem_font_viet.py      # chữ đậm trong mẫu .tsx có font đủ dấu tiếng Việt (Arial ≥800 = thiếu)
