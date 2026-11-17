@@ -333,7 +333,7 @@ export const RemotionRoot: React.FC = () => (
       schema={banDoNoiSchema}
       calculateMetadata={metadata(false)}
       defaultProps={{ tiLe: "16:9", thoiLuong: 6, font: "Arial, 'Segoe UI', sans-serif", ten: "XÃ …",
-        vong: [[0, 0], [100, 0], [100, 80], [0, 80], [0, 0]], langGieng: [], loeCuoi: true }}
+        vong: [[0, 0], [100, 0], [100, 80], [0, 80], [0, 0]], langGieng: [], loeCuoi: true, nhip12: false }}
       {...chung}
     />
     <Composition

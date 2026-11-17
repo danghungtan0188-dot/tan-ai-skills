@@ -16,6 +16,13 @@
                   "gsap-scrolltrigger", "gsap-react", "gsap-frameworks"]
       },
       {
+        "nguon": "CloudAI-X/threejs-skills",
+        "dung_cho": "do hoa 3D three.js (canh, anh sang, vat lieu, shader, hau ky) - danh cho may co card do hoa, may hien tai de nong",
+        "skill": ["threejs-fundamentals", "threejs-geometry", "threejs-materials", "threejs-lighting", "threejs-textures",
+                  "threejs-animation", "threejs-loaders", "threejs-shaders", "threejs-postprocessing", "threejs-interaction",
+                  "threejs-performance", "threejs-asset-pipeline", "threejs-react-three-fiber"]
+      },
+      {
         "nguon": "https://github.com/kajisho5/ffmpeg-skill",
         "dung_cho": "42 cong cu FFmpeg co hop dong JSON: probe, cat, 9:16, phu de karaoke, loudness, xuat theo nen tang, check sau khi xuat (Python thuan, MIT)",
         "skill": ["ffmpeg-skill"]
