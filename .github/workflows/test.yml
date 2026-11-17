@@ -36,3 +36,29 @@ jobs:
 
       - name: Chạy test
         run: python -m unittest discover -s tests
+
+  typescript:
+    # tsc không ép thì lỗi kiểu (như Root.tsx từng lỗi) lọt qua mà không ai biết
+    runs-on: windows-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        thu_muc: [do-hoa, remotion-studio]
+    defaults:
+      run:
+        working-directory: ${{ matrix.thu_muc }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: ${{ matrix.thu_muc }}/package-lock.json
+
+      - name: Cài thư viện đúng theo lockfile
+        run: npm ci --no-audit --no-fund
+
+      - name: Kiểm kiểu TypeScript
+        run: npx tsc --noEmit -p .
