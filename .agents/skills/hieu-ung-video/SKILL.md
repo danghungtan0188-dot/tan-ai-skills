@@ -1,6 +1,6 @@
 ---
 name: hieu-ung-video
-description: Thư viện hiệu ứng dựng video kiểu CapCut/CupCut — chuyển cảnh (transition), hoạt hình chữ, bộ lọc màu (filter), chuyển động camera (Ken Burns/zoom/pan), sticker/icon overlay, và hiệu chỉnh hình ảnh (adjustment) — mỗi hiệu ứng có công thức ffmpeg/HyperFrames thực thi được ngay, không chỉ mô tả suông. Kích hoạt khi người dùng muốn thêm hiệu ứng/effect vào video, hỏi "làm sao có hiệu ứng như CapCut", muốn transition/chuyển cảnh cụ thể, chữ động, filter màu, zoom/pan ảnh, sticker/icon, hoặc muốn tái tạo hiệu ứng thấy trong 1 video tham khảo. Đây là thư viện công thức (cookbook) — được `bien-tap-video`, `dung-video-su-kien`, `video-thuyet-minh`, `video-san-pham` gọi tới khi cần 1 hiệu ứng cụ thể, cũng dùng được trực tiếp khi người dùng chỉ cần 1 hiệu ứng đơn lẻ trên 1 clip.
+description: Công thức hiệu ứng kiểu CapCut chạy được ngay bằng ffmpeg/HyperFrames — chuyển cảnh, chữ động, filter màu, Ken Burns/zoom/pan, sticker/icon, chỉnh hình. Dùng khi muốn thêm một hiệu ứng cụ thể vào clip hoặc tái tạo hiệu ứng thấy trong video tham khảo. Không dùng cho phong cách thẻ/title (motion-graphics-tan), hiệu ứng đặt sau người nói (video-marketing) hay cả timeline nhiều hiệu ứng (chuyen-gia-edit-video-tan).
 ---
 
 # Thư viện hiệu ứng video (kiểu CapCut)

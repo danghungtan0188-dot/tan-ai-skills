@@ -1,6 +1,6 @@
 ---
 name: chuyen-gia-edit-video-tan
-description: Phân tích video mẫu và dựng video chuyên nghiệp bằng code với bộ chức năng tương đương CapCut gồm Text, Stickers, Effects, Transitions, Captions, Filters và Adjustment. Dùng cho bản tin, sự kiện, MC, phóng sự, video tuyên truyền, Facebook, Zalo, Reels và Shorts; không dùng để sao chép tài nguyên độc quyền hoặc xóa watermark.
+description: Dựng video bằng code với bộ chức năng kiểu CapCut (Text, Stickers, Effects, Transitions, Captions, Filters, Adjustment) qua project.json + FFmpeg; phân tích video mẫu để dựng lại kỹ thuật tương tự; banner/lower-third truyền hình, MC AI lip-sync. Dùng khi người dùng đưa video mẫu "làm giống thế này" hoặc cần nhiều hiệu ứng CapCut trên một timeline. Không sao chép tài nguyên độc quyền, không xoá watermark. Không dùng cho một hiệu ứng lẻ (hieu-ung-video) hay dựng từ kho clip thô (bien-tap-video-thong-minh-song-ngu-tan).
 ---
 
 # Chuyên gia Edit Video Tan

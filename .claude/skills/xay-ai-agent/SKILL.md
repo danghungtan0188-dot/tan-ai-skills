@@ -1,6 +1,6 @@
 ---
 name: xay-ai-agent
-description: Thiết kế và xây AI agent chạy thật — agent tự động theo lịch (đọc nguồn, tổng hợp, gửi báo cáo), agent gắn trong webapp/phần mềm (chatbot, trợ lý, tool use), và workflow agent trên Claude Managed Agents, Claude Agent SDK, n8n hoặc cron + script. Dựa trên bài "Building effective agent automations" của Anthropic (6 thành phần, 6 quy tắc), nâng cấp thêm dry-run, bộ eval, khóa chống trùng, nhật ký lượt chạy và giới hạn chi phí. Kích hoạt khi người dùng muốn "xây agent", "làm bot tự động", "agent chạy hằng ngày", "tích hợp Claude/AI vào app", "chatbot cho web", "tự động hóa bằng AI". Phần code webapp thông thường (UI, API, database) dùng quy ước của skill phat-trien-app.
+description: Xây AI agent chạy thật — agent theo lịch (đọc nguồn, tổng hợp, gửi báo cáo), chatbot/trợ lý có tool use trong app, workflow trên Claude Agent SDK, Managed Agents, n8n hoặc cron; kèm dry-run, eval, chống trùng, nhật ký, trần chi phí. Dùng khi nói "xây agent", "bot tự động", "agent chạy hằng ngày", "tích hợp Claude/AI vào app", "chatbot cho web". Code app thường (UI, API, database) dùng phat-trien-app.
 ---
 
 # Xây AI agent

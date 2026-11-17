@@ -1,6 +1,6 @@
 ---
 name: bien-tap-video-thong-minh-song-ngu-tan
-description: Tự tìm và xem toàn bộ clip trong kho/thư mục người dùng chỉ định, phân tích nội dung, hình ảnh, lời nói và nhịp để cắt ghép thành một video hoàn chỉnh có bố cục logic, đúng độ dài được yêu cầu; đồng thời hỗ trợ phụ đề song ngữ Anh trên–Việt dưới và phong cách ATT NEWS. Kích hoạt khi người dùng đưa kho clip, footage hoặc nhiều video và yêu cầu tự động dựng/cắt ghép. Chỉ quét trong kho được chỉ định; chỉ cắt khi yêu cầu hiện tại nói rõ tự động dựng/cắt ghép hoặc người dùng duyệt edit-plan.
+description: Dựng bản tin từ kho/nhiều clip thô — quét đúng thư mục được chỉ, chọn cảnh, cắt ghép đúng độ dài; phong cách ATT NEWS (logo, banner, phụ đề); phụ đề song ngữ Anh trên–Việt dưới. Dùng khi người dùng đưa kho clip/footage và bảo tự dựng/cắt ghép, làm bản tin ATT NEWS hoặc phụ đề song ngữ. Chỉ cắt khi được yêu cầu rõ hoặc đã duyệt edit-plan. Không dùng cho 1 video người nói cần cắt theo lời (video-use) hay hiệu ứng sau người kiểu TikTok (video-marketing).
 ---
 
 # Biên tập video thông minh song ngữ Tan

@@ -56,6 +56,16 @@ node scripts/lam_gallery.mjs
 - Mẫu lỗi ghi vào `gallery/loi.json` và hiện ở cuối trang, không dừng cả loạt. Mẫu cần ảnh/video trong `public/`
   (vd. `anh.png`) sẽ lỗi khi `public/` trống.
 
+## Số hình/giây: mạng xã hội 30, phát sóng 25
+
+Mặc định đồ họa dựng 30 hình/giây (khớp video điện thoại). **Bản phát sóng (hệ 50 Hz, 25 hình/giây)** phải dựng thẳng ở 25 —
+đổi 30 → 25 sau khi render sẽ bỏ 1/6 số hình, chữ chạy và lia bản đồ bị giật:
+
+```console
+REMOTION_FPS=25 npx remotion render src/index.ts ChuChay out/chu-chay.mov --props=props.json
+```
+
+(PowerShell: `$env:REMOTION_FPS=25; npx remotion render …`.) Thời lượng tính theo giây nên không đổi; `tests/test_fps_do_hoa.py` cấm ghi cứng fps.
 ## Xuất đồ họa nền trong suốt
 
 Mẫu nền trong suốt (`LowerThird`, `ChuChay`, `SoLieuChienCong`…) mặc định ra **ProRes 4444** `.mov` — dùng cho Premiere, Resolve, Shotcut:

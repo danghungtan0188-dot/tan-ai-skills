@@ -1,6 +1,6 @@
 ---
 name: dung-video-su-kien
-description: Công thức dựng video tổng kết sự kiện/hội thi/tin tức phong trào kiểu Việt Nam (hội nghị, lễ khai mạc, hội thi lực lượng, sự kiện đoàn thể, cơ quan nhà nước, địa phương): title card banner đỏ-vàng, overlay gameshow (đếm ngược + trắc nghiệm), transition hiệu ứng lửa/xé, đoạn hero-intro nhân vật cuối video, tông màu ánh sáng sân khấu. Đúc kết từ phân tích thực tế 1 video mẫu (kênh Đồng Tháp 24h, hội thi lực lượng bảo vệ an ninh trật tự ở cơ sở). Kích hoạt khi người dùng muốn dựng/edit video tổng kết sự kiện, hội nghị, lễ khai mạc, hội thi, phong trào thi đua theo phong cách bán-điện ảnh kiểu này, hoặc muốn phân tích/học theo cách một video sự kiện cụ thể đã được dựng. Skill này là bản đặc tả phong cách (playbook), không tự render video — khi thực thi cần phối hợp với công cụ dựng video khác (video-use, remotion-*, hoặc HyperFrames).
+description: Phong cách dựng video sự kiện kiểu Việt Nam (hội nghị, lễ khai mạc, hội thi, phong trào thi đua, cơ quan nhà nước) — title banner đỏ-vàng, overlay gameshow, transition lửa/xé, hero-intro nhân vật, màu ánh sáng sân khấu. Dùng khi dựng hoặc phân tích video tổng kết sự kiện theo phong cách bán-điện ảnh này. Chỉ là playbook, không render — thực thi qua video-use, remotion-*, HyperFrames.
 ---
 
 # Dựng video sự kiện kiểu Việt Nam

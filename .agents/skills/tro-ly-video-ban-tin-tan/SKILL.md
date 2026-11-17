@@ -1,10 +1,7 @@
 ---
 name: tro-ly-video-ban-tin-tan
 version: 1.0.0
-description: |
-  Trợ lý sản xuất video bản tin từ kịch bản đến file MP4 hoàn chỉnh. Kết hợp HeyGen presenter,
-  ưu tiên giọng nữ Hoài - Natural khi có sẵn, hậu kỳ FFmpeg theo phong cách bản tin/CapCut,
-  banner theo ngữ cảnh, ATT NEWS, Facebook/Zalo nhỏ gọn, kiểm tra chất lượng và khả năng phát/tải.
+description: Video bản tin có MC HeyGen (dịch vụ trả phí) — kịch bản → MC HeyGen (ưu tiên giọng Hoài - Natural) → hậu kỳ FFmpeg, banner, ATT NEWS → MP4 nhẹ cho Facebook/Zalo + kiểm chất lượng. Dùng khi người dùng muốn bản tin có người dẫn HeyGen. Không có MC HeyGen thì dùng video-thuyet-minh (lồng giọng VieNeu) hoặc bien-tap-video-thong-minh-song-ngu-tan (dựng từ clip).
 argument-hint: "[script_or_video] [--style att-news] [--voice Hoai-Natural]"
 allowed-tools: Bash, Read, Write, WebFetch, mcp__heygen__*
 ---

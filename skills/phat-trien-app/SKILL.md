@@ -1,6 +1,6 @@
 ---
 name: phat-trien-app
-description: Quy trình phát triển app và website trong repo này — dò kiến trúc dự án hiện có trước khi sửa, quy ước viết frontend (UI, component, state, responsive, accessibility), backend (API, business logic, xác thực, phân quyền, validation), database/Supabase (schema, migration, RLS, query), và chuỗi validation thật (lint → typecheck → test → build → security). Kích hoạt khi người dùng muốn xây tính năng mới, sửa lỗi, refactor, review code, hoặc kiểm thử cho một dự án phần mềm; hoặc khi chạy các command /build-feature, /fix, /review, /test, /security-check. Skill này là bộ quy ước dùng chung cho các agent app-planner, app-builder, code-reviewer, app-tester, security-reviewer — không tự chọn framework thay người dùng và không tự deploy.
+description: Quy ước làm app/website — dò kiến trúc trước khi sửa, frontend, backend (API, xác thực, phân quyền, validation), database/Supabase (schema, migration, RLS), chuỗi kiểm lint → typecheck → test → build → security. Dùng khi xây tính năng, sửa lỗi, refactor, review, kiểm thử dự án phần mềm, hoặc chạy /build-feature /fix /review /test /security-check. Không tự chọn framework, không tự deploy. Agent AI/chatbot dùng xay-ai-agent.
 ---
 
 # Phát triển app / website

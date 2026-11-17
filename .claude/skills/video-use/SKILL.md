@@ -1,6 +1,6 @@
 ---
 name: video-use
-description: Edit any video by conversation. Transcribe, cut, color grade, generate overlay animations, burn subtitles — for talking heads, montages, tutorials, travel, interviews. No presets, no menus. Ask questions, confirm the plan, execute, iterate, persist. Production-correctness rules are hard; everything else is artistic freedom.
+description: Edit any video by conversation — transcribe, cut, color grade, overlay animations, burn subtitles; for talking heads, montages, tutorials, travel, interviews. Asks, confirms the plan, executes, iterates. Không dùng cho bản tin ATT NEWS/kho nhiều clip thô (bien-tap-video-thong-minh-song-ngu-tan) hay hiệu ứng đặt sau người nói (video-marketing).
 ---
 
 # Video Use

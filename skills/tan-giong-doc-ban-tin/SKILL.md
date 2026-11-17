@@ -1,6 +1,6 @@
 ---
 name: tan-giong-doc-ban-tin
-description: Tổng hợp giọng đọc bản tin tiếng Việt từ kịch bản TXT/DOCX bằng VieNeu-TTS để lồng vào MP4 và clip video. Hỗ trợ hai giọng chuyên đọc kịch bản video ATT NEWS là MC Đài An Thạnh Thủy và Giọng Hùng Tân chân thật, cùng giọng nam/nữ miền Nam dựng sẵn; tự mở rộng chữ viết tắt, đổi số và ngày tháng thành chữ, chia đoạn dài, xuất WAV 48kHz và MP3. Kích hoạt khi người dùng cần đọc script/kịch bản cho video, tạo voice-over bản tin, lồng tiếng clip hoặc nhân bản giọng của chính họ để dùng lại.
+description: Giọng đọc tiếng Việt (VieNeu-TTS) từ kịch bản TXT/DOCX — giọng MC Đài An Thạnh Thủy, Hùng Tân chân thật, nam/nữ miền Nam hoặc nhân bản giọng riêng; tự đổi số, ngày, chữ viết tắt thành chữ; xuất WAV 48kHz + MP3. Dùng khi cần đọc script, voice-over bản tin, nhân bản giọng. Chỉ ra file giọng — muốn ghép giọng vào video dùng video-thuyet-minh.
 ---
 
 # Tân — Giọng đọc bản tin
