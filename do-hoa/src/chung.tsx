@@ -3,7 +3,9 @@ import React from "react";
 import { CalculateMetadataFunction, Easing, interpolate } from "remotion";
 import { z } from "zod";
 
-export const FPS = 30;
+// Số hình/giây theo bản xuất: mặc định 30 (video điện thoại, mạng xã hội); bản phát sóng hệ 50 Hz chạy với REMOTION_FPS=25
+// để đồ họa dựng thẳng ở 25, không phải bỏ hình khi đổi 30 → 25 (chuyển động giật).
+export const FPS = Number(process.env.REMOTION_FPS) || 30;
 export const FONT = "Arial, 'Segoe UI', sans-serif";
 
 export const MAU = {
