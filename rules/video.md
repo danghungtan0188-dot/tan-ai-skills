@@ -2,6 +2,14 @@
 
 Áp dụng cho `video-analyzer`, `video-editor`, `video-reviewer` và toàn bộ skill video trong `skills/`.
 
+## 0. QUY TẮC TỐI QUAN TRỌNG: KHÔNG LẶP CẢNH
+
+- Trong một video, **mỗi cảnh (ảnh, đoạn clip, thẻ đồ họa) chỉ xuất hiện một lần**. Cùng một ảnh với kiểu zoom/trượt khác vẫn là lặp.
+- Không đủ input → **tìm ảnh thích hợp trên mạng** (giấy phép mở, ghi nguồn) **hoặc làm đồ họa 2D/3D**. Không lặp cảnh cũ, không nhét ảnh không đúng nội dung để lấp chỗ.
+- Trước khi dựng: bảng phân cảnh phải qua bước kiểm lặp. Dựng xong: **bắt buộc** chạy
+  `python skills/bien-tap-video-thong-minh-song-ngu-tan/scripts/kiem_lap_canh.py <video> --bo 0:<hết intro đài>`.
+  Còn dòng `LAP` → **chưa được giao**, kể cả khi mọi kiểm khác đã PASS.
+
 ## 1. Chuẩn đầu ra mặc định
 
 Trừ khi người dùng yêu cầu khác:
