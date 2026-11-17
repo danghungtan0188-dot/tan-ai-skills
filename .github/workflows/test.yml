@@ -32,7 +32,7 @@ jobs:
         run: choco install ffmpeg -y --no-progress
 
       - name: Cài thư viện Python mà test dùng
-        run: pip install pillow numpy opencv-python-headless jsonschema defusedxml fonttools brotli
+        run: pip install -r requirements-ci.txt
 
       - name: Chạy test
         run: python -m unittest discover -s tests
