@@ -1,6 +1,6 @@
 ---
 name: viet-prompt-video-ai
-description: Viết prompt tạo video bằng AI (Seedance, Dreamina và công cụ tương tự) từ mô tả thường, giữ nhân vật nhất quán, gán rõ ảnh/video/âm thanh tham chiếu, chia cảnh theo giây, tạo bảng nhân vật 6 góc mặt và trang phục. Kích hoạt khi người dùng muốn "viết prompt Seedance", "prompt video AI", "b-roll bằng AI", "giữ nhân vật giống nhau giữa các cảnh", "character sheet". Skill chỉ viết prompt, không tự tạo video. Không dùng để dựng từ tư liệu quay thật (dung-video, video-use) hay làm thẻ đồ họa (motion-graphics-tan).
+description: Viết prompt video AI (Seedance, Dreamina và tương tự) từ mô tả thường — giữ nhân vật nhất quán, gán ảnh/video/âm thanh tham chiếu, chia cảnh theo giây, bảng nhân vật 6 góc (character sheet). Dùng khi nói "prompt Seedance", "prompt video AI", "b-roll bằng AI", "giữ nhân vật giống nhau giữa các cảnh". Chỉ viết prompt, không tạo video. Không dùng cho dựng từ tư liệu thật (lệnh /dung-video, video-use) hay thẻ đồ họa (motion-graphics-tan).
 ---
 
 # Viết prompt video AI

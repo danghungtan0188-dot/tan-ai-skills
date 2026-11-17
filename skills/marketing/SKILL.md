@@ -1,6 +1,6 @@
 ---
 name: marketing
-description: Hỗ trợ xây dựng chiến lược, nghiên cứu khách hàng/đối thủ, định vị, thông điệp, nội dung đa kênh (Facebook, Zalo, TikTok, website, email, SEO), kế hoạch chiến dịch theo ngày/tuần/tháng, kế hoạch quảng cáo trả phí ở mức chiến lược (không tự chạy quảng cáo), lịch nội dung, KPI và kiểm tra chất lượng/rủi ro truyền thông. Ưu tiên bối cảnh Việt Nam, doanh nghiệp nhỏ, hộ kinh doanh, sản phẩm địa phương và nông sản. Kích hoạt khi người dùng cần nghiên cứu thị trường, xây dựng chân dung khách hàng, viết nội dung quảng bá, lập brief/kế hoạch marketing, lập lịch đăng, viết kịch bản video ngắn, slogan, CTA, hoặc đánh giá/kiểm tra một chiến dịch. Đầu ra gồm brief, chân dung khách hàng, kế hoạch chiến dịch, lịch nội dung, nội dung sẵn sàng đăng, kịch bản video, bảng KPI.
+description: Marketing cho doanh nghiệp nhỏ, hộ kinh doanh, nông sản Việt Nam — nghiên cứu khách hàng/đối thủ, định vị, thông điệp, kế hoạch chiến dịch, lịch đăng, nội dung Facebook/Zalo/TikTok/website/email/SEO, slogan/CTA, KPI, chiến lược quảng cáo trả phí (không tự chạy), kiểm tra chiến dịch. Không dùng cho kịch bản video bán hàng chi tiết (kich-ban-video-marketing) hay dựng video.
 ---
 
 # Marketing
