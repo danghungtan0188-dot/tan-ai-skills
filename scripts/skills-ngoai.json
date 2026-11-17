@@ -14,6 +14,21 @@
         "dung_cho": "chuyen dong GSAP (HyperFrames chay GSAP): timeline, SplitText, DrawSVG, easing",
         "skill": ["gsap-core", "gsap-timeline", "gsap-plugins", "gsap-utils", "gsap-performance",
                   "gsap-scrolltrigger", "gsap-react", "gsap-frameworks"]
+      },
+      {
+        "nguon": "https://github.com/kajisho5/ffmpeg-skill",
+        "dung_cho": "42 cong cu FFmpeg co hop dong JSON: probe, cat, 9:16, phu de karaoke, loudness, xuat theo nen tang, check sau khi xuat (Python thuan, MIT)",
+        "skill": ["ffmpeg-skill"]
+      },
+      {
+        "nguon": "https://github.com/iart-ai/lower-thirds-skills",
+        "dung_cho": "lower-third/bug goc nen trong suot: WebM alpha cho OBS, ProRes 4444 cho Premiere/Resolve (MIT)",
+        "skill": ["lower-thirds"]
+      },
+      {
+        "nguon": "https://github.com/iart-ai/b-roll-skills",
+        "dung_cho": "do hoa b-roll dat len video nguoi noi theo tung cau, khong cat ban ghi (MIT)",
+        "skill": ["talking-head-b-roll"]
       }
     ]
   },
