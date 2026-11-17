@@ -1,6 +1,6 @@
 # Tiến độ repo tan-ai-skills
 
-Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("end session") cập nhật lại.
+Cập nhật: 2026-11-16. Đầu mỗi phiên đọc file này; cuối phiên ("end session") cập nhật lại.
 
 ## Tình trạng hiện tại
 
@@ -15,6 +15,9 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
 
 | Ngày | Việc |
 |---|---|
+| 16/11 | **tan-ai-skills:** PR #31 lưu việc bản tin an sinh; #32 chốt chặn font tiếng Việt (`kiem_font_viet.py`, sửa 22 chỗ Arial ≥800); #33 danh mục 37 mẫu `do-hoa/danh-muc.json` + trang xem trước `lam_gallery.mjs`; #34 mẫu `ChuChay` (băng chữ chạy); #35 CI cài fonttools+brotli; **bật bảo vệ nhánh `main` (chỉ merge khi CI `test` xanh)**; trỏ 13 junction Remotion về repo chính. Mở chờ merge: #36 (`BanDoNoi` `nhip12`, xuất WebM cho OBS, 13 skill Three.js trong `skills-ngoai.json`), #37 (`REMOTION_FPS=25` cho bản phát sóng). Đóng 5 PR nháp nhập skill hàng loạt (#30; att-news #7, #9, #10, #12) |
+| 16/11 | **att-news:** merge #8 (Motion FX), #11 (gộp 10 skill đồ hoạ thành 1 tài liệu); đồng bộ 13 commit. Mở chờ merge **theo thứ tự** #13 logo bản trắng → #14 kiểm nhấp nháy + luật nhãn AI/trẻ em → #15 sổ nguồn `kiem_nguon.py` → #16 master ProRes/XDCAM + slate |
+| 16/11 | Ngoài repo: bộ đóng logo `D:\DongLogo` (logo 25,9% ảnh, góc dưới phải), gói `Desktop\DongLogo_ATTnews.zip` gửi máy khác |
 | 27/10 | Harness engineering GĐ4, nhánh `feat/bai-hoc-thanh-chot-chan`: `guard_bash` dò lệnh trong `bash -c`/`powershell -Command`/`cmd /c`/heredoc; hook mới `guard_video` (loudnorm, preset, một ffmpeg một lúc) và `guard_tra_phi` (hỏi trước HeyGen); test Remotion không dùng `OffthreadVideo`; bản đồ `docs/bai-hoc-va-chot-chan.md` |
 | 27/10 | Harness engineering GĐ1–3 (PR #2 đã merge): GĐ1 vá `guard_bash` (lệnh xoá PowerShell/cmd, ffmpeg ghi đè gốc, `git add -A`); GĐ2 hook ra `~/.claude/settings.json`, lệnh dạng chịu lỗi khi thiếu file (bản lưu `settings.json.bak-20261027*`); GĐ3 hook `session_start` + `nhac_test` |
 | 25/10 | Thêm skill `humanizer` (MIT); ghi chú học từ OpenMontage + Diagram Design; fork 4 repo về GitHub |
@@ -33,6 +36,11 @@ Cập nhật: 2026-10-27. Đầu mỗi phiên đọc file này; cuối phiên ("
 - MCP `n8n` báo không kết nối được (n8n ở localhost:5678 chưa bật).
 
 ## Việc tiếp theo (theo thứ tự ưu tiên)
+
+**Tiếp từ 16/11 (làm trước):**
+- Merge PR chờ: tan-ai-skills #36, #37; att-news #13 → #14 → #15 → #16 (att-news không có luật chặn: tự `gh pr checks` thấy pass mới merge).
+- Đánh giá att-news theo chuẩn truyền hình (16/11): đã làm việc 1–5 (25 hình/giây, nhấp nháy, luật AI/trẻ em, sổ nguồn, master+slate). **Còn:** việc 6 `PROGRESS.md` riêng cho att-news (đang là bản chép của tan-ai-skills); việc 7 harness có agent điều phối cho kênh.
+- Chờ người dùng: thư mục tư liệu thật để chạy `/dai` lần đầu (nhật ký sản xuất còn trống); danh bạ người đã xác minh (`kenh/danh-ba.json` 0 người); nhạc hiệu có bản quyền; chuẩn âm lượng/định dạng của đài nhận bài; lịch sao lưu 21:00 (`kenh/van-hanh/sao_luu.ps1`) người dùng tự tạo.
 
 0. **GĐ4 đang dở** (nhánh `feat/bai-hoc-thanh-chot-chan`, đã commit, chưa push; 345 test đạt):
    a. ✓ (28/10) `guard_video.py` và `guard_tra_phi.py` đã có trong `~/.claude/settings.json`, dạng chịu lỗi;
