@@ -25,7 +25,18 @@ LỆCH NGUỒN:    <±giây> (hoặc: không đối chiếu)
 
 VIDEO QA (kỹ thuật): PASS | WARN | FAIL
 VIDEO QA (hình ảnh): PASS | FAIL | NOT RUN
+
+GIÁM KHẢO (góp ý, không chặn):
+  1. Mở đầu      <mốc> — <một câu>
+  2. Nhịp        <mốc> — <một câu>
+  3. Lặp         <mốc> — <một câu>
+  4. Đọc kịp     <mốc> — <một câu>
+  5. Khớp hình–lời <mốc> — <một câu> | NOT RUN
+  6. Kết         <mốc> — <một câu>
+  SỬA TRƯỚC: tối đa 3 việc, mỗi việc kèm mốc giây và cách sửa
 ```
+
+Phần giám khảo chạy cả với bản nháp chưa có tiếng; chỉ bỏ qua khi file hỏng, không xem được hình (cách làm ở bước 3 của agent `video-reviewer`).
 
 Mỗi mục `FAIL`/`WARN` phải kèm: sai ở đâu, hậu quả gì (video không mở được trên máy nào, chữ che gì), và lệnh ffmpeg đề xuất để sửa.
 

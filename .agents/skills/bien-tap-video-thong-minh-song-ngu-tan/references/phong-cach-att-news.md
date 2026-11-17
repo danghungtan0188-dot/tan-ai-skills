@@ -326,3 +326,19 @@ KHÔNG áp dụng cho bản tin một tin địa phương thường.
   Mức đã duyệt: ≈ −29 LUFS (Blue Skies `volume=-17.6dB`, giọng −16 LUFS), bản cuối −12,9 LUFS. Đổi nhạc thì đổi CẢ đoạn mở đầu
   (chỗ nhạc nghe rõ nhất), không chỉ phần nền. Nhạc lấy từ reel của đài khác: tách bằng Demucs được nhưng có rủi ro bản quyền —
   báo trước; người dùng cuối cùng chọn lại Blue Skies (CC0) của bản v5.
+
+## 11. Phóng sự chuyên đề tuyên truyền (2026-11-17, "80 năm Văn hóa soi đường", người dùng duyệt "Ổn rồi")
+
+Phạm vi: phóng sự dựng từ ảnh + clip AI + đồ họa, không có cảnh quay hiện trường đủ dài.
+
+| Sai sót đã gặp | Quy tắc |
+|---|---|
+| Lặp cảnh: ảnh Bác 3 lần, flycam 3 lần, đồng sen AI 3 lần (khác kiểu zoom vẫn là lặp) | **QUY TẮC QUAN TRỌNG NHẤT: mỗi nguồn (ảnh, đoạn clip, thẻ) chỉ xuất hiện 1 lần trong cả video.** Bảng phân cảnh phải có hàm kiểm lặp chạy TRƯỚC khi dựng; đếm thời lượng kho hình duy nhất so với lời đọc, thiếu thì bù bằng bước dưới. Dựng xong **bắt buộc** chạy `python skills/bien-tap-video-thong-minh-song-ngu-tan/scripts/kiem_lap_canh.py BAN_DUNG.mp4 --bo 0:<hết intro đài>` (so đường nét, giống liên tục ≥ 1,5 s, cách nhau ≥ 8 s = lặp); có LAP thì chưa được giao |
+| Thiếu hình thì lấy ảnh cũ trong máy không đúng nội dung | Không đủ input → **tìm ảnh thích hợp trên mạng** (Wikimedia Commons, giấy phép mở, ghi nguồn vào `NGUON_ANH.txt`) **hoặc làm đồ họa 2D/3D** (thẻ HyperFrames/Remotion, chữ lấy từ kịch bản). Không lặp cảnh cũ, không nhét ảnh "tạm hợp" trong máy |
+| Clip AI 10 s bị cắt khúc và làm chậm | Clip AI người dùng đưa: **chiếu trọn, tốc độ thật**, chỉ phóng khung; 24→25 hình/giây bằng `framerate` (trộn hình), không bỏ/nhân hình |
+| Đồ họa rung | Đồ họa dựng thẳng ở **25 hình/giây** (HyperFrames `data-fps="25"`, Remotion `FPS=25`), chất lượng `standard` (không `draft`); không xoay nền vân mảnh (`repeating-conic-gradient`) — nhấp nháy khi xoay. Ảnh tĩnh `zoompan` trên nền 5760×3240 |
+| Nhãn "Ảnh tư liệu / Hình ảnh minh họa" bị bảo xóa | Bản phóng sự tuyên truyền của người dùng: **không đặt nhãn trên hình**; nguồn ảnh/nhạc ghi ở phần mô tả khi đăng |
+| Bản Facebook có dải mờ giữa hình và chân | Facebook 1:1: hình 16:9 **cắt đầy 1080×720 sát đường vàng**; chân 360 px: băng chữ chạy ngay dưới đường vàng (y = 746), logo ATT news y = 875 bên phải |
+| Nhạc nền tự tổng hợp bị chê "cùi" | Dùng **nhạc thật** (kho `Desktop\edit\music` Jamendo hoặc `D:\GitHub\editonny-thu-vien` CC0); ưu tiên bài dài ≥ video để khỏi lặp; −15 dB so với gốc (≈ −26 LUFS giữa các phần), nhường giọng bằng sidechain |
+| Tiếng câm từ 2:30 đến hết, vẫn báo xong (tổng LUFS vẫn đúng −14) | Trộn tiếng 2 bước (ghép giọng ra file riêng có `apad=whole_dur` rồi mới trộn nhạc); **luôn chạy `python skills/bien-tap-video-thong-minh-song-ngu-tan/scripts/kiem_tieng_cam.py BAN_GIAO.mp4` trước khi báo xong** |
+| Script tải Wikimedia bị 429 | Tải qua trình duyệt tích hợp (`fetch` ảnh thu nhỏ 1920 px trên trang commons, tạo link tải); không giả User-Agent để lách |
