@@ -39,6 +39,8 @@ Nguyên tắc viết policy:
 
 Bảng mới không có RLS hoặc không có policy → `security-reviewer` phải báo mức `blocker`.
 
+**Thử thật bằng hai tài khoản.** Đọc policy thấy đúng chưa đủ. Tạo hai tài khoản thử (A, B), A tạo bản ghi, rồi đăng nhập B và thử đọc / sửa / xóa bản ghi của A bằng chính client của app (khóa anon, không dùng Service Role — Service Role bỏ qua RLS nên thử bằng nó luôn "qua"). B phải bị từ chối hoặc nhận danh sách rỗng. Chưa thử được → ghi `NOT RUN`.
+
 ## Khóa và index
 
 - Khóa ngoại phải có ràng buộc thật (`references`), không chỉ quy ước đặt tên.
@@ -61,6 +63,7 @@ Bucket mặc định để **private**. Public chỉ khi nội dung thực sự 
 [ ] migration mới chạy sạch trên database rỗng
 [ ] bảng mới đã bật RLS và có policy cho từng thao tác cần
 [ ] policy dùng auth.uid(), có cả using và with check
+[ ] đã thử bằng hai tài khoản: B không đọc/sửa/xóa được dữ liệu của A
 [ ] không có query nối chuỗi từ input người dùng
 [ ] không có Service Role key ở phía client
 ```
