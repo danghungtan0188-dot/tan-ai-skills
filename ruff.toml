@@ -1,0 +1,10 @@
+# Lint Python nhẹ: chỉ bắt lỗi thật (pyflakes F: tên chưa định nghĩa, import thừa, biến bỏ quên…; E9: lỗi cú pháp).
+# Không ép định dạng, không ép kiểu viết.  Chạy: python -m ruff check .
+extend-exclude = [
+    ".claude/skills",   # bản mirror của skills/ (sync_skills.py), đã kiểm ở nguồn
+    ".agents/skills",
+    "skills/video-use", # code nguồn ngoài, cập nhật từ repo gốc — không sửa tại chỗ
+]
+
+[lint]
+select = ["F", "E9"]

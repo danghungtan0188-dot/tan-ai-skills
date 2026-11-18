@@ -145,11 +145,13 @@ Bài học nào đã thành chốt chặn, bài nào còn để người phán �
 
 ```bash
 python -m unittest discover -s tests   # test kiến trúc + hook + contract
+python -m ruff check .                 # soát lỗi Python thật (tên chưa định nghĩa, import thừa) — cấu hình ruff.toml
 python scripts/sync_skills.py --check  # 3 bản skill đã khớp chưa
 python scripts/video_qa.py <file> --strict --audio   # QA video đầy đủ
 python scripts/kiem_font_viet.py      # chữ đậm trong mẫu .tsx có font đủ dấu tiếng Việt (Arial ≥800 = thiếu)
 python scripts/kiem_ten_tts.py cau.json   # tên/cụm bắt buộc trong bản TTS: đạt khi ≥ 2/3 lần whisper nghe ra
 python scripts/va_doan_video.py GOC.mp4 --tu A --den B --chi-tim   # vá 1 chỗ video đã giao: chỉ dựng lại đoạn giữa 2 khung chìa khóa
+python scripts/canh_treo.py --file RA.mp4 -- ffmpeg ...   # chó canh: CPU + file đầu ra đứng yên > 3 phút → dừng lệnh, báo TREO
 python scripts/cai_skill_ngoai.py --kiem   # đủ skill ngoài repo chưa (HyperFrames, GSAP, Playwright CLI, junction) — máy mới: --cai
 python evaluations/bai_thi.py          # bài thi video chuẩn (~10 giây) — chạy sau khi sửa tan_studio/skill video
 python scripts/harness_eval.py         # thử hook với AI thật (claude -p Haiku, tốn lượt) — chạy sau khi sửa hook

@@ -1,0 +1,10 @@
+# Thư viện Python mà CI cài để chạy test — ghim đúng phiên bản đang chạy trên máy làm việc.
+# Nâng phiên bản: sửa số ở đây, chạy test trên máy, rồi commit.
+pillow==12.2.0
+numpy==2.4.4
+opencv-python-headless==5.0.0.93
+jsonschema==4.26.0
+defusedxml==0.7.1
+fonttools==4.64.0
+brotli==1.2.0
+ruff==0.17.5
