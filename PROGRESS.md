@@ -1,6 +1,6 @@
 # Tiến độ repo tan-ai-skills
 
-Cập nhật: 2026-11-16. Đầu mỗi phiên đọc file này; cuối phiên ("end session") cập nhật lại.
+Cập nhật: 2026-11-20. Đầu mỗi phiên đọc file này; cuối phiên ("end session") cập nhật lại.
 
 ## Tình trạng hiện tại
 
@@ -15,6 +15,8 @@ Cập nhật: 2026-11-16. Đầu mỗi phiên đọc file này; cuối phiên ("
 
 | Ngày | Việc |
 |---|---|
+| 20/11 | **Skill/công cụ ngoài (không đổi code repo):** quét đủ 1.008 repo kho phandonggiang → `D:\GitHub\ngoai\kho-repo-phandonggiang.csv`; fork + clone 9 repo vào `D:\GitHub` (rtk, context7, claude-hud, VideoLingo, video-shotcraft, lossless-cut, claude-video, chrome-devtools-mcp, design.md). Cài: 11 skill (video-shotcraft, watch, context7-cli, chrome-devtools-cli + 7 skill chrome-devtools), MCP user `context7` + `chrome-devtools` (ghim phiên bản, `--isolated`), plugin claude-hud (statusLine), LosslessCut portable. lemo-opuscar (99 phong cách phim bằng code) cài + render thử được news-package; craft-anything 0.6.1 soi được trang English Kids. Chi tiết cách cập nhật: memory `project_cap_nhat_skill_goc` |
+| 18–19/11 | unslop (sửa giao diện "trông như AI") cài toàn cục + thử trên English Kids (commit `7fef94e` ở nhánh `feature/m1-lesson-player`); blender-skills (28 skill, chờ máy có Blender), rea-video (Python 3.14, tách video 19 s mất ~9,5 phút). PR #46 (`skills-ngoai.json` thêm unslop) và senior-dev-harness PR #15 (README thêm unslop) đã merge |
 | 16/11 | **tan-ai-skills:** PR #31 lưu việc bản tin an sinh; #32 chốt chặn font tiếng Việt (`kiem_font_viet.py`, sửa 22 chỗ Arial ≥800); #33 danh mục 37 mẫu `do-hoa/danh-muc.json` + trang xem trước `lam_gallery.mjs`; #34 mẫu `ChuChay` (băng chữ chạy); #35 CI cài fonttools+brotli; **bật bảo vệ nhánh `main` (chỉ merge khi CI `test` xanh)**; trỏ 13 junction Remotion về repo chính. Mở chờ merge: #36 (`BanDoNoi` `nhip12`, xuất WebM cho OBS, 13 skill Three.js trong `skills-ngoai.json`), #37 (`REMOTION_FPS=25` cho bản phát sóng). Đóng 5 PR nháp nhập skill hàng loạt (#30; att-news #7, #9, #10, #12) |
 | 16/11 | **att-news:** merge #8 (Motion FX), #11 (gộp 10 skill đồ hoạ thành 1 tài liệu); đồng bộ 13 commit. Mở chờ merge **theo thứ tự** #13 logo bản trắng → #14 kiểm nhấp nháy + luật nhãn AI/trẻ em → #15 sổ nguồn `kiem_nguon.py` → #16 master ProRes/XDCAM + slate |
 | 16/11 | Ngoài repo: bộ đóng logo `D:\DongLogo` (logo 25,9% ảnh, góc dưới phải), gói `Desktop\DongLogo_ATTnews.zip` gửi máy khác |
@@ -34,11 +36,19 @@ Cập nhật: 2026-11-16. Đầu mỗi phiên đọc file này; cuối phiên ("
 - Media nặng của `remotion-studio` (`giong.wav`, `nguon.mp4`) chỉ có trên máy, không có trên GitHub.
 - Ảnh VNeID trong `remotion-studio/public/vneid-tien-ich/` đã lên repo công khai — cần soát không lộ thông tin cá nhân.
 - MCP `n8n` báo không kết nối được (n8n ở localhost:5678 chưa bật).
+- **Smart App Control chặn file chưa ký số** (rtk.exe, DLL torch) → rtk không cài được, VideoLingo/whisperX không chạy. Không tự tắt (cài đặt bảo mật, tắt rồi không bật lại được).
+- English Kids: Next.js 16.4.3 có lỗ hổng bảo mật đã biết (build cảnh báo); 1 bài e2e "increased text keeps flashcard navigation readable" trượt (có từ trước, khu vực Codex đang sửa).
+- Script phim mẫu của lemo-opuscar viết cho Mac/Linux: trên Windows cần `-X utf8` và shim `python3` đổi `/d/` → `D:/` (đã ghi memory).
 
 ## Việc tiếp theo (theo thứ tự ưu tiên)
 
-**Tiếp từ 16/11 (làm trước):**
-- Merge PR chờ: tan-ai-skills #36, #37; att-news #13 → #14 → #15 → #16 (att-news không có luật chặn: tự `gh pr checks` thấy pass mới merge).
+**Tiếp từ 20/11 (làm trước):**
+- Thử thật các công cụ mới trên việc thật: `chrome-devtools` đo tốc độ/LCP trang English Kids; `video-shotcraft` hoặc `lemo-opuscar` (news-package, font đủ dấu tiếng Việt) làm 1 video quảng bá ngắn; `watch` xem nhanh video mẫu.
+- English Kids: nâng Next.js lên bản vá bảo mật (việc riêng, có test); xem lại bài e2e đang trượt khi Codex xong phần flashcard.
+- Mở phiên Claude Code mới để kiểm thanh trạng thái claude-hud hiện đúng.
+
+**Tiếp từ 16/11:**
+- ✓ (17/11) Đã merge tan-ai-skills #36, #37, #40; att-news #13–#17, #20.
 - Đánh giá att-news theo chuẩn truyền hình (16/11): đã làm việc 1–5 (25 hình/giây, nhấp nháy, luật AI/trẻ em, sổ nguồn, master+slate). **Còn:** việc 6 `PROGRESS.md` riêng cho att-news (đang là bản chép của tan-ai-skills); việc 7 harness có agent điều phối cho kênh.
 - Chờ người dùng: thư mục tư liệu thật để chạy `/dai` lần đầu (nhật ký sản xuất còn trống); danh bạ người đã xác minh (`kenh/danh-ba.json` 0 người); nhạc hiệu có bản quyền; chuẩn âm lượng/định dạng của đài nhận bài; lịch sao lưu 21:00 (`kenh/van-hanh/sao_luu.ps1`) người dùng tự tạo.
 
