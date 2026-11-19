@@ -36,6 +36,11 @@
         "nguon": "https://github.com/iart-ai/b-roll-skills",
         "dung_cho": "do hoa b-roll dat len video nguoi noi theo tung cau, khong cat ban ghi (MIT)",
         "skill": ["talking-head-b-roll"]
+      },
+      {
+        "nguon": "heydamir/unslop",
+        "dung_cho": "sua giao dien da co cho bot 'trong nhu AI lam' (gradient tim, chu phat sang, emoji, khoang cach lech); app cho tre em thi luat rieng cua du an thang (CC BY 4.0)",
+        "skill": ["unslop"]
       }
     ]
   },
