@@ -41,6 +41,11 @@
         "nguon": "heydamir/unslop",
         "dung_cho": "sua giao dien da co cho bot 'trong nhu AI lam' (gradient tim, chu phat sang, emoji, khoang cach lech); app cho tre em thi luat rieng cua du an thang (CC BY 4.0)",
         "skill": ["unslop"]
+      },
+      {
+        "nguon": "pbakaus/impeccable",
+        "dung_cho": "thiet ke/soi/danh bong giao dien (critique, audit, polish, typeset...); lan dau chay tu tai mot file chay rieng (Apache-2.0)",
+        "skill": ["impeccable"]
       }
     ]
   },
