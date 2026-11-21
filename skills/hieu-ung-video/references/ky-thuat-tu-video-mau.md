@@ -568,6 +568,52 @@ Tác giả công khai trang hậu trường: **4 ngày, 12 bản nháp đưa xem
 
 **Bài học:** phần lớn "kho skill" trong các reel kiểu này **trùng thứ đã có**; giá trị thật là **kho tham chiếu có prompt** và các luật cụ thể (móc câu, công thức cú máy) — đọc rồi rút vào skill của mình, không cài chồng.
 
+## Recap khai mạc triển lãm HanoiTex (SaigonTex, 2 phút 19 giây, 1080p30, 11/2026)
+
+Video recap sự kiện, khung ngang. Có 81 cú cắt, trung bình 1,7 giây/cảnh. Nhịp cắt thay đổi theo từng đoạn. Nhạc khoảng 86 BPM. Cú cắt chỉ bám phách lỏng: trung vị cách phách 0,15 giây, đặt cắt ngẫu nhiên cũng cách khoảng 0,19 giây. Đoạn phát biểu nhỏ tiếng hơn đoạn nhạc khoảng 8 dB (−23 so với −15 dB RMS).
+
+| Mốc | Hiệu ứng | Cách làm | Repo đã có? |
+|---|---|---|---|
+| 0–3,2 | Dải lụa óng ánh cầu vồng xoắn bay trên nền trắng tỏa sáng, tụ lại thành logo, có bóng phản chiếu sàn | Mẫu 3D/After Effects ("silk logo reveal") | **Chưa** — cần 3D (Blender) hoặc mẫu AE; gần nhất là `Intro` (vệt sáng + phản chiếu) |
+| 3,2–5,7 | Giữ logo, tối dần về đen, đen 0,7 giây, hiện cảnh đầu | `fade` đen | Có |
+| 6,5–10,8 | Dồn cảnh hyperlapse, **0,2–0,5 giây/cảnh**, ống kính góc rộng: méo phồng, **viền mờ có tách màu**, giữa nét | Công thức 1 dưới đây | **Mới** (trước chỉ có zoom blur cả khung) |
+| 10,8–28 | Cảnh gian hàng 1–4 giây/cảnh, gimbal lia/đẩy chậm | Quay | — |
+| suốt video | Logo góc trên trái + chữ "HanoiTex HanoiFabric 21-23 10.2026" góc trên phải | `overlay` PNG | Có (logo góc ATT NEWS) |
+| 28–75 | Phát biểu: thẻ tên bật ra (khung cam lớn 1–2 khung hình rồi thu về bảng vàng trong mờ 2 dòng tên + chức danh), xen cảnh khán phòng | Lower third có pop | Có (`lower-thirds`, `lower-third-contract.md`) |
+| 28–75 | Phụ đề tiếng Anh nhỏ, trắng, giữa dưới, dịch lời tiếng Việt | Phụ đề cứng | Có (song ngữ) |
+| 75–81 | Cắt băng khai mạc, nhạc lên lại | Cắt cứng | — |
+| 81–135 | Đoàn đại biểu tham quan, ~1 giây/cảnh, nhiều cảnh cận sản phẩm (macro) | Cắt theo nhạc | Có |
+| 136,8–137,3 | **Hút vào tâm** (zoom tăng tốc + zoom blur xuyên tâm) → **lóe trắng** → poster hiện từ trắng-mờ về nét | Công thức 2 dưới đây | **Mới** dạng ghép (từng phần có: `zoom_blur`, `flash_white`) |
+| 137,3–139 | Poster sự kiện (ngày, địa điểm, QR) đứng yên | Ảnh tĩnh | Có |
+
+### Công thức 1: ống kính góc rộng viền mờ (đã thử, 11/2026)
+
+Áp cho đoạn dồn cảnh nhanh. Giữa khung nét, viền mờ dần, có tách màu đỏ–lam **chỉ ở viền**, góc tối nhẹ. Clip 1280×720, 30 fps; đổi số `1280x720`, `1408:792` (= khung × 1,1) và `/30` theo clip.
+
+```bash
+ffmpeg -ss 82 -t 4 -i in.mp4 -filter_complex "[0:v]scale=1280:720,fps=30,lenscorrection=k1=-0.18:k2=-0.03:i=bilinear,scale=1408:792,crop=1280:720,split[a][b];[b]rgbashift=rh=-4:bh=4,gblur=sigma=10[bl];nullsrc=s=1280x720:d=1,format=gray,geq=lum='255*clip((hypot((X-W/2)/(W/2),(Y-H/2)/(H/2))-0.5)/0.6,0,1)',trim=end_frame=1,loop=-1:1:0,setpts=N/30/TB[m];[a][bl][m]maskedmerge,vignette=PI/6,format=yuv420p[v]" -map "[v]" -map 0:a -c:v libx264 -preset faster -crf 20 -c:a aac -shortest -movflags +faststart out.mp4
+```
+
+- Mặt nạ `geq` chỉ tính **một khung** rồi `loop`, nên không chậm. Đặt `geq` cho mọi khung sẽ chậm.
+- Lần thử đầu đặt `rgbashift` trên cả khung: mặt người ở giữa bị tách màu. Phải đặt nó **trong nhánh mờ** như trên.
+- `vignette=PI/5` tối quá; `PI/6` gần bản gốc.
+- Đắp logo góc **sau** bước này. Nếu không, logo bị méo và mờ theo viền.
+- 4 giây 720p render mất ~13 giây với `-threads 1`.
+
+### Công thức 2: hút vào tâm + lóe trắng vào poster (đã thử, 11/2026)
+
+Cảnh A 1,2 giây: 0,7 giây giữ nguyên, 0,5 giây cuối zoom tăng tốc tới 1,6× và mờ xuyên tâm tăng dần (trộn 3 bản phóng 1,00/1,06/1,12), sáng dần tới trắng. Sau đó poster hiện 1,5 giây: 0,4 giây đầu chuyển từ bản mờ sáng về bản nét.
+
+```bash
+ffmpeg -ss 133 -t 1.2 -i in.mp4 -loop 1 -t 1.5 -framerate 30 -i poster.png -filter_complex "[0:v]scale=1280:720,fps=30,setsar=1,split[h][t0];[h]trim=0:0.7,setpts=PTS-STARTPTS[head];[t0]trim=0.7:1.2,setpts=PTS-STARTPTS,zoompan=z='1+0.6*pow(on/15,2)':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':d=1:s=1280x720:fps=30,split=3[p][q][r];[q]scale=iw*1.06:-2,crop=1280:720[q2];[r]scale=iw*1.12:-2,crop=1280:720[r2];[p][q2][r2]mix=inputs=3,eq=brightness='min(0.9,1.8*pow(t/0.5,2))':eval=frame[tail];[1:v]format=yuv420p,setsar=1,split[pa][pb];[pa]gblur=sigma=30,eq=brightness=0.6[pbl];[pbl][pb]xfade=transition=fade:duration=0.4:offset=0[poster];[head][tail][poster]concat=n=3:v=1:a=0,format=yuv420p[v]" -map "[v]" -c:v libx264 -preset faster -crf 20 -movflags +faststart out.mp4
+```
+
+- `on/15`: 15 = số khung của 0,5 giây ở 30 fps (25 fps thì là 12,5).
+- **Đoạn A phải liền một cảnh.** Lần thử đầu lấy trúng một cú cắt có sẵn trong nguồn, nên đang hút vào tâm thì hình nhảy cảnh. Chạy dò cắt (`select='gt(scene,0.25)'`) trước khi chọn mốc.
+- Poster chèn ảnh tĩnh nên không có tiếng. Ghép tiếng/nhạc ở bước dựng chung, hoặc thêm `anullsrc` khi muốn file đứng riêng.
+
+Hai mẫu thử (720p, đạt `video_qa --strict`) nằm cạnh video nguồn: `Desktop\video\hoc_fb_reel_1279650174309599\`.
+
 ## Thấy trong mẫu, ghi lại để dựng sau
 
 Xem dày 3 khung/giây ở đầu, giữa, cuối cả 4 video. Những kỹ thuật này chưa có công thức. Phần lớn nên dựng bằng Remotion:
