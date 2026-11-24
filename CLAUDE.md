@@ -110,6 +110,8 @@ tests/              python -m unittest discover -s tests
 
 Chưa rõ thuộc nhánh nào → gọi agent `orchestrator`.
 
+**Skill repo trước, skill ngoài sau:** việc đã có skill trong `skills/` (bản tin, phụ đề, intro/thẻ đài, số liệu, bản đồ, chữ động → `motion-graphics-tan`, mẫu `do-hoa/`) thì dùng skill của repo. Skill ngoài trong `scripts/skills-ngoai.json` (ví dụ bộ iart-ai) chỉ dùng khi người dùng gọi tên, hoặc khi việc đó repo chưa có skill nào làm.
+
 ## Command gọi được
 
 `/build-feature` `/fix` `/review` `/test` `/security-check`
