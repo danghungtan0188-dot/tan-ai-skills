@@ -41,6 +41,27 @@ Kiểm: file tồn tại, dung lượng hợp lý, thời lượng > 0, có lu�
 
 Hook `.claude/hooks/check_render.py` tự chạy bản nhanh sau mỗi lệnh `ffmpeg` và chặn nếu file hỏng nặng. Bản `--strict` vẫn phải chạy thủ công ở bước review cuối.
 
+## 2b. Tự chấm từng cảnh ≥ 9/10 rồi mới render bản cuối
+
+Người dùng đặt (23/11/2026): dựng xong phải **tự soát kỹ từng cảnh**, cảnh nào trượt bất kỳ tiêu chí nào thì làm lại;
+**chỉ render bản cuối khi tự chấm ≥ 9/10**. Lý do: bản tin 13/11 phải sửa v6 → v10 vì lỗi người dùng tự phát hiện
+(đọc sai "Tham dự", số 40/80, nhạc nghe như không đổi, chữ tràn khung) — người dùng không phải người soát lỗi.
+
+1. Soát trên **bản nháp nhẹ**, chưa render bản cuối: ảnh lưới khung hình từng cảnh, khung 1080p cắt sát chỗ có chữ,
+   nghe từng câu giọng đọc.
+2. Chấm **từng cảnh** theo 5 nhóm, ghi điểm và lý do:
+
+   | Nhóm | Đạt khi |
+   |---|---|
+   | Nội dung | tên, chức danh, con số, ngày đúng nguyên văn tư liệu; không bịa — **sai tên/số = cảnh đó 0 điểm** |
+   | Hình | không lặp cảnh (mục 0); không rung/tối/mờ; không che mặt; chữ Việt đủ dấu, không tràn khung, không chữ lẻ dòng |
+   | Giọng | đọc đúng tên, "tr", "Ủy" (`scripts/kiem_ten_tts.py`, nghe 3 lần); đầu câu không mất âm; khớp hình |
+   | Âm thanh | nhạc nghe ra được nhưng dưới giọng (≈ −29 LUFS dưới giọng −16); không rè; không bóp dải động (mục 5) |
+   | Nhịp, phong cách | đúng `skills/bien-tap-video-thong-minh-song-ngu-tan/references/phong-cach-att-news.md` (với bản tin); chuyển cảnh mượt; đúng thời lượng |
+
+3. Cảnh dưới chuẩn → sửa → soát lại **chính cảnh đó**. Lặp tới khi tổng ≥ 9/10 và **không cảnh nào trượt nhóm Nội dung**.
+4. Render bản cuối, chạy `video_qa.py --strict --audio` (mục 2), giao kèm **bảng điểm từng cảnh** cho người dùng.
+
 ## 3. Không cắt khi chưa được phép
 
 Không tự cắt bỏ đoạn, không tự đổi thời lượng tổng nếu người dùng chưa đồng ý. Đối chiếu:
