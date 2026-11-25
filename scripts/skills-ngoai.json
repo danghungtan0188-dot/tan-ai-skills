@@ -38,6 +38,31 @@
         "skill": ["talking-head-b-roll"]
       },
       {
+        "nguon": "https://github.com/iart-ai/motion-design-skills",
+        "dung_cho": "kien thuc motion: bieu thuc After Effects, nguyen ly chuyen dong/easing, bo cuc khung hinh 16:9-9:16, nen dong (MIT). CHI lay 4 skill; bo logo-animation, beat-sync-editing, color-motion, motion-art-direction, remotion-video vi tranh viec voi motion-graphics-tan, bien-tap-video, video-use, remotion-*",
+        "skill": ["after-effects", "animation-principles", "shot-composition", "motion-background"]
+      },
+      {
+        "nguon": "https://github.com/iart-ai/explainer-video-skills",
+        "dung_cho": "so do/luu do dong, canh isometric 2.5D, bang trang ve tay (MIT). Bo explainer-video (tranh video-thuyet-minh), wrapped-video (tranh ban tin tong ket)",
+        "skill": ["diagram-animation", "isometric-animation", "whiteboard-animation"]
+      },
+      {
+        "nguon": "https://github.com/iart-ai/data-animation-skills",
+        "dung_cho": "bieu do dong tu CSV (bar chart race, duong, bang xep hang) (MIT). Bo animated-infographic (tranh so lieu cua motion-graphics-tan), presentation-video (tranh slideshow)",
+        "skill": ["chart-animation"]
+      },
+      {
+        "nguon": "https://github.com/iart-ai/tiktok-video-skills",
+        "dung_cho": "dong ho dem nguoc cho su kien/livestream (MIT). Bo lower-thirds (trung ten), caption-animation (tranh video-use/remotion-captions), short-form-video (tranh video-marketing)",
+        "skill": ["countdown-video"]
+      },
+      {
+        "nguon": "https://github.com/iart-ai/youtube-video-skills",
+        "dung_cho": "audiogram: song am dong cho podcast/ban ghi am (MIT). Bo youtube-intro-outro (tranh intro/the dai ATT)",
+        "skill": ["audiogram"]
+      },
+      {
         "nguon": "heydamir/unslop",
         "dung_cho": "sua giao dien da co cho bot 'trong nhu AI lam' (gradient tim, chu phat sang, emoji, khoang cach lech); app cho tre em thi luat rieng cua du an thang (CC BY 4.0)",
         "skill": ["unslop"]
