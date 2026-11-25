@@ -46,6 +46,37 @@
         "nguon": "pbakaus/impeccable",
         "dung_cho": "thiet ke/soi/danh bong giao dien (critique, audit, polish, typeset...); lan dau chay tu tai mot file chay rieng (Apache-2.0)",
         "skill": ["impeccable"]
+      },
+      {
+        "nguon": "https://github.com/danghungtan0188-dot/youtube-agent-skill",
+        "dung_cho": "van hanh kenh YouTube: len lich dang, kich ban 21 cong thuc hook, tieu de/thumbnail, mo ta/tag SEO, chuong, cat Shorts tu video dai, doc bieu do giu chan, soi kenh doi thu (MIT, ban fork da quet 2026-11-25). Bo yt-edit vi tranh viec voi video-use",
+        "skill": ["yt-plan", "yt-script", "yt-package", "yt-seo", "yt-chapters", "yt-shorts", "yt-retention", "yt-viral",
+                  "yt-audit", "yt-comment"]
+      },
+      {
+        "nguon": "https://github.com/danghungtan0188-dot/motionmaxxing",
+        "dung_cho": "dao dien phim motion graphics (launch, promo, kinetic type, CTA) cho ra chat luong nha thiet ke; render MP4 bang Chrome + FFmpeg (Apache-2.0, ban fork da quet 2026-11-25). Phong cach rieng kenh van uu tien motion-graphics-tan",
+        "skill": ["motionmaxxing"]
+      },
+      {
+        "nguon": "https://github.com/danghungtan0188-dot/visual-skills",
+        "dung_cho": "viet prompt anh (Nano Banana, GPT Image) va prompt video AI (Seedance, Kling, Veo, Runway): phan canh, goc may, anh sang, lien tuc nhan vat (CC BY 4.0 - giu ghi cong Serge Shima; ban fork da quet 2026-11-25). Bo sung cho viet-prompt-video-ai",
+        "skill": ["image", "video"]
+      },
+      {
+        "nguon": "https://github.com/danghungtan0188-dot/frontend-slides",
+        "dung_cho": "slide HTML co hieu ung tu dau hoac chuyen tu PPTX, chay ngay tren trinh duyet (MIT, ban fork da quet 2026-11-25)",
+        "skill": ["frontend-slides"]
+      },
+      {
+        "nguon": "https://github.com/danghungtan0188-dot/modern-web-guidance",
+        "dung_cho": "chuan web hien dai cua Google Chrome: HTML/CSS/JS phia trinh duyet, do tuong thich trinh duyet (Apache-2.0, ban fork da quet 2026-11-25). Bo chrome-extensions vi khong lam extension",
+        "skill": ["modern-web-guidance"]
+      },
+      {
+        "nguon": "https://github.com/danghungtan0188-dot/planning-with-files",
+        "dung_cho": "ke hoach viec nhieu buoc luu ra file (task_plan.md, findings.md, progress.md), khong mat khi /clear; hook chi chay khi skill dang dung (MIT, ban fork da quet 2026-11-25)",
+        "skill": ["planning-with-files"]
       }
     ]
   },
