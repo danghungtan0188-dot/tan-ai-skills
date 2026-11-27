@@ -1,0 +1,208 @@
+<!doctype html>
+<!-- Tieu de kieu "title preset": chu nhan viet tay de len chu chinh in dam + dong phu. 12 kieu, chon bang bien "kieu".
+     Thiet ke rieng (hoc the loai, khong chep mau cua goi ban). Chu chinh ve bang SVG de co chuyen mau, vien, phat sang, noi khoi. -->
+<html lang="vi" data-resolution="landscape"
+  data-composition-variables='[{"id":"kieu","type":"string","label":"Kiểu (vang-kim, neon, bang-do, noi-khoi, vien-doi, sang-trong, sale-nong, xanh-tuoi, bang-mau, chu-rong, go-chu, toc-do)","default":"vang-kim"},{"id":"nhan","type":"string","label":"Chữ nhấn (viết tay)","default":"Bản tin"},{"id":"chinh","type":"string","label":"Chữ chính","default":"AN THẠNH THỦY"},{"id":"phu","type":"string","label":"Dòng phụ","default":"Thứ Năm, 27/11/2026"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      /*FONTS*/
+      :root { --nen: #8a8f96; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: var(--nen); }
+      #root { position: relative; width: 100%; height: 100%; }
+      #td-the { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+      #td-khoi { position: relative; display: flex; flex-direction: column; align-items: center; }
+      #td-bang { position: absolute; left: -4%; right: -4%; top: 14%; bottom: 10%; transform-origin: left center; }
+      #td-svg { position: relative; display: block; overflow: visible; }
+      #td-nhan { position: absolute; left: 3%; top: 0; z-index: 3; white-space: nowrap; line-height: 1; transform-origin: left bottom; }
+      #td-phu { position: relative; z-index: 3; margin-top: 6px; white-space: nowrap; line-height: 1.1; align-self: flex-end; margin-right: 4%; }
+      #td-tro { position: absolute; width: 6px; background: currentColor; opacity: 0; }
+      .td-sao { position: absolute; width: 14px; height: 14px; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4" data-width="1920" data-height="1080">
+      <div id="td-the" class="clip" data-start="0" data-duration="4" data-track-index="1">
+        <div id="td-khoi" data-layout-allow-overlap data-layout-allow-overflow>
+          <div id="td-bang" data-layout-allow-occlusion></div>
+          <svg id="td-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div id="td-nhan">Bản tin</div>
+          <div id="td-phu">Thứ Năm, 27/11/2026</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Cac kieu: font, mau, vien, hieu ung (loc CSS tinh, khong tween filter) va kieu vao.
+      const DAM = (c, n) => Array.from({ length: n }, () => `drop-shadow(1.2px 1.6px 0 ${c})`).join(" ");  // n lop bong sat nhau = noi khoi
+      const SANG = (c) => `drop-shadow(0 0 4px ${c}) drop-shadow(0 0 14px ${c}) drop-shadow(0 0 34px ${c})`;
+      const BONG = "drop-shadow(0 14px 22px rgba(0,0,0,.55))";
+      const KIEU = {
+        "vang-kim":   { font: "'Anton VN'", co: 210, to: ["#fff7cf", "#ffd84a", "#e98a00"], vien: "#3b1d00", nv: 12,
+                        loc: `drop-shadow(0 9px 0 #2b1500) ${BONG}`, nFont: "'Dancing Script VN'", nCo: 0.5, nMau: "#ffffff",
+                        nBong: "0 4px 0 #3b1d00, 0 0 16px rgba(0,0,0,.45)", pFont: "'Oswald VN'", pMau: "#ffe7a3", vao: "bat" },
+        "neon":       { font: "'Bungee VN'", co: 170, to: "#eaffff", vien: "#00e5ff", nv: 5, loc: SANG("#00d9ff"),
+                        bang: "rgba(8,4,28,.88)", bangPhu: true,  // tam nen toi: neon doc duoc tren moi nen (va qua kiem tuong phan)
+                        nFont: "'Pacifico VN'", nCo: 0.42, nMau: "#ffd6f5", nBong: "0 0 8px #ff3fc8, 0 0 22px #ff3fc8",
+                        pFont: "'Oswald VN'", pMau: "#b8fbff", vao: "nhay" },
+        "bang-do":    { font: "'Anton VN'", co: 180, to: "#ffffff", vien: "#7a0610", nv: 6, loc: BONG, bang: "linear-gradient(90deg,#c8101e,#e8323c)",
+                        bangNghieng: -8, nFont: "'Great Vibes VN'", nCo: 0.56, nMau: "#ffffff", nBong: "0 3px 0 #5a0008, 0 0 12px rgba(255,216,74,.9)",
+                        pFont: "'Oswald VN'", pMau: "#ffffff", vao: "quet" },
+        "noi-khoi":   { font: "'Paytone One VN'", co: 190, to: ["#ffe06b", "#ff9d1c"], vien: "#ffffff", nv: 8, loc: `${DAM("#b34700", 9)} ${BONG}`,
+                        nFont: "'Lobster VN'", nCo: 0.44, nMau: "#ffffff", nBong: "0 4px 0 #b34700", pFont: "'Oswald VN'", pMau: "#ffffff", vao: "dap" },
+        "vien-doi":   { font: "'Anton VN'", co: 210, to: "#ffffff", vien: "#0b3a8c", nv: 14, vienNgoai: "#ffffff", loc: BONG,
+                        nFont: "'Dancing Script VN'", nCo: 0.48, nMau: "#ffffff", nBong: "0 3px 0 #0b3a8c, 0 0 12px rgba(255,216,74,.85)",
+                        pFont: "'Oswald VN'", pMau: "#ffffff", vao: "ve" },
+        "sang-trong": { font: "'Oswald VN'", co: 150, to: ["#fff3d6", "#d9b46a"], vien: "none", nv: 0, gian: 0.18, loc: BONG,
+                        nFont: "'Great Vibes VN'", nCo: 0.7, nMau: "#fffaf0", nBong: "0 0 18px rgba(217,180,106,.95)", pFont: "'Oswald VN'",
+                        pMau: "#ffffff", gach: "#d9b46a", vao: "troi" },
+        "sale-nong":  { font: "'Bungee VN'", co: 200, to: ["#fff26b", "#ff8a00", "#e8162b"], vien: "#ffffff", nv: 12,
+                        loc: `drop-shadow(0 8px 0 #7a0010) ${BONG}`, nFont: "'Pacifico VN'", nCo: 0.4, nMau: "#ffffff",
+                        nBong: "0 4px 0 #7a0010", pFont: "'Paytone One VN'", pMau: "#fff26b", sao: true, vao: "dap" },
+        "xanh-tuoi":  { font: "'Paytone One VN'", co: 190, to: ["#eaff8a", "#5bd13a", "#1d8a2c"], vien: "#ffffff", nv: 10,
+                        loc: `drop-shadow(0 8px 0 #0e4a17) ${BONG}`, nFont: "'Dancing Script VN'", nCo: 0.5, nMau: "#ffffff",
+                        nBong: "0 4px 0 #0e4a17, 0 0 12px rgba(234,255,138,.9)", pFont: "'Oswald VN'", pMau: "#f2ffe0", vao: "bat" },
+        "bang-mau":   { font: "'Oswald VN'", co: 170, to: "#ffffff", vien: "none", nv: 0, loc: "none", bang: "#0b3a8c", bangNghieng: 0,
+                        nFont: "'Oswald VN'", nCo: 0.36, nMau: "#ffffff", nNen: "#d4202a", nBong: "none", pFont: "'Oswald VN'", pMau: "#0b3a8c",
+                        pNen: "#ffffff", vao: "quet" },
+        "chu-rong":   { font: "'Anton VN'", co: 220, to: "#ffffff", vien: "#ffd84a", nv: 6, rong: true, loc: BONG,
+                        nFont: "'Lobster VN'", nCo: 0.42, nMau: "#ffffff", nBong: "0 3px 10px rgba(0,0,0,.6)", pFont: "'Oswald VN'",
+                        pMau: "#ffd84a", vao: "ve" },
+        "go-chu":     { font: "'Oswald VN'", co: 160, to: "#ffffff", vien: "#111111", nv: 8, loc: BONG, nFont: "'Dancing Script VN'",
+                        nCo: 0.44, nMau: "#ffffff", nBong: "0 3px 0 #0b3a8c, 0 0 12px rgba(127,240,255,.95)", pFont: "'Oswald VN'", pMau: "#ffffff", vao: "go" },
+        "toc-do":     { font: "'Bungee VN'", co: 180, to: ["#ffffff", "#ffe14a"], vien: "#111111", nv: 10, nghieng: -12,
+                        loc: `drop-shadow(10px 0 0 rgba(255,225,74,.55)) drop-shadow(22px 0 0 rgba(255,225,74,.25)) ${BONG}`,
+                        nFont: "'Pacifico VN'", nCo: 0.4, nMau: "#ffffff", nBong: "0 3px 0 #111", pFont: "'Oswald VN'", pMau: "#ffe14a", vao: "truot" },
+      };
+
+      async function dung() {
+        const D = Number(document.getElementById("root").dataset.duration);
+        const bien = (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {};
+        const mac = Object.fromEntries(JSON.parse(document.documentElement.dataset.compositionVariables).map((b) => [b.id, b.default]));
+        const B = Object.assign(mac, bien);
+        const K = KIEU[B.kieu] || KIEU["vang-kim"];
+        await document.fonts.ready;
+        await Promise.all([K.font, K.nFont, K.pFont].map((f) => document.fonts.load(`400 80px ${f}`).catch(() => null)));
+
+        const W = window.innerWidth, H = window.innerHeight, doc = H > W;
+        const NS = "http://www.w3.org/2000/svg";
+        const svg = document.getElementById("td-svg");
+        const mk = (tag, a, cha = svg) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); cha.appendChild(e); return e; };
+        const chuChinh = String(B.chinh || "").trim();
+        let co = K.co * (doc ? 0.72 : 1);
+        const defs = mk("defs", {});
+        let fill = K.to;
+        if (Array.isArray(K.to)) {
+          const g = mk("linearGradient", { id: "td-to", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+          K.to.forEach((c, i) => mk("stop", { offset: `${(i / (K.to.length - 1)) * 100}%`, "stop-color": c }, g));
+          fill = "url(#td-to)";
+        }
+        const text = mk("text", { x: "50%", y: "50%", "text-anchor": "middle", "dominant-baseline": "central",
+          "font-family": K.font.replace(/'/g, ""), "paint-order": "stroke fill", "stroke-linejoin": "round" });
+        text.textContent = chuChinh;
+        if (K.gian) text.setAttribute("letter-spacing", `${K.gian}em`);
+        const ap = () => { text.setAttribute("font-size", co); };
+        ap();
+        // Tu co chu cho vua khung (84% chieu ngang), khong de tran.
+        const toiDa = W * 0.84;
+        let dai = text.getComputedTextLength() * (1 + (K.gian || 0));
+        if (dai > toiDa) { co = co * toiDa / dai; ap(); dai = text.getComputedTextLength() * (1 + (K.gian || 0)); }
+        const pad = co * 0.35 + (K.nv || 0) * 2;
+        const w = Math.ceil(dai + pad * 2), h = Math.ceil(co * 1.45);
+        svg.setAttribute("width", w); svg.setAttribute("height", h); svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+        if (K.vienNgoai) {  // vien doi: mot lop vien to mau ngoai nam duoi
+          const t2 = text.cloneNode(true);
+          t2.setAttribute("fill", "none"); t2.setAttribute("stroke", K.vienNgoai); t2.setAttribute("stroke-width", (K.nv + 10) * (co / K.co));
+          svg.insertBefore(t2, text);
+        }
+        text.setAttribute("fill", K.rong ? "none" : fill);
+        if (K.vien !== "none") { text.setAttribute("stroke", K.vien); text.setAttribute("stroke-width", K.nv * (co / K.co)); }
+        let lop = null;
+        if (K.rong) {  // chu rong: lop mau do day dan tu duoi len (chu vien rong truoc, mau vao sau)
+          const cp = mk("clipPath", { id: "td-cat" }, defs);
+          lop = mk("rect", { x: 0, y: h, width: w, height: h }, cp);
+          const tMau = text.cloneNode(true);
+          tMau.setAttribute("fill", fill); tMau.setAttribute("stroke", "none"); tMau.setAttribute("clip-path", "url(#td-cat)");
+          svg.appendChild(tMau);
+        }
+        svg.style.filter = K.loc;
+        if (K.nghieng) gsap.set(svg, { skewX: K.nghieng });  // GSAP giu do nghieng khi tween x/scale (khong dung CSS transform)
+
+        const nhan = document.getElementById("td-nhan"), phu = document.getElementById("td-phu"), bang = document.getElementById("td-bang");
+        nhan.textContent = B.nhan || ""; phu.textContent = B.phu || "";
+        Object.assign(nhan.style, { fontFamily: K.nFont, fontSize: `${Math.round(co * K.nCo * (K.nFont.includes("Oswald") ? 1 : 1.25))}px`,
+          color: K.nMau, top: `${-co * K.nCo * 0.62}px`,
+          // quang toi mem duoi moi chu nhan: doc duoc tren nen sang (va qua kiem tuong phan)
+          textShadow: K.nBong === "none" ? "none" : `${K.nBong}, 0 0 14px rgba(0,0,0,.6)` });
+        if (K.nNen) Object.assign(nhan.style, { background: K.nNen, padding: "0.12em 0.4em", fontWeight: 700, letterSpacing: "0.06em" });
+        Object.assign(phu.style, { fontFamily: K.pFont, fontSize: `${Math.round(Math.max(34, co * 0.2))}px`, color: K.pMau,
+          fontWeight: 700, letterSpacing: "0.04em", textShadow: K.pNen ? "none" : "0 3px 10px rgba(0,0,0,.6)" });
+        if (K.pNen) Object.assign(phu.style, { background: K.pNen, padding: "0.15em 0.55em", marginTop: "0px" });
+        if (K.gach) Object.assign(phu.style, { borderTop: `3px solid ${K.gach}`, paddingTop: "10px", alignSelf: "center", marginRight: 0 });
+        if (K.bang) { bang.style.background = K.bang; gsap.set(bang, { skewX: K.bangNghieng || 0 }); }
+        if (K.bangPhu) Object.assign(bang.style, { top: "-42%", bottom: "-34%", left: "-6%", right: "-6%", borderRadius: "28px",
+          boxShadow: "inset 0 0 0 3px rgba(0,217,255,.35)" });
+        if (!K.bang) bang.style.display = "none";
+        const sao = [];
+        if (K.sao) for (let i = 0; i < 6; i++) {  // tia nho bung quanh chu (sale)
+          const s = document.createElement("div"); s.className = "td-sao";
+          s.style.background = i % 2 ? "#fff26b" : "#ffffff"; s.style.clipPath = "polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)";
+          const goc = (i / 6) * Math.PI * 2;
+          s.style.left = `${50 + Math.cos(goc) * 52}%`; s.style.top = `${45 + Math.sin(goc) * 60}%`;
+          document.getElementById("td-khoi").appendChild(s); sao.push(s);
+        }
+
+        const tl = gsap.timeline({ paused: true });
+        const khoi = "#td-khoi";
+        tl.fromTo(khoi, { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 0);
+        const T = 0.05;
+        switch (K.vao) {
+          case "bat":
+            tl.fromTo(svg, { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(2.2)" }, T); break;
+          case "dap":
+            tl.fromTo(svg, { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "power4.in" }, T)
+              .fromTo(khoi, { x: 0 }, { x: 10, duration: 0.05, yoyo: true, repeat: 3, ease: "none" }, T + 0.32); break;
+          case "quet":
+            if (K.bang) tl.fromTo(bang, { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "expo.out" }, T);
+            tl.fromTo(svg, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.6, ease: "expo.inOut" }, T + 0.12); break;
+          case "troi":
+            tl.fromTo(svg, { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" }, T); break;
+          case "nhay":  // neon bat len: chop vai lan roi sang han
+            tl.fromTo(svg, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "steps(1)" }, T)
+              .to(svg, { opacity: 0.2, duration: 0.06, ease: "steps(1)" }, T + 0.12)
+              .to(svg, { opacity: 1, duration: 0.06, ease: "steps(1)" }, T + 0.2)
+              .to(svg, { opacity: 0.35, duration: 0.05, ease: "steps(1)" }, T + 0.34)
+              .to(svg, { opacity: 1, duration: 0.05, ease: "steps(1)" }, T + 0.4); break;
+          case "ve": {
+            const net = svg.querySelectorAll("text");
+            net.forEach((t) => { const L = 2400; tl.fromTo(t, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, T); });
+            if (lop) tl.fromTo(lop, { attr: { y: h } }, { attr: { y: 0 }, duration: 0.6, ease: "power2.out" }, T + 0.8);
+            else tl.fromTo(text, { fillOpacity: 0 }, { fillOpacity: 1, duration: 0.4, ease: "none" }, T + 0.6);
+            break;
+          }
+          case "go": {
+            const n = Math.max(chuChinh.length, 1);
+            tl.fromTo(svg, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: Math.min(1.2, 0.07 * n), ease: `steps(${n})` }, T);
+            break;
+          }
+          case "truot":
+            tl.fromTo(svg, { x: -W * 0.6, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "expo.out" }, T); break;
+        }
+        const tN = K.vao === "ve" ? 0.9 : 0.4;
+        tl.fromTo(nhan, { opacity: 0, scale: 0.6, rotation: -14 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.5, ease: "back.out(2)" }, tN)
+          .fromTo(phu, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, tN + 0.25);
+        sao.forEach((s, i) => tl.fromTo(s, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1.6, duration: 0.3, ease: "back.out(3)" }, 0.42 + i * 0.03)
+          .to(s, { opacity: 0, duration: 0.3 }, 1.0 + i * 0.03));
+        // Giu: troi rat nhe cho khong chet hinh
+        tl.fromTo("#td-khoi", { y: 0 }, { y: -8, duration: Math.max(0.5, D - 2.2), ease: "sine.inOut" }, 1.4);
+        // Ra
+        tl.to("#td-khoi", { opacity: 0, scale: 0.92, duration: 0.35, ease: "power2.in" }, D - 0.45);
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      }
+      dung();
+    </script>
+  </body>
+</html>
