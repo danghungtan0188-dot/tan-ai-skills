@@ -48,6 +48,10 @@ Ngoài phong cách, có 12 thẻ kỹ thuật học từ 86 video marketing, n�
 
 Kèm theo là nhịp chuẩn đo được (mỗi cảnh 1,5–2,5 s, chuyển mềm dưới 0,4 s). Xem [ky-thuat.md](references/ky-thuat.md). Render giống thẻ phong cách: `python scripts/render_mau.py <ten-ky-thuat>`.
 
+## Tiêu đề kiểu "title preset" (12 kiểu)
+
+Chữ viết tay đè chữ in đậm, chuyển màu, viền, neon, nổi khối… cho tiêu đề video và thumbnail: `assets/tieu-de-preset/`, xuất bằng `python scripts/render_tieu_de.py <kieu>` (`--bang` xem trước cả 12, `--png` ảnh thumbnail). Xem [tieu-de-preset.md](references/tieu-de-preset.md).
+
 ## Tiếng động và kiểm chất lượng
 
 - **Tiếng động tự tổng hợp:** dùng `scripts/sfx`, lấy từ claude-motion (giấy phép MIT). Có click, pop, whoosh, riser, chime, pad, làm bằng Python có sẵn, không lo bản quyền, tự master về −14 LUFS. Hình nào đi với tiếng nào, mức to ra sao: [tieng-dong.md](references/tieng-dong.md).
